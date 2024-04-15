@@ -25,10 +25,10 @@
     @apply text-[24px] leading-[32px] font-bold text-black-800 dark:text-white-100;
   }
   .heading-1-medium {
-    @apply text-[20px] leading-[28px] font-medium text-white-200 dark:text-black-800;
+    @apply text-[20px] leading-[28px] font-medium text-black-800 dark:text-white-200;
   }
   .heading-2-medium {
-    @apply text-[16px] leading-[24px] font-medium text-white-200 dark:text-black-800;
+    @apply text-[16px] leading-[24px] font-medium text-black-800 dark:text-white-200;
   }
   .paragraph-1-bold {
     @apply text-[18px] leading-[20px] font-bold text-black-700 dark:text-white-100;
