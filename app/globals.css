@@ -49,7 +49,7 @@
     @apply text-[16px] leading-[24px] font-medium text-black-800 dark:text-white-400;
   }
   .paragraph-3-medium {
-    @apply text-[14px] leading-[20px] font-medium text-black-800 dark:text-white-300;
+    @apply text-[14px] leading-[20px] font-medium text-black-800 dark:text-white-200;
   }
   .paragraph-4-medium {
     @apply text-[12px] leading-[16px] font-medium text-black-800 dark:text-white-200;
@@ -61,15 +61,22 @@
     @apply text-[10px] leading-[16px] font-medium text-white-400;
   }
   .paragraph-1-regular {
-    @apply text-[18px] leading-[20px] font-regular text-black-800 dark:text-white-100;
+    @apply text-[18px] leading-[20px] font-normal text-black-800 dark:text-white-100;
   }
   .paragraph-2-regular {
-    @apply text-[16px] leading-[24px] font-regular text-white-400 dark:text-white-300;
+    @apply text-[16px] leading-[24px] font-normal text-white-400 dark:text-white-300;
   }
   .paragraph-3-regular {
-    @apply text-[14px] leading-[20px] font-regular text-white-400 dark:text-white-200;
+    @apply text-[14px] leading-[20px] font-normal text-white-400 dark:text-white-200;
   }
   .paragraph-4-regular {
-    @apply text-[12px] leading-[16px] font-regular text-black-800 dark:text-white-400;
+    @apply text-[12px] leading-[16px] font-normal text-black-800 dark:text-white-400;
   }
+}
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  transition: background-color 5000s ease-in-out 0s;
+  -webkit-text-fill-color: #ffff !important;
 }
