@@ -143,7 +143,7 @@ const Login = () => {
             </Link>
             <div className="flex items-center justify-between">
               <Separator className="w-2/5 bg-black-800" />
-              <p className="paragraph-4-regular !text-white-100">or</p>
+              <p className="paragraph-4-regular">or</p>
               <Separator className="w-2/5 bg-black-800" />
             </div>
             <Button
@@ -156,9 +156,7 @@ const Login = () => {
                 width={20}
                 height={20}
               />
-              <p className="paragraph-3-medium !text-white-100">
-                Continue with Google
-              </p>
+              <p className="paragraph-3-medium ">Continue with Google</p>
             </Button>
             <Button
               // onClick={() => signIn("github", { callbackUrl: "/home" })}
@@ -170,9 +168,7 @@ const Login = () => {
                 width={20}
                 height={20}
               />
-              <p className="paragraph-3-medium !text-white-100">
-                Continue with Github
-              </p>
+              <p className="paragraph-3-medium ">Continue with Github</p>
             </Button>
           </form>
         </Form>

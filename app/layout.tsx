@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider } from "./context/ThemeProvider";
+import { cookies } from "next/headers";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -14,10 +16,16 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookiesProvider = cookies();
+  const themeCookie = cookiesProvider.get("theme");
+  const theme = themeCookie ? themeCookie.value : "dark";
+
   return (
-    <html lang="en">
+    <html lang="en" className={`${theme}`}>
       <body className={`${inter.className} min-h-screen bg-[#000]`}>
-        <main className="max-w-screen-xxl mx-auto">{children}</main>
+        <ThemeProvider theme={theme}>
+          <main className="max-w-screen-xxl mx-auto">{children}</main>
+        </ThemeProvider>
       </body>
     </html>
   );
