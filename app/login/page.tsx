@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { loginSchema } from "@/lib/validation";
 import { Separator } from "@/components/ui/separator";
+import { signIn } from "next-auth/react";
 
 const Login = () => {
   const form = useForm<z.infer<typeof loginSchema>>({
@@ -148,7 +149,7 @@ const Login = () => {
             </div>
             <Button
               type="button"
-              // onClick={() => signIn("google", { callbackUrl: "/home" })}
+              onClick={() => signIn("google", { callbackUrl: "/home" })}
               className="paragraph-3-medium flex w-full items-center gap-2 bg-black-800">
               <Image
                 src={"/assets/icons/google.svg"}
@@ -161,7 +162,7 @@ const Login = () => {
               </p>
             </Button>
             <Button
-              // onClick={() => signIn("github", { callbackUrl: "/home" })}
+              onClick={() => signIn("github", { callbackUrl: "/home" })}
               type="button"
               className="item flex w-full gap-2  bg-black-800">
               <Image

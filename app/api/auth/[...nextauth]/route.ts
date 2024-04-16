@@ -1,4 +1,4 @@
-import { authOptions } from "@/lib/actions/authOptions";
+import { authOptions } from "@/lib/authOptions";
 import NextAuth from "next-auth/next";
 
 type HandlerType = typeof NextAuth;
