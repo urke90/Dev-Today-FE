@@ -112,18 +112,18 @@ const Onboarding = () => {
           />
         </div>
         {step === 0 && (
-          <h2 className="display-1-bold !text-white-100 mb-10">
+          <h2 className="display-1-bold mr-auto !text-white-100 mb-10">
             Which best describes your current programming journey?
           </h2>
         )}
         {step === 1 && (
-          <h2 className="display-1-bold !text-white-100 mb-10">
+          <h2 className="display-1-bold mr-auto !text-white-100 mb-10">
             Define your coding ambitions
           </h2>
         )}
         {step === 2 && (
           <>
-            <h2 className="display-1-bold !text-white-100 mb-10">
+            <h2 className="display-1-bold mr-auto !text-white-100 mb-10">
               Select your preferred languages and frameworks for a personalized
               experience.
             </h2>
@@ -149,7 +149,7 @@ const Onboarding = () => {
                             type="button"
                             value={item.title}
                             onClick={() => field.onChange(item.title)}
-                            className={`w-full bg-black-800 ${
+                            className={`w-full justify-start bg-black-800 ${
                               field.value === item.title ? "bg-primary-500" : ""
                             } border-none h-11 text-[14px] paragraph-1-medium`}>
                             {item.title}
@@ -186,7 +186,7 @@ const Onboarding = () => {
                            field.value.includes(item.title)
                              ? "bg-primary-500"
                              : "bg-black-800"
-                         }  border-none h-11 text-[14px] paragraph-1-medium`}>
+                         }  border-none h-11 justify-start text-[14px] paragraph-1-medium`}>
                             {item.title}
                           </Button>
                         </FormControl>
