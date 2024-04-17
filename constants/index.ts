@@ -47,18 +47,34 @@ export const onboardingWelcome = [
   },
 ];
 
-export const codingLevels = [
-  { title: "Seasoned Pro - Coding veteran" },
-  { title: "Learning Enthusiast - Continuous learner" },
-  { title: "Project Explorer - Passionate builder" },
-  { title: "Tech Student - Studying programming" },
-  { title: "Tech Explorer - New to coding, eager to learn" },
-];
-
 export const currentKnowledge = [
   { title: "Seasoned Pro - Coding veteran" },
   { title: "Learning Enthusiast - Continuous learner" },
   { title: "Project Explorer - Passionate builder" },
   { title: "Tech Student - Studying programming." },
   { title: "Tech Explorer - New to coding, eager to learn" },
+];
+export const codingAmbitions = [
+  { title: "Build Portfolio - Showcase projects" },
+  { title: "Open Source Contributor - Make your mark" },
+  { title: "Master New Language - Learn and conquer" },
+  { title: "Launch Side Project - Bring ideas to life" },
+  { title: "Attend Coding Events - Network and learn" },
+];
+
+export const preferSkills = [
+  { title: "HTML5" },
+  { title: "JavaScript(ES6)" },
+  { title: "React.js" },
+  { title: "Node.js" },
+  { title: "TypeScript" },
+  { title: "CSS 3" },
+  { title: "Vue.js" },
+  { title: "Angular" },
+  { title: "Express.js" },
+  { title: "MongoDB" },
+  { title: "Next.js 14" },
+  { title: "D3.js" },
+  { title: "GraphQL" },
+  { title: "Tailwind CSS" },
 ];
