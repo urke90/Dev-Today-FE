@@ -33,3 +33,32 @@ export const loginWelcome = [
       "Get in the code zone quickly! Swift sign-in for instant access to your hub.",
   },
 ];
+
+export const onboardingWelcome = [
+  {
+    image: "/assets/icons/rocket.svg",
+    alt: "rocket",
+    label: "Highlight your skills and projects for the community.",
+  },
+  {
+    image: "/assets/icons/chat.svg",
+    alt: "chat",
+    label: "Explore learning opportunities and connect with mentors",
+  },
+];
+
+export const codingLevels = [
+  { title: "Seasoned Pro - Coding veteran" },
+  { title: "Learning Enthusiast - Continuous learner" },
+  { title: "Project Explorer - Passionate builder" },
+  { title: "Tech Student - Studying programming" },
+  { title: "Tech Explorer - New to coding, eager to learn" },
+];
+
+export const currentKnowledge = [
+  { title: "Seasoned Pro - Coding veteran" },
+  { title: "Learning Enthusiast - Continuous learner" },
+  { title: "Project Explorer - Passionate builder" },
+  { title: "Tech Student - Studying programming." },
+  { title: "Tech Explorer - New to coding, eager to learn" },
+];

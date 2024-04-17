@@ -9,3 +9,9 @@ export const loginSchema = z.object({
   email: z.string().email(),
   password: z.string().min(6),
 });
+
+export const onboardingSchema = z.object({
+  currentKnowledge: z.string(),
+  codingAmbitions: z.array(z.string()),
+  preferSkills: z.array(z.string()),
+});
