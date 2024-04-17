@@ -18,6 +18,7 @@ import Link from "next/link";
 import { loginSchema } from "@/lib/validation";
 import { Separator } from "@/components/ui/separator";
 import { signIn } from "next-auth/react";
+import { loginWelcome } from "@/constants";
 
 const Login = () => {
   const form = useForm<z.infer<typeof loginSchema>>({
@@ -49,34 +50,19 @@ const Login = () => {
         <div className="max-w-md">
           <h2 className="display-1-bold mb-10">Sign in to DevToday.</h2>
           <article className="flex flex-col gap-5">
-            <div className="bg-black-700 p-5 flex gap-5 items-center rounded-lg">
-              <div className="bg-black-800 h-[60px] p-5 rounded-md">
-                <Image
-                  src="assets/icons/inbox-green.svg"
-                  alt="business"
-                  width={30}
-                  height={20}
-                />
+            {loginWelcome.map((item) => (
+              <div className="bg-black-700 p-5 flex gap-5 items-center rounded-lg">
+                <div className="bg-black-800 h-[60px] p-5 rounded-md">
+                  <Image
+                    src={item.image}
+                    alt={item.alt}
+                    width={30}
+                    height={20}
+                  />
+                </div>
+                <p className="paragraph-1-medium">{item.label}</p>
               </div>
-              <p className="paragraph-1-medium">
-                Get in the code zone quickly! Swift sign-in for instant access
-                to your hub.
-              </p>
-            </div>
-            <div className="bg-black-700 p-5 flex gap-5 items-center rounded-lg">
-              <div className="bg-black-800 p-5 h-[60px] rounded-md">
-                <Image
-                  src="assets/icons/tunder.svg"
-                  alt="business"
-                  width={30}
-                  height={20}
-                />
-              </div>
-              <p className="paragraph-1-medium">
-                Get in the code zone quickly! Swift sign-in for instant access
-                to your hub.
-              </p>
-            </div>
+            ))}
           </article>
         </div>
       </div>

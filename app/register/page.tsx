@@ -17,6 +17,8 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { signInSchema } from "@/lib/validation";
 import { Separator } from "@/components/ui/separator";
+import { signIn } from "next-auth/react";
+import { regWelcome } from "@/constants";
 
 const Register = () => {
   const form = useForm<z.infer<typeof signInSchema>>({
@@ -52,47 +54,19 @@ const Register = () => {
             conversation.
           </h2>
           <article className="flex flex-col gap-5">
-            <div className="bg-black-700 p-5 flex gap-5 items-center rounded-lg">
-              <div className="bg-black-800 p-5 rounded-md">
-                <Image
-                  src="assets/icons/business.svg"
-                  alt="business"
-                  width={30}
-                  height={20}
-                />
+            {regWelcome.map((item) => (
+              <div className="bg-black-700 p-5 flex gap-5 items-center rounded-lg">
+                <div className="bg-black-800 h-[60px] p-5 rounded-md">
+                  <Image
+                    src={item.image}
+                    alt={item.alt}
+                    width={30}
+                    height={20}
+                  />
+                </div>
+                <p className="paragraph-1-medium">{item.label}</p>
               </div>
-              <p className="paragraph-1-medium">
-                Discover the latest trends, tools, and insights shaping the
-                developer world.
-              </p>
-            </div>
-            <div className="bg-black-700 p-5 flex gap-5 items-center rounded-lg">
-              <div className="bg-black-800 p-5 rounded-md">
-                <Image
-                  src="assets/icons/chat.svg"
-                  alt="business"
-                  width={30}
-                  height={20}
-                />
-              </div>
-              <p className="paragraph-1-medium">
-                Forge connections, collaborate on projects, and grow together.
-              </p>
-            </div>
-            <div className="bg-black-700 p-5 flex gap-5 items-center rounded-lg">
-              <div className="bg-black-800 p-5 rounded-md">
-                <Image
-                  src="assets/icons/inbox.svg"
-                  alt="business"
-                  width={30}
-                  height={20}
-                />
-              </div>
-              <p className="paragraph-1-medium">
-                Elevate your coding with exclusive content for professional
-                growth
-              </p>
-            </div>
+            ))}
           </article>
         </div>
       </div>
@@ -182,7 +156,7 @@ const Register = () => {
             </div>
             <Button
               type="button"
-              // onClick={() => signIn("google", { callbackUrl: "/home" })}
+              onClick={() => signIn("google", { callbackUrl: "/home" })}
               className="paragraph-3-medium flex w-full items-center gap-2 bg-black-800">
               <Image
                 src={"/assets/icons/google.svg"}
@@ -195,7 +169,7 @@ const Register = () => {
               </p>
             </Button>
             <Button
-              // onClick={() => signIn("github", { callbackUrl: "/home" })}
+              onClick={() => signIn("github", { callbackUrl: "/home" })}
               type="button"
               className="item flex w-full gap-2  bg-black-800">
               <Image
