@@ -21,6 +21,8 @@ import {
 import { onboardingSchema } from "@/lib/validation";
 import { Button } from "@/components/ui/button";
 import toast, { Toaster } from "react-hot-toast";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
 
 const Onboarding = () => {
   const [step, setStep] = useState<number>(0);
@@ -36,7 +38,7 @@ const Onboarding = () => {
   const goNext = async () => {
     if (step === 0) {
       const success = await form.trigger("currentKnowledge");
-      if (success && form.getValues("currentKnowledge")) {
+      if (success) {
         setStep(1);
       } else {
         toast.error("Please select one option.");
@@ -44,7 +46,7 @@ const Onboarding = () => {
     }
     if (step === 1) {
       const success = await form.trigger("codingAmbitions");
-      if (success && form.getValues("codingAmbitions")) {
+      if (success) {
         setStep(2);
       } else {
         toast.error("Please select one or more options.");
@@ -112,12 +114,12 @@ const Onboarding = () => {
           />
         </div>
         {step === 0 && (
-          <h2 className="display-1-bold mr-auto !text-white-100 mb-10">
+          <h2 className="display-1-bold mr-auto !text-white-100 md:mb-10">
             Which best describes your current programming journey?
           </h2>
         )}
         {step === 1 && (
-          <h2 className="display-1-bold mr-auto !text-white-100 mb-10">
+          <h2 className="display-1-bold mr-auto !text-white-100 md:mb-10">
             Define your coding ambitions
           </h2>
         )}
@@ -145,15 +147,26 @@ const Onboarding = () => {
                     render={({ field }) => (
                       <FormItem>
                         <FormControl>
-                          <Button
-                            type="button"
-                            value={item.title}
-                            onClick={() => field.onChange(item.title)}
-                            className={`w-full justify-start bg-black-800 ${
-                              field.value === item.title ? "bg-primary-500" : ""
-                            } border-none h-11 text-[14px] paragraph-1-medium`}>
-                            {item.title}
-                          </Button>
+                          <>
+                            <Input
+                              type="radio"
+                              id={item.title}
+                              checked={field.value === item.title}
+                              onChange={() => field.onChange(item.title)}
+                              className="hidden"
+                            />
+                            <FormLabel
+                              htmlFor={item.title}
+                              className={`w-full flex items-center
+                              ${
+                                item.title === field.value
+                                  ? "bg-primary-500"
+                                  : "bg-black-800"
+                              }
+                              px-4 justify-start  rounded border-none h-14 text-[14px] paragraph-1-medium cursor-pointer`}>
+                              {item.title}
+                            </FormLabel>
+                          </>
                         </FormControl>
                       </FormItem>
                     )}
@@ -171,24 +184,32 @@ const Onboarding = () => {
                     render={({ field }) => (
                       <FormItem>
                         <FormControl>
-                          <Button
-                            type="button"
-                            onClick={() => {
-                              const newValue = field.value.includes(item.title)
-                                ? field.value.filter(
-                                    (value) => value !== item.title
-                                  )
-                                : [...field.value, item.title];
-                              field.onChange(newValue);
-                            }}
-                            className={`w-full 
-                         ${
-                           field.value.includes(item.title)
-                             ? "bg-primary-500"
-                             : "bg-black-800"
-                         }  border-none h-11 justify-start text-[14px] paragraph-1-medium`}>
-                            {item.title}
-                          </Button>
+                          <>
+                            <Checkbox
+                              id={item.title}
+                              checked={field.value.includes(item.title)}
+                              onCheckedChange={(checked) => {
+                                const newValue = checked
+                                  ? [...field.value, item.title]
+                                  : field.value.filter(
+                                      (value) => value !== item.title
+                                    );
+                                field.onChange(newValue);
+                              }}
+                              className="hidden"
+                            />
+                            <FormLabel
+                              htmlFor={item.title}
+                              className={`w-full flex items-center
+                              ${
+                                field.value.includes(item.title)
+                                  ? "bg-primary-500"
+                                  : "bg-black-800"
+                              }
+                              px-4  justify-start  rounded border-none h-14 text-[14px] paragraph-1-medium cursor-pointer`}>
+                              {item.title}
+                            </FormLabel>
+                          </>
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -221,7 +242,7 @@ const Onboarding = () => {
                               field.value.includes(item.title)
                                 ? "bg-primary-500"
                                 : "bg-black-800"
-                            } h-11 text-[14px] paragraph-1-medium `}>
+                            } md:h-12 text-[14px] paragraph-3-medium !px-2 md:!px-5  `}>
                             {item.title}
                           </Button>
                         </FormControl>
@@ -234,7 +255,7 @@ const Onboarding = () => {
             )}
             <Button
               onClick={() => goNext()}
-              className="w-full bg-primary-500 text-[14px] paragraph-2-bold ">
+              className="w-full bg-primary-500  paragraph-2-bold ">
               {step === 2 ? "Get Started" : "Next"}
             </Button>
           </form>
