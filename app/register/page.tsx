@@ -3,7 +3,7 @@ import Image from "next/image";
 import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { set, z } from "zod";
 import {
   Form,
   FormControl,
@@ -19,8 +19,10 @@ import { signInSchema } from "@/lib/validation";
 import { Separator } from "@/components/ui/separator";
 import { signIn } from "next-auth/react";
 import { regWelcome } from "@/constants";
+import { useTheme } from "../context/ThemeProvider";
 
 const Register = () => {
+  const { setMode, mode } = useTheme();
   const form = useForm<z.infer<typeof signInSchema>>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
@@ -41,6 +43,9 @@ const Register = () => {
       <div className="hidden lg:w-1/2 p-16 lg:flex flex-col items-center">
         <div className="w-full">
           <Image
+            onClick={() =>
+              setMode && setMode(mode === "dark" ? "light" : "dark")
+            }
             src="/assets/icons/logo-dark.svg"
             alt="logo"
             width={147}
@@ -54,8 +59,10 @@ const Register = () => {
             conversation.
           </h2>
           <article className="flex flex-col gap-5">
-            {regWelcome.map((item) => (
-              <div className="bg-black-700 p-5 flex gap-5 items-center rounded-lg">
+            {regWelcome.map((item, index) => (
+              <div
+                key={index + 1}
+                className="bg-black-700 p-5 flex gap-5 items-center rounded-lg">
                 <div className="bg-black-800 h-[60px] p-5 rounded-md">
                   <Image
                     src={item.image}

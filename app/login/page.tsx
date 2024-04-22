@@ -50,8 +50,10 @@ const Login = () => {
         <div className="max-w-md">
           <h2 className="display-1-bold mb-10">Sign in to DevToday.</h2>
           <article className="flex flex-col gap-5">
-            {loginWelcome.map((item) => (
-              <div className="bg-black-700 p-5 flex gap-5 items-center rounded-lg">
+            {loginWelcome.map((item, index) => (
+              <div
+                key={index + 1}
+                className="bg-black-700 p-5 flex gap-5 items-center rounded-lg">
                 <div className="bg-black-800 h-[60px] p-5 rounded-md">
                   <Image
                     src={item.image}
@@ -121,7 +123,7 @@ const Login = () => {
               Next
             </Button>
             <Link
-              href="/login"
+              href="/register"
               className="text-white-300 block cursor-pointer text-center hover:underline">
               Don’t have an account yet?
               <span className="text-[16px] ml-1 text-primary-500">
