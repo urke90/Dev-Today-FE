@@ -22,8 +22,8 @@ import { loginWelcome } from "@/constants";
 import { useTheme } from "../context/ThemeProvider";
 
 const Login = () => {
-  const { theme } = useTheme();
-  console.log(theme);
+  const { mode, setMode } = useTheme();
+  const colorsLogIn = ["bg-[#E7FAF4]", "bg-[#FDF4EA]"];
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -40,11 +40,21 @@ const Login = () => {
   }
 
   return (
-    <div className="bg-black-800 min-h-screen flex">
+    <div
+      className={`${
+        mode === "light" ? "bg-white-100" : "bg-black-800"
+      } min-h-screen flex`}>
       <div className="hidden lg:w-1/2 p-16 lg:flex flex-col items-center">
         <div className="w-full">
           <Image
-            src="/assets/icons/logo-dark.svg"
+            onClick={() =>
+              setMode && setMode(mode === "dark" ? "light" : "dark")
+            }
+            src={`${
+              mode === "dark"
+                ? "/assets/icons/logo-dark.svg"
+                : "assets/icons/logo-light.svg"
+            }`}
             alt="logo"
             width={147}
             height={30}
@@ -57,8 +67,13 @@ const Login = () => {
             {loginWelcome.map((item, index) => (
               <div
                 key={index + 1}
-                className="bg-black-700 p-5 flex gap-5 items-center rounded-lg">
-                <div className="bg-black-800 h-[60px] p-5 rounded-md">
+                className={`${
+                  mode === "dark" ? "bg-black-700" : "bg-white-100"
+                } p-5 flex gap-5 items-center rounded-lg`}>
+                <div
+                  className={`
+                ${mode === "dark" ? "bg-black-800" : `${colorsLogIn[index]}`}
+                 h-[60px] p-5 rounded-md`}>
                   <Image
                     src={item.image}
                     alt={item.alt}
@@ -72,10 +87,17 @@ const Login = () => {
           </article>
         </div>
       </div>
-      <div className="text-white-100 flex flex-col  pt-10 lg:pt-44 lg:justify-start items-center bg-black-900 px-4 md:px-10 xl:px-28  w-full lg:w-1/2">
+      <div
+        className={`text-white-100 flex flex-col  pt-10 lg:pt-44 lg:justify-start items-center ${
+          mode === "dark" ? "bg-black-900" : "bg-white-200"
+        } px-4 md:px-10 xl:px-28  w-full lg:w-1/2`}>
         <div className="w-full lg:hidden">
           <Image
-            src="/assets/icons/logo-dark.svg"
+            src={
+              mode === "dark"
+                ? "/assets/icons/logo-dark.svg"
+                : "/assets/icons/logo-light.svg"
+            }
             alt="logo"
             width={147}
             height={30}
@@ -95,7 +117,9 @@ const Login = () => {
                   <FormControl>
                     <Input
                       placeholder="Enter your email address"
-                      className="h-11 rounded border-none bg-black-800 paragraph-3-medium"
+                      className={`h-11 rounded placeholder:font-normal border-[1px] dark:border-none border-gray-300/40 ${
+                        mode === "dark" ? "bg-black-800" : "bg-white-100"
+                      }  paragraph-3-medium focus-visible:ring-0 focus-visible:ring-offset-0 focus:ring-offset-0 `}
                       {...field}
                     />
                   </FormControl>
@@ -113,7 +137,9 @@ const Login = () => {
                     <Input
                       placeholder="Enter your password"
                       type="password"
-                      className="h-11 rounded border-none bg-black-800 paragraph-3-medium"
+                      className={`h-11 rounded placeholder:font-normal border-[1px] dark:border-none border-gray-300/40 ${
+                        mode === "dark" ? "bg-black-800" : "bg-white-100"
+                      }  paragraph-3-medium focus-visible:ring-0 focus-visible:ring-offset-0 focus:ring-offset-0 `}
                       {...field}
                     />
                   </FormControl>
@@ -135,31 +161,45 @@ const Login = () => {
               </span>
             </Link>
             <div className="flex items-center justify-between">
-              <Separator className="w-2/5 bg-black-800" />
+              <Separator
+                className={`w-2/5 ${
+                  mode === "dark" ? "bg-black-800" : "bg-black-700/10"
+                }`}
+              />
               <p className="paragraph-4-regular">or</p>
-              <Separator className="w-2/5 bg-black-800" />
+              <Separator
+                className={`w-2/5 ${
+                  mode === "dark" ? "bg-black-800" : "bg-black-700/10"
+                }`}
+              />
             </div>
             <Button
               type="button"
               onClick={() => signIn("google", { callbackUrl: "/home" })}
-              className="paragraph-3-medium flex w-full items-center gap-2 bg-black-800">
+              className={`paragraph-3-medium flex w-full items-center gap-2 ${
+                mode === "dark" ? "bg-black-800" : "bg-white-100"
+              }`}>
               <Image
                 src={"/assets/icons/google.svg"}
                 alt="google"
                 width={20}
                 height={20}
+                className={`${mode === "light" && "invert"}`}
               />
               <p className="paragraph-3-medium ">Continue with Google</p>
             </Button>
             <Button
               onClick={() => signIn("github", { callbackUrl: "/home" })}
               type="button"
-              className="item flex w-full gap-2  bg-black-800">
+              className={`paragraph-3-medium flex w-full items-center gap-2 ${
+                mode === "dark" ? "bg-black-800" : "bg-white-100"
+              }`}>
               <Image
                 src={"/assets/icons/github.svg"}
                 alt="github"
                 width={20}
                 height={20}
+                className={`${mode === "light" && "invert"}`}
               />
               <p className="paragraph-3-medium ">Continue with Github</p>
             </Button>

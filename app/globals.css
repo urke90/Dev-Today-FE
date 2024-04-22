@@ -19,7 +19,7 @@
 }
 @layer utilities {
   .display-1-bold {
-    @apply text-[19px] md:text-left md:text-[31px] md:leading-[40px] font-bold text-black-800 dark:text-white-100;
+    @apply text-[21px] sm:text-[27px] md:text-left md:text-[31px] md:leading-[40px] font-bold text-black-800 dark:text-white-100;
   }
   .display-2-bold {
     @apply text-[24px] leading-[32px] font-bold text-black-800 dark:text-white-100;
@@ -49,7 +49,7 @@
     @apply text-[16px] leading-[24px] font-medium text-black-800 dark:text-white-400;
   }
   .paragraph-3-medium {
-    @apply text-[11px] md:text-[14px] md:leading-[20px] font-bold text-black-800 dark:text-white-200;
+    @apply text-[16px] md:leading-[20px] font-bold text-black-800 dark:text-white-200;
   }
   .paragraph-4-medium {
     @apply text-[12px] leading-[16px] font-medium text-black-800 dark:text-white-200;

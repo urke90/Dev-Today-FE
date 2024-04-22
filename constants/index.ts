@@ -41,7 +41,7 @@ export const onboardingWelcome = [
     label: "Highlight your skills and projects for the community.",
   },
   {
-    image: "/assets/icons/chat.svg",
+    image: "/assets/icons/chat-dark.svg",
     alt: "chat",
     label: "Explore learning opportunities and connect with mentors",
   },

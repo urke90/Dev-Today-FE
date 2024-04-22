@@ -22,7 +22,10 @@ export default function RootLayout({
 
   return (
     <html lang="en" className={`${theme}`}>
-      <body className={`${inter.className} min-h-screen `}>
+      <body
+        className={`${inter.className} min-h-screen ${
+          theme === "dark" ? "bg-[#000]" : "bg-white-100"
+        } `}>
         <ThemeProvider theme={theme}>
           <main className="max-w-screen-xxl mx-auto">{children}</main>
         </ThemeProvider>
