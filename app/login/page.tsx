@@ -19,8 +19,12 @@ import { loginSchema } from "@/lib/validation";
 import { Separator } from "@/components/ui/separator";
 import { signIn } from "next-auth/react";
 import { loginWelcome } from "@/constants";
+import { useTheme } from "../context/ThemeProvider";
 
 const Login = () => {
+  const { theme } = useTheme();
+  console.log(theme);
+
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {

@@ -18,11 +18,11 @@ export default function RootLayout({
 }>) {
   const cookiesProvider = cookies();
   const themeCookie = cookiesProvider.get("theme");
-  const theme = themeCookie ? themeCookie.value : "dark";
+  const theme = themeCookie ? themeCookie.value : "light";
 
   return (
     <html lang="en" className={`${theme}`}>
-      <body className={`${inter.className} min-h-screen bg-[#000]`}>
+      <body className={`${inter.className} min-h-screen `}>
         <ThemeProvider theme={theme}>
           <main className="max-w-screen-xxl mx-auto">{children}</main>
         </ThemeProvider>

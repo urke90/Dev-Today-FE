@@ -21,7 +21,7 @@ export const ThemeProvider = ({ children, theme }: ThemeContextType) => {
       document.documentElement.classList.remove("light");
       document.documentElement.classList.add("dark");
     }
-  }, [mode]);
+  }, [mode, setMode, theme]);
 
   return (
     <ThemeContext.Provider value={{ mode, setMode, theme }}>

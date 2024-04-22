@@ -1,18 +1,18 @@
 export const regWelcome = [
   {
-    image: "/assets/icons/business.svg",
+    image: "/assets/icons/business-dark.svg",
     alt: "business",
     label:
       "Discover the latest trends, tools, and insights shaping the developer world.",
   },
 
   {
-    image: "/assets/icons/chat.svg",
+    image: "/assets/icons/chat-dark.svg",
     alt: "chat",
     label: "Forge connections, collaborate on projects, and grow together.",
   },
   {
-    image: "/assets/icons/inbox.svg",
+    image: "/assets/icons/inbox-dark.svg",
     alt: "inbox",
     label:
       "Elevate your coding with exclusive content for professional growth.",

@@ -23,6 +23,8 @@ import { useTheme } from "../context/ThemeProvider";
 
 const Register = () => {
   const { setMode, mode } = useTheme();
+  const colors = ["bg-[#FFECE6]", "bg-[#FDF4EA]", "bg-[#EBF2FC]"];
+
   const form = useForm<z.infer<typeof signInSchema>>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
@@ -39,14 +41,21 @@ const Register = () => {
   }
 
   return (
-    <div className="bg-black-800 min-h-screen flex">
+    <div
+      className={`${
+        mode === "light" ? "bg-white-100" : "bg-black-800"
+      } min-h-screen flex`}>
       <div className="hidden lg:w-1/2 p-16 lg:flex flex-col items-center">
         <div className="w-full">
           <Image
             onClick={() =>
               setMode && setMode(mode === "dark" ? "light" : "dark")
             }
-            src="/assets/icons/logo-dark.svg"
+            src={`${
+              mode === "dark"
+                ? "/assets/icons/logo-dark.svg"
+                : "assets/icons/logo-light.svg"
+            }`}
             alt="logo"
             width={147}
             height={30}
@@ -62,10 +71,20 @@ const Register = () => {
             {regWelcome.map((item, index) => (
               <div
                 key={index + 1}
-                className="bg-black-700 p-5 flex gap-5 items-center rounded-lg">
-                <div className="bg-black-800 h-[60px] p-5 rounded-md">
+                className={`${
+                  mode === "dark" ? "bg-black-700" : "bg-white-100"
+                } p-5 flex gap-5 items-center rounded-lg`}>
+                <div
+                  className={`
+                  ${mode === "dark" ? "bg-black-800" : `${colors[index]}`}
+                }
+                h-[60px] p-5 rounded-md`}>
                   <Image
-                    src={item.image}
+                    src={
+                      mode === "dark"
+                        ? item.image
+                        : item.image.replace("dark", "light")
+                    }
                     alt={item.alt}
                     width={30}
                     height={20}
@@ -77,10 +96,17 @@ const Register = () => {
           </article>
         </div>
       </div>
-      <div className="text-white-100 flex flex-col pt-10 lg:pt-44 lg:justify-start items-center bg-black-900 px-4 md:px-10 xl:px-28  w-full lg:w-1/2">
+      <div
+        className={`text-white-100 flex flex-col pt-10 lg:pt-44 lg:justify-start items-center ${
+          mode === "dark" ? "bg-black-900" : "bg-white-200"
+        } px-4 md:px-10 xl:px-28  w-full lg:w-1/2`}>
         <div className="w-full lg:hidden">
           <Image
-            src="/assets/icons/logo-dark.svg"
+            src={`${
+              mode === "dark"
+                ? "/assets/icons/logo-dark.svg"
+                : "assets/icons/logo-light.svg"
+            }`}
             alt="logo"
             width={147}
             height={30}
@@ -102,7 +128,9 @@ const Register = () => {
                   <FormControl>
                     <Input
                       placeholder="Full Name"
-                      className="h-11 rounded border-none bg-black-800 paragraph-3-medium"
+                      className={`h-11 rounded placeholder:font-normal border-[1px] dark:border-none border-gray-300/40 ${
+                        mode === "dark" ? "bg-black-800" : "bg-white-100"
+                      }  paragraph-3-medium focus-visible:ring-0 focus-visible:ring-offset-0 focus:ring-offset-0 `}
                       {...field}
                     />
                   </FormControl>
@@ -119,7 +147,9 @@ const Register = () => {
                   <FormControl>
                     <Input
                       placeholder="Enter your email address"
-                      className="h-11 rounded border-none bg-black-800 paragraph-3-medium"
+                      className={`h-11 rounded placeholder:font-normal  border-[1px] dark:border-none border-gray-300/40 ${
+                        mode === "dark" ? "bg-black-800" : "bg-white-100"
+                      }  paragraph-3-medium focus-visible:ring-0 focus-visible:ring-offset-0 focus:ring-offset-0 `}
                       {...field}
                     />
                   </FormControl>
@@ -137,7 +167,9 @@ const Register = () => {
                     <Input
                       placeholder="Enter your password"
                       type="password"
-                      className="h-11 rounded border-none bg-black-800 paragraph-3-medium"
+                      className={`h-11 rounded placeholder:font-normal  border-[1px] dark:border-none border-gray-300/40 ${
+                        mode === "dark" ? "bg-black-800" : "bg-white-100"
+                      }  paragraph-3-medium focus-visible:ring-0 focus-visible:ring-offset-0 focus:ring-offset-0 `}
                       {...field}
                     />
                   </FormControl>
@@ -152,42 +184,52 @@ const Register = () => {
             </Button>
             <Link
               href="/login"
-              className="text-white-300 block cursor-pointer text-center hover:underline">
+              className="text-white-500/70 block cursor-pointer text-center hover:underline">
               Already have an account?
               <span className="text-[16px] ml-1 text-primary-500">Sign in</span>
             </Link>
             <div className="flex items-center justify-between">
-              <Separator className="w-2/5 bg-black-800" />
-              <p className="paragraph-4-regular !text-white-100">or</p>
-              <Separator className="w-2/5 bg-black-800" />
+              <Separator
+                className={`w-2/5 ${
+                  mode === "dark" ? "bg-black-800" : "bg-black-700/10"
+                }`}
+              />
+              <p className="paragraph-4-regular">or</p>
+              <Separator
+                className={`w-2/5 ${
+                  mode === "dark" ? "bg-black-800" : "bg-black-700/10"
+                }`}
+              />
             </div>
             <Button
               type="button"
               onClick={() => signIn("google", { callbackUrl: "/home" })}
-              className="paragraph-3-medium flex w-full items-center gap-2 bg-black-800">
+              className={`paragraph-3-medium flex w-full items-center gap-2 ${
+                mode === "dark" ? "bg-black-800" : "bg-white-100"
+              }`}>
               <Image
                 src={"/assets/icons/google.svg"}
                 alt="google"
                 width={20}
                 height={20}
+                className={`${mode === "light" && "invert"}`}
               />
-              <p className="paragraph-3-medium !text-white-100">
-                Continue with Google
-              </p>
+              <p className="paragraph-3-medium ">Continue with Google</p>
             </Button>
             <Button
               onClick={() => signIn("github", { callbackUrl: "/home" })}
               type="button"
-              className="item flex w-full gap-2  bg-black-800">
+              className={`paragraph-3-medium flex w-full items-center gap-2 ${
+                mode === "dark" ? "bg-black-800" : "bg-white-100"
+              }`}>
               <Image
                 src={"/assets/icons/github.svg"}
                 alt="github"
                 width={20}
                 height={20}
+                className={`${mode === "light" && "invert"}`}
               />
-              <p className="paragraph-3-medium !text-white-100">
-                Continue with Github
-              </p>
+              <p className="paragraph-3-medium ">Continue with Github</p>
             </Button>
           </form>
         </Form>
