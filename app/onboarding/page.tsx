@@ -23,6 +23,7 @@ import { Button } from "@/components/ui/button";
 import toast, { Toaster } from "react-hot-toast";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 const Onboarding = () => {
   const [step, setStep] = useState<number>(0);
@@ -61,6 +62,7 @@ const Onboarding = () => {
       }
     }
   };
+  console.log(form.getValues("currentKnowledge"));
 
   function onSubmit(values: z.infer<typeof onboardingSchema>) {
     console.log(values);
@@ -138,119 +140,143 @@ const Onboarding = () => {
             className="space-y-5 w-full ">
             {step === 0 && (
               <>
-                {currentKnowledge.map((item) => (
-                  <Controller
-                    key={item.title}
-                    control={form.control}
-                    defaultValue="false"
-                    name="currentKnowledge"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <>
-                            <Input
-                              type="radio"
-                              id={item.title}
-                              checked={field.value === item.title}
-                              onChange={() => field.onChange(item.title)}
-                              className="hidden"
-                            />
-                            <FormLabel
-                              htmlFor={item.title}
-                              className={`w-full flex items-center
+                <FormField
+                  control={form.control}
+                  name="currentKnowledge"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <RadioGroup
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                          className="flex flex-col space-y-1">
+                          {currentKnowledge.map((item) => (
+                            <FormItem key={item.value}>
+                              <FormControl>
+                                <RadioGroupItem
+                                  value={item.value}
+                                  className="hidden"
+                                />
+                              </FormControl>
+                              <FormLabel
+                                className={`w-full flex items-center
                               ${
-                                item.title === field.value
+                                item.value === field.value
                                   ? "bg-primary-500"
                                   : "bg-black-800"
                               }
                               px-4 justify-start  rounded border-none h-14 text-[14px] paragraph-1-medium cursor-pointer`}>
-                              {item.title}
-                            </FormLabel>
-                          </>
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
-                ))}
+                                {item.title}
+                              </FormLabel>
+                            </FormItem>
+                          ))}
+                        </RadioGroup>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
               </>
             )}
             {step === 1 && (
-              <>
-                {codingAmbitions.map((item, index) => (
-                  <Controller
-                    key={item.title}
-                    control={form.control}
-                    name="codingAmbitions"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <>
-                            <Checkbox
-                              id={item.title}
-                              checked={field.value.includes(item.title)}
-                              onCheckedChange={(checked) => {
-                                const newValue = checked
-                                  ? [...field.value, item.title]
-                                  : field.value.filter(
-                                      (value) => value !== item.title
-                                    );
-                                field.onChange(newValue);
-                              }}
-                              className="hidden"
-                            />
-                            <FormLabel
-                              htmlFor={item.title}
-                              className={`w-full flex items-center
+              <FormField
+                control={form.control}
+                name="codingAmbitions"
+                render={() => (
+                  <FormItem className="flex flex-col">
+                    {codingAmbitions.map((item, index) => (
+                      <FormField
+                        key={index}
+                        control={form.control}
+                        name="codingAmbitions"
+                        render={({ field }) => {
+                          return (
+                            <FormItem key={index}>
+                              <FormControl>
+                                <Checkbox
+                                  className="hidden"
+                                  checked={field.value?.includes(item.value)}
+                                  onCheckedChange={(checked) => {
+                                    return checked
+                                      ? field.onChange([
+                                          ...field.value,
+                                          item.value,
+                                        ])
+                                      : field.onChange(
+                                          field.value?.filter(
+                                            (value) => value !== item.value
+                                          )
+                                        );
+                                  }}
+                                />
+                              </FormControl>
+                              <FormLabel
+                                className={`w-full flex items-center
                               ${
-                                field.value.includes(item.title)
+                                field.value.includes(item.value)
                                   ? "bg-primary-500"
                                   : "bg-black-800"
                               }
                               px-4  justify-start  rounded border-none h-14 text-[14px] paragraph-1-medium cursor-pointer`}>
-                              {item.title}
-                            </FormLabel>
-                          </>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                ))}
-              </>
+                                {item.title}
+                              </FormLabel>
+                            </FormItem>
+                          );
+                        }}
+                      />
+                    ))}
+                  </FormItem>
+                )}
+              />
             )}
             {step === 2 && (
-              <div className="flex flex-wrap gap-3">
-                {preferSkills.map((item) => (
-                  <Controller
-                    key={item.title}
-                    control={form.control}
-                    name="preferSkills"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <Button
-                            type="button"
-                            onClick={() => {
-                              const newValue = field.value.includes(item.title)
-                                ? field.value.filter(
-                                    (value) => value !== item.title
-                                  )
-                                : [...field.value, item.title];
-                              field.onChange(newValue);
-                            }}
-                            className={`border-none ${
-                              field.value.includes(item.title)
-                                ? "bg-primary-500"
-                                : "bg-black-800"
-                            } md:h-12 text-[14px] paragraph-3-medium !px-2 md:!px-5  `}>
-                            {item.title}
-                          </Button>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                ))}
+              <div>
+                <FormField
+                  control={form.control}
+                  name="preferSkills"
+                  render={() => (
+                    <FormItem className="flex flex-wrap gap-3 items-center space-y-0">
+                      {preferSkills.map((item) => (
+                        <FormField
+                          key={item.title}
+                          control={form.control}
+                          name="preferSkills"
+                          render={({ field }) => {
+                            return (
+                              <FormItem key={item.title} className="flex">
+                                <FormControl>
+                                  <Checkbox
+                                    className="hidden"
+                                    checked={field.value?.includes(item.title)}
+                                    onCheckedChange={(checked) => {
+                                      return checked
+                                        ? field.onChange([
+                                            ...field.value,
+                                            item.title,
+                                          ])
+                                        : field.onChange(
+                                            field.value?.filter(
+                                              (value) => value !== item.title
+                                            )
+                                          );
+                                    }}
+                                  />
+                                </FormControl>
+                                <FormLabel
+                                  className={`border-none ${
+                                    field.value.includes(item.title)
+                                      ? "bg-primary-500"
+                                      : "bg-black-800"
+                                  } h-12 text-[14px] rounded-lg flex items-center paragraph-3-medium !px-2 md:!px-5  `}>
+                                  {item.title}
+                                </FormLabel>
+                              </FormItem>
+                            );
+                          }}
+                        />
+                      ))}
+                    </FormItem>
+                  )}
+                />
               </div>
             )}
             <Button

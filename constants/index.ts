@@ -48,18 +48,24 @@ export const onboardingWelcome = [
 ];
 
 export const currentKnowledge = [
-  { title: "Seasoned Pro - Coding veteran" },
-  { title: "Learning Enthusiast - Continuous learner" },
-  { title: "Project Explorer - Passionate builder" },
-  { title: "Tech Student - Studying programming." },
-  { title: "Tech Explorer - New to coding, eager to learn" },
+  { title: "Seasoned Pro - Coding veteran", value: "pro" },
+  {
+    title: "Learning Enthusiast - Continuous learner",
+    value: "learning-enthusiast",
+  },
+  { title: "Project Explorer - Passionate builder", value: "explorer" },
+  { title: "Tech Student - Studying programming.", value: "student" },
+  {
+    title: "Tech Explorer - New to coding, eager to learn",
+    value: "tech-explorer",
+  },
 ];
 export const codingAmbitions = [
-  { title: "Build Portfolio - Showcase projects" },
-  { title: "Open Source Contributor - Make your mark" },
-  { title: "Master New Language - Learn and conquer" },
-  { title: "Launch Side Project - Bring ideas to life" },
-  { title: "Attend Coding Events - Network and learn" },
+  { title: "Build Portfolio - Showcase projects", value: "portfolio" },
+  { title: "Open Source Contributor - Make your mark", value: "contributor" },
+  { title: "Master New Language - Learn and conquer", value: "language" },
+  { title: "Launch Side Project - Bring ideas to life", value: "project" },
+  { title: "Attend Coding Events - Network and learn", value: "events" },
 ];
 
 export const preferSkills = [
