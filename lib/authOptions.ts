@@ -22,13 +22,16 @@ export const authOptions = {
       async authorize(credentials) {
         try {
           if (!credentials) return null;
-          const result = await fetch('http://localhost:8080/register', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(credentials),
-          });
+          const result = await fetch(
+            'http://localhost:8080/api/user/register',
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(credentials),
+            }
+          );
           const user = await result.json();
           if (!user) return null;
           return user;
@@ -43,21 +46,42 @@ export const authOptions = {
     async signIn({ profile, account }: any) {
       if (account?.provider === 'google' || account?.provider === 'github') {
         try {
-          const result = await fetch('http://localhost:8080/login', {
+          const result = await fetch('http://localhost:8080/api/user/login', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify(profile),
           });
+
           const user = await result.json();
           if (!user) return null;
-          return user;
+          return true;
         } catch (error) {
           console.log(error);
           throw new Error('Error while authorizing');
         }
       }
+      return true;
+    },
+    async session({ session, token }: any) {
+      try {
+        const result = await fetch(`http://localhost:8080/api/user/`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        const user = await result.json();
+        console.log('user: ', user);
+
+        if (!user) return null;
+        session.user = user;
+      } catch (error) {
+        console.error('signIn error: ', error);
+        throw new Error('Error while signing in');
+      }
+      return session;
     },
   },
   pages: {

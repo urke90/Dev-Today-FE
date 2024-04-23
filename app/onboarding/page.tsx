@@ -1,6 +1,7 @@
 'use client';
 import {
   codingAmbitions,
+  colorsOnboardingIcons,
   currentKnowledge,
   onboardingWelcome,
   preferSkills,
@@ -8,7 +9,7 @@ import {
 import Image from 'next/image';
 import React, { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Controller, useForm, FormState } from 'react-hook-form';
+import { useForm, FormState } from 'react-hook-form';
 import { z } from 'zod';
 import {
   Form,
@@ -28,7 +29,6 @@ import { useTheme } from '../context/ThemeProvider';
 const Onboarding = () => {
   const { mode, setMode } = useTheme();
   const [step, setStep] = useState<number>(0);
-  const colorsOnboardingIcons = ['bg-[#FFECE6]', 'bg-[#FDF4EA]'];
   const form = useForm<z.infer<typeof onboardingSchema>>({
     resolver: zodResolver(onboardingSchema),
     defaultValues: {
@@ -69,10 +69,7 @@ const Onboarding = () => {
     console.log(values);
   }
   return (
-    <div
-      className={`${
-        mode === 'light' ? 'bg-white-100' : 'bg-black-800'
-      } min-h-screen flex`}>
+    <div className="bg-white-100 dark:bg-black-800 min-h-screen flex">
       <Toaster
         toastOptions={{
           className: '!bg-black-600 !text-white-100',
@@ -105,11 +102,7 @@ const Onboarding = () => {
                   mode === 'dark' ? 'bg-black-700' : 'bg-white-100'
                 } p-5 flex gap-5 items-center rounded-lg`}>
                 <div
-                  className={`${
-                    mode === 'dark'
-                      ? 'bg-black-800'
-                      : `${colorsOnboardingIcons[index]}`
-                  } h-[60px]  p-5 rounded-md`}>
+                  className={`dark:bg-black-800 ${colorsOnboardingIcons[index]} h-[60px] p-5 rounded-md`}>
                   <Image
                     src={item.image}
                     alt={item.alt}
@@ -123,10 +116,7 @@ const Onboarding = () => {
           </article>
         </div>
       </div>
-      <div
-        className={`text-white-100 flex flex-col  pt-10 lg:pt-44 lg:justify-start items-center ${
-          mode === 'dark' ? 'bg-black-900' : 'bg-white-200'
-        } px-4 md:px-10 xl:px-28  w-full lg:w-1/2`}>
+      <div className="text-white-100 flex flex-col  pt-10 lg:pt-44 lg:justify-start items-center  dark:bg-black-900 bg-white-200 px-4 md:px-10 xl:px-28  w-full lg:w-1/2">
         <div className="w-full lg:hidden">
           <Image
             src={
@@ -156,10 +146,7 @@ const Onboarding = () => {
               Select your preferred languages and frameworks for a personalized
               experience.
             </h2>
-            <p
-              className={`mr-auto mb-3 ${
-                mode === 'light' ? 'text-black-600' : ''
-              }`}>
+            <p className="mr-auto mb-3 text-black-600 dark:text-white-300">
               Choose as many as you like.
             </p>
           </>
@@ -193,11 +180,7 @@ const Onboarding = () => {
                               ${
                                 item.value === field.value
                                   ? 'bg-primary-500 !text-white-100'
-                                  : `${
-                                      mode === 'dark'
-                                        ? 'bg-black-800'
-                                        : 'bg-white-100'
-                                    }`
+                                  : 'dark:bg-black-800 bg-white-100'
                               }
                               px-4 justify-start  rounded border-none h-14 text-[14px] paragraph-1-medium cursor-pointer`}>
                                 {item.title}
@@ -248,11 +231,7 @@ const Onboarding = () => {
                               ${
                                 field.value.includes(item.value)
                                   ? 'bg-primary-500 !text-white-100'
-                                  : `${
-                                      mode === 'dark'
-                                        ? 'bg-black-800'
-                                        : 'bg-white-100'
-                                    }`
+                                  : 'dark:bg-black-800 bg-white-100'
                               }
                               px-4  justify-start  rounded border-none h-14 text-[14px] paragraph-1-medium cursor-pointer`}>
                                 {item.title}
@@ -303,11 +282,7 @@ const Onboarding = () => {
                                   className={`border-none cursor-pointer ${
                                     field.value.includes(item.title)
                                       ? 'bg-primary-500 !text-white-100'
-                                      : `${
-                                          mode === 'dark'
-                                            ? 'bg-black-800'
-                                            : 'bg-white-100'
-                                        }`
+                                      : 'dark:bg-black-800 bg-white-100'
                                   } h-12  rounded-lg flex items-center paragraph-3-medium !px-5`}>
                                   {item.title}
                                 </FormLabel>
