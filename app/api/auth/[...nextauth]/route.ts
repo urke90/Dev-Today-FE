@@ -1,9 +1,9 @@
-import { authOptions } from "@/lib/authOptions";
-import NextAuth from "next-auth/next";
+import { authOptions } from '@/lib/authOptions';
+import NextAuth from 'next-auth/next';
 
 type HandlerType = typeof NextAuth;
 
-declare module "next-auth" {
+declare module 'next-auth' {
   interface Session {
     id: string;
     name: string;

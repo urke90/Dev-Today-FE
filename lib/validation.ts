@@ -13,5 +13,5 @@ export const loginSchema = z.object({
 export const onboardingSchema = z.object({
   currentKnowledge: z.string().min(1),
   codingAmbitions: z.array(z.string()).min(1),
-  preferSkills: z.array(z.string().max(17)).min(1),
+  preferredSkills: z.array(z.string().max(17)).min(1),
 });
