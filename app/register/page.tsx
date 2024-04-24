@@ -18,7 +18,8 @@ import Link from 'next/link';
 import { signInSchema } from '@/lib/validation';
 import { Separator } from '@/components/ui/separator';
 import { signIn } from 'next-auth/react';
-import { colorsRegister, regWelcome } from '@/constants';
+import { regWelcome } from '@/constants';
+import { colorsRegister } from '@/styles/index';
 import { useTheme } from '../context/ThemeProvider';
 import { useRouter } from 'next/navigation';
 
@@ -48,13 +49,17 @@ const Register = () => {
       }),
     });
 
-    await signIn('credentials', {
+    const result = await signIn('credentials', {
       redirect: false,
       email: values.email,
       password: values.password,
     });
 
-    router.push('/onboarding');
+    if (result?.ok) {
+      router.push('/onboarding');
+    } else {
+      console.log('Error while registering');
+    }
   }
 
   return (
@@ -82,27 +87,28 @@ const Register = () => {
             conversation.
           </h2>
           <article className="flex flex-col gap-5">
-            {regWelcome.map((item, index) => (
-              <div
-                key={index + 1}
-                className="bg-white-100 dark:bg-black-700 p-5 flex gap-5 items-center rounded-lg">
+            {regWelcome.map((item, index) => {
+              return (
                 <div
-                  className={`dark:bg-black-800 ${colorsRegister[index]}
-                h-[60px] p-5 rounded-md`}>
-                  <Image
-                    src={
-                      mode === 'dark'
-                        ? item.image
-                        : item.image.replace('dark', 'light')
-                    }
-                    alt={item.alt}
-                    width={30}
-                    height={20}
-                  />
+                  key={index + 1}
+                  className="bg-white-100 dark:bg-black-700 p-5 flex gap-5 items-center rounded-lg">
+                  <div
+                    className={`dark:bg-black-800 ${colorsRegister[index]} h-[60px] p-5 rounded-md`}>
+                    <Image
+                      src={
+                        mode === 'dark'
+                          ? item.image
+                          : item.image.replace('dark', 'light')
+                      }
+                      alt={item.alt}
+                      width={30}
+                      height={20}
+                    />
+                  </div>
+                  <p className="paragraph-1-medium">{item.label}</p>
                 </div>
-                <p className="paragraph-1-medium">{item.label}</p>
-              </div>
-            ))}
+              );
+            })}
           </article>
         </div>
       </div>

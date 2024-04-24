@@ -42,9 +42,6 @@ export const authOptions = {
           }
 
           if (!data) return null;
-          console.log(data);
-
-          console.log(data.user);
 
           return data.user;
         } catch (error) {
@@ -59,7 +56,7 @@ export const authOptions = {
       if (account?.provider === 'google' || account?.provider === 'github') {
         try {
           const result = await fetch('http://localhost:8080/api/user/login', {
-            method: 'POST',
+            method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
             },
@@ -77,8 +74,6 @@ export const authOptions = {
       return true;
     },
     async session({ session, token }: any) {
-      console.log('session', session);
-
       try {
         const result = await fetch(
           `http://localhost:8080/api/user/${session.user.email}`,
@@ -96,7 +91,6 @@ export const authOptions = {
         console.error('signIn error: ', error);
         throw new Error('Error while signing in');
       }
-      console.log(session);
 
       return session;
     },

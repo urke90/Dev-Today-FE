@@ -1,13 +1,13 @@
 'use client';
 import {
   codingAmbitions,
-  colorsOnboardingIcons,
   currentKnowledge,
   onboardingWelcome,
   preferSkills,
 } from '@/constants';
+import { colorsOnboardingIcons } from '@/styles/index';
 import Image from 'next/image';
-import React, { useState } from 'react';
+import React, { use, useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, FormState } from 'react-hook-form';
 import { z } from 'zod';
@@ -20,15 +20,26 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { onboardingSchema } from '@/lib/validation';
-import { Button } from '@/components/ui/button';
 import toast, { Toaster } from 'react-hot-toast';
-import { Checkbox } from '@/components/ui/checkbox';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { useRouter } from 'next/navigation';
 import { useTheme } from '../context/ThemeProvider';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Button } from '@/components/ui/button';
+import { signOut, useSession } from 'next-auth/react';
+interface UserWithId {
+  id: string;
+}
 
 const Onboarding = () => {
   const { mode, setMode } = useTheme();
+  const router = useRouter();
   const [step, setStep] = useState<number>(0);
+  const session = useSession();
+  const { data: user } = session;
+
+  const userId = (user?.user as UserWithId)?.id;
+
   const form = useForm<z.infer<typeof onboardingSchema>>({
     resolver: zodResolver(onboardingSchema),
     defaultValues: {
@@ -65,8 +76,22 @@ const Onboarding = () => {
     }
   };
 
-  function onSubmit(values: z.infer<typeof onboardingSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof onboardingSchema>) {
+    const result = await fetch(
+      `http://localhost:8080/api/user/${userId}/onboarding`,
+      {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ ...values, isOnboardingCompleted: true }),
+      }
+    );
+    if (result?.ok) {
+      router.push('/home');
+    } else {
+      console.log('Error while updating onboarding');
+    }
   }
   return (
     <div className="bg-white-100 dark:bg-black-800 min-h-screen flex">
@@ -93,7 +118,11 @@ const Onboarding = () => {
           />
         </div>
         <div className="max-w-md">
-          <h2 className="display-1-bold mb-10">Sign in to DevToday.</h2>
+          <h2
+            onClick={() => signOut({ callbackUrl: '/login' })}
+            className="display-1-bold mb-10">
+            Sign in to DevToday.
+          </h2>
           <article className="flex flex-col gap-5">
             {onboardingWelcome.map((item, index) => (
               <div

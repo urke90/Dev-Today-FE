@@ -18,14 +18,14 @@ import Link from 'next/link';
 import { loginSchema } from '@/lib/validation';
 import { Separator } from '@/components/ui/separator';
 import { signIn } from 'next-auth/react';
-import { colorsLogIn, loginWelcome } from '@/constants';
+import { loginWelcome } from '@/constants';
+import { colorsLogIn } from '@/styles/index';
 import { useTheme } from '../context/ThemeProvider';
 import { useRouter } from 'next/navigation';
 
 const Login = () => {
   const { mode, setMode } = useTheme();
   const router = useRouter();
-
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -35,12 +35,15 @@ const Login = () => {
   });
 
   async function onSubmit(values: z.infer<typeof loginSchema>) {
-    await signIn('credentials', {
+    const result = await signIn('credentials', {
       redirect: false,
       email: values.email,
       password: values.password,
     });
-    router.push('/home');
+
+    if (result?.ok) {
+      router.push('/home');
+    }
   }
 
   return (
@@ -114,7 +117,7 @@ const Login = () => {
                   <FormControl>
                     <Input
                       placeholder="Enter your email address"
-                      className="h-11 rounded placeholder:font-normal border-[1px] dark:border-none border-gray-300/40 dark:bg-black-800 bg-white-100  paragraph-3-medium focus-visible:ring-0 focus-visible:ring-offset-0 focus:ring-offset-0 "
+                      className="h-11 rounded placeholder:!font-normal placeholder:text-bla border-[1px] dark:border-none border-gray-300/40 dark:bg-black-800 bg-white-100   paragraph-3-medium focus-visible:ring-0 focus-visible:ring-offset-0 focus:ring-offset-0 "
                       {...field}
                     />
                   </FormControl>
