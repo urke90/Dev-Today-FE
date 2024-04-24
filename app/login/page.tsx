@@ -20,9 +20,11 @@ import { Separator } from '@/components/ui/separator';
 import { signIn } from 'next-auth/react';
 import { colorsLogIn, loginWelcome } from '@/constants';
 import { useTheme } from '../context/ThemeProvider';
+import { useRouter } from 'next/navigation';
 
 const Login = () => {
   const { mode, setMode } = useTheme();
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -32,10 +34,13 @@ const Login = () => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof loginSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof loginSchema>) {
+    await signIn('credentials', {
+      redirect: false,
+      email: values.email,
+      password: values.password,
+    });
+    router.push('/home');
   }
 
   return (

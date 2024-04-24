@@ -16,25 +16,37 @@ export const authOptions = {
     CredentialsProvider({
       name: 'Credentials',
       credentials: {
+        userName: { label: 'Username', type: 'text' },
         email: { label: 'Email', type: 'email' },
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
         try {
           if (!credentials) return null;
-          const result = await fetch(
-            'http://localhost:8080/api/user/register',
-            {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify(credentials),
-            }
-          );
-          const user = await result.json();
-          if (!user) return null;
-          return user;
+          const result = await fetch('http://localhost:8080/api/user/login', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              email: credentials.email,
+              password: credentials.password,
+            }),
+          });
+
+          const data = await result.json();
+
+          if (!result.ok) {
+            console.error('Error response from server', data);
+            throw new Error('Server responded with an error');
+          }
+
+          if (!data) return null;
+          console.log(data);
+
+          console.log(data.user);
+
+          return data.user;
         } catch (error) {
           console.log(error);
           throw new Error('Error while authorizing');
@@ -65,22 +77,27 @@ export const authOptions = {
       return true;
     },
     async session({ session, token }: any) {
-      try {
-        const result = await fetch(`http://localhost:8080/api/user/`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-        const user = await result.json();
-        console.log('user: ', user);
+      console.log('session', session);
 
-        if (!user) return null;
-        session.user = user;
+      try {
+        const result = await fetch(
+          `http://localhost:8080/api/user/${session.user.email}`,
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+        const resultObject = await result.json();
+        if (!resultObject) return null;
+        session.user = resultObject.user;
       } catch (error) {
         console.error('signIn error: ', error);
         throw new Error('Error while signing in');
       }
+      console.log(session);
+
       return session;
     },
   },

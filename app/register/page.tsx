@@ -50,7 +50,6 @@ const Register = () => {
 
     await signIn('credentials', {
       redirect: false,
-      username: values.email,
       email: values.email,
       password: values.password,
     });
