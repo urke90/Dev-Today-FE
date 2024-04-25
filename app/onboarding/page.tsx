@@ -77,20 +77,24 @@ const Onboarding = () => {
   };
 
   async function onSubmit(values: z.infer<typeof onboardingSchema>) {
-    const result = await fetch(
-      `http://localhost:8080/api/user/${userId}/onboarding`,
-      {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ ...values, isOnboardingCompleted: true }),
+    try {
+      const result = await fetch(
+        `http://localhost:8080/api/user/${userId}/onboarding`,
+        {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ ...values, isOnboardingCompleted: true }),
+        }
+      );
+      if (result?.ok) {
+        router.push('/home');
+      } else {
+        throw new Error('Error while updating user onboarding');
       }
-    );
-    if (result?.ok) {
-      router.push('/home');
-    } else {
-      console.log('Error while updating onboarding');
+    } catch (error) {
+      toast.error('Error while updating user onboarding');
     }
   }
   return (

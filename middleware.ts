@@ -27,7 +27,7 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL('/login', request.url));
     }
   } else {
-    if (url.startsWith('/register')) {
+    if (url.startsWith('/register') && session.user.isOnboardingCompleted) {
       return NextResponse.redirect(new URL('/home', request.url));
     }
     if (url.startsWith('/login') && session.user.isOnboardingCompleted) {

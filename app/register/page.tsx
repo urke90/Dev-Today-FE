@@ -37,17 +37,22 @@ const Register = () => {
   });
 
   async function onSubmit(values: z.infer<typeof signInSchema>) {
-    await fetch('http://localhost:8080/api/user/register', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        userName: values.userName,
-        email: values.email,
-        password: values.password,
-      }),
-    });
+    try {
+      await fetch('http://localhost:8080/api/user/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userName: values.userName,
+          email: values.email,
+          password: values.password,
+        }),
+      });
+    } catch (error) {
+      console.error(error);
+      throw new Error('Error while registering');
+    }
 
     const result = await signIn('credentials', {
       redirect: false,
@@ -58,7 +63,7 @@ const Register = () => {
     if (result?.ok) {
       router.push('/onboarding');
     } else {
-      console.log('Error while registering');
+      throw new Error('Error while logging in');
     }
   }
 
@@ -205,7 +210,7 @@ const Register = () => {
             </div>
             <Button
               type="button"
-              onClick={() => signIn('google', { callbackUrl: '/home' })}
+              onClick={() => signIn('google', { callbackUrl: '/onboarding' })}
               className="paragraph-3-medium flex w-full items-center gap-2 dark:bg-black-800 bg-white-100">
               <Image
                 src={'/assets/icons/google.svg'}
@@ -217,7 +222,7 @@ const Register = () => {
               <p className="paragraph-3-medium ">Continue with Google</p>
             </Button>
             <Button
-              onClick={() => signIn('github', { callbackUrl: '/home' })}
+              onClick={() => signIn('github', { callbackUrl: '/onboarding' })}
               type="button"
               className="paragraph-3-medium flex w-full items-center gap-2 dark:bg-black-800 bg-white-100">
               <Image

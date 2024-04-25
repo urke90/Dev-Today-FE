@@ -41,7 +41,7 @@ export const authOptions = {
             throw new Error('Server responded with an error');
           }
 
-          if (!data) return null;
+          if (!data?.user) return null;
 
           return data.user;
         } catch (error) {
@@ -55,17 +55,27 @@ export const authOptions = {
     async signIn({ profile, account }: any) {
       if (account?.provider === 'google' || account?.provider === 'github') {
         try {
-          const result = await fetch('http://localhost:8080/api/user/login', {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(profile),
-          });
+          const result = await fetch(
+            'http://localhost:8080/api/user/login-provider',
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                email: profile.email,
+                name: profile.name,
+                avatarImg: profile.picture,
+              }),
+            }
+          );
 
           const user = await result.json();
+
+          console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', user);
+
           if (!user) return null;
-          return true;
+          return user;
         } catch (error) {
           console.log(error);
           throw new Error('Error while authorizing');

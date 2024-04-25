@@ -43,6 +43,8 @@ const Login = () => {
 
     if (result?.ok) {
       router.push('/home');
+    } else {
+      throw new Error('Error while logging in');
     }
   }
 
