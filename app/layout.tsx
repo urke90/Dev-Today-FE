@@ -6,6 +6,7 @@ import { cookies } from 'next/headers';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/authOptions';
 import SessionProvider from './context/SessionProvider';
+import Header from '@/components/layout/Header';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -28,7 +29,9 @@ export default async function RootLayout({
       <SessionProvider session={session}>
         <html lang="en" className={`${theme}`}>
           <body
-            className={`${inter.className} min-h-screen dark:bg-[#000] bg-white-100`}>
+            className={`${inter.className} min-h-screen dark:bg-[#000] bg-white-100`}
+          >
+            <Header />
             <main className="max-w-screen-xxl mx-auto">{children}</main>
           </body>
         </html>
