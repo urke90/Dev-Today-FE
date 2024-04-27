@@ -1,4 +1,8 @@
+'use client';
+
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
+import Link from 'next/link';
 
 import HeaderMenu from './HeaderMenu';
 import FrameIcon from '../icons/Frame';
@@ -8,6 +12,7 @@ import GroupsIcon from '../icons/Groups';
 import SearchIcon from '../icons/Search';
 import NotificationIcon from '../icons/Notification';
 import PlusIcon from '../icons/Plus';
+import { useTheme } from '@/app/context/ThemeProvider';
 
 // ----------------------------------------------------------------
 
@@ -21,37 +26,40 @@ interface IHeaderProps {}
  */
 
 const Header: React.FC<IHeaderProps> = (props) => {
+  const pathname = usePathname();
+  const { mode } = useTheme();
+
+  const logoUrl =
+    mode === 'dark'
+      ? '/assets/images/logo-dark.svg'
+      : '/assets/images/logo-light.svg';
+
   return (
-    <header className="bg-white-100__dark-800 flex justify-between items-center py-5 px-8">
-      <Image
-        src="/assets/images/logo-light.svg"
-        width={147}
-        height={30}
-        alt="Logo"
-      />
+    <header className="bg-white-100__dark-black-800 flex justify-between items-center py-5 px-8 w-full fixed z-50">
+      <Image src={logoUrl} width={147} height={30} alt="Logo" />
       <div className="flex gap-5 border border-red-200">
-        <div className="p-2.5 bg-primary-500 rounded-[10px]">
+        <Link href="/posts" className="p-2.5 icon-white-400__dark-white-300">
           <FrameIcon className="" />
-        </div>
-        <div className="p-2.5">
+        </Link>
+        <Link href="/meetup" className="p-2.5 icon-white-400__dark-white-300">
           <CalendarIcon />
-        </div>
-        <div className="p-2.5">
+        </Link>
+        <Link href="/podcast" className="p-2.5 icon-white-400__dark-white-300">
           <PodcastIcon />
-        </div>
-        <div className="p-2.5">
+        </Link>
+        <Link href="/groups" className="p-2.5 icon-white-400__dark-white-300">
           <GroupsIcon />
-        </div>
-        <div className="p-2.5">
+        </Link>
+        <Link href="#" className="p-2.5 icon-white-400__dark-white-300">
           <PlusIcon />
-        </div>
+        </Link>
       </div>
-      <div className="flex items-center gap-[18px] border border-blue-200">
+      <div className="flex items-center gap-[18px] ">
         <div className="p-2.5">
-          <SearchIcon />
+          <SearchIcon className="icon-white-400__dark-white-300" />
         </div>
-        <div className="p-2.5">
-          <NotificationIcon />
+        <div className="p-2.5 ">
+          <NotificationIcon className="icon-white-400__dark-white-300" />
         </div>
         <div className="p-2.5">
           <HeaderMenu />

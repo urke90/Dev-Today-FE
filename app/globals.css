@@ -74,8 +74,12 @@
   }
 
   /* DARK LIGHT MODE */
-  .bg-white-100__dark-800 {
+  .bg-white-100__dark-black-800 {
     @apply bg-white-100 dark:bg-black-800;
+  }
+
+  .icon-white-400__dark-white-300 {
+    @apply text-white-400 dark:text-white-300;
   }
 
   /* DARK LIGHT MODE */

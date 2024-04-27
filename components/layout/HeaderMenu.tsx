@@ -16,12 +16,14 @@ import SunIcon from '../icons/Sun';
 import { Button } from '../ui/button';
 import NotificationIcon from '../icons/Notification';
 import ArrowDownIcon from '../icons/ArrowDown';
+import ProfileIcon from '../icons/Profile';
+import LogoutIcon from '../icons/Logout';
 
 // ----------------------------------------------------------------
 
 /**
- * 1. Dark
- * 2. Light
+ * 1. Dark   (active -- text-white-200 bg-dark-700 rounded-full)  regular text-dark-700
+ * 2. Light  (active -- text-dark-700  bg-primary-100  rounded-full)  regular text-white-300
  */
 
 interface IHeaderMenuProps {}
@@ -29,45 +31,42 @@ interface IHeaderMenuProps {}
 const HeaderMenu: React.FC<IHeaderMenuProps> = (props) => {
   const { setMode, mode } = useTheme();
 
-  const imgDarkModeStyles = `text-black-700 ${
-    mode === 'dark' ? 'text-white-200 p-1 bg-black-700' : ''
-  }`;
+  const iconStyles = '';
+  // const activeMode;
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="flex items-center gap-2">
         <NotificationIcon />
         <span className="paragraph-2-medium">Uros Bijelic</span>
-        <ArrowDownIcon />
+        <ArrowDownIcon className="icon-white-400__dark-white-300" />
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuItem className="paragraph-3-medium gap-2.5">
-          <Image
-            src="/assets/icons/profile.svg"
-            width={12}
-            height={8}
-            alt="profile"
-          />
+          <ProfileIcon />
           Profile
         </DropdownMenuItem>
         <DropdownMenuItem className="paragraph-3-medium gap-2.5">
-          <Image
-            src="/assets/icons/logout.svg"
-            width={12}
-            height={8}
-            alt="logout"
-          />
+          <LogoutIcon />
           Logout
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="gap-5 font-semibold text-black-800 dark:text-white-200 text-base">
+        <DropdownMenuItem className="gap-5 p-[3px] bg-primary-200 dark:bg-black-800 rounded-[15px] font-semibold text-black-800 dark:text-white-200 text-base">
           Interface
-          <Button className="p-0" onClick={() => setMode('light')}>
-            <SunIcon />
-          </Button>
-          <Button className="p-0" onClick={() => setMode('dark')}>
-            <MoonIcon className="text-red-400" />
-          </Button>
+          <div className="flex gap-2.5">
+            <Button
+              className="p-1 bg-primary-100 dark:bg-black-800 dark:p-0 rounded-full h-auto"
+              onClick={() => setMode('light')}
+            >
+              <SunIcon className={`text-black-700  dark:text-dark-700`} />
+            </Button>
+            <Button
+              className="p-0 bg-white-200 dark:p-1 dark:bg-black-700 rounded-full h-auto"
+              onClick={() => setMode('dark')}
+            >
+              <MoonIcon className={`text-white-300 dark:text-dark-700`} />
+            </Button>
+          </div>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
