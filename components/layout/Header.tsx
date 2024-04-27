@@ -1,11 +1,9 @@
 'use client';
 
 import Image from 'next/image';
-import { usePathname } from 'next/navigation';
-import HeaderMenu from './HeaderMenu';
-import SearchIcon from '../icons/Search';
-import NotificationIcon from '../icons/Notification';
+
 import NavLinks from './NavLinks';
+import NavMenu from './NavMenu';
 
 import { useTheme } from '@/app/context/ThemeProvider';
 
@@ -18,10 +16,10 @@ interface IHeaderProps {}
  *     - text-white-400
  * DARK MODE
  *     - text-white-300
+ * TODO: figure out how to render active link later
  */
 
 const Header: React.FC<IHeaderProps> = (props) => {
-  const pathname = usePathname();
   const { mode } = useTheme();
 
   const logoUrl =
@@ -35,17 +33,7 @@ const Header: React.FC<IHeaderProps> = (props) => {
       <div className="max-md:hidden">
         <NavLinks />
       </div>
-      <div className="flex items-center gap-[18px] ">
-        <div className="p-2.5">
-          <SearchIcon className="icon-white-400__dark-white-300" />
-        </div>
-        <div className="p-2.5 ">
-          <NotificationIcon className="icon-white-400__dark-white-300" />
-        </div>
-        <div className="p-2.5">
-          <HeaderMenu />
-        </div>
-      </div>
+      <NavMenu />
     </header>
   );
 };

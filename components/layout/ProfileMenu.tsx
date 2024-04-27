@@ -18,6 +18,7 @@ import NotificationIcon from '../icons/Notification';
 import ArrowDownIcon from '../icons/ArrowDown';
 import ProfileIcon from '../icons/Profile';
 import LogoutIcon from '../icons/Logout';
+import Image from 'next/image';
 
 // ----------------------------------------------------------------
 
@@ -26,17 +27,23 @@ import LogoutIcon from '../icons/Logout';
  * 2. Light  (active -- text-dark-700  bg-primary-100  rounded-full)  regular text-white-300
  */
 
-interface IHeaderMenuProps {}
+interface IProfileMenuProps {}
 
-const HeaderMenu: React.FC<IHeaderMenuProps> = (props) => {
+const ProfileMenu: React.FC<IProfileMenuProps> = (props) => {
   const { setMode, mode } = useTheme();
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="flex items-center gap-2">
-        <NotificationIcon />
-        <span className="paragraph-2-medium">Uros Bijelic</span>
-        <ArrowDownIcon className="icon-white-400__dark-white-300" />
+        <Image
+          src="/assets/images/no-image.svg"
+          alt="avatar"
+          width={34}
+          height={34}
+          className="ring-primary-500 ring-[1px] ring-offset-[3px] ring-offset-white-100 dark:ring-offset-black-800 rounded-lg"
+        />
+        <span className="paragraph-2-medium max-md:hidden">Uros Bijelic</span>
+        <ArrowDownIcon className="icon-white-400__dark-white-300 max-md:hidden" />
       </DropdownMenuTrigger>
       <DropdownMenuContent className="shadow-header-menu">
         <DropdownMenuItem className="paragraph-3-medium">
@@ -46,7 +53,10 @@ const HeaderMenu: React.FC<IHeaderMenuProps> = (props) => {
           </Button>
         </DropdownMenuItem>
         <DropdownMenuItem className="paragraph-3-medium gap-2.5">
-          <Button className="p-0 gap-2.5 h-auto text-primary-500">
+          <Button
+            className="p-0 gap-2.5 h-auto text-primary-500"
+            onClick={() => signOut()}
+          >
             <LogoutIcon />
             Logout
           </Button>
@@ -74,4 +84,4 @@ const HeaderMenu: React.FC<IHeaderMenuProps> = (props) => {
   );
 };
 
-export default HeaderMenu;
+export default ProfileMenu;

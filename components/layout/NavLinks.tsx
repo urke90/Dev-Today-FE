@@ -1,4 +1,7 @@
+'use client';
+
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import FrameIcon from '../icons/Frame';
 import GroupsIcon from '../icons/Groups';
 import CalendarIcon from '../icons/Calendar';
@@ -10,8 +13,10 @@ import PlusIcon from '../icons/Plus';
 interface IFooterProps {}
 
 const Footer: React.FC<IFooterProps> = (props) => {
+  const pathname = usePathname();
+
   return (
-    <section className="flex gap-5">
+    <nav className="flex gap-5">
       <Link href="/posts" className="p-2.5 icon-white-400__dark-white-300">
         <FrameIcon className="" />
       </Link>
@@ -27,7 +32,7 @@ const Footer: React.FC<IFooterProps> = (props) => {
       <Link href="#" className="p-2.5 icon-white-400__dark-white-300">
         <PlusIcon />
       </Link>
-    </section>
+    </nav>
   );
 };
 
