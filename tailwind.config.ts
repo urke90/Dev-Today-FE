@@ -42,6 +42,10 @@ const config = {
         whiteBorder: 'rgba(197, 208, 230, 0.4)',
         orangeRed: '#F65E5E',
       },
+      boxShadow: {
+        'header-menu':
+          '0px 3px 80px 0px #0000004D, dark:0px 7px 80px 0px #0000001A',
+      },
       keyframes: {
         'accordion-down': {
           from: { height: '0' },
