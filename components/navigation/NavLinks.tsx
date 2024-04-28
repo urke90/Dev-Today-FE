@@ -12,7 +12,7 @@ import PlusIcon from '../icons/Plus';
 
 interface IFooterProps {}
 
-const Footer: React.FC<IFooterProps> = (props) => {
+const NavLinks: React.FC<IFooterProps> = (props) => {
   const pathname = usePathname();
 
   return (
@@ -36,4 +36,4 @@ const Footer: React.FC<IFooterProps> = (props) => {
   );
 };
 
-export default Footer;
+export default NavLinks;

@@ -34,14 +34,15 @@ const ProfileMenu: React.FC<IProfileMenuProps> = (props) => {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="flex items-center gap-2">
-        <Image
-          src="/assets/images/no-image.svg"
-          alt="avatar"
-          width={34}
-          height={34}
-          className="ring-primary-500 ring-[1px] ring-offset-[3px] ring-offset-white-100 dark:ring-offset-black-800 rounded-lg"
-        />
+      <DropdownMenuTrigger className="flex items-center gap-2 ">
+        <div className="relative w-[26px] h-[26px] lg:w-[34px] lg:h-[34px]">
+          <Image
+            src="/assets/images/no-image.svg"
+            alt="avatar"
+            fill
+            className="ring-primary-500 ring-[1px] ring-offset-[3px] ring-offset-white-100 dark:ring-offset-black-800 rounded-lg "
+          />
+        </div>
         <span className="paragraph-2-medium max-md:hidden">Uros Bijelic</span>
         <ArrowDownIcon className="icon-white-400__dark-white-300 max-md:hidden" />
       </DropdownMenuTrigger>

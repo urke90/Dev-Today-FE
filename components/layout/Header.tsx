@@ -2,8 +2,8 @@
 
 import Image from 'next/image';
 
-import NavLinks from './NavLinks';
-import NavMenu from './NavMenu';
+import NavLinks from '../navigation/NavLinks';
+import NavMenu from '../navigation/NavMenu';
 
 import { useTheme } from '@/app/context/ThemeProvider';
 
@@ -28,9 +28,9 @@ const Header: React.FC<IHeaderProps> = (props) => {
       : '/assets/images/logo-light.svg';
 
   return (
-    <header className="bg-white-100__dark-black-800 flex justify-between items-center py-5 px-8 w-full fixed z-50">
+    <header className="gap-5 bg-white-100__dark-black-800 flex flex-wrap justify-between items-center px-3.5 py-4 lg:py-5 lg:px-8 w-full fixed top-0 left-0 z-50">
       <Image src={logoUrl} width={147} height={30} alt="Logo" />
-      <div className="max-md:hidden">
+      <div className="max-lg:hidden">
         <NavLinks />
       </div>
       <NavMenu />
