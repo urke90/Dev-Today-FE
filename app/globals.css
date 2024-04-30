@@ -52,7 +52,7 @@
     @apply text-[16px] md:leading-[20px] font-medium text-black-800 dark:text-white-200;
   }
   .paragraph-4-medium {
-    @apply text-xs font-medium text-black-800 dark:text-white-200;
+    @apply text-xs font-medium text-black-400 dark:text-white-300;
   }
   .subtitle {
     @apply text-[10px] leading-[16px] font-bold text-white-400;
@@ -70,7 +70,7 @@
     @apply text-sm font-normal text-white-400 dark:text-white-200;
   }
   .paragraph-4-regular {
-    @apply text-xs font-normal text-black-800 dark:text-white-400;
+    @apply text-xs font-normal text-white-400 dark:text-white-200;
   }
 
   /* DARK LIGHT MODE */
@@ -83,6 +83,16 @@
   }
 
   /* DARK LIGHT MODE */
+
+  /* FLEX */
+  .flex-center {
+    @apply flex justify-center items-center;
+  }
+
+  .flex-between {
+    @apply flex justify-between items-center;
+  }
+  /* FLEX */
 }
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
