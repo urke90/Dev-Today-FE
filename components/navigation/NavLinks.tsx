@@ -18,7 +18,7 @@ const NavLinks: React.FC<IFooterProps> = (props) => {
   return (
     <nav className="flex gap-5">
       <Link href="/posts" className="p-2.5 icon-white-400__dark-white-300">
-        <FrameIcon className="" />
+        <FrameIcon />
       </Link>
       <Link href="/meetup" className="p-2.5 icon-white-400__dark-white-300">
         <CalendarIcon />

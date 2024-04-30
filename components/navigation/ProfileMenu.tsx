@@ -27,7 +27,7 @@ const ProfileMenu: React.FC<IProfileMenuProps> = (props) => {
   return (
     <DropdownMenu>
       <Trigger className="flex items-center gap-2" asChild>
-        <div>
+        <Button className="w-auto">
           <div className="relative w-[26px] h-[26px] lg:w-[34px] lg:h-[34px]">
             <Image
               src="/assets/images/no-image.svg"
@@ -38,7 +38,7 @@ const ProfileMenu: React.FC<IProfileMenuProps> = (props) => {
           </div>
           <span className="p2-medium max-md:hidden">Uros Bijelic</span>
           <ArrowDownIcon className="icon-white-400__dark-white-300 max-md:hidden" />
-        </div>
+        </Button>
       </Trigger>
       <Portal>
         <Content
@@ -46,15 +46,15 @@ const ProfileMenu: React.FC<IProfileMenuProps> = (props) => {
           onCloseAutoFocus={(e) => e.preventDefault()}
           className="min-w-[11rem] max-lg:mt-6 mt-7  flex flex-col border border-[#C5D0E666] dark:border-black-700 rounded-[14px] bg-white-100__dark-black-800 gap-5 p-5 shadow-header-menu data-[side=top]:animate-slideDownAndFade data-[side=right]:animate-slideLeftAndFade data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade"
         >
-          <Item className="p3-medium">
-            <Button className="p-0 gap-2.5 h-auto">
-              <ProfileIcon className="" />
+          <Item className="p3-medium ">
+            <Button className="gap-2.5 justify-start">
+              <ProfileIcon />
               Profile
             </Button>
           </Item>
           <Item className="p3-medium gap-2.5">
             <Button
-              className="p-0 gap-2.5 h-auto text-primary-500"
+              className="justify-start gap-2.5 text-primary-500"
               onClick={() => signOut()}
             >
               <LogoutIcon />
@@ -66,13 +66,13 @@ const ProfileMenu: React.FC<IProfileMenuProps> = (props) => {
             Interface
             <div className="flex gap-2.5">
               <Button
-                className="p-1 bg-primary-100 dark:bg-black-800 dark:p-0 rounded-full h-auto"
+                className="bg-primary-100 dark:bg-black-800 rounded-full size-[24px]"
                 onClick={() => setMode('light')}
               >
                 <SunIcon className="text-black-700 dark:text-black-700" />
               </Button>
               <Button
-                className="p-0 bg-white-200 dark:p-1 dark:bg-black-700 rounded-full h-auto"
+                className="bg-white-200 dark:bg-black-700 rounded-full size-[24px]"
                 onClick={() => setMode('dark')}
               >
                 <MoonIcon className="text-white-300 dark:text-dark-700" />

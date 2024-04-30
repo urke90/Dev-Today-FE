@@ -17,7 +17,7 @@ const SearchMenuDialog: React.FC<ISearchDialogProps> = (props) => {
   return (
     <Root>
       <Trigger asChild>
-        <Button className="p-1.5 lg:p-2.5 bg-white-200 dark:bg-black-700 h-auto">
+        <Button className="nav-button-white-200__dark-black-700">
           <SearchIcon className="icon-white-400__dark-white-300" />
         </Button>
       </Trigger>
