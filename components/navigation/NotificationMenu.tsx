@@ -16,8 +16,6 @@ interface INotificationMenuProps {}
 
 // ----------------------------------------------------------------
 
-//
-
 const NotificationMenu: React.FC<INotificationMenuProps> = (props) => {
   return (
     <DropdownMenu>
