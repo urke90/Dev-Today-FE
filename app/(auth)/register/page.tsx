@@ -20,7 +20,7 @@ import { Separator } from '@/components/ui/separator';
 import { signIn } from 'next-auth/react';
 import { regWelcome } from '@/constants';
 import { colorsRegister } from '@/styles/index';
-import { useTheme } from '../context/ThemeProvider';
+import { useTheme } from '@/app/context/ThemeProvider';
 import { useRouter } from 'next/navigation';
 
 const Register = () => {
@@ -87,7 +87,7 @@ const Register = () => {
           />
         </div>
         <div className="max-w-md">
-          <h2 className="display-1-bold mb-10">
+          <h2 className="d1-bold mb-10">
             Join our developer community! Sign up now and be part of the
             conversation.
           </h2>
@@ -96,9 +96,11 @@ const Register = () => {
               return (
                 <div
                   key={index + 1}
-                  className="bg-white-100 dark:bg-black-700 p-5 flex gap-5 items-center rounded-lg">
+                  className="bg-white-100 dark:bg-black-700 p-5 flex gap-5 items-center rounded-lg"
+                >
                   <div
-                    className={`dark:bg-black-800 ${colorsRegister[index]} h-[60px] p-5 rounded-md`}>
+                    className={`dark:bg-black-800 ${colorsRegister[index]} h-[60px] p-5 rounded-md`}
+                  >
                     <Image
                       src={
                         mode === 'dark'
@@ -110,7 +112,7 @@ const Register = () => {
                       height={20}
                     />
                   </div>
-                  <p className="paragraph-1-medium">{item.label}</p>
+                  <p className="p1-medium">{item.label}</p>
                 </div>
               );
             })}
@@ -120,7 +122,8 @@ const Register = () => {
       <div
         className="text-white-100 flex flex-col pt-10 lg:pt-44 lg:justify-start items-center 
         dark:bg-black-900 bg-white-200
-         px-4 md:px-10 xl:px-28  w-full lg:w-1/2">
+         px-4 md:px-10 xl:px-28  w-full lg:w-1/2"
+      >
         <div className="w-full lg:hidden">
           <Image
             src={`${
@@ -137,19 +140,18 @@ const Register = () => {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-5 w-full ">
+            className="space-y-5 w-full "
+          >
             <FormField
               control={form.control}
               name="userName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="paragraph-3-medium">
-                    Full Name
-                  </FormLabel>
+                  <FormLabel className="p3-medium">Full Name</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="Full Name"
-                      className="h-11 rounded placeholder:font-normal border-[1px] dark:border-none border-gray-300/40 dark:bg-black-800 bg-white-100  paragraph-3-medium focus-visible:ring-0 focus-visible:ring-offset-0 focus:ring-offset-0 "
+                      className="h-11 rounded placeholder:font-normal border-[1px] dark:border-none border-gray-300/40 dark:bg-black-800 bg-white-100  p3-medium focus-visible:ring-0 focus-visible:ring-offset-0 focus:ring-offset-0 "
                       {...field}
                     />
                   </FormControl>
@@ -162,11 +164,11 @@ const Register = () => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="paragraph-3-medium">Email</FormLabel>
+                  <FormLabel className="p3-medium">Email</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="Enter your email address"
-                      className="h-11 rounded placeholder:font-normal border-[1px] dark:border-none border-gray-300/40 dark:bg-black-800 bg-white-100  paragraph-3-medium focus-visible:ring-0 focus-visible:ring-offset-0 focus:ring-offset-0 "
+                      className="h-11 rounded placeholder:font-normal border-[1px] dark:border-none border-gray-300/40 dark:bg-black-800 bg-white-100  p3-medium focus-visible:ring-0 focus-visible:ring-offset-0 focus:ring-offset-0 "
                       {...field}
                     />
                   </FormControl>
@@ -179,12 +181,12 @@ const Register = () => {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="paragraph-3-medium">Password</FormLabel>
+                  <FormLabel className="p3-medium">Password</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="Enter your password"
                       type="password"
-                      className="h-11 rounded placeholder:font-normal border-[1px] dark:border-none border-gray-300/40 dark:bg-black-800 bg-white-100  paragraph-3-medium focus-visible:ring-0 focus-visible:ring-offset-0 focus:ring-offset-0 "
+                      className="h-11 rounded placeholder:font-normal border-[1px] dark:border-none border-gray-300/40 dark:bg-black-800 bg-white-100  p3-medium focus-visible:ring-0 focus-visible:ring-offset-0 focus:ring-offset-0 "
                       {...field}
                     />
                   </FormControl>
@@ -194,24 +196,27 @@ const Register = () => {
             />
             <Button
               type="submit"
-              className="w-full bg-primary-500 text-[14px] paragraph-2-bold ">
+              className="w-full bg-primary-500 text-[14px] p2-bold "
+            >
               Next
             </Button>
             <Link
               href="/login"
-              className="text-white-500/70 block cursor-pointer text-center hover:underline">
+              className="text-white-500/70 block cursor-pointer text-center hover:underline"
+            >
               Already have an account?
               <span className="text-[16px] ml-1 text-primary-500">Sign in</span>
             </Link>
             <div className="flex items-center justify-between">
               <Separator className="w-2/5  dark:bg-black-800 bg-black-700/10" />
-              <p className="paragraph-4-regular">or</p>
+              <p className="p4-regular">or</p>
               <Separator className="w-2/5 dark:bg-black-800 bg-black-700/10" />
             </div>
             <Button
               type="button"
               onClick={() => signIn('google', { callbackUrl: '/onboarding' })}
-              className="paragraph-3-medium flex w-full items-center gap-2 dark:bg-black-800 bg-white-100">
+              className="p3-medium flex w-full items-center gap-2 dark:bg-black-800 bg-white-100"
+            >
               <Image
                 src={'/assets/icons/google.svg'}
                 alt="google"
@@ -219,12 +224,13 @@ const Register = () => {
                 height={20}
                 className="invert dark:invert-0"
               />
-              <p className="paragraph-3-medium ">Continue with Google</p>
+              <p className="p3-medium ">Continue with Google</p>
             </Button>
             <Button
               onClick={() => signIn('github', { callbackUrl: '/onboarding' })}
               type="button"
-              className="paragraph-3-medium flex w-full items-center gap-2 dark:bg-black-800 bg-white-100">
+              className="p3-medium flex w-full items-center gap-2 dark:bg-black-800 bg-white-100"
+            >
               <Image
                 src={'/assets/icons/github.svg'}
                 alt="github"
@@ -232,7 +238,7 @@ const Register = () => {
                 height={20}
                 className="invert dark:invert-0"
               />
-              <p className="paragraph-3-medium ">Continue with Github</p>
+              <p className="p3-medium ">Continue with Github</p>
             </Button>
           </form>
         </Form>

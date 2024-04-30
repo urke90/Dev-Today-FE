@@ -124,7 +124,8 @@ const Onboarding = () => {
         <div className="max-w-md">
           <h2
             onClick={() => signOut({ callbackUrl: '/login' })}
-            className="display-1-bold mb-10">
+            className="d1-bold mb-10"
+          >
             Sign in to DevToday.
           </h2>
           <article className="flex flex-col gap-5">
@@ -133,9 +134,11 @@ const Onboarding = () => {
                 key={item.label}
                 className={`${
                   mode === 'dark' ? 'bg-black-700' : 'bg-white-100'
-                } p-5 flex gap-5 items-center rounded-lg`}>
+                } p-5 flex gap-5 items-center rounded-lg`}
+              >
                 <div
-                  className={`dark:bg-black-800 ${colorsOnboardingIcons[index]} h-[60px] p-5 rounded-md`}>
+                  className={`dark:bg-black-800 ${colorsOnboardingIcons[index]} h-[60px] p-5 rounded-md`}
+                >
                   <Image
                     src={item.image}
                     alt={item.alt}
@@ -143,7 +146,7 @@ const Onboarding = () => {
                     height={20}
                   />
                 </div>
-                <p className="paragraph-1-medium">{item.label}</p>
+                <p className="p1-medium">{item.label}</p>
               </div>
             ))}
           </article>
@@ -164,18 +167,18 @@ const Onboarding = () => {
           />
         </div>
         {step === 0 && (
-          <h2 className="display-1-bold mr-auto md:mb-10">
+          <h2 className="d1-bold mr-auto md:mb-10">
             Which best describes your current programming journey?
           </h2>
         )}
         {step === 1 && (
-          <h2 className="display-1-bold mr-auto md:mb-10">
+          <h2 className="d1-bold mr-auto md:mb-10">
             Define your coding ambitions
           </h2>
         )}
         {step === 2 && (
           <>
-            <h2 className="display-1-bold mr-auto mb-10">
+            <h2 className="d1-bold mr-auto mb-10">
               Select your preferred languages and frameworks for a personalized
               experience.
             </h2>
@@ -187,7 +190,8 @@ const Onboarding = () => {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-5 w-full ">
+            className="space-y-5 w-full "
+          >
             {step === 0 && (
               <>
                 <FormField
@@ -199,7 +203,8 @@ const Onboarding = () => {
                         <RadioGroup
                           onValueChange={field.onChange}
                           defaultValue={field.value}
-                          className="flex flex-col space-y-1">
+                          className="flex flex-col space-y-1"
+                        >
                           {currentKnowledge.map((item) => (
                             <FormItem key={item.value}>
                               <FormControl>
@@ -215,7 +220,8 @@ const Onboarding = () => {
                                   ? 'bg-primary-500 !text-white-100'
                                   : 'dark:bg-black-800 bg-white-100'
                               }
-                              px-4 justify-start  rounded border-none h-14 text-[14px] paragraph-1-medium cursor-pointer`}>
+                              px-4 justify-start  rounded border-none h-14 text-[14px] p1-medium cursor-pointer`}
+                              >
                                 {item.title}
                               </FormLabel>
                             </FormItem>
@@ -266,7 +272,8 @@ const Onboarding = () => {
                                   ? 'bg-primary-500 !text-white-100'
                                   : 'dark:bg-black-800 bg-white-100'
                               }
-                              px-4  justify-start  rounded border-none h-14 text-[14px] paragraph-1-medium cursor-pointer`}>
+                              px-4  justify-start  rounded border-none h-14 text-[14px] p1-medium cursor-pointer`}
+                              >
                                 {item.title}
                               </FormLabel>
                             </FormItem>
@@ -316,7 +323,8 @@ const Onboarding = () => {
                                     field.value.includes(item.title)
                                       ? 'bg-primary-500 !text-white-100'
                                       : 'dark:bg-black-800 bg-white-100'
-                                  } h-12  rounded-lg flex items-center paragraph-3-medium !px-5`}>
+                                  } h-12  rounded-lg flex items-center p3-medium !px-5`}
+                                >
                                   {item.title}
                                 </FormLabel>
                               </FormItem>
@@ -331,7 +339,8 @@ const Onboarding = () => {
             )}
             <Button
               onClick={() => goNext()}
-              className="w-full bg-primary-500 h-11 paragraph-2-bold ">
+              className="w-full bg-primary-500 h-11 p2-bold "
+            >
               {step === 2 ? 'Get Started' : 'Next'}
             </Button>
           </form>
