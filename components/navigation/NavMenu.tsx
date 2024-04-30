@@ -1,8 +1,6 @@
 'use client';
 
-import NotificationIcon from '../icons/Notification';
 import SearchIcon from '../icons/Search';
-// import ProfileMenuOLD from './ProfileMenuOLD';
 import ProfileMenu from './ProfileMenu';
 import NotificationMenu from './NotificationMenu';
 import { Button } from '../ui/button';
@@ -19,7 +17,6 @@ const NavMenu: React.FC<INavMenuProps> = () => {
       </Button>
       <NotificationMenu />
       <ProfileMenu />
-      {/* <ProfileMenuOLD /> */}
     </div>
   );
 };

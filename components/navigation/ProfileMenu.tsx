@@ -22,7 +22,7 @@ interface IProfileMenuProps {}
 
 // ? shadcn command dialog  cmdk lib
 
-const ProfileMenuRadix: React.FC<IProfileMenuProps> = (props) => {
+const ProfileMenu: React.FC<IProfileMenuProps> = (props) => {
   const { setMode } = useTheme();
   return (
     <DropdownMenu>
@@ -36,7 +36,7 @@ const ProfileMenuRadix: React.FC<IProfileMenuProps> = (props) => {
               className="ring-primary-500 ring-[1px] ring-offset-[3px] ring-offset-white-100 dark:ring-offset-black-800 rounded-lg"
             />
           </div>
-          <span className="paragraph-2-medium max-md:hidden">Uros Bijelic</span>
+          <span className="p2-medium max-md:hidden">Uros Bijelic</span>
           <ArrowDownIcon className="icon-white-400__dark-white-300 max-md:hidden" />
         </div>
       </Trigger>
@@ -44,15 +44,15 @@ const ProfileMenuRadix: React.FC<IProfileMenuProps> = (props) => {
         <Content
           collisionPadding={10}
           onCloseAutoFocus={(e) => e.preventDefault()}
-          className="min-w-[8rem] max-lg:mt-6 mt-7  flex flex-col border border-[#C5D0E666] dark:border-black-700 rounded-lg bg-white-100__dark-black-800 gap-5 p-5 shadow-header-menu data-[side=top]:animate-slideDownAndFade data-[side=right]:animate-slideLeftAndFade data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade"
+          className="min-w-[11rem] max-lg:mt-6 mt-7  flex flex-col border border-[#C5D0E666] dark:border-black-700 rounded-[14px] bg-white-100__dark-black-800 gap-5 p-5 shadow-header-menu data-[side=top]:animate-slideDownAndFade data-[side=right]:animate-slideLeftAndFade data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade"
         >
-          <Item className="paragraph-3-medium">
+          <Item className="p3-medium">
             <Button className="p-0 gap-2.5 h-auto">
               <ProfileIcon className="" />
               Profile
             </Button>
           </Item>
-          <Item className="paragraph-3-medium gap-2.5">
+          <Item className="p3-medium gap-2.5">
             <Button
               className="p-0 gap-2.5 h-auto text-primary-500"
               onClick={() => signOut()}
@@ -85,6 +85,4 @@ const ProfileMenuRadix: React.FC<IProfileMenuProps> = (props) => {
   );
 };
 
-export default ProfileMenuRadix;
-
-//className="min-w-[220px] bg-white rounded-md p-[5px] shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] will-change-[opacity,transform] data-[side=top]:animate-slideDownAndFade data-[side=right]:animate-slideLeftAndFade data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade"
+export default ProfileMenu;

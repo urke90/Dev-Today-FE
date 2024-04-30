@@ -18,41 +18,42 @@
   }
 }
 @layer utilities {
-  .display-1-bold {
+  /* TYPOGRAPHY  */
+  .d1-bold {
     @apply text-[21px] sm:text-[27px] md:text-left md:text-[31px] md:leading-[40px] font-bold text-black-800 dark:text-white-100;
   }
-  .display-2-bold {
+  .d2-bold {
     @apply text-2xl font-bold text-black-800 dark:text-white-100;
   }
-  .heading-1-medium {
+  .h1-medium {
     @apply text-[20px] leading-[28px] font-medium text-black-800 dark:text-white-200;
   }
-  .heading-2-medium {
+  .h2-medium {
     @apply text-base font-medium text-black-800 dark:text-white-200;
   }
-  .paragraph-1-bold {
+  .p1-bold {
     @apply text-[18px] leading-[20px] font-bold text-black-700 dark:text-white-100;
   }
-  .paragraph-2-bold {
+  .p2-bold {
     @apply text-base font-bold dark:text-white-200;
   }
-  .paragraph-3-bold {
+  .p3-bold {
     @apply text-[14px] leading-[24px] font-bold text-black-700 dark:text-white-300;
   }
-  .paragraph-4-bold {
+  .p4-bold {
     @apply text-xs font-bold text-black-700 dark:text-white-400;
   }
-  .paragraph-1-medium {
+  .p1-medium {
     @apply text-[16px] md:text-[18px] leading-[20px] font-medium text-black-700 dark:text-white-200;
   }
-  .paragraph-2-medium {
+  .p2-medium {
     @apply text-base font-medium text-black-800 dark:text-white-400;
   }
-  .paragraph-3-medium {
+  .p3-medium {
     @apply text-[16px] md:leading-[20px] font-medium text-black-800 dark:text-white-200;
   }
-  .paragraph-4-medium {
-    @apply text-xs font-medium text-black-400 dark:text-white-300;
+  .p4-medium {
+    @apply text-xs font-medium text-white-400 dark:text-white-300;
   }
   .subtitle {
     @apply text-[10px] leading-[16px] font-bold text-white-400;
@@ -60,35 +61,33 @@
   .caption {
     @apply text-[10px] leading-[16px] font-medium text-white-400;
   }
-  .paragraph-1-regular {
+  .p1-regular {
     @apply text-[18px] leading-[20px] font-normal text-black-800 dark:text-white-100;
   }
-  .paragraph-2-regular {
+  .p2-regular {
     @apply text-base font-normal text-white-400 dark:text-white-300;
   }
-  .paragraph-3-regular {
+  .p3-regular {
     @apply text-sm font-normal text-white-400 dark:text-white-200;
   }
-  .paragraph-4-regular {
+  .p4-regular {
     @apply text-xs font-normal text-white-400 dark:text-white-200;
   }
+  /* TYPOGRAPHY  */
 
   /* DARK LIGHT MODE */
   .bg-white-100__dark-black-800 {
     @apply bg-white-100 dark:bg-black-800;
   }
-
   .icon-white-400__dark-white-300 {
     @apply text-white-400 dark:text-white-300;
   }
-
   /* DARK LIGHT MODE */
 
   /* FLEX */
   .flex-center {
     @apply flex justify-center items-center;
   }
-
   .flex-between {
     @apply flex justify-between items-center;
   }
