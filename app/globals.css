@@ -82,7 +82,6 @@
   .icon-white-400__dark-white-300 {
     @apply text-white-400 dark:text-white-300;
   }
-
   .nav-button-white-200__dark-black-700 {
     @apply bg-white-200 dark:bg-black-700 rounded-[7px] size-[32px] lg:size-[40px];
   }

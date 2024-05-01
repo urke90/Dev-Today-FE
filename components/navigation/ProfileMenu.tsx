@@ -46,7 +46,7 @@ const ProfileMenu: React.FC<IProfileMenuProps> = (props) => {
           onCloseAutoFocus={(e) => e.preventDefault()}
           className="min-w-[11rem] max-lg:mt-6 mt-7  flex flex-col border border-[#C5D0E666] dark:border-black-700 rounded-[14px] bg-white-100__dark-black-800 gap-5 p-5 shadow-header-menu data-[side=top]:animate-slideDownAndFade data-[side=right]:animate-slideLeftAndFade data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade"
         >
-          <Item className="p3-medium ">
+          <Item className="p3-medium">
             <Button className="gap-2.5 justify-start">
               <ProfileIcon />
               Profile
