@@ -9,6 +9,7 @@
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
+  --profile-background: linear-gradient(180deg, #c55ef6 0%, #4c3790 100%);
 }
 @media (prefers-color-scheme: dark) {
   :root {
@@ -76,7 +77,7 @@
   /* TYPOGRAPHY  */
 
   /* DARK LIGHT MODE */
-  .bg-white-100__dark-black-800 {
+  .bg-light100__dark800 {
     @apply bg-white-100 dark:bg-black-800;
   }
   .icon-white-400__dark-white-300 {
@@ -95,6 +96,37 @@
     @apply flex justify-between items-center;
   }
   /* FLEX */
+
+  /* LAYOUT ? NOT SURE IF THIS WILL BE USED, LEFT JUST IN CASE WE NEED IT LATER!!! */
+  .content-wrapper {
+    @apply top-[100px] lg:gap-5;
+  }
+
+  .left-sidebar {
+    @apply flex flex-col  sm:w-left-sidebar;
+  }
+  .right-sidebar {
+    @apply flex flex-col lg:w-right-sidebar max-sm:flex sm:hidden lg:flex;
+  }
+
+  .sidebar-item {
+    @apply flex flex-col bg-white-100 dark:bg-black-800;
+  }
+  /* .left-sidebar-item {
+    @apply w-[21,625rem] lg:w-52 gap-5;
+  }
+  .right-sidebar-item {
+    @apply w-[21,625rem] lg:w-[20.25rem] lg:p-5 gap-5;
+  } */
+
+  /* LAYOUT */
+
+  /* PROFILE */
+  .profile-background {
+    background-image: linear-gradient(180deg, #c55ef6 0%, #4c3790 100%);
+    /* background-repeat: no-repeat; */
+  }
+  /* PROFILE */
 }
 input:-webkit-autofill,
 input:-webkit-autofill:hover,

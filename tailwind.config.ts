@@ -19,6 +19,7 @@ const config = {
     extend: {
       screens: {
         xxl: '1440px',
+        content: '1360px',
       },
       colors: {
         primary: {
@@ -42,11 +43,27 @@ const config = {
         whiteBorder: 'rgba(197, 208, 230, 0.4)',
         orangeRed: '#F65E5E',
       },
+      width: {
+        sidebar: '21.625rem',
+        'left-sidebar': '13.125rem',
+        'right-sidebar': '20.25rem',
+      },
+      minWidth: {
+        sidebar: '21.625rem',
+        'left-sidebar': '13.125rem',
+        'right-sidebar': '20.25rem',
+      },
+      // Width: {
+      //   sidebar: '21.625rem',
+      //   'left-sidebar': '13.125rem',
+      //   'right-sidebar': '20.25rem',
+      // },
       boxShadow: {
         'header-menu':
           '0px 3px 80px 0px #0000004D, dark:0px 7px 80px 0px #0000001A',
         'search-dialog':
           '0px 0px 0px 1px #1212124D, dark:0px 0px 0px 1px #1212120D',
+        'cancel-btn': '0px 3px 20px 0px #0000000A',
       },
       keyframes: {
         'accordion-down': {

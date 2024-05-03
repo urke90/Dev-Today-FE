@@ -28,7 +28,7 @@ export default async function RootLayout({
       <SessionProvider session={session}>
         <html lang="en" className={`${theme}`}>
           <body
-            className={`${inter.className} min-h-screen dark:bg-[#000] bg-white-100`}
+            className={`${inter.className} min-h-screen dark:bg-black-900 bg-white-200`}
           >
             <main className="max-w-screen-xxl mx-auto">{children}</main>
           </body>

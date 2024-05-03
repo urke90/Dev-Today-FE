@@ -5,9 +5,9 @@ import Footer from '@/components/layout/Footer';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <section className="flex flex-col">
+    <section>
       <Header />
-      <main>{children}</main>
+      {children}
       <Footer />
     </section>
   );

@@ -28,7 +28,7 @@ const Header: React.FC<IHeaderProps> = (props) => {
       : '/assets/images/logo-light.svg';
 
   return (
-    <header className="gap-5 bg-white-100__dark-black-800 flex-wrap flex-between px-3.5 py-4 lg:py-5 lg:px-8 w-full fixed top-0 left-0 z-50">
+    <header className="gap-5 bg-light100__dark800 flex-between px-3.5 py-4 lg:py-5 lg:px-8 w-full fixed top-0 left-0 z-50">
       <Image src={logoUrl} width={147} height={30} alt="Logo" />
       <div className="max-lg:hidden">
         <NavLinks />
