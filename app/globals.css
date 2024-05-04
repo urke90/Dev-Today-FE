@@ -51,16 +51,10 @@
     @apply text-base font-medium text-black-800 dark:text-white-400;
   }
   .p3-medium {
-    @apply text-[16px] md:leading-[20px] font-medium text-black-800 dark:text-white-200;
+    @apply text-sm font-medium text-black-800 dark:text-white-200;
   }
   .p4-medium {
     @apply text-xs font-medium text-white-400 dark:text-white-300;
-  }
-  .subtitle {
-    @apply text-[10px] leading-[16px] font-bold text-white-400;
-  }
-  .caption {
-    @apply text-[10px] leading-[16px] font-medium text-white-400;
   }
   .p1-regular {
     @apply text-[18px] leading-[20px] font-normal text-black-800 dark:text-white-100;
@@ -73,6 +67,15 @@
   }
   .p4-regular {
     @apply text-xs font-normal text-white-400 dark:text-white-200;
+  }
+  .subtitle {
+    @apply text-[10px] leading-[16px] font-normal text-white-400;
+  }
+  .caption-10 {
+    @apply text-[10px] leading-[13px] font-medium text-white-400;
+  }
+  .caption-8 {
+    @apply text-[8px] leading-[10.4px] font-medium text-white-400;
   }
   /* TYPOGRAPHY  */
 

@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { Inter, IBM_Plex_Sans } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from './context/ThemeProvider';
 import { cookies } from 'next/headers';
@@ -7,7 +7,10 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/authOptions';
 import SessionProvider from './context/SessionProvider';
 
-const inter = Inter({ subsets: ['latin'] });
+const ibmPlexSans = IBM_Plex_Sans({
+  weight: ['100', '200', '300', '400', '500', '600', '700'],
+  subsets: ['latin'],
+});
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -28,7 +31,7 @@ export default async function RootLayout({
       <SessionProvider session={session}>
         <html lang="en" className={`${theme}`}>
           <body
-            className={`${inter.className} min-h-screen dark:bg-black-900 bg-white-200`}
+            className={`${ibmPlexSans.className} min-h-screen dark:bg-black-900 bg-white-200`}
           >
             <main className="max-w-screen-xxl mx-auto">{children}</main>
           </body>
