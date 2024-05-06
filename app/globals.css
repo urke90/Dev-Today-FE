@@ -102,11 +102,11 @@
 
   /* LAYOUT ? NOT SURE IF THIS WILL BE USED, LEFT JUST IN CASE WE NEED IT LATER!!! */
   .content-wrapper {
-    @apply top-[100px] lg:gap-5;
+    @apply relative m-auto top-[94px] lg:top-[100px] flex flex-col sm:flex-row sm:gap-4;
   }
 
   .left-sidebar {
-    @apply flex flex-col  sm:w-left-sidebar;
+    @apply flex flex-col sm:w-left-sidebar sm:min-w-left-sidebar;
   }
   .right-sidebar {
     @apply flex flex-col lg:w-right-sidebar max-sm:flex sm:hidden lg:flex;

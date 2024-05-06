@@ -13,7 +13,7 @@ const buttonVariants = cva(
         primary:
           'bg-primary-500 border border-primary-500 transition-colors text-white-100',
         cancel:
-          'bg-white-100 py-3 gap-2.5 text-black-700 dark:text-white-100 dark:bg-black-800 shadow-[0px_3px_20px_0px_rgba(0,0,0,0.04)] shadow-cancel-btn dark:shadow-none',
+          'bg-white-100 py-3 gap-2.5 text-black-700 dark:text-white-100 dark:bg-black-800 shadow-[0px_3px_20px_0px_rgba(0,0,0,0.04)] dark:shadow-none',
       },
       size: {
         // TODO check this if it will be used

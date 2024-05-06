@@ -1,12 +1,12 @@
 import Image from 'next/image';
 import { Button } from '../ui/button';
 import TechStackItem from './TechStackItem';
+import Link from 'next/link';
+import ProfileNavLinks from './ProfileNavLinks';
 
 // ----------------------------------------------------------------
 
-interface IProfileHomeProps {
-  string: string[];
-}
+interface IProfileHomeProps {}
 
 const TECH_STACK_ITEMS = [
   'Node.js',
@@ -20,9 +20,8 @@ const TECH_STACK_ITEMS = [
 
 const ProfileHome: React.FC<IProfileHomeProps> = (props) => {
   return (
-    <div className="relative m-auto top-[94px] lg:top-[100px] flex flex-col sm:flex-row">
+    <div className="content-wrapper">
       <aside className="left-sidebar bg-light100__dark800 text-center h-full rounded-t-2xl pb-7 rounded-b-2xl">
-        {/* <div className="flex flex-col gap-y-5 rounded-t-2xl"> */}
         <div className="relative h-[106px] lg:h-[83px] profile-background rounded-t-2xl">
           <Image
             fill
@@ -33,7 +32,7 @@ const ProfileHome: React.FC<IProfileHomeProps> = (props) => {
           />
         </div>
         <div className="px-5 flex flex-col gap-y-6 md:gap-y-5">
-          <div className="relative z-10 -mt-16">
+          <div className="relative z-10 -mt-14">
             <Image
               src="/assets/images/no-image.svg"
               width={110}
@@ -69,35 +68,42 @@ const ProfileHome: React.FC<IProfileHomeProps> = (props) => {
             Fluent in React.js, Next.js, & TS.
           </p>
           <div className="flex gap-6 justify-center">
-            <Image
-              src="/assets/icons/social-media/linkedin.svg"
-              width={20}
-              height={20}
-              alt="linkedin"
-            />
-            <Image
-              src="/assets/icons/social-media/twitter.svg"
-              width={20}
-              height={20}
-              alt="twitter"
-            />
-            <Image
-              src="/assets/icons/social-media/instagram.svg"
-              width={20}
-              height={20}
-              alt="instagram"
-            />
+            <Link href="/">
+              <Image
+                src="/assets/icons/social-media/linkedin.svg"
+                width={20}
+                height={20}
+                alt="linkedin"
+              />
+            </Link>
+            <Link href="/">
+              <Image
+                src="/assets/icons/social-media/twitter.svg"
+                width={20}
+                height={20}
+                alt="twitter"
+              />
+            </Link>
+            <Link href="/">
+              <Image
+                src="/assets/icons/social-media/instagram.svg"
+                width={20}
+                height={20}
+                alt="instagram"
+              />
+            </Link>
           </div>
           <p className="p3-medium text-white-300 dark:text-white-400">
             joined 2 years ago
           </p>
         </div>
-        {/* </div> */}
       </aside>
-      <main className="flex flex-1">MAIN</main>
-      <aside className="right-sidebar bg-light100__dark800">
-        RIGHT SIDEBAR
-      </aside>
+      <main className="flex flex-col flex-1">
+        <div>
+          <ProfileNavLinks />
+        </div>
+      </main>
+      <aside className="right-sidebar bg-blue-500">RIGHT SIDEBAR</aside>
     </div>
   );
 };

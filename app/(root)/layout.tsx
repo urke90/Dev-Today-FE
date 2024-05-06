@@ -8,7 +8,9 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     <section>
       <Header />
       {children}
-      <Footer />
+      <div className="sm:hidden">
+        <Footer />
+      </div>
     </section>
   );
 };
