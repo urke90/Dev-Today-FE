@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { Button } from '../ui/button';
-import TechStackItem from './TechStackItem';
+import BadgeItem from '../shared/BadgeItem';
 import Link from 'next/link';
 import ProfileNavLinks from './ProfileNavLinks';
 import HeartIcon from '../icons/Heart';
@@ -71,12 +71,12 @@ const ProfileHome: React.FC<IProfileHomeProps> = (props) => {
             </p>
           </div>
           <ul className="flex flex-wrap gap-y-1 justify-between">
-            <TechStackItem title="Node.js" />
-            <TechStackItem title="HTML" />
-            <TechStackItem title="React.js" />
-            <TechStackItem title="Next.js" />
-            <TechStackItem title="TypeScript" />
-            <TechStackItem title="CSS" />
+            <BadgeItem isTechStackItem title="Node.js" />
+            <BadgeItem isTechStackItem title="HTML" />
+            <BadgeItem isTechStackItem title="React.js" />
+            <BadgeItem isTechStackItem title="Next.js" />
+            <BadgeItem isTechStackItem title="TypeScript" />
+            <BadgeItem isTechStackItem title="CSS" />
           </ul>
           <div className="border border-[#C5D0E6] dark:border-[#393E4F]" />
           <p className="p3-regular text-white-400 dark:text-white-300 text-center">

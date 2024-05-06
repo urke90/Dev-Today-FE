@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import HeartIcon from '../icons/Heart';
-import TechStackItem from './TechStackItem';
+import BadgeItem from '../shared/BadgeItem';
 import { Button } from '../ui/button';
 
 // ----------------------------------------------------------------
@@ -36,9 +36,9 @@ const PostItem: React.FC<IPostItemProps> = ({ imgUrl }) => {
           </Button>
         </div>
         <ul className="flex gap-2.5 mb-6">
-          <TechStackItem title="finance" />
-          <TechStackItem title="bitcoin" />
-          <TechStackItem title="crypto" />
+          <BadgeItem title="finance" />
+          <BadgeItem title="bitcoin" />
+          <BadgeItem title="crypto" />
         </ul>
         <div className="flex-between flex-wrap gap-5">
           <div className="flex">
