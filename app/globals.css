@@ -102,16 +102,17 @@
 
   /* LAYOUT ? NOT SURE IF THIS WILL BE USED, LEFT JUST IN CASE WE NEED IT LATER!!! */
   .content-wrapper {
-    @apply relative m-auto top-[94px] lg:top-[100px] flex flex-col sm:flex-row sm:gap-4;
+    @apply relative m-auto top-[94px] lg:top-[100px] flex flex-col md:flex-row gap-3 px-3.5 lg:px-5;
   }
-
+  .main-content {
+    @apply flex flex-col flex-1 sm:max-w-[80%] sm:mx-auto;
+  }
   .left-sidebar {
-    @apply flex flex-col sm:w-left-sidebar sm:min-w-left-sidebar;
+    @apply flex flex-col sm:max-w-[80%] sm:mx-auto  md:w-left-sidebar md:min-w-left-sidebar;
   }
   .right-sidebar {
-    @apply flex flex-col lg:w-right-sidebar max-sm:flex sm:hidden lg:flex;
+    @apply flex flex-col lg:w-right-sidebar max-sm:flex sm:hidden xl:flex;
   }
-
   .sidebar-item {
     @apply flex flex-col bg-white-100 dark:bg-black-800;
   }
@@ -138,3 +139,8 @@ input:-webkit-autofill:active {
   transition: background-color 5000s ease-in-out 0s !important;
   -webkit-text-fill-color: #ffff !important;
 }
+
+/**
+* S
+
+*/

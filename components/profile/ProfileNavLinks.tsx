@@ -11,7 +11,8 @@ interface IProfileNavLinksProps {}
 const ProfileNavLinks: React.FC<IProfileNavLinksProps> = (props) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const contentType = searchParams.get('contentType');
+  // staviti default value
+  const contentType = searchParams.get('contentType') ?? 'posts';
   console.log('contentType', contentType);
 
   const updateQueryParams = (value: string) => {

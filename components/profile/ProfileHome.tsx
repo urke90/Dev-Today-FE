@@ -3,6 +3,8 @@ import { Button } from '../ui/button';
 import TechStackItem from './TechStackItem';
 import Link from 'next/link';
 import ProfileNavLinks from './ProfileNavLinks';
+import HeartIcon from '../icons/Heart';
+import PostItem from './PostItem';
 
 // ----------------------------------------------------------------
 
@@ -17,6 +19,20 @@ const TECH_STACK_ITEMS = [
   'CSS',
   'Sass',
 ];
+
+/**
+ * 1. default url nema query params
+ * 2. saljem req GET  sa contentType=posts i page=1
+ * 3. za params page=1 samo radim params.set('page', value)
+ * 4. intersection observer za page
+ * 5. provera za quyer params da li je string undefined ili array( ako je array uzeti [0])
+ */
+
+/**
+ * REUSABLE
+ * 1. isMyProfile
+ * 2. pitati za paragrafe boja itd
+ */
 
 const ProfileHome: React.FC<IProfileHomeProps> = (props) => {
   return (
@@ -98,9 +114,12 @@ const ProfileHome: React.FC<IProfileHomeProps> = (props) => {
           </p>
         </div>
       </aside>
-      <main className="flex flex-col flex-1">
-        <div>
+      <main className="main-content">
+        <div className="flex flex-col gap-5">
           <ProfileNavLinks />
+          <ul>
+            <PostItem imgUrl="/assets/images/post-example.svg" />
+          </ul>
         </div>
       </main>
       <aside className="right-sidebar bg-blue-500">RIGHT SIDEBAR</aside>
