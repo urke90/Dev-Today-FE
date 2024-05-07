@@ -6,9 +6,9 @@ import { usePathname } from 'next/navigation';
 
 // ----------------------------------------------------------------
 
-interface IProfileNavLinksProps {}
+interface IContentNavLinksProps {}
 
-const ProfileNavLinks: React.FC<IProfileNavLinksProps> = (props) => {
+const ContentNavLinks: React.FC<IContentNavLinksProps> = (props) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   // staviti default value
@@ -70,4 +70,4 @@ const ProfileNavLinks: React.FC<IProfileNavLinksProps> = (props) => {
   );
 };
 
-export default ProfileNavLinks;
+export default ContentNavLinks;

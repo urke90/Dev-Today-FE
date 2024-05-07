@@ -2,8 +2,8 @@ import Image from 'next/image';
 import { Button } from '../ui/button';
 import BadgeItem from '../shared/BadgeItem';
 import Link from 'next/link';
-import ProfileNavLinks from './ProfileNavLinks';
-import PostItemCard from '../shared/PostItemCard';
+import ContentNavLinks from '../shared/ContentNavLinks';
+// import PostItemCard from '../shared/PostItemCard';
 import PerformanceItem from './PerformanceItem';
 import SidebarContentCard from '../shared/SidebarContentCard';
 import MeetupItemCard from '../shared/MeetupItemCard';
@@ -118,7 +118,7 @@ const ProfileHome: React.FC<IProfileHomeProps> = (props) => {
       </aside>
       <main className="main-content mx-auto">
         <div className="flex flex-col gap-5">
-          <ProfileNavLinks />
+          <ContentNavLinks />
           <ul className="flex flex-col gap-5">
             {/* <p>NO DATA AT THE MOMENT</p> */}
             {/* <PostItemCard imgUrl="/assets/images/post-example.svg" />
