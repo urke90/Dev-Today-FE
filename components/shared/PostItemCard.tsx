@@ -14,17 +14,13 @@ interface IPostItemCardProps {
 
 const PostItemCard: React.FC<IPostItemCardProps> = ({ imgUrl }) => {
   return (
-    <li className="flex p-2 md:p-5 gap-4 bg-light100__dark800 rounded-2xl">
-      <Image
-        src={imgUrl}
-        width={165}
-        height={165}
-        alt="post"
-        className="shrink-0"
-      />
+    <li className="flex md:items-center p-4 md:p-5 gap-4 bg-light100__dark800 rounded-2xl">
+      <div className="relative size-[100px] md:size-[165px] shrink-0">
+        <Image src={imgUrl} fill alt="post" className="shrink-0" />
+      </div>
       {/* RIGHT PART OF THE POST */}
-      <div>
-        <div className="flex mb-4 gap-4">
+      <div className="flex flex-col gap-4">
+        <div className="flex mb-4">
           <div>
             <p className="p1-bold mb-2">
               What is the ideal Tech stack to build a website in 2024? 👨‍💻
@@ -42,7 +38,7 @@ const PostItemCard: React.FC<IPostItemCardProps> = ({ imgUrl }) => {
             <HeartIcon className="text-white-300" />
           </Button>
         </div>
-        <ul className="flex gap-2.5 mb-6">
+        <ul className="flex gap-2.5">
           <BadgeItem title="finance" />
           <BadgeItem title="bitcoin" />
           <BadgeItem title="crypto" />

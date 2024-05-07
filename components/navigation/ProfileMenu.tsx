@@ -37,7 +37,7 @@ const ProfileMenu: React.FC<IProfileMenuProps> = (props) => {
             />
           </div>
           <span className="p2-medium max-md:hidden">Uros Bijelic</span>
-          <ArrowDownIcon className="icon-white-400__dark-white-300 max-md:hidden" />
+          <ArrowDownIcon className="icon-light400__dark300 max-md:hidden" />
         </Button>
       </Trigger>
       <Portal>

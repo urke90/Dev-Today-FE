@@ -20,8 +20,8 @@ const NotificationMenu: React.FC<INotificationMenuProps> = (props) => {
   return (
     <DropdownMenu>
       <Trigger asChild>
-        <Button className="nav-button-white-200__dark-black-700 ">
-          <NotificationIcon className="icon-white-400__dark-white-300" />
+        <Button className="nav-btn-light200__dark700 ">
+          <NotificationIcon className="icon-light400__dark300" />
         </Button>
       </Trigger>
       <Portal>

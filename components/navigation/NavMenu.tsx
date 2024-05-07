@@ -1,9 +1,7 @@
 'use client';
 
-import SearchIcon from '../icons/Search';
 import ProfileMenu from './ProfileMenu';
 import NotificationMenu from './NotificationMenu';
-import { Button } from '../ui/button';
 import SearchCommandDialog from './SearchCommandDialog';
 
 // ----------------------------------------------------------------

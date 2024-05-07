@@ -3,7 +3,8 @@ import { Button } from '../ui/button';
 import BadgeItem from '../shared/BadgeItem';
 import Link from 'next/link';
 import ContentNavLinks from '../shared/ContentNavLinks';
-// import PostItemCard from '../shared/PostItemCard';
+import PostItemCard from '../shared/PostItemCard';
+import PodcastItemCard from '../shared/PodcastItemCard';
 import PerformanceItem from './PerformanceItem';
 import SidebarContentCard from '../shared/SidebarContentCard';
 import MeetupItemCard from '../shared/MeetupItemCard';
@@ -34,6 +35,11 @@ const TECH_STACK_ITEMS = [
  * REUSABLE
  * 1. isMyProfile
  * 2. pitati za paragrafe boja itd
+ */
+
+// TODO: PITANJA
+/**
+ * 1. Kako da renderujem razlicite liste, da li treba
  */
 
 const ProfileHome: React.FC<IProfileHomeProps> = (props) => {
@@ -119,9 +125,9 @@ const ProfileHome: React.FC<IProfileHomeProps> = (props) => {
       <main className="main-content mx-auto">
         <div className="flex flex-col gap-5">
           <ContentNavLinks />
-          <ul className="flex flex-col gap-5">
+          {/** CHECK HOW TO RENDER DIFFERENT LISTS */}
+          <ul className="grid grid-cols-1 gap-5">
             {/* <p>NO DATA AT THE MOMENT</p> */}
-            {/* <PostItemCard imgUrl="/assets/images/post-example.svg" />
             <PostItemCard imgUrl="/assets/images/post-example.svg" />
             <PostItemCard imgUrl="/assets/images/post-example.svg" />
             <PostItemCard imgUrl="/assets/images/post-example.svg" />
@@ -129,8 +135,9 @@ const ProfileHome: React.FC<IProfileHomeProps> = (props) => {
             <PostItemCard imgUrl="/assets/images/post-example.svg" />
             <PostItemCard imgUrl="/assets/images/post-example.svg" />
             <PostItemCard imgUrl="/assets/images/post-example.svg" />
-            <PostItemCard imgUrl="/assets/images/post-example.svg" /> */}
-            <MeetupItemCard
+            <PostItemCard imgUrl="/assets/images/post-example.svg" />
+            <PostItemCard imgUrl="/assets/images/post-example.svg" />
+            {/* <MeetupItemCard
               imgUrl="/assets/images/meetup-example.svg"
               title="A Deep Dive into the Latest UI/UX Trends and Techniques"
               location="Innovation Hub, Austin"
@@ -140,7 +147,11 @@ const ProfileHome: React.FC<IProfileHomeProps> = (props) => {
               opportunities."
               date="FEB 3"
               tags={['Developer', 'Tech Guru', 'Software']}
-            />
+            /> */}
+            {/* <PodcastItemCard />
+            <PodcastItemCard />
+            <PodcastItemCard />
+            <PodcastItemCard /> */}
           </ul>
         </div>
       </main>

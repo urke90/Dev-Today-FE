@@ -17,19 +17,19 @@ const NavLinks: React.FC<IFooterProps> = (props) => {
 
   return (
     <nav className="flex gap-5">
-      <Link href="/posts" className="p-2.5 icon-white-400__dark-white-300">
+      <Link href="/posts" className="p-2.5 icon-light400__dark300">
         <FrameIcon />
       </Link>
-      <Link href="/meetup" className="p-2.5 icon-white-400__dark-white-300">
+      <Link href="/meetup" className="p-2.5 icon-light400__dark300">
         <CalendarIcon />
       </Link>
-      <Link href="/podcast" className="p-2.5 icon-white-400__dark-white-300">
+      <Link href="/podcast" className="p-2.5 icon-light400__dark300">
         <PodcastIcon />
       </Link>
-      <Link href="/groups" className="p-2.5 icon-white-400__dark-white-300">
+      <Link href="/groups" className="p-2.5 icon-light400__dark300">
         <GroupsIcon />
       </Link>
-      <Link href="#" className="p-2.5 icon-white-400__dark-white-300">
+      <Link href="#" className="p-2.5 icon-light400__dark300">
         <PlusIcon />
       </Link>
     </nav>
