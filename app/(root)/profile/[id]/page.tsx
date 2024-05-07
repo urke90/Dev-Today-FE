@@ -18,7 +18,7 @@ const UserProfilePage: React.FC<IUserProfilePageProps> = ({ params }) => {
   // TODO proveriti da li je string | string[] | undefined; i u zavisnoti odraditi akcijuuradiit flow ceo
 
   return (
-    <section className="">
+    <section className="px-3.5 lg:px-5">
       <ProfileHome />
     </section>
   );

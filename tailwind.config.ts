@@ -53,6 +53,10 @@ const config = {
         'left-sidebar': '13.125rem',
         'right-sidebar': '20.25rem',
       },
+      margin: {
+        'content-left': '13.875rem',
+        'content-right': '21rem',
+      },
       // Width: {
       //   sidebar: '21.625rem',
       //   'left-sidebar': '13.125rem',

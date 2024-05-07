@@ -13,7 +13,6 @@ const ProfileNavLinks: React.FC<IProfileNavLinksProps> = (props) => {
   const searchParams = useSearchParams();
   // staviti default value
   const contentType = searchParams.get('contentType') ?? 'posts';
-  console.log('contentType', contentType);
 
   const updateQueryParams = (value: string) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -26,7 +25,7 @@ const ProfileNavLinks: React.FC<IProfileNavLinksProps> = (props) => {
     'p1-medium text-white-400 dark:text-white-300 py-2 px-3.5 rounded-[7px]';
 
   return (
-    <div className="bg-white100__dark800 flex items-center p-3.5 rounded-lg gap-2.5 bg-light100__dark800 flex-1 justify-between">
+    <div className="bg-light100__dark800 flex-between p-3.5 rounded-lg">
       <Link
         href={pathname + '?' + updateQueryParams('posts')}
         className={`${linkStyles} ${

@@ -6,6 +6,8 @@ import ProfileNavLinks from './ProfileNavLinks';
 import PostItemCard from '../shared/PostItemCard';
 import PerformanceItem from './PerformanceItem';
 import SidebarContentCard from '../shared/SidebarContentCard';
+import MeetupItemCard from '../shared/MeetupItemCard';
+
 // ----------------------------------------------------------------
 
 interface IProfileHomeProps {}
@@ -37,7 +39,7 @@ const TECH_STACK_ITEMS = [
 const ProfileHome: React.FC<IProfileHomeProps> = (props) => {
   return (
     <div className="content-wrapper">
-      <aside className="left-sidebar bg-light100__dark800 text-center h-full rounded-t-2xl pb-7 rounded-b-2xl">
+      <aside className="left-sidebar bg-light100__dark800 !p-0 !pb-5 text-center rounded-t-2xl rounded-b-2xl">
         <div className="relative h-[106px] lg:h-[83px] profile-background rounded-t-2xl">
           <Image
             fill
@@ -47,19 +49,19 @@ const ProfileHome: React.FC<IProfileHomeProps> = (props) => {
             className="rounded-t-2xl"
           />
         </div>
-        <div className="px-5 flex flex-col gap-y-6 md:gap-y-5">
+        <div className="px-5 flex flex-col gap-y-6">
           <div className="relative z-10 -mt-14">
             <Image
               src="/assets/images/no-image.svg"
               width={110}
               height={110}
               alt="profile"
-              className="ring-4 ring-primary-500 rounded-full mx-auto"
+              className="ring-4 ring-primary-500 rounded-full mx-auto mb-2.5"
             />
             <h1 className="h1-medium">JS Mastery</h1>
             <p className="p3-regular dark:text-white-400">@jsmastery</p>
           </div>
-          <Button variant="primary" size="small" className="md:mb-5 mb-4">
+          <Button variant="primary" size="small">
             Follow
           </Button>
           <div className="flex justify-center gap-[7px] gap-y-0 sm:flex-col">
@@ -114,19 +116,39 @@ const ProfileHome: React.FC<IProfileHomeProps> = (props) => {
           </p>
         </div>
       </aside>
-      <main className="main-content">
+      <main className="main-content mx-auto">
         <div className="flex flex-col gap-5">
           <ProfileNavLinks />
-          <ul>
+          <ul className="flex flex-col gap-5">
+            {/* <p>NO DATA AT THE MOMENT</p> */}
+            {/* <PostItemCard imgUrl="/assets/images/post-example.svg" />
             <PostItemCard imgUrl="/assets/images/post-example.svg" />
+            <PostItemCard imgUrl="/assets/images/post-example.svg" />
+            <PostItemCard imgUrl="/assets/images/post-example.svg" />
+            <PostItemCard imgUrl="/assets/images/post-example.svg" />
+            <PostItemCard imgUrl="/assets/images/post-example.svg" />
+            <PostItemCard imgUrl="/assets/images/post-example.svg" />
+            <PostItemCard imgUrl="/assets/images/post-example.svg" />
+            <PostItemCard imgUrl="/assets/images/post-example.svg" /> */}
+            <MeetupItemCard
+              imgUrl="/assets/images/meetup-example.svg"
+              title="A Deep Dive into the Latest UI/UX Trends and Techniques"
+              location="Innovation Hub, Austin"
+              description="Elevate your web development skills by delving into the latest UI/UX
+              trends and techniques. Join us for an insightful session filled with
+              hands-on demonstrations, expert-led discussions, and networking
+              opportunities."
+              date="FEB 3"
+              tags={['Developer', 'Tech Guru', 'Software']}
+            />
           </ul>
         </div>
       </main>
-      <aside className="right-sidebar gap-5">
+      <aside className="right-sidebar">
         <div className="max-xl:hidden">
           <SidebarContentCard title="Recent Posts" items={[]} />
         </div>
-        <div className="right-sidebar-item gap-5">
+        <div className="right-sidebar-item ">
           <div>
             <p className="p2-bold">Performance</p>
             <p className="p3-regular">The best posts from the last 30 days</p>

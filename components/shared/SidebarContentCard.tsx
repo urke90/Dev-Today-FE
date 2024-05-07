@@ -27,6 +27,18 @@ const SidebarContentCard: React.FC<ISidebarContentCardProps> = ({ title }) => {
           author="by Liam Debugger"
           link="#"
         />
+        <SidebarContentCardItem
+          imgUrl="/assets/images/post-example.svg"
+          title="The Code Breaker's Toolkit: Unraveling Challenges"
+          author="by Liam Debugger"
+          link="#"
+        />
+        <SidebarContentCardItem
+          imgUrl="/assets/images/post-example.svg"
+          title="The Code Breaker's Toolkit: Unraveling Challenges"
+          author="by Liam Debugger"
+          link="#"
+        />
       </ul>
     </div>
   );
