@@ -2,16 +2,16 @@
 
 import Image from 'next/image';
 import HeartIcon from '../icons/Heart';
-import BadgeItem from '../shared/BadgeItem';
+import BadgeItem from './BadgeItem';
 import { Button } from '../ui/button';
 
 // ----------------------------------------------------------------
 
-interface IPostItemProps {
+interface IPostItemCardProps {
   imgUrl: string;
 }
 
-const PostItem: React.FC<IPostItemProps> = ({ imgUrl }) => {
+const PostItemCard: React.FC<IPostItemCardProps> = ({ imgUrl }) => {
   return (
     <li className="flex p-2 md:p-5 gap-4 bg-light100__dark800 rounded-2xl">
       <Image src={imgUrl} width={165} height={165} alt="post" />
@@ -52,7 +52,7 @@ const PostItem: React.FC<IPostItemProps> = ({ imgUrl }) => {
             </div>
             <div>
               <p className="p3-bold">Pavel Gvay</p>
-              <p className="subtitle">3 weeks ago</p>
+              <p className="subtitle-normal">3 weeks ago</p>
             </div>
           </div>
           <div className="flex gap-[30px] text-white-400 dark:text-white-300">
@@ -67,4 +67,4 @@ const PostItem: React.FC<IPostItemProps> = ({ imgUrl }) => {
   );
 };
 
-export default PostItem;
+export default PostItemCard;

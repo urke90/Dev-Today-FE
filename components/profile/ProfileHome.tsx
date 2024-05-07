@@ -3,9 +3,12 @@ import { Button } from '../ui/button';
 import BadgeItem from '../shared/BadgeItem';
 import Link from 'next/link';
 import ProfileNavLinks from './ProfileNavLinks';
-import HeartIcon from '../icons/Heart';
-import PostItem from './PostItem';
-
+import PostItemCard from '../shared/PostItemCard';
+// import RecentPostItem from '../shared/RecentPostItem';
+// import ArrowRightIcon from '../icons/ArrowRight';
+// import HeartIcon from '../icons/Heart';
+import PerformanceItem from './PerformanceItem';
+import SidebarContentCard from '../shared/SidebarContentCard';
 // ----------------------------------------------------------------
 
 interface IProfileHomeProps {}
@@ -118,11 +121,26 @@ const ProfileHome: React.FC<IProfileHomeProps> = (props) => {
         <div className="flex flex-col gap-5">
           <ProfileNavLinks />
           <ul>
-            <PostItem imgUrl="/assets/images/post-example.svg" />
+            <PostItemCard imgUrl="/assets/images/post-example.svg" />
           </ul>
         </div>
       </main>
-      <aside className="right-sidebar bg-blue-500">RIGHT SIDEBAR</aside>
+      <aside className="right-sidebar gap-5">
+        <div className="max-xl:hidden right-sidebar-item">
+          <SidebarContentCard title="Recent Posts" items={[]} />
+        </div>
+        <div className="right-sidebar-item gap-5">
+          <div>
+            <p className="p2-bold">Performance</p>
+            <p className="p3-regular">The best posts from the last 30 days</p>
+          </div>
+          <ul className="flex flex-col gap-5">
+            <PerformanceItem />
+            <PerformanceItem />
+            <PerformanceItem />
+          </ul>
+        </div>
+      </aside>
     </div>
   );
 };

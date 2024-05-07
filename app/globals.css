@@ -68,8 +68,11 @@
   .p4-regular {
     @apply text-xs font-normal text-white-400 dark:text-white-200;
   }
-  .subtitle {
-    @apply text-[10px] leading-[16px] font-normal text-white-400;
+  .subtitle-normal {
+    @apply text-[10px] leading-[14px] font-normal text-white-400;
+  }
+  .subtitle-medium {
+    @apply text-[10px] leading-[14px] font-normal text-white-400;
   }
   .caption-10 {
     @apply text-[10px] leading-[13px] font-medium text-white-400;
@@ -100,7 +103,7 @@
   }
   /* FLEX */
 
-  /* LAYOUT ? NOT SURE IF THIS WILL BE USED, LEFT JUST IN CASE WE NEED IT LATER!!! */
+  /* LAYOUT */
   .content-wrapper {
     @apply relative m-auto top-[94px] lg:top-[100px] flex flex-col md:flex-row gap-3 px-3.5 lg:px-5;
   }
@@ -111,17 +114,14 @@
     @apply flex flex-col sm:max-w-[80%] sm:mx-auto  md:w-left-sidebar md:min-w-left-sidebar;
   }
   .right-sidebar {
-    @apply flex flex-col lg:w-right-sidebar max-sm:flex sm:hidden xl:flex;
+    @apply flex flex-col gap-5 lg:w-right-sidebar max-sm:flex sm:hidden xl:flex;
   }
-  .sidebar-item {
-    @apply flex flex-col bg-white-100 dark:bg-black-800;
-  }
-  /* .left-sidebar-item {
-    @apply w-[21,625rem] lg:w-52 gap-5;
+  .left-sidebar-item {
+    @apply flex flex-col bg-white-100 dark:bg-black-800 rounded-2xl gap-5;
   }
   .right-sidebar-item {
-    @apply w-[21,625rem] lg:w-[20.25rem] lg:p-5 gap-5;
-  } */
+    @apply flex flex-col p-5 rounded-2xl bg-white-100 dark:bg-black-800 gap-5;
+  }
 
   /* LAYOUT */
 
