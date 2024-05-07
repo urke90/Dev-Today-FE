@@ -15,7 +15,7 @@ interface ISidebarContentCardProps {
  */
 const SidebarContentCard: React.FC<ISidebarContentCardProps> = ({ title }) => {
   return (
-    <>
+    <div className="right-sidebar-item">
       <div className="flex gap-[3px] items-center">
         <p className="p2-bold">{title}</p>
         <ArrowRightIcon className="dark:text-white-200 text-black-800" />
@@ -28,7 +28,7 @@ const SidebarContentCard: React.FC<ISidebarContentCardProps> = ({ title }) => {
           link="#"
         />
       </ul>
-    </>
+    </div>
   );
 };
 
@@ -46,8 +46,8 @@ const SidebarContentCardItem: React.FC<ISidebarContentCardItemProps> = ({
   link,
 }) => {
   return (
-    <li className="flex">
-      <Link href={link}>
+    <li>
+      <Link href={link} className="flex">
         <div className="flex gap-3.5">
           <Image
             src={imgUrl}

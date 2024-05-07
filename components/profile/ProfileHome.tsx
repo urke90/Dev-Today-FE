@@ -4,9 +4,6 @@ import BadgeItem from '../shared/BadgeItem';
 import Link from 'next/link';
 import ProfileNavLinks from './ProfileNavLinks';
 import PostItemCard from '../shared/PostItemCard';
-// import RecentPostItem from '../shared/RecentPostItem';
-// import ArrowRightIcon from '../icons/ArrowRight';
-// import HeartIcon from '../icons/Heart';
 import PerformanceItem from './PerformanceItem';
 import SidebarContentCard from '../shared/SidebarContentCard';
 // ----------------------------------------------------------------
@@ -126,7 +123,7 @@ const ProfileHome: React.FC<IProfileHomeProps> = (props) => {
         </div>
       </main>
       <aside className="right-sidebar gap-5">
-        <div className="max-xl:hidden right-sidebar-item">
+        <div className="max-xl:hidden">
           <SidebarContentCard title="Recent Posts" items={[]} />
         </div>
         <div className="right-sidebar-item gap-5">
@@ -135,6 +132,8 @@ const ProfileHome: React.FC<IProfileHomeProps> = (props) => {
             <p className="p3-regular">The best posts from the last 30 days</p>
           </div>
           <ul className="flex flex-col gap-5">
+            <PerformanceItem />
+            <PerformanceItem />
             <PerformanceItem />
             <PerformanceItem />
             <PerformanceItem />
