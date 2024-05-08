@@ -33,7 +33,7 @@
     @apply text-base font-medium text-black-800 dark:text-white-200;
   }
   .p1-bold {
-    @apply text-[18px] leading-[20px] font-bold text-black-700 dark:text-white-100;
+    @apply text-[18px] leading-[21.6px] font-bold text-black-800 dark:text-white-200; /* DOBRO */
   }
   .p2-bold {
     @apply text-base font-bold dark:text-white-200 text-black-800; /* DOBRO */
@@ -108,10 +108,13 @@
 
   /* LAYOUT */
   .content-wrapper {
-    @apply relative top-[94px]  max-sm:pb-[100px] pb-7 lg:top-[100px] flex flex-col md:flex-row gap-5;
+    @apply relative top-[92px] max-sm:pb-[100px] pb-7 lg:top-[100px] flex flex-col md:flex-row gap-5 mx-auto;
   }
   .main-content {
     @apply flex flex-col flex-1 sm:max-w-[80%];
+  }
+  .create-page-wrapper {
+    @apply flex flex-col gap-[30px] py-[30px] px-3.5 md:p-[30px] top-[92px] lg:top-[100px] relative mx-auto max-w-[900px] max-sm:pb-[110px];
   }
   .left-sidebar {
     @apply flex flex-col p-5 sm:max-w-[80%] gap-5 sm:mx-auto md:w-left-sidebar md:min-w-left-sidebar md:sticky md:top-[100px] h-full;

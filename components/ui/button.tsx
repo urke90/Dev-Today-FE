@@ -11,7 +11,7 @@ const buttonVariants = cva(
       variant: {
         base: {},
         primary:
-          'bg-primary-500 border border-primary-500 transition-colors text-white-100',
+          'bg-primary-500 border border-primary-500 transition-colors text-white-100 py-3',
         cancel:
           'bg-white-100 py-3 gap-2.5 text-black-700 dark:text-white-100 dark:bg-black-800 shadow-[0px_3px_20px_0px_rgba(0,0,0,0.04)] dark:shadow-none',
         icon: 'p-0 w-auto',

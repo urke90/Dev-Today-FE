@@ -9,25 +9,21 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { Input, InputProps } from '@/components/ui/input';
+import { Textarea, TextareaProps } from '@/components/ui/textarea';
 
-// ----------------------------------------------------------------
-
-interface IRHFInputProps extends InputProps {
+interface IRHFTextareaProps extends TextareaProps {
   name: string;
   label?: string;
   description?: string;
 }
 
-const RHFInput: React.FC<IRHFInputProps> = ({
+const RHFTextarea: React.FC<IRHFTextareaProps> = ({
   name,
   label,
   description,
-  type = 'text',
   ...rest
 }) => {
   const { control } = useFormContext();
-
   return (
     <FormField
       control={control}
@@ -36,7 +32,7 @@ const RHFInput: React.FC<IRHFInputProps> = ({
         <FormItem>
           {label && <FormLabel>{label}</FormLabel>}
           <FormControl>
-            <Input type={type} {...field} {...rest} />
+            <Textarea {...field} {...rest} />
           </FormControl>
           {description && <FormDescription>{description}</FormDescription>}
           <FormMessage />
@@ -46,4 +42,4 @@ const RHFInput: React.FC<IRHFInputProps> = ({
   );
 };
 
-export default RHFInput;
+export default RHFTextarea;
