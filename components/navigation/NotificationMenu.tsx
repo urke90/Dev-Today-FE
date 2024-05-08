@@ -29,7 +29,7 @@ const NotificationMenu: React.FC<INotificationMenuProps> = (props) => {
           avoidCollisions
           collisionPadding={15}
           onCloseAutoFocus={(e) => e.preventDefault()}
-          className="w-[346px] z-20 max-lg:mt-6 mt-7 lg:w-96 flex flex-col border border-[#C5D0E666] dark:border-black-700 rounded-[14px] bg-light100__dark800 gap-5 p-5 shadow-header-menu data-[side=top]:animate-slideDownAndFade data-[side=right]:animate-slideLeftAndFade data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade"
+          className="w-[346px] z-20 max-lg:mt-6 mt-7 lg:w-96 flex flex-col border border-white-border dark:border-black-700 rounded-[14px] bg-light100__dark800 gap-5 p-5 shadow-header-menu data-[side=top]:animate-slideDownAndFade data-[side=right]:animate-slideLeftAndFade data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade"
         >
           <Item
             onSelect={(e) => e.preventDefault()}

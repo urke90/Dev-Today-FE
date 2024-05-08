@@ -44,7 +44,7 @@ const ProfileMenu: React.FC<IProfileMenuProps> = (props) => {
         <Content
           collisionPadding={10}
           onCloseAutoFocus={(e) => e.preventDefault()}
-          className="min-w-[11rem] max-lg:mt-6 mt-7 z-20 flex flex-col border border-[#C5D0E666] dark:border-black-700 rounded-[14px] bg-light100__dark800 gap-5 p-5 shadow-header-menu data-[side=top]:animate-slideDownAndFade data-[side=right]:animate-slideLeftAndFade data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade"
+          className="min-w-[11rem] max-lg:mt-6 mt-7 z-20 flex flex-col border border-white-border dark:border-black-700 rounded-[14px] bg-light100__dark800 gap-5 p-5 shadow-header-menu data-[side=top]:animate-slideDownAndFade data-[side=right]:animate-slideLeftAndFade data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade"
         >
           <Item className="p3-medium">
             <Button className="gap-2.5 justify-start">
@@ -61,7 +61,7 @@ const ProfileMenu: React.FC<IProfileMenuProps> = (props) => {
               Logout
             </Button>
           </Item>
-          <Separator className="h-px bg-[#C5D0E666]" />
+          <Separator className="h-px bg-white-border" />
           <Item className="flex gap-5 p-[3px] bg-primary-200 dark:bg-black-800 rounded-[15px] font-semibold text-black-800 dark:text-white-200 text-base">
             Interface
             <div className="flex gap-2.5">

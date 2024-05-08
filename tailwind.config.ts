@@ -38,6 +38,10 @@ const config = {
           300: '#C5D0E6',
           400: '#808191',
           500: '#55597D',
+          border: '#C5D0E666',
+        },
+        error: {
+          primary: '#F65E5E',
         },
         darkBorder: 'rgba(57, 62, 79, 0.4)',
         whiteBorder: 'rgba(197, 208, 230, 0.4)',
