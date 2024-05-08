@@ -49,7 +49,7 @@ const MeetupItemCard: React.FC<IMeetupItemCardProps> = ({
       </div>
       <ul className="flex gap-2.5">
         {tags.map((tag) => (
-          <BadgeItem title={tag} />
+          <BadgeItem key={tag} title={tag} />
         ))}
       </ul>
     </li>

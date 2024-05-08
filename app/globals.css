@@ -74,10 +74,10 @@
   .subtitle-medium {
     @apply text-[10px] leading-[14px] font-normal text-white-400;
   }
-  .caption-10 {
+  .cap-10 {
     @apply text-[10px] leading-[13px] font-medium text-white-400;
   }
-  .caption-8 {
+  .cap-8 {
     @apply text-[8px] leading-[10.4px] font-medium text-white-400;
   }
   /* TYPOGRAPHY  */

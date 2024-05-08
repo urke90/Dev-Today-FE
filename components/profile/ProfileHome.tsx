@@ -8,6 +8,7 @@ import PodcastItemCard from '../shared/PodcastItemCard';
 import PerformanceItem from './PerformanceItem';
 import SidebarContentCard from '../shared/SidebarContentCard';
 import MeetupItemCard from '../shared/MeetupItemCard';
+import GroupItemCard from '../shared/GroupItemCard';
 
 // ----------------------------------------------------------------
 
@@ -39,7 +40,7 @@ const TECH_STACK_ITEMS = [
 
 // TODO: PITANJA
 /**
- * 1. Kako da renderujem razlicite liste, da li treba
+ * 1. Kako da renderujem razlicite liste, da li treba display: grid? display: flex?
  */
 
 const ProfileHome: React.FC<IProfileHomeProps> = (props) => {
@@ -51,8 +52,7 @@ const ProfileHome: React.FC<IProfileHomeProps> = (props) => {
             fill
             src="/assets/images/profile-background.svg"
             alt="profile bacground"
-            objectFit="cover"
-            className="rounded-t-2xl"
+            className="rounded-t-2xl object-cover"
           />
         </div>
         <div className="px-5 flex flex-col gap-y-6">
@@ -126,8 +126,9 @@ const ProfileHome: React.FC<IProfileHomeProps> = (props) => {
         <div className="flex flex-col gap-5">
           <ContentNavLinks />
           {/** CHECK HOW TO RENDER DIFFERENT LISTS */}
-          <ul className="grid grid-cols-1 gap-5">
+          <ul className="grid grid-cols-2 gap-5">
             {/* <p>NO DATA AT THE MOMENT</p> */}
+            {/* <PostItemCard imgUrl="/assets/images/post-example.svg" />
             <PostItemCard imgUrl="/assets/images/post-example.svg" />
             <PostItemCard imgUrl="/assets/images/post-example.svg" />
             <PostItemCard imgUrl="/assets/images/post-example.svg" />
@@ -135,8 +136,14 @@ const ProfileHome: React.FC<IProfileHomeProps> = (props) => {
             <PostItemCard imgUrl="/assets/images/post-example.svg" />
             <PostItemCard imgUrl="/assets/images/post-example.svg" />
             <PostItemCard imgUrl="/assets/images/post-example.svg" />
-            <PostItemCard imgUrl="/assets/images/post-example.svg" />
-            <PostItemCard imgUrl="/assets/images/post-example.svg" />
+            <PostItemCard imgUrl="/assets/images/post-example.svg" /> */}
+            <GroupItemCard
+              title="CodeCrafters Hub"
+              imgUrl="/assets/images/group-example.svg"
+              description="Connect with fellow developers, share insights, and embark on coding
+        adventures. Join us in mastering the art of web dev through
+        collaborative projects."
+            />
             {/* <MeetupItemCard
               imgUrl="/assets/images/meetup-example.svg"
               title="A Deep Dive into the Latest UI/UX Trends and Techniques"
