@@ -36,25 +36,25 @@
     @apply text-[18px] leading-[20px] font-bold text-black-700 dark:text-white-100;
   }
   .p2-bold {
-    @apply text-base font-bold dark:text-white-200;
+    @apply text-base font-bold dark:text-white-200 text-black-800; /* DOBRO */
   }
   .p3-bold {
-    @apply text-[14px] leading-[24px] font-bold text-black-700 dark:text-white-300;
+    @apply text-[14px] leading-[24px] font-bold text-black-800 dark:text-white-100; /* DOBRO */
   }
   .p4-bold {
     @apply text-xs font-bold text-black-700 dark:text-white-400;
   }
   .p1-medium {
-    @apply text-[14px] md:text-[18px] leading-[20px] font-medium text-black-700 dark:text-white-200;
+    @apply text-[14px] md:text-[18px] leading-[20px] font-medium text-white-400 dark:text-white-300; /* DOBRO */
   }
   .p2-medium {
-    @apply text-base font-medium text-black-800 dark:text-white-400;
+    @apply text-base font-medium text-black-800 dark:text-white-200; /* DOBRO */
   }
   .p3-medium {
-    @apply text-sm font-medium text-black-800 dark:text-white-200;
+    @apply text-sm font-medium text-black-700 dark:text-white-200; /* DOBRO */
   }
   .p4-medium {
-    @apply text-xs font-medium text-white-400 dark:text-white-300;
+    @apply text-xs font-medium text-black-800 dark:text-white-200; /* DOBRO */
   }
   .p1-regular {
     @apply text-[18px] leading-[20px] font-normal text-black-800 dark:text-white-100;
@@ -63,10 +63,10 @@
     @apply text-base font-normal text-white-400 dark:text-white-300;
   }
   .p3-regular {
-    @apply text-sm font-normal text-white-400 dark:text-white-200;
+    @apply text-sm font-normal text-white-400 dark:text-white-200; /* DOBRO*/
   }
   .p4-regular {
-    @apply text-xs font-normal text-white-400 dark:text-white-200;
+    @apply text-xs font-normal text-white-400 dark:text-white-200; /* DOBRO*/
   }
   .subtitle-normal {
     @apply text-[10px] leading-[14px] font-normal text-white-400;

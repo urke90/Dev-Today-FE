@@ -25,12 +25,12 @@ const ContentNavLinks: React.FC<IContentNavLinksProps> = (props) => {
     'p1-medium text-white-400 dark:text-white-300 py-2 px-3.5 rounded-[7px]';
 
   return (
-    <div className="bg-light100__dark800 flex-between p-3.5 rounded-lg">
+    <div className="bg-light100__dark800 flex-between p-3.5 rounded-lg mx-auto w-full">
       <Link
         href={pathname + '?' + updateQueryParams('posts')}
         className={`${linkStyles} ${
           contentType === 'posts'
-            ? 'bg-primary-500 text-white-100 dark:!text-white-100'
+            ? 'bg-primary-500 !text-white-100 dark:!text-white-100'
             : ''
         }`}
       >

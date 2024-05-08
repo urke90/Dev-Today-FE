@@ -35,12 +35,13 @@ const TECH_STACK_ITEMS = [
 /**
  * REUSABLE
  * 1. isMyProfile
- * 2. pitati za paragrafe boja itd
+ * 2.
  */
 
 // TODO: PITANJA
 /**
  * 1. Kako da renderujem razlicite liste, da li treba display: grid? display: flex?
+ * 2. Instalirao sam cmdk lib za PNPM ?!!!?!?!?
  */
 
 const ProfileHome: React.FC<IProfileHomeProps> = (props) => {
@@ -122,11 +123,11 @@ const ProfileHome: React.FC<IProfileHomeProps> = (props) => {
           </p>
         </div>
       </aside>
-      <main className="main-content mx-auto">
-        <div className="flex flex-col gap-5">
+      <main className="main-content w-full mx-auto">
+        <div className="flex w-full flex-col gap-5">
           <ContentNavLinks />
           {/** CHECK HOW TO RENDER DIFFERENT LISTS */}
-          <ul className="grid grid-cols-2 gap-5">
+          <ul className="flex flex-col flax-wrap gap-5">
             {/* <p>NO DATA AT THE MOMENT</p> */}
             {/* <PostItemCard imgUrl="/assets/images/post-example.svg" />
             <PostItemCard imgUrl="/assets/images/post-example.svg" />
@@ -137,13 +138,14 @@ const ProfileHome: React.FC<IProfileHomeProps> = (props) => {
             <PostItemCard imgUrl="/assets/images/post-example.svg" />
             <PostItemCard imgUrl="/assets/images/post-example.svg" />
             <PostItemCard imgUrl="/assets/images/post-example.svg" /> */}
-            <GroupItemCard
+            {/* <PostItemCard imgUrl="/assets/images/post-example.svg" /> */}
+            {/* <GroupItemCard
               title="CodeCrafters Hub"
               imgUrl="/assets/images/group-example.svg"
               description="Connect with fellow developers, share insights, and embark on coding
         adventures. Join us in mastering the art of web dev through
         collaborative projects."
-            />
+            /> */}
             {/* <MeetupItemCard
               imgUrl="/assets/images/meetup-example.svg"
               title="A Deep Dive into the Latest UI/UX Trends and Techniques"

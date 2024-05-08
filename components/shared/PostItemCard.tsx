@@ -12,6 +12,8 @@ interface IPostItemCardProps {
 }
 // width={165} height={165}
 
+// TODO stavim 2 images i da mobile i desktop toogle hidden na different viewports
+
 const PostItemCard: React.FC<IPostItemCardProps> = ({ imgUrl }) => {
   return (
     <li className="flex md:items-center p-4 md:p-5 gap-4 bg-light100__dark800 rounded-2xl">
