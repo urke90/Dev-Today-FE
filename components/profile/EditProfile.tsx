@@ -10,9 +10,9 @@ import RHFTextarea from '../RHFInputs/RHFTextarea';
 
 // ----------------------------------------------------------------
 
-interface IProfileEditProps {}
+interface IEditProfileProps {}
 
-const ProfileEdit: React.FC<IProfileEditProps> = (props) => {
+const EditProfile: React.FC<IEditProfileProps> = (props) => {
   const form = useForm({
     resolver: zodResolver(profileSchema),
     defaultValues: {
@@ -93,4 +93,4 @@ const ProfileEdit: React.FC<IProfileEditProps> = (props) => {
   );
 };
 
-export default ProfileEdit;
+export default EditProfile;

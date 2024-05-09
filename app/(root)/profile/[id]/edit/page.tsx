@@ -1,11 +1,11 @@
-import ProfileEdit from '@/components/profile/ProfileEdit';
+import EditProfile from '@/components/profile/EditProfile';
 
 // ----------------------------------------------------------------
 
 interface IUserEditPageProps {}
 
 const UserEditPage: React.FC<IUserEditPageProps> = (props) => {
-  return <ProfileEdit />;
+  return <EditProfile />;
 };
 
 export default UserEditPage;
