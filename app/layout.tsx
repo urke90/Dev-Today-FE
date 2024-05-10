@@ -4,7 +4,7 @@ import './globals.css';
 import { ThemeProvider } from './context/ThemeProvider';
 import { cookies } from 'next/headers';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/authOptions';
+import { authOptions } from '@/lib/auth-options';
 import SessionProvider from './context/SessionProvider';
 
 const ibmPlexSans = IBM_Plex_Sans({

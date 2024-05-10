@@ -1,4 +1,4 @@
-import NextAuth from 'next-auth';
+import NextAuth, { DefaultSession } from 'next-auth';
 
 declare module 'next-auth' {
   /**
@@ -6,8 +6,10 @@ declare module 'next-auth' {
    */
   interface Session {
     user: {
-      /** The user's unique id */
+      /** The user's unique ID. */
       id: string;
-    };
+      /** Has user finished onboarding steps. */
+      isOnboardingCompleted: boolean;
+    } & DefaultSession['user'];
   }
 }

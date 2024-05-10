@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { Form } from '@/components/ui/form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import z from 'zod';
+import { CldUploadWidget } from 'next-cloudinary';
 import { profileSchema } from '@/lib/validation';
 import { Button } from '../ui/button';
 import RHFInput from '@/components/RHFInputs/RHFInput';
@@ -48,7 +49,13 @@ const EditProfile: React.FC<IEditProfileProps> = (props) => {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <div className="create-page-wrapper">
-          <div>OVO JE ZA IMAGE DIV NAPRAVITI POSLE </div>
+          <div>
+            <CldUploadWidget>
+              {({ open }) => {
+                return <button onClick={() => open()}>Upload an Image</button>;
+              }}
+            </CldUploadWidget>
+          </div>
           <RHFInput name="name" label="Name" placeholder="Name" />
           <RHFInput name="userName" label="Username" placeholder="Username" />
           <RHFTextarea

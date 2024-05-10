@@ -1,4 +1,3 @@
-// const bcrypt = require("bcrypt");
 import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GitHubProvider from 'next-auth/providers/github';
@@ -72,8 +71,6 @@ export const authOptions = {
 
           const user = await result.json();
 
-          console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', user);
-
           if (!user) return null;
           return user;
         } catch (error) {
@@ -84,9 +81,10 @@ export const authOptions = {
       return true;
     },
     async session({ session, token }: any) {
+      console.log('session u async session', session);
       try {
         const result = await fetch(
-          `http://localhost:8080/api/user/${session.user.email}`,
+          `http://localhost:8080/api/user/email/${session.user.email}`,
           {
             method: 'GET',
             headers: {
@@ -95,8 +93,11 @@ export const authOptions = {
           }
         );
         const resultObject = await result.json();
+        console.log('result object', resultObject);
         if (!resultObject) return null;
-        session.user = resultObject.user;
+        session.user.isOnboardingCompleted =
+          resultObject.user.isOnboardingCompleted;
+        session.user.id = resultObject.user.id;
       } catch (error) {
         console.error('signIn error: ', error);
         throw new Error('Error while signing in');
