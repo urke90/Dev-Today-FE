@@ -40,14 +40,9 @@ const EditProfile: React.FC<IEditProfileProps> = (props) => {
     },
   });
 
-  function onSubmit(data: z.infer<typeof profileSchema>) {
+  const onSubmit = (data: z.infer<typeof profileSchema>) => {
     console.log('data', data);
-  }
-
-  useEffect(() => {
-    const values = form.watch('preferredSkills');
-    console.log('values', values);
-  }, [form]);
+  };
 
   return (
     <Form {...form}>

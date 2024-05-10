@@ -27,24 +27,6 @@ const options = [
   { value: 'vanilla', label: 'Vanilla' },
 ];
 
-// const EmotionCacheProvider = ({ children }: { children: React.ReactNode }) => {
-//   const cache = React.useMemo(
-//     () =>
-//       createCache({
-//         key: 'with-tailwind',
-//         insertionPoint: document.querySelector('title')!,
-//       }),
-//     []
-//   );
-
-//   return <CacheProvider value={cache}>{children}</CacheProvider>;
-// };
-
-// noOptionsMessage={() => 'No tags available!'}
-//               onChange={(newValue) => {
-//                 field.onChange(newValue);
-//               }}
-
 const RHFMultipleSelect: React.FC<IRHFMultipleSelectProps> = ({
   name,
   description,

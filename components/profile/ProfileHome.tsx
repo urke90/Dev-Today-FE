@@ -1,28 +1,16 @@
 import Image from 'next/image';
-import { Button } from '../ui/button';
 import BadgeItem from '../shared/BadgeItem';
 import Link from 'next/link';
 import ContentNavLinks from '../shared/ContentNavLinks';
-import PostItemCard from '../shared/PostItemCard';
-import PodcastItemCard from '../shared/PodcastItemCard';
 import PerformanceItem from './PerformanceItem';
 import SidebarContentCard from '../shared/SidebarContentCard';
+import PostItemCard from '../shared/PostItemCard';
+import PodcastItemCard from '../shared/PodcastItemCard';
 import MeetupItemCard from '../shared/MeetupItemCard';
 import GroupItemCard from '../shared/GroupItemCard';
+import ProfileSidebarInfo from './ProfileSidebarInfo';
 
 // ----------------------------------------------------------------
-
-interface IProfileHomeProps {}
-
-const TECH_STACK_ITEMS = [
-  'Node.js',
-  'HTML',
-  'React.js',
-  'Next.js',
-  'TypeScript',
-  'CSS',
-  'Sass',
-];
 
 /**
  * 1. default url nema query params
@@ -32,19 +20,21 @@ const TECH_STACK_ITEMS = [
  * 5. provera za quyer params da li je string undefined ili array( ako je array uzeti [0])
  */
 
-/**
- * REUSABLE
- * 1. isMyProfile
- * 2.
- */
-
 // TODO: PITANJA
 /**
  * 1. Kako da renderujem razlicite liste, da li treba display: grid? display: flex?
  * 2. Instalirao sam cmdk lib za PNPM ?!!!?!?!?
  */
 
-const ProfileHome: React.FC<IProfileHomeProps> = (props) => {
+interface IProfileHomeProps {
+  isPersonalProfile?: boolean;
+  userId: string;
+}
+
+const ProfileHome: React.FC<IProfileHomeProps> = ({
+  isPersonalProfile = true,
+  userId,
+}) => {
   return (
     <div className="content-wrapper">
       <aside className="left-sidebar bg-light100__dark800 !p-0 !pb-5 text-center rounded-t-2xl rounded-b-2xl">
@@ -68,9 +58,7 @@ const ProfileHome: React.FC<IProfileHomeProps> = (props) => {
             <h1 className="h1-medium">JS Mastery</h1>
             <p className="p3-regular dark:text-white-400">@jsmastery</p>
           </div>
-          <Button variant="primary" size="small">
-            Follow
-          </Button>
+          <ProfileSidebarInfo isPersonalProfile={isPersonalProfile} />
           <div className="flex justify-center gap-[7px] gap-y-0 sm:flex-col">
             <p className="p3-medium text-white-400 dark:text-white-300">
               314 Followers

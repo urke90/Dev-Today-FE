@@ -19,7 +19,7 @@ const UserProfilePage: React.FC<IUserProfilePageProps> = ({ params }) => {
 
   return (
     <section className="px-3.5 lg:px-5">
-      <ProfileHome />
+      <ProfileHome userId={id} />
     </section>
   );
 };

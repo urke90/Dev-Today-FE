@@ -117,10 +117,10 @@
     @apply flex flex-col gap-[30px] py-[30px] px-3.5 md:p-[30px] top-[92px] lg:top-[100px] relative mx-auto max-w-[900px] max-sm:pb-[110px];
   }
   .left-sidebar {
-    @apply flex flex-col p-5 sm:max-w-[80%] gap-5 sm:mx-auto md:w-left-sidebar md:min-w-left-sidebar md:sticky md:top-[100px] h-full;
+    @apply flex flex-col p-5 sm:max-w-[80%] gap-5 sm:mx-auto md:w-left-sidebar md:min-w-left-sidebar md:sticky md:top-[100px];
   }
   .right-sidebar {
-    @apply flex flex-col gap-5 xl:w-right-sidebar sm:hidden xl:flex xl:sticky xl:right-0 xl:top-[100px] h-full;
+    @apply flex flex-col gap-5 xl:w-right-sidebar sm:hidden xl:flex xl:sticky xl:right-0 xl:top-[100px];
   }
   .left-sidebar-item {
     @apply flex flex-col bg-white-100 dark:bg-black-800 rounded-2xl gap-2.5;
