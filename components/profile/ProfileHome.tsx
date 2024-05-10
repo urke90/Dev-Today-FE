@@ -28,12 +28,10 @@ import ProfileSidebarInfo from './ProfileSidebarInfo';
 
 interface IProfileHomeProps {
   isPersonalProfile?: boolean;
-  userId: string;
 }
 
 const ProfileHome: React.FC<IProfileHomeProps> = ({
   isPersonalProfile = true,
-  userId,
 }) => {
   return (
     <div className="content-wrapper">
