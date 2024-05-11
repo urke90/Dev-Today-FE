@@ -1,17 +1,25 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import z from 'zod';
 import { Form } from '@/components/ui/form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Image from 'next/image';
-import { CldUploadWidget, CldUploadButton } from 'next-cloudinary';
+import {
+  CldUploadWidget,
+  CldUploadButton,
+  CldImage,
+  type CldImageProps,
+  type CloudinaryUploadWidgetResults,
+  type CloudinaryUploadWidgetOptions,
+} from 'next-cloudinary';
 import { profileSchema } from '@/lib/validation';
 import { Button } from '../ui/button';
 import RHFInput from '@/components/RHFInputs/RHFInput';
 import RHFTextarea from '../RHFInputs/RHFTextarea';
 import RHFMultipleSelect from '../RHFInputs/RHFMultipleSelect';
-import { useEffect } from 'react';
+import toast from 'react-hot-toast';
 import ImageUploadIcon from '../icons/ImageUpload';
 import ImagePreviewIcon from '../icons/ImagePreview';
 
@@ -44,6 +52,18 @@ const EditProfile: React.FC<IEditProfileProps> = (props) => {
     },
   });
 
+  const { setValue } = form;
+
+  const [previewImg, setPreveiwImg] = useState('');
+
+  const handleUploadImage = (result: CloudinaryUploadWidgetResults) => {
+    if (!result.info || typeof result.info === 'string')
+      return toast.error('Image upload failed!');
+    console.log('result', result);
+    setPreveiwImg(result.info.secure_url);
+    setValue('avatarImg', result.info.secure_url);
+  };
+
   const onSubmit = (data: z.infer<typeof profileSchema>) => {
     console.log('data', data);
   };
@@ -54,9 +74,30 @@ const EditProfile: React.FC<IEditProfileProps> = (props) => {
         <div className="create-page-wrapper">
           <div className="flex gap-2.5 items-center">
             <div className="bg-white-100 dark:bg-black-800 rounded-full shrink-0 size-[60px] flex-center">
-              <ImagePreviewIcon className="icon-light400__dark300" />
+              {previewImg ? (
+                <CldImage
+                  src={previewImg}
+                  width="60"
+                  height="60"
+                  crop="fill"
+                  className="size-[60px] rounded-full"
+                  alt="profile preview"
+                />
+              ) : (
+                <ImagePreviewIcon className="icon-light400__dark300" />
+              )}
             </div>
-            <CldUploadButton className="flex bg-white-100 dark:bg-black-800 items-center gap-2.5 px-5 py-3 rounded-[5px] h-11">
+            <CldUploadButton
+              className="flex bg-white-100 dark:bg-black-800 items-center gap-2.5 px-5 py-3 rounded-[5px] h-11"
+              uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_PRESEST_NAME}
+              onSuccess={handleUploadImage}
+              config={{}}
+              options={{
+                multiple: false,
+                cropping: true,
+                croppingShowDimensions: true,
+              }}
+            >
               <ImageUploadIcon className="icon-light400__dark300" />
               <span className="p3-regular">Set a profile photo</span>
             </CldUploadButton>
