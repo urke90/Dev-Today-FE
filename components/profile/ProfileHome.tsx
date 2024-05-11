@@ -31,7 +31,7 @@ interface IProfileHomeProps {
 }
 
 const ProfileHome: React.FC<IProfileHomeProps> = ({
-  isPersonalProfile = true,
+  isPersonalProfile = false,
 }) => {
   return (
     <div className="content-wrapper">

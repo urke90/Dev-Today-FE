@@ -69,7 +69,7 @@ const ProfileMenu: React.FC<IProfileMenuProps> = (props) => {
                 className="bg-primary-100 dark:bg-black-800 rounded-full size-[24px]"
                 onClick={() => setMode('light')}
               >
-                <SunIcon className="text-black-700 dark:text-black-700" />
+                <SunIcon className="text-black-700" />
               </Button>
               <Button
                 className="bg-white-200 dark:bg-black-700 rounded-full size-[24px]"

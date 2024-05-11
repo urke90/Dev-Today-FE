@@ -1,16 +1,19 @@
 'use client';
 
 import { useForm } from 'react-hook-form';
+import z from 'zod';
 import { Form } from '@/components/ui/form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import z from 'zod';
-import { CldUploadWidget } from 'next-cloudinary';
+import Image from 'next/image';
+import { CldUploadWidget, CldUploadButton } from 'next-cloudinary';
 import { profileSchema } from '@/lib/validation';
 import { Button } from '../ui/button';
 import RHFInput from '@/components/RHFInputs/RHFInput';
 import RHFTextarea from '../RHFInputs/RHFTextarea';
 import RHFMultipleSelect from '../RHFInputs/RHFMultipleSelect';
 import { useEffect } from 'react';
+import ImageUploadIcon from '../icons/ImageUpload';
+import ImagePreviewIcon from '../icons/ImagePreview';
 
 // ----------------------------------------------------------------
 
@@ -49,12 +52,14 @@ const EditProfile: React.FC<IEditProfileProps> = (props) => {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <div className="create-page-wrapper">
-          <div>
-            <CldUploadWidget>
-              {({ open }) => {
-                return <button onClick={() => open()}>Upload an Image</button>;
-              }}
-            </CldUploadWidget>
+          <div className="flex gap-2.5 items-center">
+            <div className="bg-white-100 dark:bg-black-800 rounded-full shrink-0 size-[60px] flex-center">
+              <ImagePreviewIcon className="icon-light400__dark300" />
+            </div>
+            <CldUploadButton className="flex bg-white-100 dark:bg-black-800 items-center gap-2.5 px-5 py-3 rounded-[5px] h-11">
+              <ImageUploadIcon className="icon-light400__dark300" />
+              <span className="p3-regular">Set a profile photo</span>
+            </CldUploadButton>
           </div>
           <RHFInput name="name" label="Name" placeholder="Name" />
           <RHFInput name="userName" label="Username" placeholder="Username" />

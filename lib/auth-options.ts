@@ -81,7 +81,6 @@ export const authOptions = {
       return true;
     },
     async session({ session, token }: any) {
-      console.log('session u async session', session);
       try {
         const result = await fetch(
           `http://localhost:8080/api/user/email/${session.user.email}`,
@@ -93,7 +92,6 @@ export const authOptions = {
           }
         );
         const resultObject = await result.json();
-        console.log('result object', resultObject);
         if (!resultObject) return null;
         session.user.isOnboardingCompleted =
           resultObject.user.isOnboardingCompleted;
