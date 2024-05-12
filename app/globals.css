@@ -45,13 +45,13 @@
     @apply text-xs font-bold text-black-700 dark:text-white-400;
   }
   .p1-medium {
-    @apply text-[14px] md:text-[18px] leading-[20px] font-medium text-white-400 dark:text-white-300; /* DOBRO */
+    @apply text-[14px] md:!text-[18px] leading-[20px] font-medium text-white-400 dark:text-white-300; /* DOBRO */
   }
   .p2-medium {
     @apply text-base font-medium text-black-800 dark:text-white-200; /* DOBRO */
   }
   .p3-medium {
-    @apply text-sm font-medium text-black-800 dark:text-white-200; /* DOBRO */
+    @apply text-[18px] !font-medium text-black-800 dark:text-white-200; /* DOBRO */
   }
   .p4-medium {
     @apply text-xs font-medium text-black-800 dark:text-white-200; /* DOBRO */

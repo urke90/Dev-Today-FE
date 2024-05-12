@@ -42,7 +42,7 @@ const Login = () => {
     });
 
     if (result?.ok) {
-      router.push('/home');
+      router.push('/');
     } else {
       throw new Error('Error while logging in');
     }
@@ -73,11 +73,9 @@ const Login = () => {
             {loginWelcome.map((item, index) => (
               <div
                 key={index + 1}
-                className="bg-white-100 dark:bg-black-700 p-5 flex gap-5 items-center rounded-lg"
-              >
+                className="bg-white-100 dark:bg-black-700 p-5 flex gap-5 items-center rounded-lg">
                 <div
-                  className={`dark:bg-black-800 ${colorsLogIn[index]} h-[60px] p-5 rounded-md`}
-                >
+                  className={`dark:bg-black-800 ${colorsLogIn[index]} h-[60px] p-5 rounded-md`}>
                   <Image
                     src={item.image}
                     alt={item.alt}
@@ -94,8 +92,7 @@ const Login = () => {
       <div
         className="text-white-100 flex flex-col pt-10 lg:pt-44 lg:justify-start items-center 
         dark:bg-black-900 bg-white-200
-         px-4 md:px-10 xl:px-28  w-full lg:w-1/2"
-      >
+         px-4 md:px-10 xl:px-28  w-full lg:w-1/2">
         <div className="w-full lg:hidden">
           <Image
             src={
@@ -112,8 +109,7 @@ const Login = () => {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-5 w-full "
-          >
+            className="space-y-5 w-full ">
             <FormField
               control={form.control}
               name="email"
@@ -151,14 +147,12 @@ const Login = () => {
             />
             <Button
               type="submit"
-              className="w-full bg-primary-500 text-[14px] p2-bold "
-            >
+              className="w-full bg-primary-500 text-[14px] h-11 p2-bold ">
               Next
             </Button>
             <Link
               href="/register"
-              className="text-white-300 block cursor-pointer text-center hover:underline"
-            >
+              className="text-white-300 block cursor-pointer text-center hover:underline">
               Don’t have an account yet?
               <span className="text-[16px] ml-1 text-primary-500">
                 Join the community
@@ -172,8 +166,7 @@ const Login = () => {
             <Button
               type="button"
               onClick={() => signIn('google', { callbackUrl: '/home' })}
-              className="p3-medium flex w-full items-center gap-2 dark:bg-black-800 bg-white-100"
-            >
+              className="p3-medium h-11 flex w-full items-center gap-2 dark:bg-black-800 bg-white-100">
               <Image
                 src={'/assets/icons/google.svg'}
                 alt="google"
@@ -186,8 +179,7 @@ const Login = () => {
             <Button
               onClick={() => signIn('github', { callbackUrl: '/home' })}
               type="button"
-              className="p3-medium flex w-full items-center gap-2 dark:bg-black-800 bg-white-100"
-            >
+              className="p3-medium h-11 flex w-full items-center gap-2 dark:bg-black-800 bg-white-100">
               <Image
                 src={'/assets/icons/github.svg'}
                 alt="github"
