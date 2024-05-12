@@ -2,7 +2,7 @@ import React from 'react';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import * as Select from '@radix-ui/react-select';
-import classnames from 'classnames';
+import { cn } from '@/lib/utils';
 import {
   Form,
   FormControl,
