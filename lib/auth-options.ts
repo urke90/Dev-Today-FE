@@ -93,6 +93,7 @@ export const authOptions = {
         );
         const resultObject = await result.json();
         if (!resultObject) return null;
+        // console.log('resultObject', resultObject);
         session.user.isOnboardingCompleted =
           resultObject.user.isOnboardingCompleted;
         session.user.id = resultObject.user.id;
