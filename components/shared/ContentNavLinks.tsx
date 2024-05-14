@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { EContentType } from '@/types/content';
+import { EQueryContentType } from '@/types/content';
 import { useSearchParams } from 'next/navigation';
 import { usePathname } from 'next/navigation';
 
@@ -13,7 +13,7 @@ const ContentNavLinks: React.FC<IContentNavLinksProps> = (props) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   // staviti default value
-  const type = searchParams.get('type') ?? EContentType.POSTS;
+  const type = searchParams.get('type') ?? EQueryContentType.POSTS;
 
   const updateQueryParams = (value: string) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -28,9 +28,9 @@ const ContentNavLinks: React.FC<IContentNavLinksProps> = (props) => {
   return (
     <div className="bg-light100__dark800 flex-between p-3.5 rounded-lg mx-auto w-full">
       <Link
-        href={pathname + '?' + updateQueryParams(EContentType.POSTS)}
+        href={pathname + '?' + updateQueryParams(EQueryContentType.POSTS)}
         className={`${linkStyles} ${
-          type === EContentType.POSTS
+          type === EQueryContentType.POSTS
             ? 'bg-primary-500 !text-white-100 dark:!text-white-100'
             : ''
         }`}
@@ -38,9 +38,9 @@ const ContentNavLinks: React.FC<IContentNavLinksProps> = (props) => {
         Posts
       </Link>
       <Link
-        href={pathname + '?' + updateQueryParams(EContentType.MEETUPS)}
+        href={pathname + '?' + updateQueryParams(EQueryContentType.MEETUPS)}
         className={`${linkStyles} ${
-          type === EContentType.MEETUPS
+          type === EQueryContentType.MEETUPS
             ? 'bg-primary-500 text-white-100 dark:!text-white-100'
             : ''
         }`}
@@ -50,7 +50,7 @@ const ContentNavLinks: React.FC<IContentNavLinksProps> = (props) => {
       <Link
         href={pathname + '?' + updateQueryParams('podcasts')}
         className={`${linkStyles} ${
-          type === EContentType.PODCASTS
+          type === EQueryContentType.PODCASTS
             ? 'bg-primary-500 text-white-100 dark:!text-white-100'
             : ''
         }`}
@@ -58,9 +58,9 @@ const ContentNavLinks: React.FC<IContentNavLinksProps> = (props) => {
         Podcasts
       </Link>
       <Link
-        href={pathname + '?' + updateQueryParams(EContentType.GROUPS)}
+        href={pathname + '?' + updateQueryParams(EQueryContentType.GROUPS)}
         className={`${linkStyles} ${
-          type === EContentType.GROUPS
+          type === EQueryContentType.GROUPS
             ? 'bg-primary-500 text-white-100 dark:!text-white-100'
             : ''
         }`}

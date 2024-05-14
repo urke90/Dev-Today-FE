@@ -34,7 +34,7 @@ export interface IUserLatestContents {
 
 export interface IUserResponse {
   user: IUser;
-  latestContent: { contents: IUserLatestContents[] };
+  contents: IUserLatestContents[];
   isFollowing: boolean;
 }
 

@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import BadgeItem from '../shared/BadgeItem';
-import { EContentType } from '@/types/content';
+import { EQueryContentType } from '@/types/content';
 import type { IUser, IUserLatestContents } from '@/types/user';
 import ContentNavLinks from '../shared/ContentNavLinks';
 import PerformanceItem from './PerformanceItem';
@@ -11,12 +11,13 @@ import MeetupItemCard from '../shared/MeetupItemCard';
 import GroupItemCard from '../shared/GroupItemCard';
 import ProfileSidebarInfo from './ProfileSidebarInfo';
 import SocialMediaLinks from './SocialMediaLinks';
+import ContentList from '../shared/ContentList';
 
 // ----------------------------------------------------------------
 
 interface IProfileHomeProps {
   user: IUser;
-  contentType: EContentType;
+  contentType: EQueryContentType;
   latestContent: IUserLatestContents[];
   isPersonalProfile?: boolean;
   isFollowing?: boolean;
@@ -46,7 +47,6 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
     twitterLink,
     instagramLink,
   } = user ?? {};
-
   return (
     <div className="content-wrapper">
       <aside className="left-sidebar bg-light100__dark800 !p-0 !pb-5 text-center rounded-t-2xl rounded-b-2xl">
@@ -110,7 +110,7 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
       <main className="main-content w-full mx-auto">
         <div className="flex w-full flex-col gap-5">
           <ContentNavLinks />
-          <ProfileContent contentType={contentType} items={[]} />
+          <ContentList contentType={contentType} items={[]} />
         </div>
       </main>
       <aside className="right-sidebar">
@@ -133,77 +133,6 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
       </aside>
     </div>
   );
-};
-
-interface IProfileContentProps {
-  contentType: EContentType;
-  items: any;
-}
-
-const ProfileContent: React.FC<IProfileContentProps> = ({
-  contentType,
-  items,
-}) => {
-  let content;
-
-  switch (contentType) {
-    case EContentType.POSTS: {
-      content = (
-        <ul className="flex flex-col flax-wrap gap-5">
-          <PostItemCard imgUrl="/assets/images/post-example.svg" />
-        </ul>
-      );
-    }
-    case EContentType.MEETUPS: {
-      content = (
-        <ul className="flex flex-col flax-wrap gap-5">
-          <MeetupItemCard
-            imgUrl="/assets/images/meetup-example.svg"
-            title="A Deep Dive into the Latest UI/UX Trends and Techniques"
-            location="Innovation Hub, Austin"
-            description="Elevate your web development skills by delving into the latest UI/UX
-              trends and techniques. Join us for an insightful session filled with
-              hands-on demonstrations, expert-led discussions, and networking
-              opportunities."
-            date="FEB 3"
-            tags={['Developer', 'Tech Guru', 'Software']}
-          />
-        </ul>
-      );
-    }
-    case EContentType.PODCASTS: {
-      content = (
-        <ul className="flex flex-col flax-wrap gap-5">
-          <PodcastItemCard />
-        </ul>
-      );
-    }
-    case EContentType.GROUPS: {
-      content = (
-        <ul className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          <GroupItemCard
-            title="CodeCrafters Hub"
-            imgUrl="/assets/images/group-example.svg"
-            description="Connect with fellow developers, share insights, and embark on coding
-        adventures. Join us in mastering the art of web dev through
-        collaborative projects."
-          />
-          <GroupItemCard
-            title="CodeCrafters Hub"
-            imgUrl="/assets/images/group-example.svg"
-            description="Connect with fellow developers, share insights, and embark on coding
-        adventures. Join us in mastering the art of web dev through
-        collaborative projects."
-          />
-        </ul>
-      );
-    }
-    default: {
-      content = <ul className="flex flex-col flax-wrap gap-5"></ul>;
-    }
-  }
-
-  return content;
 };
 
 export default ProfileHome;

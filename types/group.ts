@@ -21,3 +21,10 @@ export interface IGroup {
 export interface IGroupContent {
   group: IGroup;
 }
+
+// interface ContentGroup {
+//   contentId: string;
+//   content: Content;
+//   groupId: string;
+//   group: Group;
+// }

@@ -22,7 +22,7 @@ const MeetupItemCard: React.FC<IMeetupItemCardProps> = ({
 }) => {
   return (
     <li className="flex flex-col gap-2.5 px-3.5 py-5 bg-light100__dark800 rounded-[10px]">
-      <div className="flex flex-between ">
+      <div className="flex flex-between">
         <div className="flex items-center gap-2 md:gap-4">
           <div className="relative size-[56px] md:size-[72px] shrink-0">
             <Image

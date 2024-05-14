@@ -1,7 +1,7 @@
 import ProfileHome from '@/components/profile/ProfileHome';
 import { auth } from '@/app/api/auth/[...nextauth]/route';
 import { IUserResponse } from '@/types/user';
-import { EContentType } from '@/types/content';
+import { EQueryContentType } from '@/types/content';
 import { typedFetch } from '@/utils/api';
 import { parseSearchParams } from '@/utils/query';
 
@@ -17,10 +17,10 @@ interface IMyProfilePageProps {
 const MyProfilePage: React.FC<IMyProfilePageProps> = async ({
   searchParams,
 }) => {
-  const pageParam = parseSearchParams(searchParams.page, '1');
-  const contentTypeParam = parseSearchParams<EContentType>(
+  const page = parseSearchParams(searchParams.page, '1');
+  const contentType = parseSearchParams<EQueryContentType>(
     searchParams.type,
-    EContentType.POSTS
+    EQueryContentType.POSTS
   );
 
   const session = await auth();
@@ -30,21 +30,25 @@ const MyProfilePage: React.FC<IMyProfilePageProps> = async ({
     `/user/${session?.user.id}`
   );
 
+  console.log('userResult', userResult);
+
   let content; // : IContent[] | IGroup[]
-  if (contentTypeParam === EContentType.GROUPS) {
+  if (contentType === EQueryContentType.GROUPS) {
     content = await typedFetch(`/user/${session.user.id}/groups`);
   } else {
-    content = await typedFetch(`/user/${session.user.id}/content`);
+    content = await typedFetch(
+      `/user/${session.user.id}/content?type=${contentType}&page=${page}`
+    );
   }
 
   return (
     <section className="px-3.5 lg:px-5">
       <ProfileHome
         user={userResult.user}
-        latestContent={userResult.latestContent.contents}
+        latestContent={userResult.contents}
         isFollowing={userResult.isFollowing}
         isPersonalProfile
-        contentType={contentTypeParam}
+        contentType={contentType}
       />
     </section>
   );
