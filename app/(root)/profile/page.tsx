@@ -38,8 +38,8 @@ const MyProfilePage: React.FC<IMyProfilePageProps> = async ({
       `/user/${session.user.id}/content?type=${contentType}&page=${page}`
     );
   }
-
-  console.log('content: U PAGEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE', content);
+  // console.log('contentType', contentType);
+  // console.log('content: U PAGEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE', content);
 
   return (
     <section className="px-3.5 lg:px-5">

@@ -6,7 +6,6 @@ import Image from 'next/image';
 import HeartIcon from '../icons/Heart';
 import BadgeItem from './BadgeItem';
 import { Button } from '../ui/button';
-import { IContent } from '@/types/content';
 
 // ----------------------------------------------------------------
 
@@ -19,7 +18,6 @@ interface IPostItemCardProps {
   likesCount?: number;
   commentsCount?: number;
 }
-// TODO stavim 2 images i da mobile i desktop toogle hidden na different viewports
 
 const PostItemCard: React.FC<IPostItemCardProps> = ({
   coverImage,
@@ -33,7 +31,7 @@ const PostItemCard: React.FC<IPostItemCardProps> = ({
   return (
     <li>
       <Link
-        href="/"
+        href={`/`}
         className="flex md:items-center p-4 md:p-5 gap-4 bg-light100__dark800 rounded-2xl"
       >
         <CldImage
@@ -50,7 +48,7 @@ const PostItemCard: React.FC<IPostItemCardProps> = ({
               src={coverImage || '/assets/images/no-image.svg'}
               width={50}
               height={50}
-              alt={title!}
+              alt={title}
               className="shrink-0 md:hidden self-baseline"
             />
             <div>

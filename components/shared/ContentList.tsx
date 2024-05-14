@@ -30,8 +30,8 @@ const ContentList: React.FC<IContentListProps> = ({ contentType, items }) => {
               commentsCount,
             }) => (
               <PostItemCard
-                coverImage={coverImage}
                 key={id}
+                coverImage={coverImage}
                 title={title}
                 description={contentDescription}
                 tags={storyTags}
@@ -47,24 +47,52 @@ const ContentList: React.FC<IContentListProps> = ({ contentType, items }) => {
     case EQueryContentType.MEETUPS: {
       return (
         <ul className="flex flex-col flax-wrap gap-5">
-          <MeetupItemCard
-            imgUrl="/assets/images/meetup-example.svg"
-            title="A Deep Dive into the Latest UI/UX Trends and Techniques"
-            location="Innovation Hub, Austin"
-            description="Elevate your web development skills by delving into the latest UI/UX
-                  trends and techniques. Join us for an insightful session filled with
-                  hands-on demonstrations, expert-led discussions, and networking
-                  opportunities."
-            date="FEB 3"
-            tags={['Developer', 'Tech Guru', 'Software']}
-          />
+          {items.map(
+            ({
+              id,
+              meetUpDate,
+              title = '',
+              contentDescription = '',
+              coverImage,
+              storyTags,
+            }) => (
+              <MeetupItemCard
+                key={id}
+                coverImage={coverImage}
+                title={title}
+                description={contentDescription}
+                tags={storyTags}
+                location="Innovation Hub, Austin"
+                date={meetUpDate}
+              />
+            )
+          )}
         </ul>
       );
     }
     case EQueryContentType.PODCASTS: {
       return (
         <ul className="flex flex-col flax-wrap gap-5">
-          <PodcastItemCard />
+          {items.map(
+            ({
+              id,
+              coverImage,
+              title = '',
+              contentDescription = '',
+              storyTags,
+              createdAt,
+            }) => (
+              <PodcastItemCard
+                key={id}
+                coverImage={coverImage}
+                title={title}
+                description={contentDescription}
+                tags={storyTags}
+                author="Pavel Gvay"
+                createdAt={createdAt}
+              />
+            )
+          )}
         </ul>
       );
     }
