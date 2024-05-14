@@ -5,13 +5,15 @@ import { Button } from '../ui/button';
 
 // ----------------------------------------------------------------
 
-interface IPodcastItemCardProps {}
+interface IPodcastItemCardProps {
+  item?: any;
+}
 
 /**
  * TODO: Check with Mateo how should this card be rendered.
  */
 
-const PodcastItemCard: React.FC<IPodcastItemCardProps> = (props) => {
+const PodcastItemCard: React.FC<IPodcastItemCardProps> = ({ item }) => {
   return (
     <li className="flex flex-col gap-3.5 lg:gap-[18px] py-5 px-3.5 lg:p-4 bg-light100__dark800 rounded-[10px] lg:rounded-2xl">
       <div className="flex gap-2 lg:flex-between">

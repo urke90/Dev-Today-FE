@@ -13,9 +13,9 @@ export enum EQueryContentType {
   GROUPS = 'groups',
 }
 
-interface IContent {
+export interface IContent {
   id: string;
-  type?: EContentType; // You need to define this enum based on your valid content types
+  type?: EContentType;
   createdAt: Date;
   updatedAt?: Date;
   author: IUser;

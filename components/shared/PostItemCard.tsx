@@ -1,82 +1,106 @@
 'use client';
 
+import { CldImage } from 'next-cloudinary';
+import Link from 'next/link';
 import Image from 'next/image';
 import HeartIcon from '../icons/Heart';
 import BadgeItem from './BadgeItem';
 import { Button } from '../ui/button';
+import { IContent } from '@/types/content';
 
 // ----------------------------------------------------------------
 
 interface IPostItemCardProps {
-  imgUrl: string;
+  coverImage?: string;
+  title: string;
+  description: string;
+  tags: string[];
+  viewsCount?: number;
+  likesCount?: number;
+  commentsCount?: number;
 }
 // TODO stavim 2 images i da mobile i desktop toogle hidden na different viewports
 
-const PostItemCard: React.FC<IPostItemCardProps> = ({ imgUrl }) => {
+const PostItemCard: React.FC<IPostItemCardProps> = ({
+  coverImage,
+  title,
+  description,
+  tags,
+  viewsCount,
+  likesCount,
+  commentsCount,
+}) => {
   return (
-    <li className="flex md:items-center p-4 md:p-5 gap-4 bg-light100__dark800 rounded-2xl">
-      <Image
-        src={imgUrl}
-        width={165}
-        height={165}
-        alt="post"
-        className="shrink-0 max-md:hidden self-baseline"
-      />
-      {/* RIGHT PART OF THE POST */}
-      <div className="flex flex-col gap-4">
-        <div className="flex mb-4 gap-2">
-          <Image
-            src={imgUrl}
-            width={50}
-            height={50}
-            alt="post"
-            className="shrink-0 md:hidden self-baseline"
-          />
-          <div>
-            <p className="p1-bold mb-2">
-              What is the ideal Tech stack to build a website in 2024? 👨‍💻
-            </p>
-            <p className="p3-regular line-clamp-1">
-              The post discusses the author's preferred tech stack for building
-              a website in 2024, including the use of Typescript, Reactjs or
-              Vuejs, Postgres, and Redis.
-            </p>
-          </div>
-          <Button
-            className="size-[30px] bg-white-200 dark:bg-black-700 flex-center rounded-full shrink-0"
-            onClick={() => alert('radi btn')}
-          >
-            <HeartIcon className="text-white-300" />
-          </Button>
-        </div>
-        <ul className="flex gap-2.5">
-          <BadgeItem title="finance" />
-          <BadgeItem title="bitcoin" />
-          <BadgeItem title="crypto" />
-        </ul>
-        <div className="flex-between flex-wrap gap-5">
-          <div className="flex">
-            <div className="bg-[#F0F1FE] rounded-full size-[40px] flex-center mr-2.5">
-              <Image
-                src="/assets/images/avatars/avatar-1.svg"
-                width={28}
-                height={34}
-                alt="avatar"
-              />
-            </div>
+    <li>
+      <Link
+        href="/"
+        className="flex md:items-center p-4 md:p-5 gap-4 bg-light100__dark800 rounded-2xl"
+      >
+        <CldImage
+          src={coverImage || '/assets/images/no-image.svg'}
+          width={165}
+          height={165}
+          alt={title}
+          className="shrink-0 max-md:hidden self-baseline"
+        />
+        {/* RIGHT PART OF THE POST */}
+        <div className="flex flex-col gap-4">
+          <div className="flex mb-4 gap-2">
+            <CldImage
+              src={coverImage || '/assets/images/no-image.svg'}
+              width={50}
+              height={50}
+              alt={title!}
+              className="shrink-0 md:hidden self-baseline"
+            />
             <div>
-              <p className="p3-bold">Pavel Gvay</p>
-              <p className="subtitle-normal">3 weeks ago</p>
+              <p className="p1-bold mb-2">{title}</p>
+              <p className="p3-regular line-clamp-1">{description}</p>
+            </div>
+            <Button
+              className="size-[30px] bg-white-200 dark:bg-black-700 flex-center rounded-full shrink-0"
+              onClick={() => alert('radi btn')}
+            >
+              <HeartIcon className="text-white-300" />
+            </Button>
+          </div>
+          {tags.length > 0 ? (
+            <ul className="flex gap-2.5">
+              {tags.map((tag) => (
+                <BadgeItem key={tag} title={tag} />
+              ))}
+            </ul>
+          ) : null}
+          <div className="flex-between flex-wrap gap-5">
+            <div className="flex">
+              <div className="bg-[#F0F1FE] rounded-full size-[40px] flex-center mr-2.5">
+                <Image
+                  src="/assets/images/avatars/avatar-1.svg"
+                  width={28}
+                  height={34}
+                  alt="avatar"
+                />
+              </div>
+              <div>
+                <p className="p3-bold">Pavel Gvay</p>
+                <p className="subtitle-normal">3 weeks ago</p>
+              </div>
+            </div>
+            <div className="flex gap-[30px] text-white-400 dark:text-white-300">
+              {viewsCount && (
+                <span className="p3-regular">{viewsCount} Views</span>
+              )}
+              {likesCount && (
+                <span className="p3-regular">{likesCount} Likes</span>
+              )}
+              {commentsCount && (
+                <span className="p3-regular">{commentsCount} comments</span>
+              )}
             </div>
           </div>
-          <div className="flex gap-[30px] text-white-400 dark:text-white-300">
-            <span className="p3-regular">651,324 Views</span>
-            <span className="p3-regular">36,6545 Likes</span>
-            <span className="p3-regular">56 comments</span>
-          </div>
         </div>
-      </div>
-      {/* RIGHT PART OF THE POST */}
+        {/* RIGHT PART OF THE POST */}
+      </Link>
     </li>
   );
 };

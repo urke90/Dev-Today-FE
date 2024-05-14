@@ -1,4 +1,4 @@
-import { EQueryContentType } from '@/types/content';
+import { EQueryContentType, IContent } from '@/types/content';
 import PostItemCard from './PostItemCard';
 import MeetupItemCard from './MeetupItemCard';
 import PodcastItemCard from './PodcastItemCard';
@@ -8,15 +8,39 @@ import GroupItemCard from './GroupItemCard';
 
 interface IContentListProps {
   contentType: EQueryContentType;
-  items: any;
+  items: IContent[];
 }
 
 const ContentList: React.FC<IContentListProps> = ({ contentType, items }) => {
+  console.log('items', items);
+
   switch (contentType) {
     case EQueryContentType.POSTS: {
       return (
         <ul className="flex flex-col flax-wrap gap-5">
-          <PostItemCard imgUrl="/assets/images/post-example.svg" />
+          {items.map(
+            ({
+              id,
+              title = '',
+              coverImage = '',
+              contentDescription = '',
+              storyTags,
+              viewsCount,
+              likesCount,
+              commentsCount,
+            }) => (
+              <PostItemCard
+                coverImage={coverImage}
+                key={id}
+                title={title}
+                description={contentDescription}
+                tags={storyTags}
+                viewsCount={viewsCount}
+                likesCount={likesCount}
+                commentsCount={commentsCount}
+              />
+            )
+          )}
         </ul>
       );
     }

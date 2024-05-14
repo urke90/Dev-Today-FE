@@ -1,7 +1,7 @@
 import ProfileHome from '@/components/profile/ProfileHome';
 import { auth } from '@/app/api/auth/[...nextauth]/route';
 import { IUserResponse } from '@/types/user';
-import { EQueryContentType } from '@/types/content';
+import { EQueryContentType, IContent } from '@/types/content';
 import { typedFetch } from '@/utils/api';
 import { parseSearchParams } from '@/utils/query';
 
@@ -30,9 +30,7 @@ const MyProfilePage: React.FC<IMyProfilePageProps> = async ({
     `/user/${session?.user.id}`
   );
 
-  console.log('userResult', userResult);
-
-  let content; // : IContent[] | IGroup[]
+  let content: { content: IContent[] }; // : IContent[] | IGroup[]
   if (contentType === EQueryContentType.GROUPS) {
     content = await typedFetch(`/user/${session.user.id}/groups`);
   } else {
@@ -41,14 +39,17 @@ const MyProfilePage: React.FC<IMyProfilePageProps> = async ({
     );
   }
 
+  console.log('content: U PAGEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE', content);
+
   return (
     <section className="px-3.5 lg:px-5">
       <ProfileHome
+        isPersonalProfile
         user={userResult.user}
         latestContent={userResult.contents}
         isFollowing={userResult.isFollowing}
-        isPersonalProfile
         contentType={contentType}
+        contentItems={content.content}
       />
     </section>
   );

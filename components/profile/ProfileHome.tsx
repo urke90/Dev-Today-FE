@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import BadgeItem from '../shared/BadgeItem';
-import { EQueryContentType } from '@/types/content';
+import { EQueryContentType, IContent } from '@/types/content';
 import type { IUser, IUserLatestContents } from '@/types/user';
 import ContentNavLinks from '../shared/ContentNavLinks';
 import PerformanceItem from './PerformanceItem';
@@ -21,6 +21,7 @@ interface IProfileHomeProps {
   latestContent: IUserLatestContents[];
   isPersonalProfile?: boolean;
   isFollowing?: boolean;
+  contentItems: IContent[];
 }
 
 const ProfileHome: React.FC<IProfileHomeProps> = ({
@@ -29,6 +30,7 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
   contentType,
   latestContent,
   isFollowing,
+  contentItems,
 }) => {
   const {
     avatarImg,
@@ -47,6 +49,7 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
     twitterLink,
     instagramLink,
   } = user ?? {};
+
   return (
     <div className="content-wrapper">
       <aside className="left-sidebar bg-light100__dark800 !p-0 !pb-5 text-center rounded-t-2xl rounded-b-2xl">
@@ -110,7 +113,7 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
       <main className="main-content w-full mx-auto">
         <div className="flex w-full flex-col gap-5">
           <ContentNavLinks />
-          <ContentList contentType={contentType} items={[]} />
+          <ContentList contentType={contentType} items={contentItems} />
         </div>
       </main>
       <aside className="right-sidebar">
