@@ -51,4 +51,3 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 Button.displayName = 'Button';
 
 export { Button, buttonVariants };
-// shadow-[0px_3px_20px_0px_rgba(0, 0, 0, 0.04)]
