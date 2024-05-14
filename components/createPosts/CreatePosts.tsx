@@ -20,7 +20,7 @@ import {
 import RHFInput from '@/components/RHFInputs/RHFInput';
 import Image from 'next/image';
 import FrameIcon from '../icons/Frame';
-import { useTheme } from '@/app/context/ThemeProvider';
+import { Editor } from '@tinymce/tinymce-react';
 
 type SelectItemProps = {
   value: string;
@@ -37,7 +37,6 @@ const CreatePosts = () => {
   const [isSearchable, setIsSearchable] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [isRtl, setIsRtl] = useState(false);
-  const { theme } = useTheme();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -109,7 +108,7 @@ const CreatePosts = () => {
               option: () =>
                 '!bg-white-100  !py-[18px]  dark:!bg-black-800  dark:!text-white-100 !text-black-800',
               singleValue: () => 'dark:!text-white-100',
-              menu: () => 'bg-white-100 dark:bg-black-800',
+              menu: () => 'bg-white-100 dark:bg-black-800 !shadow-smd ',
             }}
             className="w-full h-full rounded-md dark:!bg-black-800"
             placeholder="Select Group"
@@ -138,6 +137,37 @@ const CreatePosts = () => {
             </p>
           </div>
         </div>
+        <Editor
+          apiKey="k1u3ltmn8ydlw7do8q51quscj02xqm6pbvu08pcm5jnlklnf"
+          initialValue="<p>This is the initial content of the editor.</p>"
+          init={{
+            skin: 'oxide-dark',
+            icons: 'thin',
+            toolbar_location: 'top',
+            content_css: 'dark',
+            content_style: `
+             body { font-family: Roboto, sans-serif; border:none font-size: 14px; color: #808191;  background-color: #262935;} body::-webkit-scrollbar {display: none; }pre, code { font-family: "Roboto Mono", monospace; background-color: transparent !important;  padding: 5px; } body::before { color: #808191 !important; } `,
+            menubar: false,
+            plugins: 'code codesample link preview image',
+            toolbar:
+              'customImageButton customPreview | bold italic underline link  alignleft aligncenter alignright image ',
+
+            setup: function (editor) {
+              editor.ui.registry.addButton('customImageButton', {
+                text: 'Write',
+                icon: 'edit-block',
+                onAction: function () {},
+              });
+              editor.ui.registry.addButton('customPreview', {
+                text: 'Preview',
+                icon: 'preview',
+                onAction: function () {
+                  editor.execCommand('mcePreview');
+                },
+              });
+            },
+          }}
+        />
         <Button type="submit" className="bg-red-500">
           Submit
         </Button>
