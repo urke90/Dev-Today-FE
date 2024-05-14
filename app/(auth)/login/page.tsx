@@ -165,7 +165,7 @@ const Login = () => {
             </div>
             <Button
               type="button"
-              onClick={() => signIn('google', { callbackUrl: '/home' })}
+              onClick={() => signIn('google', { callbackUrl: '/' })}
               className="p3-medium h-11 flex w-full items-center gap-2 dark:bg-black-800 bg-white-100">
               <Image
                 src={'/assets/icons/google.svg'}

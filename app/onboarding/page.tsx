@@ -89,7 +89,7 @@ const Onboarding = () => {
         }
       );
       if (result?.ok) {
-        router.push('/home');
+        router.push('/');
       } else {
         throw new Error('Error while updating user onboarding');
       }
