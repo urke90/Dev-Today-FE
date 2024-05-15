@@ -1,11 +1,15 @@
 'use client';
 
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useRef } from 'react';
 import { CldImage } from 'next-cloudinary';
 import Link from 'next/link';
 import Image from 'next/image';
 import HeartIcon from '../icons/Heart';
 import BadgeItem from './BadgeItem';
 import { Button } from '../ui/button';
+import { parseSearchParams } from '@/utils/query';
+// IntersectionObserverCallback
 
 // ----------------------------------------------------------------
 
@@ -19,6 +23,8 @@ interface IPostItemCardProps {
   viewsCount?: number;
   likesCount?: number;
   commentsCount?: number;
+  isLast: boolean;
+  updatePageNumber: () => void;
 }
 
 const PostItemCard: React.FC<IPostItemCardProps> = ({
@@ -30,9 +36,26 @@ const PostItemCard: React.FC<IPostItemCardProps> = ({
   likesCount,
   commentsCount,
   createdAt,
+  isLast,
+  updatePageNumber,
 }) => {
+  const postItemEl = useRef<HTMLLIElement | null>(null);
+
+  useEffect(() => {
+    if (!postItemEl?.current) return;
+
+    const observer = new IntersectionObserver(([item]) => {
+      if (isLast && item.isIntersecting) {
+        updatePageNumber();
+        observer.unobserve(item.target);
+      }
+    });
+
+    observer.observe(postItemEl.current);
+  }, []);
+
   return (
-    <li>
+    <li ref={postItemEl}>
       <Link
         href={`/`}
         className="flex md:items-center p-4 md:p-5 gap-4 bg-light100__dark800 rounded-2xl"

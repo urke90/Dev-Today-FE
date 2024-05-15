@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { CldImage } from 'next-cloudinary';
 import BadgeItem from './BadgeItem';
+import { useEffect } from 'react';
 
 // ----------------------------------------------------------------
 
@@ -13,8 +14,9 @@ interface IMeetupItemCardProps {
   description: string;
   tags: string[];
   coverImage?: string;
+  isLast: boolean;
+  updatePageNumber: () => void;
 }
-// TODO figure out how to work with the date
 
 const MeetupItemCard: React.FC<IMeetupItemCardProps> = ({
   coverImage,
@@ -23,6 +25,8 @@ const MeetupItemCard: React.FC<IMeetupItemCardProps> = ({
   date,
   description,
   tags,
+  isLast,
+  updatePageNumber,
 }) => {
   return (
     <li>

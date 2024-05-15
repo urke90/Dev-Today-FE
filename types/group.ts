@@ -14,10 +14,3 @@ export interface IGroup {
     avatarImg?: string;
   }[];
 }
-
-// interface ContentGroup {
-//   contentId: string;
-//   content: Content;
-//   groupId: string;
-//   group: Group;
-// }

@@ -1,9 +1,13 @@
+'use client';
+
+import { useEffect, useState, useCallback, memo } from 'react';
 import { EQueryContentType, type IContent } from '@/types/content';
+import type { IGroup } from '@/types/group';
 import PostItemCard from './PostItemCard';
 import MeetupItemCard from './MeetupItemCard';
 import PodcastItemCard from './PodcastItemCard';
 import GroupItemCard from './GroupItemCard';
-import type { IGroup } from '@/types/group';
+import { typedFetch } from '@/utils/api';
 
 // ----------------------------------------------------------------
 
@@ -11,31 +15,63 @@ interface IContentListProps {
   contentType: EQueryContentType;
   contentItems: IContent[];
   groupItems: IGroup[];
+  userId: string;
 }
 
 const ContentList: React.FC<IContentListProps> = ({
   contentType,
   contentItems,
   groupItems,
+  userId,
 }) => {
-  // console.log('items', items);
+  const [page, setPage] = useState(1);
+  const [content, setContent] = useState<IContent[]>(contentItems);
+  const [groups, setGroups] = useState<IGroup[]>(groupItems);
+
+  const updatePageNumber = useCallback(() => {
+    setPage((prevPage) => prevPage + 1);
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (contentType === EQueryContentType.GROUPS) {
+        const newGroups = await typedFetch<IGroup[]>(`/user/${userId}/groups`);
+        setGroups((prevGroups) => [...prevGroups, ...newGroups]);
+      } else {
+        console.log('uso u FETCH CONTENT');
+        const newContent = await typedFetch<{ content: IContent[] }>(
+          `/user/${userId}/content?type=${contentType}&page=${page}`
+        );
+
+        setContent((prevContent) => [...prevContent, ...newContent.content]);
+      }
+    };
+    if (page !== 1) fetchData();
+  }, [page]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [contentType]);
 
   switch (contentType) {
     case EQueryContentType.POSTS: {
       return (
         <ul className="flex flex-col flax-wrap gap-5">
-          {contentItems.map(
-            ({
-              id,
-              title = '',
-              coverImage = '',
-              contentDescription = '',
-              storyTags,
-              createdAt,
-              viewsCount,
-              likesCount,
-              commentsCount,
-            }) => (
+          {content.map(
+            (
+              {
+                id,
+                title = '',
+                coverImage = '',
+                contentDescription = '',
+                storyTags,
+                createdAt,
+                viewsCount,
+                likesCount,
+                commentsCount,
+              },
+              index
+            ) => (
               <PostItemCard
                 key={id}
                 coverImage={coverImage}
@@ -47,6 +83,8 @@ const ContentList: React.FC<IContentListProps> = ({
                 viewsCount={viewsCount}
                 likesCount={likesCount}
                 commentsCount={commentsCount}
+                updatePageNumber={updatePageNumber}
+                isLast={index === contentItems.length - 1}
               />
             )
           )}
@@ -56,15 +94,18 @@ const ContentList: React.FC<IContentListProps> = ({
     case EQueryContentType.MEETUPS: {
       return (
         <ul className="flex flex-col flax-wrap gap-5">
-          {contentItems.map(
-            ({
-              id,
-              meetUpDate,
-              title = '',
-              contentDescription = '',
-              coverImage,
-              storyTags,
-            }) => (
+          {content.map(
+            (
+              {
+                id,
+                meetUpDate,
+                title = '',
+                contentDescription = '',
+                coverImage,
+                storyTags,
+              },
+              index
+            ) => (
               <MeetupItemCard
                 key={id}
                 coverImage={coverImage}
@@ -73,6 +114,8 @@ const ContentList: React.FC<IContentListProps> = ({
                 tags={storyTags}
                 location="Innovation Hub, Austin"
                 date={meetUpDate}
+                updatePageNumber={() => {}}
+                isLast={index === contentItems.length - 1}
               />
             )
           )}
@@ -82,7 +125,7 @@ const ContentList: React.FC<IContentListProps> = ({
     case EQueryContentType.PODCASTS: {
       return (
         <ul className="flex flex-col flax-wrap gap-5">
-          {contentItems.map(
+          {content.map(
             ({
               id,
               coverImage,
@@ -108,7 +151,7 @@ const ContentList: React.FC<IContentListProps> = ({
     case EQueryContentType.GROUPS: {
       return (
         <ul className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          {groupItems.map(({ id, groupBio, coverImg, members, name }) => (
+          {groups.map(({ id, groupBio, coverImg, members, name }) => (
             <GroupItemCard
               key={id}
               coverImage={coverImg}
@@ -117,28 +160,13 @@ const ContentList: React.FC<IContentListProps> = ({
               members={members}
             />
           ))}
-
-          {/* <GroupItemCard
-            title="CodeCrafters Hub"
-            imgUrl="/assets/images/group-example.svg"
-            description="Connect with fellow developers, share insights, and embark on coding
-            adventures. Join us in mastering the art of web dev through
-            collaborative projects."
-          />
-          <GroupItemCard
-            title="CodeCrafters Hub"
-            imgUrl="/assets/images/group-example.svg"
-            description="Connect with fellow developers, share insights, and embark on coding
-            adventures. Join us in mastering the art of web dev through
-            collaborative projects."
-          /> */}
         </ul>
       );
     }
     default: {
-      return <ul className="flex flex-col flax-wrap gap-5"></ul>;
+      throw new Error('Something went wrong!');
     }
   }
 };
 
-export default ContentList;
+export default memo(ContentList);

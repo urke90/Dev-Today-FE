@@ -32,6 +32,7 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
   groupItems,
 }) => {
   const {
+    id,
     avatarImg,
     bio,
     email,
@@ -114,6 +115,7 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
             contentType={contentType}
             contentItems={contentItems}
             groupItems={groupItems}
+            userId={id}
           />
         </div>
       </main>
