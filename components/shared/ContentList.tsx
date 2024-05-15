@@ -52,6 +52,9 @@ const ContentList: React.FC<IContentListProps> = ({
   useEffect(() => {
     setPage(1);
   }, [contentType]);
+  useEffect(() => {
+    console.log('content', content);
+  }, [content]);
 
   switch (contentType) {
     case EQueryContentType.POSTS: {
@@ -84,7 +87,7 @@ const ContentList: React.FC<IContentListProps> = ({
                 likesCount={likesCount}
                 commentsCount={commentsCount}
                 updatePageNumber={updatePageNumber}
-                isLast={index === contentItems.length - 1}
+                isLast={index === content.length - 1}
               />
             )
           )}
@@ -114,8 +117,8 @@ const ContentList: React.FC<IContentListProps> = ({
                 tags={storyTags}
                 location="Innovation Hub, Austin"
                 date={meetUpDate}
-                updatePageNumber={() => {}}
-                isLast={index === contentItems.length - 1}
+                updatePageNumber={updatePageNumber}
+                isLast={index === content.length - 1}
               />
             )
           )}
@@ -126,14 +129,17 @@ const ContentList: React.FC<IContentListProps> = ({
       return (
         <ul className="flex flex-col flax-wrap gap-5">
           {content.map(
-            ({
-              id,
-              coverImage,
-              title = '',
-              contentDescription = '',
-              storyTags,
-              createdAt,
-            }) => (
+            (
+              {
+                id,
+                coverImage,
+                title = '',
+                contentDescription = '',
+                storyTags,
+                createdAt,
+              },
+              index
+            ) => (
               <PodcastItemCard
                 key={id}
                 coverImage={coverImage}
@@ -142,6 +148,8 @@ const ContentList: React.FC<IContentListProps> = ({
                 tags={storyTags}
                 author="Pavel Gvay"
                 createdAt={createdAt}
+                updatePageNumber={updatePageNumber}
+                isLast={index === content.length - 1}
               />
             )
           )}
@@ -151,13 +159,15 @@ const ContentList: React.FC<IContentListProps> = ({
     case EQueryContentType.GROUPS: {
       return (
         <ul className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          {groups.map(({ id, groupBio, coverImg, members, name }) => (
+          {groups.map(({ id, groupBio, coverImg, members, name }, index) => (
             <GroupItemCard
               key={id}
               coverImage={coverImg}
               title={name}
               description={groupBio}
               members={members}
+              updatePageNumber={updatePageNumber}
+              isLast={index === groups.length - 1}
             />
           ))}
         </ul>

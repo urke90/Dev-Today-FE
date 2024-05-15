@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '../ui/button';
 import ShareIcon from '../icons/Share';
+import { useInfiniteScroll } from '@/hooks/use-infinite-scroll';
 
 // ----------------------------------------------------------------
 
@@ -16,6 +17,8 @@ interface IGroupItemCardProps {
     id: string;
     avatarImg?: string;
   }[];
+  isLast: boolean;
+  updatePageNumber: () => void;
 }
 
 const GroupItemCard: React.FC<IGroupItemCardProps> = ({
@@ -23,10 +26,12 @@ const GroupItemCard: React.FC<IGroupItemCardProps> = ({
   title,
   description,
   members,
+  updatePageNumber,
+  isLast,
 }) => {
-  console.log('members0', members);
+  const listItemRef = useInfiniteScroll({ updatePageNumber, isLast });
   return (
-    <li>
+    <li ref={listItemRef}>
       <Link
         href={``}
         className="flex flex-col bg-light100__dark800 p-5 rounded-2xl gap-3.5 flex-0 shrink-0"

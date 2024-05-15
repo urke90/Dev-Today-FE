@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { CldImage } from 'next-cloudinary';
 import BadgeItem from './BadgeItem';
-import { useEffect } from 'react';
+import { useInfiniteScroll } from '@/hooks/use-infinite-scroll';
 
 // ----------------------------------------------------------------
 
@@ -28,8 +28,10 @@ const MeetupItemCard: React.FC<IMeetupItemCardProps> = ({
   isLast,
   updatePageNumber,
 }) => {
+  const listItemRef = useInfiniteScroll({ updatePageNumber, isLast });
+
   return (
-    <li>
+    <li ref={listItemRef}>
       <Link
         href={`/`}
         className="flex flex-col gap-2.5 px-3.5 py-5 bg-light100__dark800 rounded-[10px]"
