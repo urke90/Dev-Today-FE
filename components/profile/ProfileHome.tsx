@@ -2,13 +2,10 @@ import Image from 'next/image';
 import BadgeItem from '../shared/BadgeItem';
 import { EQueryContentType, IContent } from '@/types/content';
 import type { IUser, IUserLatestContents } from '@/types/user';
+import type { IGroup } from '@/types/group';
 import ContentNavLinks from '../shared/ContentNavLinks';
 import PerformanceItem from './PerformanceItem';
 import SidebarContentCard from '../shared/SidebarContentCard';
-import PostItemCard from '../shared/PostItemCard';
-import PodcastItemCard from '../shared/PodcastItemCard';
-import MeetupItemCard from '../shared/MeetupItemCard';
-import GroupItemCard from '../shared/GroupItemCard';
 import ProfileSidebarInfo from './ProfileSidebarInfo';
 import SocialMediaLinks from './SocialMediaLinks';
 import ContentList from '../shared/ContentList';
@@ -22,6 +19,7 @@ interface IProfileHomeProps {
   isPersonalProfile?: boolean;
   isFollowing?: boolean;
   contentItems: IContent[];
+  groupItems: IGroup[];
 }
 
 const ProfileHome: React.FC<IProfileHomeProps> = ({
@@ -29,20 +27,16 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
   user,
   contentType,
   latestContent,
-  isFollowing,
+  isFollowing = false,
   contentItems,
+  groupItems,
 }) => {
   const {
     avatarImg,
     bio,
-    codingAmbitions,
-    createdAt,
-    currentKnowledge,
     email,
     followers,
     following,
-    id,
-    name,
     preferredSkills,
     userName,
     linkedinLink,
@@ -73,7 +67,10 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
             <h1 className="h1-medium">{userName}</h1>
             <p className="p3-regular dark:text-white-400">{email}</p>
           </div>
-          <ProfileSidebarInfo isPersonalProfile={isPersonalProfile} />
+          <ProfileSidebarInfo
+            isPersonalProfile={isPersonalProfile}
+            isFollowing={isFollowing}
+          />
           <div className="flex justify-center gap-[7px] gap-y-0 sm:flex-col">
             <p className="p3-medium text-white-400 dark:text-white-300">
               {followers.length} Followers
@@ -113,7 +110,11 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
       <main className="main-content w-full mx-auto">
         <div className="flex w-full flex-col gap-5">
           <ContentNavLinks />
-          <ContentList contentType={contentType} items={contentItems} />
+          <ContentList
+            contentType={contentType}
+            contentItems={contentItems}
+            groupItems={groupItems}
+          />
         </div>
       </main>
       <aside className="right-sidebar">

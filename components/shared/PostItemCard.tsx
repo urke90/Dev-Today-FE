@@ -14,6 +14,8 @@ interface IPostItemCardProps {
   title: string;
   description: string;
   tags: string[];
+  createdAt: Date;
+  author: string;
   viewsCount?: number;
   likesCount?: number;
   commentsCount?: number;
@@ -27,6 +29,7 @@ const PostItemCard: React.FC<IPostItemCardProps> = ({
   viewsCount,
   likesCount,
   commentsCount,
+  createdAt,
 }) => {
   return (
     <li>
@@ -81,7 +84,7 @@ const PostItemCard: React.FC<IPostItemCardProps> = ({
               </div>
               <div>
                 <p className="p3-bold">Pavel Gvay</p>
-                <p className="subtitle-normal">3 weeks ago</p>
+                <p className="subtitle-normal">{createdAt.toLocaleString()}</p>
               </div>
             </div>
             <div className="flex gap-[30px] text-white-400 dark:text-white-300">

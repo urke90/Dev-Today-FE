@@ -10,10 +10,12 @@ import { Button } from '../ui/button';
 
 interface IProfileSidebarInfoProps {
   isPersonalProfile: boolean;
+  isFollowing: boolean;
 }
 
 const ProfileSidebarInfo: React.FC<IProfileSidebarInfoProps> = ({
   isPersonalProfile,
+  isFollowing,
 }) => {
   const { data: session } = useSession();
   const pathname = usePathname();
@@ -28,7 +30,7 @@ const ProfileSidebarInfo: React.FC<IProfileSidebarInfoProps> = ({
         </Link>
       ) : (
         <Button variant="primary" onClick={() => alert('follow')}>
-          Follow
+          {isFollowing ? 'Following' : 'Follow'}
         </Button>
       )}
     </>

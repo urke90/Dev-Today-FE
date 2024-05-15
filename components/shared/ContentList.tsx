@@ -1,30 +1,37 @@
-import { EQueryContentType, IContent } from '@/types/content';
+import { EQueryContentType, type IContent } from '@/types/content';
 import PostItemCard from './PostItemCard';
 import MeetupItemCard from './MeetupItemCard';
 import PodcastItemCard from './PodcastItemCard';
 import GroupItemCard from './GroupItemCard';
+import type { IGroup } from '@/types/group';
 
 // ----------------------------------------------------------------
 
 interface IContentListProps {
   contentType: EQueryContentType;
-  items: IContent[];
+  contentItems: IContent[];
+  groupItems: IGroup[];
 }
 
-const ContentList: React.FC<IContentListProps> = ({ contentType, items }) => {
-  console.log('items', items);
+const ContentList: React.FC<IContentListProps> = ({
+  contentType,
+  contentItems,
+  groupItems,
+}) => {
+  // console.log('items', items);
 
   switch (contentType) {
     case EQueryContentType.POSTS: {
       return (
         <ul className="flex flex-col flax-wrap gap-5">
-          {items.map(
+          {contentItems.map(
             ({
               id,
               title = '',
               coverImage = '',
               contentDescription = '',
               storyTags,
+              createdAt,
               viewsCount,
               likesCount,
               commentsCount,
@@ -35,6 +42,8 @@ const ContentList: React.FC<IContentListProps> = ({ contentType, items }) => {
                 title={title}
                 description={contentDescription}
                 tags={storyTags}
+                createdAt={createdAt}
+                author="Pavel Gray"
                 viewsCount={viewsCount}
                 likesCount={likesCount}
                 commentsCount={commentsCount}
@@ -47,7 +56,7 @@ const ContentList: React.FC<IContentListProps> = ({ contentType, items }) => {
     case EQueryContentType.MEETUPS: {
       return (
         <ul className="flex flex-col flax-wrap gap-5">
-          {items.map(
+          {contentItems.map(
             ({
               id,
               meetUpDate,
@@ -73,7 +82,7 @@ const ContentList: React.FC<IContentListProps> = ({ contentType, items }) => {
     case EQueryContentType.PODCASTS: {
       return (
         <ul className="flex flex-col flax-wrap gap-5">
-          {items.map(
+          {contentItems.map(
             ({
               id,
               coverImage,
@@ -99,7 +108,17 @@ const ContentList: React.FC<IContentListProps> = ({ contentType, items }) => {
     case EQueryContentType.GROUPS: {
       return (
         <ul className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          <GroupItemCard
+          {groupItems.map(({ id, groupBio, coverImg, members, name }) => (
+            <GroupItemCard
+              key={id}
+              coverImage={coverImg}
+              title={name}
+              description={groupBio}
+              members={members}
+            />
+          ))}
+
+          {/* <GroupItemCard
             title="CodeCrafters Hub"
             imgUrl="/assets/images/group-example.svg"
             description="Connect with fellow developers, share insights, and embark on coding
@@ -112,7 +131,7 @@ const ContentList: React.FC<IContentListProps> = ({ contentType, items }) => {
             description="Connect with fellow developers, share insights, and embark on coding
             adventures. Join us in mastering the art of web dev through
             collaborative projects."
-          />
+          /> */}
         </ul>
       );
     }

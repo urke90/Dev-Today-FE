@@ -1,13 +1,7 @@
-export interface IGroupMember {
-  user: {
-    id: string;
-    avatarImg: string;
-  };
-}
-
 export interface IGroup {
   id: string;
   name: string;
+  type: 'posts' | 'meetups' | 'podcasts';
   coverImg: string;
   groupBio: string;
   createdAt: Date;
@@ -15,11 +9,10 @@ export interface IGroup {
   _count: {
     members: number;
   };
-  members: IGroupMember[];
-}
-
-export interface IGroupContent {
-  group: IGroup;
+  members: {
+    id: string;
+    avatarImg?: string;
+  }[];
 }
 
 // interface ContentGroup {

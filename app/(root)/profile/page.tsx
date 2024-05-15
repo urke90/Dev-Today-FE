@@ -1,7 +1,8 @@
 import ProfileHome from '@/components/profile/ProfileHome';
 import { auth } from '@/app/api/auth/[...nextauth]/route';
-import { IUserResponse } from '@/types/user';
-import { EQueryContentType, IContent } from '@/types/content';
+import type { IUserResponse } from '@/types/user';
+import type { IGroup } from '@/types/group';
+import { EQueryContentType, type IContent } from '@/types/content';
 import { typedFetch } from '@/utils/api';
 import { parseSearchParams } from '@/utils/query';
 
@@ -30,16 +31,15 @@ const MyProfilePage: React.FC<IMyProfilePageProps> = async ({
     `/user/${session?.user.id}`
   );
 
-  let content: { content: IContent[] }; // : IContent[] | IGroup[]
+  let content: { content: IContent[] } = { content: [] };
+  let groupContent: IGroup[] = [];
   if (contentType === EQueryContentType.GROUPS) {
-    content = await typedFetch(`/user/${session.user.id}/groups`);
+    groupContent = await typedFetch(`/user/${session.user.id}/groups`);
   } else {
     content = await typedFetch(
       `/user/${session.user.id}/content?type=${contentType}&page=${page}`
     );
   }
-  // console.log('contentType', contentType);
-  // console.log('content: U PAGEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE', content);
 
   return (
     <section className="px-3.5 lg:px-5">
@@ -50,6 +50,7 @@ const MyProfilePage: React.FC<IMyProfilePageProps> = async ({
         isFollowing={userResult.isFollowing}
         contentType={contentType}
         contentItems={content.content}
+        groupItems={groupContent}
       />
     </section>
   );
