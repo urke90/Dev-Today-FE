@@ -159,15 +159,18 @@ input:-webkit-autofill:active {
 .tox .tox-toolbar-overlord .tox-toolbar__primary {
   background-color: #262935;
 }
+
 .tox .tox-toolbar__group > button {
   background-color: #262935 !important;
 }
+
 .tox .tox-edit-area__iframe {
   background-color: transparent !important;
 }
 .tox:not(.tox-tinymce-inline) .tox-editor-header {
   background-color: #262935 !important;
 }
+
 .tox .tox-edit-area::before {
   border: none !important;
 }
@@ -179,4 +182,36 @@ input:-webkit-autofill:active {
 }
 .tox .tox-statusbar {
   display: none !important;
+}
+.tox-dialog-wrap__backdrop {
+  background-color: rgba(0, 0, 0, 0.5) !important;
+}
+.tox-dialog__header {
+  background-color: #1f2128 !important;
+  padding: 10px 10px !important;
+}
+.tox-dialog__body-content {
+  background-color: #262935 !important;
+}
+.tox-dialog__footer {
+  background-color: #1f2128 !important;
+}
+.tox-button {
+  border: none !important;
+  background-color: #262935 !important;
+}
+
+.tox-button:hover {
+  background-color: #393e4f !important;
+}
+.tox .tox-toolbar-overlord > .tox-toolbar,
+.tox .tox-toolbar-overlord > .tox-toolbar__overflow,
+.tox .tox-toolbar-overlord > .tox-toolbar__primary {
+  background-size: 0 !important;
+}
+[data-mce-name='customimagebutton'] span svg {
+  fill: #c55ef6 !important;
+}
+[data-mce-name='customimagebutton'] span {
+  color: #c55ef6 !important;
 }

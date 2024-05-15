@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import ReactSelect from 'react-select';
+import CreatableSelect from 'react-select/creatable';
 import { components } from 'react-select';
 import * as Select from '@radix-ui/react-select';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -21,6 +22,14 @@ import RHFInput from '@/components/RHFInputs/RHFInput';
 import Image from 'next/image';
 import FrameIcon from '../icons/Frame';
 import { Editor } from '@tinymce/tinymce-react';
+import { format } from 'date-fns';
+import { Calendar as CalendarIcon } from 'lucide-react';
+import { Calendar } from '@/components/ui/calendar';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
 
 type SelectItemProps = {
   value: string;
@@ -33,6 +42,7 @@ const formSchema = z.object({
 });
 
 const CreatePosts = () => {
+  const [date, setDate] = React.useState<Date>();
   const [isClearable, setIsClearable] = useState(true);
   const [isSearchable, setIsSearchable] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
@@ -49,10 +59,23 @@ const CreatePosts = () => {
     console.log(values);
   }
 
+  const colourOptions = [
+    { value: 'ocean', label: 'Ocean' },
+    { value: 'blue', label: 'Blue' },
+    { value: 'purple', label: 'Purple' },
+  ];
+
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
-        <RHFInput name="title" label="Title" />
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-8 w-full px-3 md:px-0">
+        <RHFInput
+          className="!placeholder:white-400 p3-medium dark:!placeholder-white-400"
+          name="title"
+          label="Title"
+          placeholder="Write an title of the post"
+        />
         <div className="flex items-center gap-3">
           <Select.Root>
             <Select.Trigger
@@ -108,7 +131,7 @@ const CreatePosts = () => {
               option: () =>
                 '!bg-white-100  !py-[18px]  dark:!bg-black-800  dark:!text-white-100 !text-black-800',
               singleValue: () => 'dark:!text-white-100',
-              menu: () => 'bg-white-100 dark:bg-black-800 !shadow-smd ',
+              menu: () => 'bg-white-100 dark:bg-black-800 !shadow-sm ',
             }}
             className="w-full h-full rounded-md dark:!bg-black-800"
             placeholder="Select Group"
@@ -137,6 +160,43 @@ const CreatePosts = () => {
             </p>
           </div>
         </div>
+        <RHFInput
+          className="!placeholder:white-400 p3-medium dark:!placeholder-white-400"
+          name="meetupLocation"
+          label="Meetup location"
+          placeholder="Write an title of the post"
+        />
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button
+              className={cn(
+                'justify-start p3-regular !text-white-400 bg-black-800 px-4 h-11',
+                !date && 'text-muted-foreground'
+              )}>
+              <Image
+                src="/assets/icons/calendar-create.svg"
+                alt="calendar"
+                width={18}
+                height={18}
+              />
+              {date ? (
+                format(date, 'PPP')
+              ) : (
+                <span>Pick a date of the meetup</span>
+              )}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0 rounded-none border-white-400">
+            <Calendar
+              className="bg-white-100 dark:bg-black-800 p4-regular "
+              mode="single"
+              selected={date}
+              onSelect={setDate}
+              initialFocus
+            />
+          </PopoverContent>
+        </Popover>
+
         <Editor
           apiKey="k1u3ltmn8ydlw7do8q51quscj02xqm6pbvu08pcm5jnlklnf"
           initialValue="<p>This is the initial content of the editor.</p>"
@@ -145,12 +205,13 @@ const CreatePosts = () => {
             icons: 'thin',
             toolbar_location: 'top',
             content_css: 'dark',
+
             content_style: `
              body { font-family: Roboto, sans-serif; border:none font-size: 14px; color: #808191;  background-color: #262935;} body::-webkit-scrollbar {display: none; }pre, code { font-family: "Roboto Mono", monospace; background-color: transparent !important;  padding: 5px; } body::before { color: #808191 !important; } `,
             menubar: false,
             plugins: 'code codesample link preview image',
             toolbar:
-              'customImageButton customPreview | bold italic underline link  alignleft aligncenter alignright image ',
+              'customImageButton customPreview | bold italic underline link strikethrough alignleft aligncenter alignright image ',
 
             setup: function (editor) {
               editor.ui.registry.addButton('customImageButton', {
@@ -168,9 +229,63 @@ const CreatePosts = () => {
             },
           }}
         />
-        <Button type="submit" className="bg-red-500">
-          Submit
-        </Button>
+        <div className="space-y-3">
+          <FormLabel>
+            Add or change tags (up to 5) so readers know what your story is
+            about
+          </FormLabel>
+          <CreatableSelect
+            classNames={{
+              input: () => '!text-[16px] dark:!text-white-100 text-black-800',
+              control: () =>
+                '!border-none !shadow-none  dark:bg-black-800 dark:!border-[#393E4F66] px-3 h-11',
+              indicatorSeparator: () => '!hidden',
+              dropdownIndicator: () => '!hidden',
+              multiValue: () =>
+                '!bg-white-200 !px-2 !py-1 dark:!bg-black-700 !text-white-100 !rounded-full',
+              multiValueLabel: () => '!uppercase dark:!text-white-200 !cap-10',
+              multiValueRemove: () =>
+                '!bg-white-200 !text-white-400 !ml-1  !rounded-3xl',
+              option: () =>
+                '!bg-white-100  !py-[18px]  dark:!bg-black-800  dark:!text-white-100 !text-black-800',
+              singleValue: () => 'dark:!text-white-100',
+              menu: () => 'bg-white-100 dark:bg-black-800 !shadow-sm ',
+            }}
+            isMulti
+            options={colourOptions}
+            formatOptionLabel={(option, { context }) => {
+              if (context === 'value') {
+                return <div>{option.label}</div>;
+              }
+              return (
+                <div className="flex items-center">
+                  <Image
+                    src="/assets/icons/tag-frame.svg"
+                    alt="frame"
+                    width={16}
+                    height={16}
+                    className="dark:invert "
+                  />
+                  <div className="flex flex-col ml-2">
+                    <p className="p4-medium uppercase">{option.label}</p>
+                  </div>
+                </div>
+              );
+            }}
+          />
+        </div>
+        <div className="flex gap-5 p3-bold ">
+          <Button
+            type="submit"
+            className="bg-light100__dark800 hover:!text-white-100 duration-200 hover:bg-primary-500 py-3 w-3/5">
+            Cancel
+          </Button>
+          <Button
+            type="submit"
+            className=" bg-light100__dark800 hover:!text-white-100 duration-200 hover:bg-primary-500 py-3 w-3/5">
+            Publish Post
+          </Button>
+        </div>
       </form>
     </Form>
   );
