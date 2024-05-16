@@ -50,7 +50,7 @@ const MyProfilePage: React.FC<IMyProfilePageProps> = async ({
         isFollowing={userResult.isFollowing}
         contentType={contentType}
         contentItems={content.content}
-        groupItems={groupContent}
+        groupItems={[]}
       />
     </section>
   );

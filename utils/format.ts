@@ -1,20 +1,23 @@
-/**
- *
- * 2
- * 23
- * 345
- * 3,555
- * 43,555
- * 545,555
- * 2,777,444
- * 43,555,444
- * 545,777,888
- */
-
-export const formatNumber = (value: number | string) => {
+export const formatNumberWithCommas = (value: number | string) => {
   // ? DO I need to check the type of value since we own the BE and choose the type of data?
-  let number: number;
-  if (typeof value !== 'string') {
-    return 0;
+  if (typeof value === 'string') return 0;
+
+  let result = ''; // final result
+  const numberString = value.toString();
+
+  const startCommaPosition = numberString.length % 3; // can be 0, 1, 2  ---> start comma position
+
+  if (startCommaPosition > 0) {
+    result = numberString.substring(0, startCommaPosition); // we check the number converted to string before for loop
   }
+
+  for (let i = startCommaPosition; i < numberString.length; i += 3) {
+    // since we increment index by 3 then we add ','(comma) after each 3 digits
+    if (result.length > 0) result += ',';
+
+    // slice the numberString after each ','(comma) and add 3 digits.
+    result += numberString.substring(i, i + 3);
+  }
+
+  return result;
 };

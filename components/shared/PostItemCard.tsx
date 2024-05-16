@@ -1,6 +1,5 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
 import { CldImage } from 'next-cloudinary';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -8,6 +7,7 @@ import HeartIcon from '../icons/Heart';
 import BadgeItem from './BadgeItem';
 import { Button } from '../ui/button';
 import { useInfiniteScroll } from '@/hooks/use-infinite-scroll';
+import { formatNumberWithCommas } from '@/utils/format';
 
 // ----------------------------------------------------------------
 
@@ -97,13 +97,19 @@ const PostItemCard: React.FC<IPostItemCardProps> = ({
             </div>
             <div className="flex gap-[30px] text-white-400 dark:text-white-300">
               {viewsCount && (
-                <span className="p3-regular">{viewsCount} Views</span>
+                <span className="p3-regular">
+                  {formatNumberWithCommas(viewsCount)} Views
+                </span>
               )}
               {likesCount && (
-                <span className="p3-regular">{likesCount} Likes</span>
+                <span className="p3-regular">
+                  {formatNumberWithCommas(likesCount)} Likes
+                </span>
               )}
               {commentsCount && (
-                <span className="p3-regular">{commentsCount} comments</span>
+                <span className="p3-regular">
+                  {formatNumberWithCommas(commentsCount)} comments
+                </span>
               )}
             </div>
           </div>

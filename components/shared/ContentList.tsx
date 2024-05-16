@@ -1,13 +1,17 @@
 'use client';
 
 import { useEffect, useState, useCallback, memo } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { EQueryContentType, type IContent } from '@/types/content';
 import type { IGroup } from '@/types/group';
+import { EContentItemsQueries } from '@/constants/react-query';
 import PostItemCard from './PostItemCard';
 import MeetupItemCard from './MeetupItemCard';
 import PodcastItemCard from './PodcastItemCard';
 import GroupItemCard from './GroupItemCard';
 import { typedFetch } from '@/utils/api';
+
+import { formatNumberWithCommas } from '@/utils/format';
 
 // ----------------------------------------------------------------
 
@@ -24,7 +28,7 @@ const ContentList: React.FC<IContentListProps> = ({
   groupItems,
   userId,
 }) => {
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(2);
   const [content, setContent] = useState<IContent[]>(contentItems);
   const [groups, setGroups] = useState<IGroup[]>(groupItems);
 
@@ -32,26 +36,53 @@ const ContentList: React.FC<IContentListProps> = ({
     setPage((prevPage) => prevPage + 1);
   }, []);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (contentType === EQueryContentType.GROUPS) {
-        const newGroups = await typedFetch<IGroup[]>(`/user/${userId}/groups`);
-        setGroups((prevGroups) => [...prevGroups, ...newGroups]);
-      } else {
-        console.log('uso u FETCH CONTENT');
-        const newContent = await typedFetch<{ content: IContent[] }>(
-          `/user/${userId}/content?type=${contentType}&page=${page}`
-        );
+  const num = formatNumberWithCommas(1);
+  console.log('num', num);
 
-        setContent((prevContent) => [...prevContent, ...newContent.content]);
-      }
-    };
-    if (page !== 1) fetchData();
-  }, [page]);
+  // const {
+  //   isLoading: isLoadingContent,
+  //   error: contentError,
+  //   data: contentData,
+  // } = useQuery({
+  //   queryKey: [contentType],
+  //   queryFn: () => {
+  //     console.log('opalio CONTENT');
+  //   },
+  //   enabled: contentType !== 'groups' && page !== 1,
+  // });
 
-  useEffect(() => {
-    setPage(1);
-  }, [contentType]);
+  // const {
+  //   isLoading: isLoadingGroups,
+  //   error: groupsError,
+  //   data: groupsData,
+  // } = useQuery({
+  //   queryKey: [contentType],
+  //   queryFn: () => {
+  //     console.log('opalio GROUPS');
+  //   },
+  //   enabled: contentType == 'groups' && page !== 1,
+  // });
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     if (contentType === EQueryContentType.GROUPS) {
+  //       const newGroups = await typedFetch<IGroup[]>(`/user/${userId}/groups`);
+  //       setGroups((prevGroups) => [...prevGroups, ...newGroups]);
+  //     } else {
+  //       console.log('uso u FETCH CONTENT');
+  //       const newContent = await typedFetch<{ content: IContent[] }>(
+  //         `/user/${userId}/content?type=${contentType}&page=${page}`
+  //       );
+
+  //       setContent((prevContent) => [...prevContent, ...newContent.content]);
+  //     }
+  //   };
+  //   if (page !== 1) fetchData();
+  // }, [page]);
+
+  // useEffect(() => {
+  //   setPage(1);
+  // }, [contentType]);
   useEffect(() => {
     console.log('content', content);
   }, [content]);
@@ -158,6 +189,33 @@ const ContentList: React.FC<IContentListProps> = ({
     }
     case EQueryContentType.GROUPS: {
       return (
+        // <ul className="flex flex-col flax-wrap gap-5">
+        //   {content.map(
+        //     (
+        //       {
+        //         id,
+        //         coverImage,
+        //         title = '',
+        //         contentDescription = '',
+        //         storyTags,
+        //         createdAt,
+        //       },
+        //       index
+        //     ) => (
+        //       <PodcastItemCard
+        //         key={id}
+        //         coverImage={coverImage}
+        //         title={title}
+        //         description={contentDescription}
+        //         tags={storyTags}
+        //         author="Pavel Gvay"
+        //         createdAt={createdAt}
+        //         updatePageNumber={updatePageNumber}
+        //         isLast={index === content.length - 1}
+        //       />
+        //     )
+        //   )}
+        // </ul>
         <ul className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {groups.map(({ id, groupBio, coverImg, members, name }, index) => (
             <GroupItemCard
