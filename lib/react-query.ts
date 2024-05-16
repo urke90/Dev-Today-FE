@@ -1,0 +1,4 @@
+export const FETCH_POSTS = 'FETCH_POSTS';
+export const FETCH_MEETUPS = 'FETCH_MEETUPS';
+export const FETCH_PODCASTS = 'FETCH_PODCASTS';
+export const FETCH_GROUPS = 'FETCH_GROUPS';

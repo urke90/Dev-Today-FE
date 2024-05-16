@@ -22,7 +22,7 @@ import {
 import { onboardingSchema } from '@/lib/validation';
 import toast, { Toaster } from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
-import { useTheme } from '../context/ThemeProvider';
+import { useTheme } from '../../context/ThemeProvider';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';

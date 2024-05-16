@@ -1,11 +1,15 @@
 import type { Metadata } from 'next';
 import { Inter, IBM_Plex_Sans } from 'next/font/google';
-import './globals.css';
-import { ThemeProvider } from './context/ThemeProvider';
+import { ThemeProvider } from '../context/ThemeProvider';
 import { cookies } from 'next/headers';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth-options';
-import SessionProvider from './context/SessionProvider';
+import SessionProvider from '../context/SessionProvider';
+import QueryProvider from '@/context/QueryProvider';
+
+import './globals.css';
+
+// ----------------------------------------------------------------
 
 const ibmPlexSans = IBM_Plex_Sans({
   weight: ['100', '200', '300', '400', '500', '600', '700'],
@@ -29,13 +33,15 @@ export default async function RootLayout({
   return (
     <ThemeProvider theme={theme}>
       <SessionProvider session={session}>
-        <html lang="en" className={`${theme}`}>
-          <body
-            className={`${ibmPlexSans.className} min-h-screen dark:bg-black-900 bg-white-200`}
-          >
-            <main className="max-w-screen-xxl mx-auto">{children}</main>
-          </body>
-        </html>
+        <QueryProvider>
+          <html lang="en" className={`${theme}`}>
+            <body
+              className={`${ibmPlexSans.className} min-h-screen dark:bg-black-900 bg-white-200`}
+            >
+              <main className="max-w-screen-xxl mx-auto">{children}</main>
+            </body>
+          </html>
+        </QueryProvider>
       </SessionProvider>
     </ThemeProvider>
   );

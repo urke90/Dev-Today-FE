@@ -16,7 +16,7 @@ import LogoutIcon from '../icons/Logout';
 import MoonIcon from '../icons/Moon';
 import SunIcon from '../icons/Sun';
 import { signOut } from 'next-auth/react';
-import { useTheme } from '@/app/context/ThemeProvider';
+import { useTheme } from '@/context/ThemeProvider';
 
 interface IProfileMenuProps {}
 

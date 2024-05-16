@@ -20,7 +20,7 @@ import { Separator } from '@/components/ui/separator';
 import { signIn } from 'next-auth/react';
 import { loginWelcome } from '@/constants';
 import { colorsLogIn } from '@/styles/index';
-import { useTheme } from '@/app/context/ThemeProvider';
+import { useTheme } from '@/context/ThemeProvider';
 import { useRouter } from 'next/navigation';
 
 const Login = () => {

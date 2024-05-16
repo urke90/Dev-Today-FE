@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 import NavLinks from '../navigation/NavLinks';
 import NavMenu from '../navigation/NavMenu';
-import { useTheme } from '@/app/context/ThemeProvider';
+import { useTheme } from '@/context/ThemeProvider';
 
 // ----------------------------------------------------------------
 
