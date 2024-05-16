@@ -21,7 +21,7 @@ const QueryProvider: React.FC<IQueryProviderProps> = ({ children }) => {
   return (
     <QueryClientProvider client={client}>
       {children}
-      <ReactQueryDevtools />
+      {/* <ReactQueryDevtools /> */}
     </QueryClientProvider>
   );
 };

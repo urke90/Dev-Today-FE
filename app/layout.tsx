@@ -6,6 +6,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth-options';
 import SessionProvider from '../context/SessionProvider';
 import QueryProvider from '@/context/QueryProvider';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 import './globals.css';
 
@@ -39,6 +40,7 @@ export default async function RootLayout({
               className={`${ibmPlexSans.className} min-h-screen dark:bg-black-900 bg-white-200`}
             >
               <main className="max-w-screen-xxl mx-auto">{children}</main>
+              <ReactQueryDevtools />
             </body>
           </html>
         </QueryProvider>
