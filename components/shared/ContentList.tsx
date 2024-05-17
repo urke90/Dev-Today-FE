@@ -1,19 +1,29 @@
 'use client';
 
 import { useEffect, useState, useCallback, memo } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useInfiniteQuery } from '@tanstack/react-query';
 import { EQueryContentType, type IContent } from '@/types/content';
 import type { IGroup } from '@/types/group';
-import { EContentItemsQueries } from '@/constants/react-query';
+import { EContentGroupItemsQueries } from '@/constants/react-query';
 import PostItemCard from './PostItemCard';
 import MeetupItemCard from './MeetupItemCard';
 import PodcastItemCard from './PodcastItemCard';
 import GroupItemCard from './GroupItemCard';
 import { typedFetch } from '@/utils/api';
-
-import { formatNumberWithCommas } from '@/utils/format';
+import { fetchContent, fetchGroups } from '@/api/queries';
 
 // ----------------------------------------------------------------
+
+const updateContentQueryKey = (contentType: EQueryContentType) => {
+  const FETCH_QUERIES = {
+    posts: EContentGroupItemsQueries.FETCH_POSTS,
+    meetups: EContentGroupItemsQueries.FETCH_MEETUPS,
+    podcasts: EContentGroupItemsQueries.FETCH_PODCASTS,
+    groups: EContentGroupItemsQueries.FETCH_GROUPS,
+  };
+
+  return FETCH_QUERIES[contentType];
+};
 
 interface IContentListProps {
   contentType: EQueryContentType;
@@ -28,7 +38,7 @@ const ContentList: React.FC<IContentListProps> = ({
   groupItems,
   userId,
 }) => {
-  const [page, setPage] = useState(2);
+  const [page, setPage] = useState(1);
   const [content, setContent] = useState<IContent[]>(contentItems);
   const [groups, setGroups] = useState<IGroup[]>(groupItems);
 
@@ -36,62 +46,49 @@ const ContentList: React.FC<IContentListProps> = ({
     setPage((prevPage) => prevPage + 1);
   }, []);
 
-  const num = formatNumberWithCommas(1);
-  console.log('num', num);
+  const {
+    isLoading: isLoadingContent,
+    error: contentError,
+    data: contentData,
+  } = useQuery<{ content: IContent[] }>({
+    queryKey: [updateContentQueryKey(contentType)],
+    queryFn: () => fetchContent(userId, contentType, page),
+    enabled: contentType !== EQueryContentType.GROUPS && page !== 1,
+  });
 
-  // const {
-  //   isLoading: isLoadingContent,
-  //   error: contentError,
-  //   data: contentData,
-  // } = useQuery({
-  //   queryKey: [contentType],
-  //   queryFn: () => {
-  //     console.log('opalio CONTENT');
-  //   },
-  //   enabled: contentType !== 'groups' && page !== 1,
-  // });
+  console.log('groups', groups);
 
-  // const {
-  //   isLoading: isLoadingGroups,
-  //   error: groupsError,
-  //   data: groupsData,
-  // } = useQuery({
-  //   queryKey: [contentType],
-  //   queryFn: () => {
-  //     console.log('opalio GROUPS');
-  //   },
-  //   enabled: contentType == 'groups' && page !== 1,
-  // });
+  const {
+    isLoading: isLoadingGroups,
+    error: groupsError,
+    data: groupsData,
+  } = useQuery<IGroup[]>({
+    queryKey: [updateContentQueryKey(contentType)],
+    queryFn: () => fetchGroups(userId, page),
+    enabled: contentType === EQueryContentType.GROUPS && page !== 1,
+  });
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     if (contentType === EQueryContentType.GROUPS) {
-  //       const newGroups = await typedFetch<IGroup[]>(`/user/${userId}/groups`);
-  //       setGroups((prevGroups) => [...prevGroups, ...newGroups]);
-  //     } else {
-  //       console.log('uso u FETCH CONTENT');
-  //       const newContent = await typedFetch<{ content: IContent[] }>(
-  //         `/user/${userId}/content?type=${contentType}&page=${page}`
-  //       );
-
-  //       setContent((prevContent) => [...prevContent, ...newContent.content]);
-  //     }
-  //   };
-  //   if (page !== 1) fetchData();
-  // }, [page]);
-
-  // useEffect(() => {
-  //   setPage(1);
-  // }, [contentType]);
   useEffect(() => {
-    console.log('content', content);
-  }, [content]);
+    if (groupsData) {
+      setGroups((prevGroups) => [...prevGroups, ...groupsData]);
+    }
+  }, [groupsData]);
+
+  useEffect(() => {
+    if (contentData) {
+      setContent((prevContent) => [...prevContent, ...contentData.content]);
+    }
+  }, [contentData]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [contentType]);
 
   switch (contentType) {
     case EQueryContentType.POSTS: {
       return (
         <ul className="flex flex-col flax-wrap gap-5">
-          {content.map(
+          {content?.map(
             (
               {
                 id,
@@ -128,7 +125,7 @@ const ContentList: React.FC<IContentListProps> = ({
     case EQueryContentType.MEETUPS: {
       return (
         <ul className="flex flex-col flax-wrap gap-5">
-          {content.map(
+          {content?.map(
             (
               {
                 id,
@@ -159,7 +156,7 @@ const ContentList: React.FC<IContentListProps> = ({
     case EQueryContentType.PODCASTS: {
       return (
         <ul className="flex flex-col flax-wrap gap-5">
-          {content.map(
+          {content?.map(
             (
               {
                 id,
@@ -189,35 +186,8 @@ const ContentList: React.FC<IContentListProps> = ({
     }
     case EQueryContentType.GROUPS: {
       return (
-        // <ul className="flex flex-col flax-wrap gap-5">
-        //   {content.map(
-        //     (
-        //       {
-        //         id,
-        //         coverImage,
-        //         title = '',
-        //         contentDescription = '',
-        //         storyTags,
-        //         createdAt,
-        //       },
-        //       index
-        //     ) => (
-        //       <PodcastItemCard
-        //         key={id}
-        //         coverImage={coverImage}
-        //         title={title}
-        //         description={contentDescription}
-        //         tags={storyTags}
-        //         author="Pavel Gvay"
-        //         createdAt={createdAt}
-        //         updatePageNumber={updatePageNumber}
-        //         isLast={index === content.length - 1}
-        //       />
-        //     )
-        //   )}
-        // </ul>
         <ul className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          {groups.map(({ id, groupBio, coverImg, members, name }, index) => (
+          {groups?.map(({ id, groupBio, coverImg, members, name }, index) => (
             <GroupItemCard
               key={id}
               coverImage={coverImg}

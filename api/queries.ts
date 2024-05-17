@@ -10,7 +10,7 @@ export const fetchContent = async (
   page: number
 ) => {
   const response = await fetch(
-    `/user/${userId}/content?type=${contentType}&page=${page}`
+    BASE_API_URL + `/user/${userId}/content?type=${contentType}&page=${page}`
   );
 
   if (!response.ok) {
@@ -20,7 +20,9 @@ export const fetchContent = async (
 };
 
 export const fetchGroups = async (userId: string, page: number) => {
-  const response = await fetch(`/user/${userId}/groups&page=${page}`);
+  const response = await fetch(
+    BASE_API_URL + `/user/${userId}/groups&page=${page}`
+  );
 
   if (!response.ok) {
     throw new Error('Something went wrong!');

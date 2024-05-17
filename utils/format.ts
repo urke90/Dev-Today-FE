@@ -1,5 +1,4 @@
 export const formatNumberWithCommas = (value: number | string) => {
-  // ? DO I need to check the type of value since we own the BE and choose the type of data?
   if (typeof value === 'string') return 0;
 
   let result = ''; // final result
