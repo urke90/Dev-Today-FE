@@ -8,6 +8,7 @@ import BadgeItem from './BadgeItem';
 import { Button } from '../ui/button';
 import { useInfiniteScroll } from '@/hooks/use-infinite-scroll';
 import { formatNumberWithCommas } from '@/utils/format';
+import { calculateTimeAgo } from '@/utils/format';
 
 // ----------------------------------------------------------------
 
@@ -94,7 +95,7 @@ const PostItemCard: React.FC<IPostItemCardProps> = ({
               </div>
               <div>
                 <p className="p3-bold">Pavel Gvay</p>
-                <p className="subtitle-normal">{createdAt.toLocaleString()}</p>
+                <p className="subtitle-normal">{calculateTimeAgo(createdAt)}</p>
               </div>
             </div>
             <div className="flex gap-[30px] text-white-400 dark:text-white-300">
