@@ -18,9 +18,9 @@ interface IPostItemCardProps {
   tags: string[];
   createdAt: Date;
   author: string;
-  viewsCount?: number;
-  likesCount?: number;
-  commentsCount?: number;
+  viewsCount?: number | null;
+  likesCount?: number | null;
+  commentsCount?: number | null;
   isLast: boolean;
   updatePageNumber: () => void;
 }
@@ -53,18 +53,20 @@ const PostItemCard: React.FC<IPostItemCardProps> = ({
           className="shrink-0 max-md:hidden self-baseline"
         />
         {/* RIGHT PART OF THE POST */}
-        <div className="flex flex-col gap-4">
-          <div className="flex mb-4 gap-2">
-            <CldImage
-              src={coverImage || '/assets/images/no-image.svg'}
-              width={50}
-              height={50}
-              alt={title}
-              className="shrink-0 md:hidden self-baseline"
-            />
-            <div>
-              <p className="p1-bold mb-2">{title}</p>
-              <p className="p3-regular line-clamp-1">{description}</p>
+        <div className="flex flex-col gap-4 flex-1">
+          <div className="flex mb-4 gap-2 justify-between">
+            <div className="flex gap-2">
+              <CldImage
+                src={coverImage || '/assets/images/no-image.svg'}
+                width={50}
+                height={50}
+                alt={title}
+                className="shrink-0 md:hidden self-baseline"
+              />
+              <div>
+                <p className="p1-bold mb-2">{title}</p>
+                <p className="p3-regular line-clamp-1">{description}</p>
+              </div>
             </div>
             <Button
               className="size-[30px] bg-white-200 dark:bg-black-700 flex-center rounded-full shrink-0"
@@ -96,21 +98,15 @@ const PostItemCard: React.FC<IPostItemCardProps> = ({
               </div>
             </div>
             <div className="flex gap-[30px] text-white-400 dark:text-white-300">
-              {viewsCount && (
-                <span className="p3-regular">
-                  {formatNumberWithCommas(viewsCount)} Views
-                </span>
-              )}
-              {likesCount && (
-                <span className="p3-regular">
-                  {formatNumberWithCommas(likesCount)} Likes
-                </span>
-              )}
-              {commentsCount && (
-                <span className="p3-regular">
-                  {formatNumberWithCommas(commentsCount)} comments
-                </span>
-              )}
+              <span className="p3-regular">
+                {formatNumberWithCommas(viewsCount)} Views
+              </span>
+              <span className="p3-regular">
+                {formatNumberWithCommas(likesCount)} Likes
+              </span>
+              <span className="p3-regular">
+                {formatNumberWithCommas(commentsCount)} comments
+              </span>
             </div>
           </div>
         </div>

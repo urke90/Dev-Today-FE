@@ -15,11 +15,13 @@ import { fetchContent, fetchGroups } from '@/api/queries';
 // ----------------------------------------------------------------
 
 const updateContentQueryKey = (contentType: EQueryContentType) => {
+  if (contentType === EQueryContentType.GROUPS) {
+    return;
+  }
   const FETCH_QUERIES = {
     posts: EContentGroupItemsQueries.FETCH_POSTS,
     meetups: EContentGroupItemsQueries.FETCH_MEETUPS,
     podcasts: EContentGroupItemsQueries.FETCH_PODCASTS,
-    groups: EContentGroupItemsQueries.FETCH_GROUPS,
   };
 
   return FETCH_QUERIES[contentType];
@@ -63,7 +65,7 @@ const ContentList: React.FC<IContentListProps> = ({
     error: groupsError,
     data: groupsData,
   } = useQuery<IGroup[]>({
-    queryKey: [updateContentQueryKey(contentType)],
+    queryKey: [EContentGroupItemsQueries.FETCH_GROUPS],
     queryFn: () => fetchGroups(userId, page),
     enabled: contentType === EQueryContentType.GROUPS && page !== 1,
   });
