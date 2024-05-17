@@ -13,6 +13,7 @@ import { calculateTimeAgo } from '@/utils/format';
 // ----------------------------------------------------------------
 
 interface IPostItemCardProps {
+  id: string;
   coverImage?: string;
   title: string;
   description: string;
@@ -27,6 +28,7 @@ interface IPostItemCardProps {
 }
 
 const PostItemCard: React.FC<IPostItemCardProps> = ({
+  id,
   coverImage,
   title,
   description,
@@ -43,7 +45,7 @@ const PostItemCard: React.FC<IPostItemCardProps> = ({
   return (
     <li ref={listItemRef}>
       <Link
-        href={`/`}
+        href={'/posts/' + id}
         className="flex md:items-center p-4 md:p-5 gap-4 bg-light100__dark800 rounded-2xl"
       >
         <CldImage

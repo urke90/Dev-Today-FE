@@ -4,13 +4,15 @@ import Link from 'next/link';
 import { CldImage } from 'next-cloudinary';
 import BadgeItem from './BadgeItem';
 import { useInfiniteScroll } from '@/hooks/use-infinite-scroll';
+import { parseDate } from '@/utils/format';
 
 // ----------------------------------------------------------------
 
 interface IMeetupItemCardProps {
+  id: string;
   title: string;
   location: string;
-  date?: Date;
+  meetupDate?: Date;
   description: string;
   tags: string[];
   coverImage?: string;
@@ -19,10 +21,11 @@ interface IMeetupItemCardProps {
 }
 
 const MeetupItemCard: React.FC<IMeetupItemCardProps> = ({
+  id,
   coverImage,
   location,
   title,
-  date,
+  meetupDate,
   description,
   tags,
   isLast,
@@ -30,10 +33,13 @@ const MeetupItemCard: React.FC<IMeetupItemCardProps> = ({
 }) => {
   const listItemRef = useInfiniteScroll({ updatePageNumber, isLast });
 
+  const shortenedDate = meetupDate ? parseDate(meetupDate) : 'TBD';
+  const [month, day] = shortenedDate.split(' ');
+
   return (
     <li ref={listItemRef}>
       <Link
-        href={`/`}
+        href={'/meetups/' + id}
         className="flex flex-col gap-2.5 px-3.5 py-5 bg-light100__dark800 rounded-[10px]"
       >
         <div className="flex flex-between">
@@ -52,9 +58,9 @@ const MeetupItemCard: React.FC<IMeetupItemCardProps> = ({
           </div>
           <div className="flex-center flex-col rounded-[6px] w-[38px] h-[56px] md:h-[58px] md:w-[54px] py-[5px] px-2.5 bg-light200__dark700 shrink-0">
             <span className="subtitle-normal md:p4-regular uppercase text-black-800 dark:text-white-200">
-              FEB
+              {month}
             </span>
-            <span className="!text-primary-500 p2-bold md:d2-bold">2</span>
+            <span className="!text-primary-500 p2-bold md:d2-bold">{day}</span>
           </div>
         </div>
         <div>

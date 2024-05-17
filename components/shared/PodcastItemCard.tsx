@@ -11,6 +11,7 @@ import { useInfiniteScroll } from '@/hooks/use-infinite-scroll';
 // ----------------------------------------------------------------
 
 interface IPodcastItemCardProps {
+  id: string;
   coverImage?: string;
   title: string;
   description: string;
@@ -22,6 +23,7 @@ interface IPodcastItemCardProps {
 }
 
 const PodcastItemCard: React.FC<IPodcastItemCardProps> = ({
+  id,
   coverImage,
   title,
   description,
@@ -35,7 +37,7 @@ const PodcastItemCard: React.FC<IPodcastItemCardProps> = ({
   return (
     <li ref={listItemRef}>
       <Link
-        href={`/`}
+        href={'/podcasts/' + id}
         className="flex flex-col gap-3.5 lg:gap-[18px] py-5 px-3.5 lg:p-4 bg-light100__dark800 rounded-[10px] lg:rounded-2xl"
       >
         <div className="flex gap-2 lg:flex-between">

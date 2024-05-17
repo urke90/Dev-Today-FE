@@ -10,6 +10,7 @@ import { useInfiniteScroll } from '@/hooks/use-infinite-scroll';
 // ----------------------------------------------------------------
 
 interface IGroupItemCardProps {
+  id: string;
   coverImage: string;
   title: string;
   description: string;
@@ -22,6 +23,7 @@ interface IGroupItemCardProps {
 }
 
 const GroupItemCard: React.FC<IGroupItemCardProps> = ({
+  id,
   coverImage,
   title,
   description,
@@ -33,7 +35,7 @@ const GroupItemCard: React.FC<IGroupItemCardProps> = ({
   return (
     <li ref={listItemRef}>
       <Link
-        href={``}
+        href={'/groups/' + id}
         className="flex flex-col bg-light100__dark800 p-5 rounded-2xl gap-3.5 flex-0 shrink-0"
       >
         <div className="relative w-full h-[150px]">

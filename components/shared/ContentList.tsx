@@ -9,10 +9,12 @@ import PostItemCard from './PostItemCard';
 import MeetupItemCard from './MeetupItemCard';
 import PodcastItemCard from './PodcastItemCard';
 import GroupItemCard from './GroupItemCard';
-import { typedFetch } from '@/utils/api';
 import { fetchContent, fetchGroups } from '@/api/queries';
 
 // ----------------------------------------------------------------
+
+// 1. SQL tutorial
+// 2. Prisma kurs od JS matery
 
 const updateContentQueryKey = (contentType: EQueryContentType) => {
   if (contentType === EQueryContentType.GROUPS) {
@@ -58,23 +60,23 @@ const ContentList: React.FC<IContentListProps> = ({
     enabled: contentType !== EQueryContentType.GROUPS && page !== 1,
   });
 
-  console.log('groups', groups);
+  console.log('contentData', contentData);
 
-  const {
-    isLoading: isLoadingGroups,
-    error: groupsError,
-    data: groupsData,
-  } = useQuery<IGroup[]>({
-    queryKey: [EContentGroupItemsQueries.FETCH_GROUPS],
-    queryFn: () => fetchGroups(userId, page),
-    enabled: contentType === EQueryContentType.GROUPS && page !== 1,
-  });
+  // const {
+  //   isLoading: isLoadingGroups,
+  //   error: groupsError,
+  //   data: groupsData,
+  // } = useQuery<IGroup[]>({
+  //   queryKey: [EContentGroupItemsQueries.FETCH_GROUPS],
+  //   queryFn: () => fetchGroups(userId, page),
+  //   enabled: contentType === EQueryContentType.GROUPS && page !== 1,
+  // });
 
-  useEffect(() => {
-    if (groupsData) {
-      setGroups((prevGroups) => [...prevGroups, ...groupsData]);
-    }
-  }, [groupsData]);
+  // useEffect(() => {
+  //   if (groupsData) {
+  //     setGroups((prevGroups) => [...prevGroups, ...groupsData]);
+  //   }
+  // }, [groupsData]);
 
   useEffect(() => {
     if (contentData) {
@@ -107,6 +109,7 @@ const ContentList: React.FC<IContentListProps> = ({
             ) => (
               <PostItemCard
                 key={id}
+                id={id}
                 coverImage={coverImage}
                 title={title}
                 description={contentDescription}
@@ -131,7 +134,7 @@ const ContentList: React.FC<IContentListProps> = ({
             (
               {
                 id,
-                meetUpDate,
+                meetUpDate = new Date(),
                 title = '',
                 contentDescription = '',
                 coverImage,
@@ -141,12 +144,13 @@ const ContentList: React.FC<IContentListProps> = ({
             ) => (
               <MeetupItemCard
                 key={id}
+                id={id}
                 coverImage={coverImage}
                 title={title}
                 description={contentDescription}
                 tags={storyTags}
                 location="Innovation Hub, Austin"
-                date={meetUpDate}
+                meetupDate={meetUpDate}
                 updatePageNumber={updatePageNumber}
                 isLast={index === content.length - 1}
               />
@@ -172,6 +176,7 @@ const ContentList: React.FC<IContentListProps> = ({
             ) => (
               <PodcastItemCard
                 key={id}
+                id={id}
                 coverImage={coverImage}
                 title={title}
                 description={contentDescription}
@@ -192,6 +197,7 @@ const ContentList: React.FC<IContentListProps> = ({
           {groups?.map(({ id, groupBio, coverImg, members, name }, index) => (
             <GroupItemCard
               key={id}
+              id={id}
               coverImage={coverImg}
               title={name}
               description={groupBio}
