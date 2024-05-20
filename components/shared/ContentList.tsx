@@ -13,9 +13,6 @@ import { fetchContent, fetchGroups } from '@/api/queries';
 
 // ----------------------------------------------------------------
 
-// 1. SQL tutorial
-// 2. Prisma kurs od JS matery
-
 const updateContentQueryKey = (contentType: EQueryContentType) => {
   if (contentType === EQueryContentType.GROUPS) {
     return;
@@ -60,23 +57,25 @@ const ContentList: React.FC<IContentListProps> = ({
     enabled: contentType !== EQueryContentType.GROUPS && page !== 1,
   });
 
+  // console.log('contentData', contentData);
+
   console.log('contentData', contentData);
 
-  // const {
-  //   isLoading: isLoadingGroups,
-  //   error: groupsError,
-  //   data: groupsData,
-  // } = useQuery<IGroup[]>({
-  //   queryKey: [EContentGroupItemsQueries.FETCH_GROUPS],
-  //   queryFn: () => fetchGroups(userId, page),
-  //   enabled: contentType === EQueryContentType.GROUPS && page !== 1,
-  // });
+  const {
+    isLoading: isLoadingGroups,
+    error: groupsError,
+    data: groupsData,
+  } = useQuery<IGroup[]>({
+    queryKey: [EContentGroupItemsQueries.FETCH_GROUPS],
+    queryFn: () => fetchGroups(userId, page),
+    enabled: contentType === EQueryContentType.GROUPS && page !== 1,
+  });
 
-  // useEffect(() => {
-  //   if (groupsData) {
-  //     setGroups((prevGroups) => [...prevGroups, ...groupsData]);
-  //   }
-  // }, [groupsData]);
+  useEffect(() => {
+    if (groupsData) {
+      setGroups((prevGroups) => [...prevGroups, ...groupsData]);
+    }
+  }, [groupsData]);
 
   useEffect(() => {
     if (contentData) {
@@ -92,7 +91,7 @@ const ContentList: React.FC<IContentListProps> = ({
     case EQueryContentType.POSTS: {
       return (
         <ul className="flex flex-col flax-wrap gap-5">
-          {content?.map(
+          {content.map(
             (
               {
                 id,
@@ -130,7 +129,7 @@ const ContentList: React.FC<IContentListProps> = ({
     case EQueryContentType.MEETUPS: {
       return (
         <ul className="flex flex-col flax-wrap gap-5">
-          {content?.map(
+          {content.map(
             (
               {
                 id,

@@ -1,4 +1,4 @@
-import { EQueryContentType } from '@/types/content';
+import { EQueryContentType, IContent } from '@/types/content';
 
 // ----------------------------------------------------------------
 
@@ -8,7 +8,7 @@ export const fetchContent = async (
   userId: string,
   contentType: EQueryContentType,
   page: number
-) => {
+): Promise<{ content: IContent[] }> => {
   const response = await fetch(
     BASE_API_URL + `/user/${userId}/content?type=${contentType}&page=${page}`
   );

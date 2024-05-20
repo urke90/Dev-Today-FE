@@ -52,6 +52,7 @@ export const parseDate = (date: Date | string) => {
   }).format(new Date(date));
 };
 
+// ! Left this in case currently used function doesn't work
 // const timeAgo = (date: Date) => {
 //   const seconds = Math.floor((new Date() - date) / 1000);
 
