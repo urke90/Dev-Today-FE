@@ -1,8 +1,4 @@
-import React from 'react';
-
 import CreatableSelect from 'react-select/creatable';
-// import createCache from '@emotion/cache';
-// import { CacheProvider } from '@emotion/react';
 import {
   FormControl,
   FormDescription,
@@ -12,6 +8,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { useFormContext } from 'react-hook-form';
+import { useState } from 'react';
 
 // ----------------------------------------------------------------
 
@@ -19,20 +16,37 @@ interface IRHFMultipleSelectProps {
   name: string;
   label?: string;
   description?: string;
+  options?: {
+    value: string;
+    label: string;
+  }[];
+  defaultValue?: {
+    value: string;
+    label: string;
+  }[];
+  placeholder?: string;
+  hideDropDown?: boolean;
 }
 
-const options = [
-  { value: 'chocolate', label: 'Chocolate' },
-  { value: 'strawberry', label: 'Strawberry' },
-  { value: 'vanilla', label: 'Vanilla' },
-];
+interface Option {
+  readonly label: string;
+  readonly value: string;
+}
 
 const RHFMultipleSelect: React.FC<IRHFMultipleSelectProps> = ({
   name,
   description,
   label,
+  options,
+  defaultValue,
+  placeholder,
+  hideDropDown,
 }) => {
   const { control } = useFormContext();
+  const createOption = (label: string) => ({
+    label,
+    value: label,
+  });
   return (
     <FormField
       control={control}
@@ -46,9 +60,19 @@ const RHFMultipleSelect: React.FC<IRHFMultipleSelectProps> = ({
               isClearable
               options={options}
               onChange={(newValue) => {
-                console.log('newValue', newValue);
+                console.log('newnewValue', newValue);
                 field.onChange(newValue);
               }}
+              // onCreateOption={(newValue) => {
+              //   // console.log('newValue', newValue);
+              //   field.onChange(newValue);
+              // }}
+              // getNewOptionData={(newValue) => {
+              //   console.log('newValue', newValue)
+              //   return { value: newValue, label: newValue }
+              // }}
+              placeholder={placeholder}
+              defaultValue={defaultValue}
               classNames={{
                 control: () =>
                   // TODO Add different hover and focus effect since we will probably add the same to the Inputs
@@ -62,9 +86,13 @@ const RHFMultipleSelect: React.FC<IRHFMultipleSelectProps> = ({
                   `bg-black-700 dark:text-white-300 ${
                     state.isFocused ? 'dark:!bg-black-700 !bg-white-300' : ''
                   }`,
-                menuList: () => 'bg-white-100 dark:bg-black-800',
+                menuList: () =>
+                  `bg-white-100 dark:bg-black-800 ${
+                    hideDropDown ? 'hidden' : ''
+                  }`,
                 multiValueLabel: () => 'dark:text-white-300 text-black-700',
-                multiValueRemove: () => 'dark:!text-white-300 !text-black-700',
+                multiValueRemove: () =>
+                  'dark:!text-white-300 !text-black-700 hover:!bg-inherit',
                 multiValue: () =>
                   '!py-1 !bg-white-200 dark:!bg-black-700 !px-1.5 !text-white-400 dark:!text-white-100 !cap-8 md:!cap-10 !rounded-[20px] uppercase',
               }}

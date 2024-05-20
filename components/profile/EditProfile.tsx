@@ -1,54 +1,69 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useRouter } from 'next/navigation';
 import z from 'zod';
 import { Form } from '@/components/ui/form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import Image from 'next/image';
+import { typedFetch } from '@/utils/api';
 import {
-  CldUploadWidget,
   CldUploadButton,
   CldImage,
-  type CldImageProps,
   type CloudinaryUploadWidgetResults,
-  type CloudinaryUploadWidgetOptions,
 } from 'next-cloudinary';
-import { profileSchema } from '@/lib/validation';
+import { updateProfileSchema } from '@/lib/validation';
 import { Button } from '../ui/button';
 import RHFInput from '@/components/RHFInputs/RHFInput';
 import RHFTextarea from '../RHFInputs/RHFTextarea';
 import RHFMultipleSelect from '../RHFInputs/RHFMultipleSelect';
-import toast from 'react-hot-toast';
 import ImageUploadIcon from '../icons/ImageUpload';
 import ImagePreviewIcon from '../icons/ImagePreview';
+import type { IUser } from '@/types/user';
+import toast from 'react-hot-toast';
 
 // ----------------------------------------------------------------
 
-interface IEditProfileProps {}
+interface IEditProfileProps {
+  user: IUser;
+}
 
-const EditProfile: React.FC<IEditProfileProps> = (props) => {
+const EditProfile: React.FC<IEditProfileProps> = ({ user }) => {
+  const router = useRouter();
+  const {
+    id,
+    userName,
+    name,
+    preferredSkills,
+    bio,
+    avatarImg,
+    instagramName,
+    instagramLink,
+    linkedinName,
+    linkedinLink,
+    twitterName,
+    twitterLink,
+  } = user ?? {};
+
+  const PREFERRED_SKILLS_OPTIONS = preferredSkills.map((skill) => ({
+    value: skill,
+    label: skill,
+  }));
+
   const form = useForm({
-    resolver: zodResolver(profileSchema),
+    resolver: zodResolver(updateProfileSchema),
     defaultValues: {
-      userId: '',
-      userName: '',
-      name: '',
-      email: '',
-      preferredSkills: [],
-      contents: [],
-      likedContents: [],
-      bio: '',
-      avatarImg: '',
-      createdAt: undefined,
-      instagramName: '',
-      instagramLink: '',
-      linkedinName: '',
-      linkedinLink: '',
-      twitterName: '',
-      twitterLink: '',
-      followers: undefined,
-      following: undefined,
+      name: name || '',
+      userName: userName || '',
+      bio: bio || '',
+      preferredSkills: PREFERRED_SKILLS_OPTIONS || [],
+      avatarImg: avatarImg || '',
+      instagramName: instagramName || '',
+      instagramLink: instagramLink || '',
+      linkedinName: linkedinName || '',
+      linkedinLink: linkedinLink || '',
+      twitterName: twitterName || '',
+      twitterLink: twitterLink || '',
     },
   });
 
@@ -59,13 +74,35 @@ const EditProfile: React.FC<IEditProfileProps> = (props) => {
   const handleUploadImage = (result: CloudinaryUploadWidgetResults) => {
     if (!result.info || typeof result.info === 'string')
       return toast.error('Image upload failed!');
-    console.log('result', result);
+
     setPreveiwImg(result.info.secure_url);
     setValue('avatarImg', result.info.secure_url);
   };
 
-  const onSubmit = (data: z.infer<typeof profileSchema>) => {
-    console.log('data', data);
+  const onSubmit = async (data: z.infer<typeof updateProfileSchema>) => {
+    const validatedData = updateProfileSchema.safeParse(data);
+
+    if (!validatedData.success) {
+      console.log('validatedData', validatedData.error.format());
+      toast.error('Validation failed!');
+    }
+
+    const mappedSkills = data.preferredSkills.map((skill) => skill.value);
+
+    try {
+      await typedFetch(`/user${id}`, 'PATCH', undefined, {
+        ...data,
+        preferredSkills: mappedSkills,
+      });
+      toast.success('Profile successfully updated');
+      router.push('/profile');
+    } catch (error) {
+      console.log('Error updating user profile', error);
+      if (error instanceof Error) {
+        console.log('Error updating user profile', error.message);
+        toast.error("Could't update user profile");
+      }
+    }
   };
 
   return (
@@ -91,7 +128,6 @@ const EditProfile: React.FC<IEditProfileProps> = (props) => {
               className="flex bg-white-100 dark:bg-black-800 items-center gap-2.5 px-5 py-3 rounded-[5px] h-11"
               uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_PRESEST_NAME}
               onSuccess={handleUploadImage}
-              config={{}}
               options={{
                 multiple: false,
                 cropping: true,
@@ -110,7 +146,13 @@ const EditProfile: React.FC<IEditProfileProps> = (props) => {
             placeholder="Enter something about yourself..."
           />
           <div>
-            <RHFMultipleSelect name="preferredSkills" />
+            <RHFMultipleSelect
+              label="Interested Technologies"
+              name="preferredSkills"
+              defaultValue={PREFERRED_SKILLS_OPTIONS}
+              placeholder="Add a tag..."
+              hideDropDown
+            />
           </div>
           <p className="p1-bold">Social Media</p>
           <div className="flex flex-col sm:flex-row gap-5 border-b dark:border-black-800 border-white-border">
@@ -150,7 +192,9 @@ const EditProfile: React.FC<IEditProfileProps> = (props) => {
             />
           </div>
           <div className="flex flex-col sm:flex-row sm:gap-5 gap-2.5">
-            <Button variant="cancel">Cancel</Button>
+            <Button type="button" variant="cancel">
+              Cancel
+            </Button>
             <Button type="submit" variant="primary">
               Update Profile
             </Button>

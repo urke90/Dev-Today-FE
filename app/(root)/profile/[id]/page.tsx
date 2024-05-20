@@ -1,7 +1,7 @@
 import ProfileHome from '@/components/profile/ProfileHome';
-import { EQueryContentType, IContent } from '@/types/content';
-import { IGroup } from '@/types/group';
-import { IUserResponse } from '@/types/user';
+import { EQueryContentType, type IContent } from '@/types/content';
+import type { IGroup } from '@/types/group';
+import type { IUserResponse } from '@/types/user';
 import { typedFetch } from '@/utils/api';
 import { parseSearchParams } from '@/utils/query';
 

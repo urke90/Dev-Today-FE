@@ -40,3 +40,31 @@ export const profileSchema = z.object({
   followers: z.number().optional(),
   following: z.number().optional(),
 });
+
+const preferredSkillsSchema = z.object({
+  value: z.string().trim().min(1, 'Tag must be at least 2 characters long!'),
+  label: z.string().trim().min(1, 'Tag must be at least 2 characters long!'),
+});
+
+export const updateProfileSchema = z.object({
+  userName: z
+    .string()
+    .trim()
+    .min(2, 'User name must be at least 2 character long'),
+  name: z
+    .string()
+    .trim()
+    .min(2, 'User name must be at least 2 character long')
+    .optional(),
+  preferredSkills: z
+    .array(preferredSkillsSchema)
+    .min(1, 'Please add at least one skill to your profile.'),
+  bio: z.string().optional(),
+  avatarImg: z.string().optional(),
+  instagramName: z.string().optional(),
+  instagramLink: z.string().url().optional().or(z.literal('')),
+  linkedinName: z.string().optional(),
+  linkedinLink: z.string().url().optional().or(z.literal('')),
+  twitterName: z.string().optional(),
+  twitterLink: z.string().url().optional().or(z.literal('')),
+});
