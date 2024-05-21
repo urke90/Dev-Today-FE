@@ -48,24 +48,12 @@ const config = {
         orangeRed: '#F65E5E',
       },
       width: {
-        sidebar: '21.625rem',
         'left-sidebar': '13.125rem',
         'right-sidebar': '20.25rem',
       },
-      minWidth: {
-        sidebar: '21.625rem',
-        'left-sidebar': '13.125rem',
-        'right-sidebar': '20.25rem',
+      gridTemplateRows: {
+        masonry: '',
       },
-      margin: {
-        'content-left': '13.875rem',
-        'content-right': '21rem',
-      },
-      // Width: {
-      //   sidebar: '21.625rem',
-      //   'left-sidebar': '13.125rem',
-      //   'right-sidebar': '20.25rem',
-      // },
       boxShadow: {
         'header-menu':
           '0px 3px 80px 0px #0000004D, dark:0px 7px 80px 0px #0000001A',

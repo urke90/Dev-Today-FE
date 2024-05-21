@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import { CldImage } from 'next-cloudinary';
 import BadgeItem from './BadgeItem';
-import { useInfiniteScroll } from '@/hooks/use-infinite-scroll';
 import { parseDate } from '@/utils/format';
 
 // ----------------------------------------------------------------
@@ -16,8 +15,6 @@ interface IMeetupItemCardProps {
   description: string;
   tags: string[];
   coverImage?: string;
-  isLast: boolean;
-  updatePageNumber: () => void;
 }
 
 const MeetupItemCard: React.FC<IMeetupItemCardProps> = ({
@@ -28,16 +25,12 @@ const MeetupItemCard: React.FC<IMeetupItemCardProps> = ({
   meetupDate,
   description,
   tags,
-  isLast,
-  updatePageNumber,
 }) => {
-  const listItemRef = useInfiniteScroll({ updatePageNumber, isLast });
-
   const shortenedDate = meetupDate ? parseDate(meetupDate) : 'TBD';
   const [month, day] = shortenedDate.split(' ');
 
   return (
-    <li ref={listItemRef}>
+    <li>
       <Link
         href={'/meetups/' + id}
         className="flex flex-col gap-2.5 px-3.5 py-5 bg-light100__dark800 rounded-[10px]"

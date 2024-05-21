@@ -6,7 +6,6 @@ import HeartIcon from '../icons/Heart';
 import { Button } from '../ui/button';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useInfiniteScroll } from '@/hooks/use-infinite-scroll';
 
 // ----------------------------------------------------------------
 
@@ -18,8 +17,6 @@ interface IPodcastItemCardProps {
   tags: string[];
   author: string;
   createdAt: Date;
-  isLast: boolean;
-  updatePageNumber: () => void;
 }
 
 const PodcastItemCard: React.FC<IPodcastItemCardProps> = ({
@@ -30,12 +27,9 @@ const PodcastItemCard: React.FC<IPodcastItemCardProps> = ({
   tags,
   author,
   createdAt,
-  updatePageNumber,
-  isLast,
 }) => {
-  const listItemRef = useInfiniteScroll({ updatePageNumber, isLast });
   return (
-    <li ref={listItemRef}>
+    <li>
       <Link
         href={'/podcasts/' + id}
         className="flex flex-col gap-3.5 lg:gap-[18px] py-5 px-3.5 lg:p-4 bg-light100__dark800 rounded-[10px] lg:rounded-2xl"

@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import z from 'zod';
@@ -80,17 +80,10 @@ const EditProfile: React.FC<IEditProfileProps> = ({ user }) => {
   };
 
   const onSubmit = async (data: z.infer<typeof updateProfileSchema>) => {
-    const validatedData = updateProfileSchema.safeParse(data);
-
-    if (!validatedData.success) {
-      console.log('validatedData', validatedData.error.format());
-      toast.error('Validation failed!');
-    }
-
     const mappedSkills = data.preferredSkills.map((skill) => skill.value);
 
     try {
-      await typedFetch(`/user${id}`, 'PATCH', undefined, {
+      await typedFetch(`/user/${id}`, 'PATCH', undefined, {
         ...data,
         preferredSkills: mappedSkills,
       });

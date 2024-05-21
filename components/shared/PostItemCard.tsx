@@ -6,7 +6,6 @@ import Image from 'next/image';
 import HeartIcon from '../icons/Heart';
 import BadgeItem from './BadgeItem';
 import { Button } from '../ui/button';
-import { useInfiniteScroll } from '@/hooks/use-infinite-scroll';
 import { formatNumberWithCommas } from '@/utils/format';
 import { calculateTimeAgo } from '@/utils/format';
 
@@ -23,8 +22,6 @@ interface IPostItemCardProps {
   viewsCount?: number | null;
   likesCount?: number | null;
   commentsCount?: number | null;
-  isLast: boolean;
-  updatePageNumber: () => void;
 }
 
 const PostItemCard: React.FC<IPostItemCardProps> = ({
@@ -37,13 +34,9 @@ const PostItemCard: React.FC<IPostItemCardProps> = ({
   likesCount,
   commentsCount,
   createdAt,
-  isLast,
-  updatePageNumber,
 }) => {
-  const listItemRef = useInfiniteScroll({ updatePageNumber, isLast });
-
   return (
-    <li ref={listItemRef}>
+    <li>
       <Link
         href={'/posts/' + id}
         className="flex md:items-center p-4 md:p-5 gap-4 bg-light100__dark800 rounded-2xl"

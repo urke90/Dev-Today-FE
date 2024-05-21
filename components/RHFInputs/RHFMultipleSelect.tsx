@@ -60,17 +60,8 @@ const RHFMultipleSelect: React.FC<IRHFMultipleSelectProps> = ({
               isClearable
               options={options}
               onChange={(newValue) => {
-                console.log('newnewValue', newValue);
                 field.onChange(newValue);
               }}
-              // onCreateOption={(newValue) => {
-              //   // console.log('newValue', newValue);
-              //   field.onChange(newValue);
-              // }}
-              // getNewOptionData={(newValue) => {
-              //   console.log('newValue', newValue)
-              //   return { value: newValue, label: newValue }
-              // }}
               placeholder={placeholder}
               defaultValue={defaultValue}
               classNames={{
