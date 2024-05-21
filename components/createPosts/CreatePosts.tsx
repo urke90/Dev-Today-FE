@@ -23,13 +23,13 @@ import Image from 'next/image';
 import FrameIcon from '../icons/Frame';
 import { Editor } from '@tinymce/tinymce-react';
 import { format } from 'date-fns';
-import { Calendar as CalendarIcon } from 'lucide-react';
 import { Calendar } from '@/components/ui/calendar';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import Preview from '../preview/Preview';
 
 type SelectItemProps = {
   value: string;
@@ -43,10 +43,8 @@ const formSchema = z.object({
 
 const CreatePosts = () => {
   const [date, setDate] = React.useState<Date>();
-  const [isClearable, setIsClearable] = useState(true);
-  const [isSearchable, setIsSearchable] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-  const [isRtl, setIsRtl] = useState(false);
+  const [isPreview, setIsPreview] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -66,228 +64,265 @@ const CreatePosts = () => {
   ];
 
   return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-8 w-full px-3 md:px-0">
-        <RHFInput
-          className="!placeholder:white-400 p3-medium dark:!placeholder-white-400"
-          name="title"
-          label="Title"
-          placeholder="Write an title of the post"
-        />
-        <div className="flex items-center gap-3">
-          <Select.Root>
-            <Select.Trigger
-              className="flex w-1/4 rounded px-2 items-center h-11 bg-white-100 dark:bg-black-800 justify-center outline-none"
-              aria-label="Food">
-              <p className=" p3-regular dark:!text-white-400">Create</p>
-              <span className="mx-1 dark:text-white-100/70 text-black-800/60 ">
-                -
-              </span>
-              <div className=" flex items-center p3-regular !text-black-800 dark:!text-white-100 !font-bold ">
-                <Select.Value placeholder="Post" />
-                <Image
-                  src="/assets/icons/arrow-down-slim.svg"
-                  alt="arrow-down"
-                  width={10}
-                  height={2}
-                  className="ml-2"
-                />
-              </div>
-            </Select.Trigger>
-            <Select.Portal>
-              <Select.Content
-                position="popper"
-                className="overflow-hidden bg-white">
-                <Select.Viewport className="w-60 mt-3 rounded-md  p-3 bg-light100__dark800">
-                  <Select.Group className="flex items-center p-2 rounded-md group hover:shadow-lg duration-200 dark:hover:bg-black-700 justify-start">
-                    <FrameIcon className=" dark:text-white-100 text-white-400" />
-                    <SelectItem
-                      className="p-2 p3-medium !text-[14px]
-                      group-hover:!text-primary-500 "
-                      value="apple">
-                      Apple
-                    </SelectItem>
-                  </Select.Group>
-                </Select.Viewport>
-              </Select.Content>
-            </Select.Portal>
-          </Select.Root>
-          <ReactSelect
-            styles={{
-              control: (base) => ({
-                ...base,
-                boxShadow: 'none',
-              }),
-            }}
-            classNames={{
-              input: () => '!text-[16px] dark:!text-white-100 text-black-800',
-
-              control: () =>
-                '!border-none dark:bg-black-800 dark:!border-[#393E4F66] px-3 h-11',
-              indicatorSeparator: () => '!hidden',
-              dropdownIndicator: () => '!text-white-400 !w-10 !h-10',
-              option: () =>
-                '!bg-white-100  !py-[18px]  dark:!bg-black-800  dark:!text-white-100 !text-black-800',
-              singleValue: () => 'dark:!text-white-100',
-              menu: () => 'bg-white-100 dark:bg-black-800 !shadow-sm ',
-            }}
-            className="w-full h-full rounded-md dark:!bg-black-800"
-            placeholder="Select Group"
-            isLoading={isLoading}
-            isClearable={isClearable}
-            isRtl={isRtl}
-            isSearchable={isSearchable}
-            name="color"
-            options={[{ value: 'ocean', label: 'Ocean' }]}
-            components={{ Option }}
-          />
-        </div>
-        <div className="w-full h-64 dashedBorder !text-white-400 rounded-lg flex items-center justify-center">
-          <div className="flex flex-col items-center">
-            <div className="flex items-center dark:bg-black-800 p-3 rounded-lg bg-white-100 gap-3 mb-3">
-              <Image
-                src={'/assets/icons/upload-icon.svg'}
-                alt="upload"
-                width={16}
-                height={16}
-              />
-              <p className="p3-regular !text-white-300">Upload a cover image</p>
-            </div>
-            <p className="p4-regular !text-white-400">
-              Drag & Drop or upload png or jpeg up to 16MB
-            </p>
-          </div>
-        </div>
-        <RHFInput
-          className="!placeholder:white-400 p3-medium dark:!placeholder-white-400"
-          name="meetupLocation"
-          label="Meetup location"
-          placeholder="Write an title of the post"
-        />
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button
-              className={cn(
-                'justify-start p3-regular !text-white-400 bg-black-800 px-4 h-11',
-                !date && 'text-muted-foreground'
-              )}>
-              <Image
-                src="/assets/icons/calendar-create.svg"
-                alt="calendar"
-                width={18}
-                height={18}
-              />
-              {date ? (
-                format(date, 'PPP')
-              ) : (
-                <span>Pick a date of the meetup</span>
-              )}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-auto p-0 rounded-none border-white-400">
-            <Calendar
-              className="bg-white-100 dark:bg-black-800 p4-regular "
-              mode="single"
-              selected={date}
-              onSelect={setDate}
-              initialFocus
+    <>
+      {!isPreview ? (
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-8 w-full px-3 md:px-0">
+            <RHFInput
+              className="!placeholder:white-400 p3-medium dark:!placeholder-white-400"
+              name="title"
+              label="Title"
+              placeholder="Write an title of the post"
             />
-          </PopoverContent>
-        </Popover>
+            <div className="flex items-center gap-3">
+              <Select.Root>
+                <Select.Trigger
+                  className="flex w-1/4 border dark:border-black-700/50 rounded-md px-2 items-center h-11 bg-white-100 dark:bg-black-800 justify-center outline-none"
+                  aria-label="Food">
+                  <p className=" p3-regular dark:!text-white-400">Create</p>
+                  <span className="mx-1 dark:text-white-100/70 text-black-800/60 ">
+                    -
+                  </span>
+                  <div className=" flex items-center p3-regular !text-black-800 dark:!text-white-100 !font-bold ">
+                    <Select.Value placeholder="Post" />
+                    <Image
+                      src="/assets/icons/arrow-down-slim.svg"
+                      alt="arrow-down"
+                      width={10}
+                      height={2}
+                      className="ml-2"
+                    />
+                  </div>
+                </Select.Trigger>
+                <Select.Portal>
+                  <Select.Content
+                    position="popper"
+                    className="overflow-hidden bg-white">
+                    <Select.Viewport className="w-60 mt-3 rounded-md  p-3 bg-light100__dark800">
+                      <Select.Group className="flex items-center p-2 rounded-md group hover:shadow-lg duration-200 dark:hover:bg-black-700 justify-start">
+                        <FrameIcon className=" dark:text-white-100 text-white-400" />
+                        <SelectItem
+                          className="p-2 p3-medium !text-[14px]
+                      group-hover:!text-primary-500 "
+                          value="apple">
+                          Apple
+                        </SelectItem>
+                      </Select.Group>
+                    </Select.Viewport>
+                  </Select.Content>
+                </Select.Portal>
+              </Select.Root>
+              <ReactSelect
+                styles={{
+                  control: (base) => ({
+                    ...base,
+                    boxShadow: 'none',
+                  }),
+                }}
+                classNames={{
+                  input: () =>
+                    '!text-[16px] dark:!text-white-100 text-black-800',
 
-        <Editor
-          apiKey="k1u3ltmn8ydlw7do8q51quscj02xqm6pbvu08pcm5jnlklnf"
-          initialValue="<p>This is the initial content of the editor.</p>"
-          init={{
-            skin: 'oxide-dark',
-            icons: 'thin',
-            toolbar_location: 'top',
-            content_css: 'dark',
-
-            content_style: `
-             body { font-family: Roboto, sans-serif; border:none font-size: 14px; color: #808191;  background-color: #262935;} body::-webkit-scrollbar {display: none; }pre, code { font-family: "Roboto Mono", monospace; background-color: transparent !important;  padding: 5px; } body::before { color: #808191 !important; } `,
-            menubar: false,
-            plugins: 'code codesample link preview image',
-            toolbar:
-              'customImageButton customPreview | bold italic underline link strikethrough alignleft aligncenter alignright image ',
-
-            setup: function (editor) {
-              editor.ui.registry.addButton('customImageButton', {
-                text: 'Write',
-                icon: 'edit-block',
-                onAction: function () {},
-              });
-              editor.ui.registry.addButton('customPreview', {
-                text: 'Preview',
-                icon: 'preview',
-                onAction: function () {
-                  editor.execCommand('mcePreview');
-                },
-              });
-            },
-          }}
-        />
-        <div className="space-y-3">
-          <FormLabel>
-            Add or change tags (up to 5) so readers know what your story is
-            about
-          </FormLabel>
-          <CreatableSelect
-            classNames={{
-              input: () => '!text-[16px] dark:!text-white-100 text-black-800',
-              control: () =>
-                '!border-none !shadow-none  dark:bg-black-800 dark:!border-[#393E4F66] px-3 h-11',
-              indicatorSeparator: () => '!hidden',
-              dropdownIndicator: () => '!hidden',
-              multiValue: () =>
-                '!bg-white-200 !px-2 !py-1 dark:!bg-black-700 !text-white-100 !rounded-full',
-              multiValueLabel: () => '!uppercase dark:!text-white-200 !cap-10',
-              multiValueRemove: () =>
-                '!bg-white-200 !text-white-400 !ml-1  !rounded-3xl',
-              option: () =>
-                '!bg-white-100  !py-[18px]  dark:!bg-black-800  dark:!text-white-100 !text-black-800',
-              singleValue: () => 'dark:!text-white-100',
-              menu: () => 'bg-white-100 dark:bg-black-800 !shadow-sm ',
-            }}
-            isMulti
-            options={colourOptions}
-            formatOptionLabel={(option, { context }) => {
-              if (context === 'value') {
-                return <div>{option.label}</div>;
-              }
-              return (
-                <div className="flex items-center">
+                  control: () =>
+                    '!border-none dark:bg-black-800 dark:!border-[#393E4F66] px-3 h-11',
+                  indicatorSeparator: () => '!hidden',
+                  dropdownIndicator: () => '!text-white-400 !w-10 !h-10',
+                  option: () =>
+                    '!bg-white-100  !py-[18px]  dark:!bg-black-800  dark:!text-white-100 !text-black-800',
+                  singleValue: () => 'dark:!text-white-100',
+                  menu: () => 'bg-white-100 dark:bg-black-800 !shadow-sm ',
+                }}
+                className="w-full h-full rounded-md dark:!bg-black-800 border dark:border-black-700/50 "
+                placeholder="Select Group"
+                isLoading={isLoading}
+                isClearable
+                name="color"
+                options={[{ value: 'ocean', label: 'Ocean' }]}
+                components={{ Option }}
+              />
+            </div>
+            <div className="w-full h-64 dashedBorder !text-white-400 rounded-lg flex items-center justify-center">
+              <div className="flex flex-col items-center">
+                <div className="flex items-center dark:bg-black-800 p-3 rounded-lg bg-white-100 gap-3 mb-3">
                   <Image
-                    src="/assets/icons/tag-frame.svg"
-                    alt="frame"
+                    src={'/assets/icons/upload-icon.svg'}
+                    alt="upload"
                     width={16}
                     height={16}
-                    className="dark:invert "
                   />
-                  <div className="flex flex-col ml-2">
-                    <p className="p4-medium uppercase">{option.label}</p>
-                  </div>
+                  <p className="p3-regular !text-white-300">
+                    Upload a cover image
+                  </p>
                 </div>
-              );
-            }}
-          />
-        </div>
-        <div className="flex gap-5 p3-bold ">
-          <Button
-            type="submit"
-            className="bg-light100__dark800 hover:!text-white-100 duration-200 hover:bg-primary-500 py-3 w-3/5">
-            Cancel
-          </Button>
-          <Button
-            type="submit"
-            className=" bg-light100__dark800 hover:!text-white-100 duration-200 hover:bg-primary-500 py-3 w-3/5">
-            Publish Post
-          </Button>
-        </div>
-      </form>
-    </Form>
+                <p className="p4-regular !text-white-400">
+                  Drag & Drop or upload png or jpeg up to 16MB
+                </p>
+              </div>
+            </div>
+            <RHFInput
+              className="!placeholder:white-400 p3-medium dark:!placeholder-white-400"
+              name="meetupLocation"
+              label="Meetup location"
+              placeholder="Write an title of the post"
+            />
+
+            <Popover>
+              <h3 className="p3-medium"> Meetup date</h3>
+              <PopoverTrigger asChild>
+                <Button
+                  className={cn(
+                    'justify-start p3-regular !text-white-400 bg-light100__dark800 border dark:border-black-700/50 px-4 h-11 !mt-2',
+                    !date && 'text-muted-foreground'
+                  )}>
+                  <Image
+                    src="/assets/icons/calendar-create.svg"
+                    alt="calendar"
+                    width={18}
+                    height={18}
+                  />
+                  {date ? (
+                    format(date, 'PPP')
+                  ) : (
+                    <span>Pick a date of the meetup</span>
+                  )}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0 rounded-none border-white-400">
+                <Calendar
+                  className="bg-white-100 dark:bg-black-800 p4-regular "
+                  mode="single"
+                  selected={date}
+                  onSelect={setDate}
+                  initialFocus
+                />
+              </PopoverContent>
+            </Popover>
+
+            <div className="flex flex-col">
+              <h3 className="p3-medium">Podcast audio file</h3>
+              <Button
+                type="button"
+                className="w-full flex !mt-2 justify-start focus-visible:outline-none dark:placeholder:text-[#ADB3CC] placeholder:text-white-400 placeholder:font-normal placeholder:text-sm dark:text-white-100 text-black-900 text-sm font-medium px-3 border border-white-border dark:border-[#393E4F66] rounded-lg py-3 md:px-5 bg-white-100 dark:bg-black-800">
+                <Image
+                  src="/assets/icons/microphone.svg"
+                  alt="upload"
+                  width={11}
+                  height={15}
+                />
+
+                <span className="subtitle-medium tracking-wide dark:bg-black-700 px-2 py-1 rounded-md bg-white-200 ">
+                  Choose a file
+                </span>
+              </Button>
+            </div>
+
+            <RHFInput
+              className="!placeholder:white-400 p3-medium dark:!placeholder-white-400"
+              name="meetupLocation"
+              label="Audio title"
+              placeholder="Ex: Codetime | Episode 8"
+            />
+
+            <Editor
+              apiKey="k1u3ltmn8ydlw7do8q51quscj02xqm6pbvu08pcm5jnlklnf"
+              initialValue="<p>This is the initial content of the editor.</p>"
+              init={{
+                skin: 'oxide-dark',
+                icons: 'thin',
+                toolbar_location: 'top',
+                content_css: 'dark',
+
+                content_style: `
+             body { font-family: Roboto, sans-serif; border:none font-size: 14px; color: #808191;  background-color: #262935;} body::-webkit-scrollbar {display: none; }pre, code { font-family: "Roboto Mono", monospace; background-color: transparent !important;  padding: 5px; } body::before { color: #808191 !important; } `,
+                menubar: false,
+                plugins: 'code codesample link preview image',
+                toolbar:
+                  'customImageButton customPreview | bold italic underline link strikethrough alignleft aligncenter alignright image ',
+
+                setup: function (editor) {
+                  editor.ui.registry.addButton('customImageButton', {
+                    text: 'Write',
+                    icon: 'edit-block',
+                    onAction: function () {},
+                  });
+                  editor.ui.registry.addButton('customPreview', {
+                    text: 'Preview',
+                    icon: 'preview',
+                    onAction: function () {
+                      setIsPreview(true);
+                    },
+                  });
+                },
+              }}
+            />
+            <div className="space-y-3">
+              <FormLabel>
+                Add or change tags (up to 5) so readers know what your story is
+                about
+              </FormLabel>
+              <CreatableSelect
+                className="border rounded-md dark:border-black-700/50"
+                classNames={{
+                  input: () =>
+                    '!text-[16px] dark:!text-white-100 text-black-800',
+                  control: () =>
+                    '!border-none !shadow-none  dark:bg-black-800 dark:!border-[#393E4F66] px-3 h-11',
+                  indicatorSeparator: () => '!hidden',
+                  dropdownIndicator: () => '!hidden',
+                  multiValue: () =>
+                    '!bg-white-200 !px-2 !py-1 dark:!bg-black-700 !text-white-100 !rounded-full',
+                  multiValueLabel: () =>
+                    '!uppercase dark:!text-white-200 !cap-10',
+                  multiValueRemove: () =>
+                    '!bg-white-200 !text-white-400 !ml-1  !rounded-3xl',
+                  option: () =>
+                    '!bg-white-100  !py-[18px]  dark:!bg-black-800  dark:!text-white-100 !text-black-800',
+                  singleValue: () => 'dark:!text-white-100',
+                  menu: () => 'bg-white-100 dark:bg-black-800 !shadow-sm ',
+                }}
+                isMulti
+                options={colourOptions}
+                formatOptionLabel={(option, { context }) => {
+                  if (context === 'value') {
+                    return <div>{option.label}</div>;
+                  }
+                  return (
+                    <div className="flex items-center">
+                      <Image
+                        src="/assets/icons/archive.svg"
+                        alt="frame"
+                        width={16}
+                        height={16}
+                        className="dark:invert "
+                      />
+                      <div className="flex flex-col ml-2">
+                        <p className="p4-medium uppercase">{option.label}</p>
+                      </div>
+                    </div>
+                  );
+                }}
+              />
+            </div>
+            <div className="flex gap-5 p3-bold ">
+              <Button
+                type="submit"
+                className="bg-light100__dark800 hover:!text-white-100 duration-200 hover:bg-primary-500 py-3 w-3/5">
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                className=" bg-light100__dark800 hover:!text-white-100 duration-200 hover:bg-primary-500 py-3 w-3/5">
+                Publish Post
+              </Button>
+            </div>
+          </form>
+        </Form>
+      ) : (
+        <Preview setIsPreview={setIsPreview} />
+      )}
+    </>
   );
 };
 
