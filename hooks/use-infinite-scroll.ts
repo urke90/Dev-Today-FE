@@ -1,27 +1,42 @@
-import { useEffect, useRef } from 'react';
+import { EQueryContentType } from '@/types/content';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 // ----------------------------------------------------------------
 
 interface IUseInfiniteScroll {
-  updatePageNumber: () => void;
-  // isLast: boolean;
+  isLoadingContent: boolean;
+  isLoadingGroups: boolean;
+  updatePage: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export const useInfiniteScroll = (updatePageNumber: () => void) => {
+// 1. svaki put moram da nakacim observe na novi item
+
+export const useInfiniteScroll = ({
+  updatePage,
+  isLoadingContent,
+  isLoadingGroups,
+}: IUseInfiniteScroll) => {
   const listItemRef = useRef<HTMLLIElement | null>(null);
+  const observer = useRef<IntersectionObserver | null>(null);
 
-  useEffect(() => {
-    if (!listItemRef?.current) return;
+  const observe = useCallback((node: Element) => {
+    console.log('node', node);
+    if (observer.current) observer.current.disconnect();
 
-    const observer = new IntersectionObserver(([item]) => {
-      if (item.isIntersecting) {
-        updatePageNumber();
-        observer.unobserve(item.target);
+    observer.current = new IntersectionObserver(([item]) => {
+      if (item.isIntersecting && !isLoadingContent && !isLoadingGroups) {
+        updatePage((prevPage) => prevPage + 1);
+        console.log('OBSERVER');
       }
     });
-
-    observer.observe(listItemRef.current);
+    if (node) observer.current.observe(node);
   }, []);
 
-  return listItemRef;
+  useEffect(() => {
+    if (listItemRef.current) {
+      observe(listItemRef.current);
+    }
+  }, [observe, listItemRef.current]);
+
+  return { listItemRef, observe };
 };

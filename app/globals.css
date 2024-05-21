@@ -137,6 +137,24 @@
     /* background-repeat: no-repeat; */
   }
   /* PROFILE */
+
+  /* SPINNING LOADER */
+  .loader {
+    @apply size-12 rounded-full inline-block relative border-[3px] border-primary-500 border-t-transparent border-r-transparent box-border;
+    animation: rotation 1s linear infinite;
+  }
+  .loader::after,
+  .loader::before {
+    content: '';
+    @apply box-border absolute inset-0 m-auto border-[3px] border-transparent border-b-white-100 border-l-white-100 rounded-full;
+    animation: rotationBack 0.5s linear infinite;
+    transform-origin: center;
+  }
+  .loader::before {
+    @apply w-8 h-8 border-primary-500 border-t-transparent border-r-transparent;
+    animation: rotation 1.5s linear infinite;
+  }
+  /* SPINNING LOADER */
 }
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
@@ -144,4 +162,22 @@ input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
   transition: background-color 5000s ease-in-out 0s !important;
   -webkit-text-fill-color: #ffff !important;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes rotationBack {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(-360deg);
+  }
 }

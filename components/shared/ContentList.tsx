@@ -11,6 +11,7 @@ import PodcastItemCard from './PodcastItemCard';
 import GroupItemCard from './GroupItemCard';
 import { fetchContent, fetchGroups } from '@/api/queries';
 import { useInfiniteScroll } from '@/hooks/use-infinite-scroll';
+import LoadingSpinner from './LoadingSpinner';
 
 // ----------------------------------------------------------------
 
@@ -44,23 +45,19 @@ const ContentList: React.FC<IContentListProps> = ({
   userId,
   userName,
 }) => {
-  const [page, setPage] = useState(1);
   const [content, setContent] = useState<IContent[]>(contentItems);
   const [groups, setGroups] = useState<IGroup[]>(groupItems);
-
-  const updatePageNumber = useCallback(() => {
-    setPage((prevPage) => prevPage + 1);
-  }, []);
-  const listItemRef = useInfiniteScroll(updatePageNumber);
+  const [page, setPage] = useState(1);
 
   const {
     isLoading: isLoadingContent,
     error: contentError,
     data: contentData,
   } = useQuery<{ content: IContent[] }>({
-    queryKey: [updateContentQueryKey(contentType)],
+    queryKey: [updateContentQueryKey(contentType), contentType, userId, page],
     queryFn: () => fetchContent(userId, contentType, page),
     enabled: contentType !== EQueryContentType.GROUPS && page !== 1,
+    retry: false,
   });
 
   const {
@@ -68,9 +65,16 @@ const ContentList: React.FC<IContentListProps> = ({
     error: groupsError,
     data: groupsData,
   } = useQuery<IGroup[]>({
-    queryKey: [EContentGroupItemsQueries.FETCH_GROUPS],
+    queryKey: [EContentGroupItemsQueries.FETCH_GROUPS, userId, page],
     queryFn: () => fetchGroups(userId, page),
     enabled: contentType === EQueryContentType.GROUPS && page !== 1,
+    retry: false,
+  });
+
+  const { listItemRef, observe } = useInfiniteScroll({
+    updatePage: setPage,
+    isLoadingContent,
+    isLoadingGroups,
   });
 
   useEffect(() => {
@@ -86,10 +90,14 @@ const ContentList: React.FC<IContentListProps> = ({
   }, [contentData]);
 
   useEffect(() => {
+    if (listItemRef.current) {
+      observe(listItemRef.current);
+    }
+  }, [content, groups, listItemRef, observe]);
+
+  useEffect(() => {
     setPage(1);
   }, [contentType]);
-
-  console.log('contentData', contentData);
 
   const renderContent = () => {
     let styles;
@@ -233,9 +241,11 @@ const ContentList: React.FC<IContentListProps> = ({
     <ul className={styles}>
       {renderedContent}
       <li ref={listItemRef} />
-      {/* <li>
-        <LoadingSpinner />
-      </li> */}
+      {(isLoadingContent || isLoadingGroups) && (
+        <li>
+          <LoadingSpinner />
+        </li>
+      )}
     </ul>
   );
 };

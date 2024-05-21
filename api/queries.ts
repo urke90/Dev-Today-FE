@@ -16,6 +16,9 @@ export const fetchContent = async (
   if (!response.ok) {
     throw new Error('Something went wrong!');
   }
+
+  console.log('response u FETCH CONTENT', await response.json());
+
   return response.json();
 };
 
