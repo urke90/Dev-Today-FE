@@ -1,7 +1,7 @@
 'use client';
 
-import ProfileMenu from './ProfileMenu';
 import NotificationMenu from './NotificationMenu';
+import ProfileMenu from './ProfileMenu';
 import SearchCommandDialog from './SearchCommandDialog';
 
 // ----------------------------------------------------------------

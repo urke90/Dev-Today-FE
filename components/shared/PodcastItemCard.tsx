@@ -6,8 +6,8 @@ import HeartIcon from '../icons/Heart';
 import { Button } from '../ui/button';
 
 import { CldImage } from 'next-cloudinary';
-import Link from 'next/link';
 import Image from 'next/image';
+import Link from 'next/link';
 
 // ----------------------------------------------------------------
 
@@ -46,7 +46,7 @@ const PodcastItemCard: React.FC<IPodcastItemCardProps> = ({
           <p className="p3-bold lg:p1-bold line-clamp-2">{title}</p>
           <Button
             variant="icon"
-            className="size-[30px] shrink-0 rounded-full bg-white-200 dark:bg-black-700"
+            className="bg-white-200 dark:bg-black-700 size-[30px] shrink-0 rounded-full"
           >
             {/* TODO: HOW TO MAKE THIS ICON RESIZE ON DIFFERENT VIEWPORTS */}
             <HeartIcon className="text-white-300" />
@@ -63,7 +63,7 @@ const PodcastItemCard: React.FC<IPodcastItemCardProps> = ({
           </ul>
         ) : null}
         <div className="flex items-center gap-[7px] lg:gap-2.5">
-          <div className="flex-center relative size-[30px] rounded-full bg-white-300 dark:bg-[#F0F1FE] lg:size-[40px]">
+          <div className="flex-center bg-white-300 relative size-[30px] rounded-full lg:size-[40px] dark:bg-[#F0F1FE]">
             <Image
               fill
               src="/assets/images/avatars/avatar-1.svg"

@@ -6,11 +6,10 @@ import HeartIcon from '../icons/Heart';
 import { Button } from '../ui/button';
 
 import { CldImage } from 'next-cloudinary';
-import Link from 'next/link';
 import Image from 'next/image';
+import Link from 'next/link';
 
-import { formatNumberWithCommas } from '@/utils/format';
-import { calculateTimeAgo } from '@/utils/format';
+import { calculateTimeAgo, formatNumberWithCommas } from '@/utils/format';
 
 // ----------------------------------------------------------------
 
@@ -68,7 +67,7 @@ const PostItemCard: React.FC<IPostItemCardProps> = ({
               </div>
             </div>
             <Button
-              className="flex-center size-[30px] shrink-0 rounded-full bg-white-200 dark:bg-black-700"
+              className="flex-center bg-white-200 dark:bg-black-700 size-[30px] shrink-0 rounded-full"
               onClick={() => alert('radi btn')}
             >
               <HeartIcon className="text-white-300" />
@@ -96,7 +95,7 @@ const PostItemCard: React.FC<IPostItemCardProps> = ({
                 <p className="subtitle-normal">{calculateTimeAgo(createdAt)}</p>
               </div>
             </div>
-            <div className="flex gap-[30px] text-white-400 dark:text-white-300">
+            <div className="text-white-400 dark:text-white-300 flex gap-[30px]">
               <span className="p3-regular">
                 {formatNumberWithCommas(viewsCount)} Views
               </span>

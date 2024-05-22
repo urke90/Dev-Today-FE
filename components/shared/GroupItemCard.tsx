@@ -1,11 +1,11 @@
 'use client';
 
-import { Button } from '../ui/button';
 import ShareIcon from '../icons/Share';
+import { Button } from '../ui/button';
 
 import { CldImage } from 'next-cloudinary';
-import Link from 'next/link';
 import Image from 'next/image';
+import Link from 'next/link';
 
 // ----------------------------------------------------------------
 
@@ -63,13 +63,13 @@ const GroupItemCard: React.FC<IGroupItemCardProps> = ({
                 />
               </div>
             ))}
-            <div className="cap-8 flex-center -ml-3 size-[30px] rounded-full bg-[#F0F1FE] text-black-700 dark:bg-black-700 dark:text-white-100">
+            <div className="cap-8 flex-center text-black-700 dark:bg-black-700 dark:text-white-100 -ml-3 size-[30px] rounded-full bg-[#F0F1FE]">
               {members.length > 120 ? '120+' : members.length}
             </div>
           </div>
           <Button
             variant="icon"
-            className="size-[30px] rounded-full bg-white-200 dark:bg-black-700"
+            className="bg-white-200 dark:bg-black-700 size-[30px] rounded-full"
           >
             <ShareIcon className="text-white-300" />
           </Button>

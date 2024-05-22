@@ -7,7 +7,7 @@ const LoadingSpinner: React.FC<ILoadingSpinnerProps> = ({ asLayout }) => {
     <div
       className={`flex items-center justify-center ${
         asLayout
-          ? 'bg-opacity/80 absolute left-0 top-0 z-50 size-full bg-black-900 backdrop-blur-md'
+          ? 'bg-opacity/80 bg-black-900 absolute left-0 top-0 z-50 size-full backdrop-blur-md'
           : ''
       }`}
     >

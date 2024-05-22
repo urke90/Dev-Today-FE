@@ -2,8 +2,8 @@
 
 import BadgeItem from './BadgeItem';
 
-import Link from 'next/link';
 import { CldImage } from 'next-cloudinary';
+import Link from 'next/link';
 
 import { parseDate } from '@/utils/format';
 
@@ -52,7 +52,7 @@ const MeetupItemCard: React.FC<IMeetupItemCardProps> = ({
             </div>
           </div>
           <div className="flex-center bg-light200__dark700 h-[56px] w-[38px] shrink-0 flex-col rounded-[6px] px-2.5 py-[5px] md:h-[58px] md:w-[54px]">
-            <span className="subtitle-normal md:p4-regular uppercase text-black-800 dark:text-white-200">
+            <span className="subtitle-normal md:p4-regular text-black-800 dark:text-white-200 uppercase">
               {month}
             </span>
             <span className="p2-bold md:d2-bold !text-primary-500">{day}</span>

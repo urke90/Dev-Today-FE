@@ -1,11 +1,11 @@
 'use client';
 
 import ArrowDownIcon from '../icons/ArrowDown';
-import { Button } from '../ui/button';
-import ProfileIcon from '../icons/Profile';
 import LogoutIcon from '../icons/Logout';
 import MoonIcon from '../icons/Moon';
+import ProfileIcon from '../icons/Profile';
 import SunIcon from '../icons/Sun';
+import { Button } from '../ui/button';
 
 import {
   Content,
@@ -15,8 +15,8 @@ import {
   Separator,
   Trigger,
 } from '@radix-ui/react-dropdown-menu';
-import Image from 'next/image';
 import { signOut } from 'next-auth/react';
+import Image from 'next/image';
 
 import { useTheme } from '@/context/ThemeProvider';
 
@@ -35,7 +35,7 @@ const ProfileMenu: React.FC<IProfileMenuProps> = (props) => {
               src="/assets/images/no-image.svg"
               alt="avatar"
               fill
-              className="rounded-lg ring-1 ring-primary-500 ring-offset-[3px] ring-offset-white-100 dark:ring-offset-black-800"
+              className="ring-primary-500 ring-offset-white-100 dark:ring-offset-black-800 rounded-lg ring-1 ring-offset-[3px]"
             />
           </div>
           <span className="p2-medium max-md:hidden">Uros Bijelic</span>
@@ -46,7 +46,7 @@ const ProfileMenu: React.FC<IProfileMenuProps> = (props) => {
         <Content
           collisionPadding={10}
           onCloseAutoFocus={(e) => e.preventDefault()}
-          className="bg-light100__dark800 shadow-header-menu z-20 mt-7 flex min-w-44 flex-col gap-5 rounded-[14px] border border-white-border p-5 data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade dark:border-black-700 max-lg:mt-6"
+          className="bg-light100__dark800 shadow-header-menu border-white-border data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade dark:border-black-700 z-20 mt-7 flex min-w-44 flex-col gap-5 rounded-[14px] border p-5 max-lg:mt-6"
         >
           <Item className="p3-medium">
             <Button className="justify-start gap-2.5">
@@ -56,25 +56,25 @@ const ProfileMenu: React.FC<IProfileMenuProps> = (props) => {
           </Item>
           <Item className="p3-medium gap-2.5">
             <Button
-              className="justify-start gap-2.5 text-primary-500"
+              className="text-primary-500 justify-start gap-2.5"
               onClick={() => signOut()}
             >
               <LogoutIcon />
               Logout
             </Button>
           </Item>
-          <Separator className="h-px bg-white-border" />
-          <Item className="bg-primary-200 flex gap-5 rounded-[15px] p-[3px] text-base font-semibold text-black-800 dark:bg-black-800 dark:text-white-200">
+          <Separator className="bg-white-border h-px" />
+          <Item className="bg-primary-200 text-black-800 dark:bg-black-800 dark:text-white-200 flex gap-5 rounded-[15px] p-[3px] text-base font-semibold">
             Interface
             <div className="flex gap-2.5">
               <Button
-                className="size-[24px] rounded-full bg-primary-100 dark:bg-black-800"
+                className="bg-primary-100 dark:bg-black-800 size-[24px] rounded-full"
                 onClick={() => setMode('light')}
               >
                 <SunIcon className="text-black-700" />
               </Button>
               <Button
-                className="size-[24px] rounded-full bg-white-200 dark:bg-black-700"
+                className="bg-white-200 dark:bg-black-700 size-[24px] rounded-full"
                 onClick={() => setMode('dark')}
               >
                 <MoonIcon className="dark:text-dark-700 text-white-300" />

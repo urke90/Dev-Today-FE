@@ -1,7 +1,7 @@
 'use client';
 
-import NotificationIcon from '../icons/Notification';
 import CheckmarkIcon from '../icons/Checkmark';
+import NotificationIcon from '../icons/Notification';
 import { Button } from '../ui/button';
 
 import {
@@ -30,7 +30,7 @@ const NotificationMenu: React.FC<INotificationMenuProps> = (props) => {
           avoidCollisions
           collisionPadding={15}
           onCloseAutoFocus={(e) => e.preventDefault()}
-          className="bg-light100__dark800 shadow-header-menu z-20 mt-7 flex w-[346px] flex-col gap-5 rounded-[14px] border border-white-border p-5 data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade dark:border-black-700 max-lg:mt-6 lg:w-96"
+          className="bg-light100__dark800 shadow-header-menu border-white-border data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade dark:border-black-700 z-20 mt-7 flex w-[346px] flex-col gap-5 rounded-[14px] border p-5 max-lg:mt-6 lg:w-96"
         >
           <Item
             onSelect={(e) => e.preventDefault()}
@@ -39,7 +39,7 @@ const NotificationMenu: React.FC<INotificationMenuProps> = (props) => {
             <span className="p1-bold">3 Notifications</span>
             <button
               onClick={() => alert('Check All clicked')}
-              className="flex-between p4-medium gap-1 rounded bg-white-200 px-2.5 py-2 text-white-400 dark:bg-black-700 dark:text-white-300 max-lg:hidden"
+              className="flex-between p4-medium bg-white-200 text-white-400 dark:bg-black-700 dark:text-white-300 gap-1 rounded px-2.5 py-2 max-lg:hidden"
             >
               <CheckmarkIcon />
               Mark All Read
@@ -58,7 +58,7 @@ const NotificationMenu: React.FC<INotificationMenuProps> = (props) => {
           >
             <button
               onClick={() => alert('Check All clicked')}
-              className="flex-center w-full gap-1 rounded bg-white-200 px-2.5 py-2 text-white-400 dark:bg-black-700 dark:text-white-300"
+              className="flex-center bg-white-200 text-white-400 dark:bg-black-700 dark:text-white-300 w-full gap-1 rounded px-2.5 py-2"
             >
               <CheckmarkIcon />
               Mark All Read
@@ -89,7 +89,7 @@ const NotificationItem: React.FC<INotificationItemProps> = ({
       className="flex items-center gap-2.5"
     >
       <div className="relative shrink-0">
-        <div className="absolute right-0 size-2 rounded-full bg-primary-500" />
+        <div className="bg-primary-500 absolute right-0 size-2 rounded-full" />
         <Image
           src={imgUrl}
           width={40}
@@ -101,7 +101,7 @@ const NotificationItem: React.FC<INotificationItemProps> = ({
       <div className="flex flex-col gap-0.5">
         <div className="flex-between">
           <span className="p3-bold">{likedBy}</span>
-          <span className="text-[10px] font-normal text-black-700 dark:text-white-300">
+          <span className="text-black-700 dark:text-white-300 text-[10px] font-normal">
             15 mins ago
           </span>
         </div>

@@ -1,34 +1,33 @@
 'use client';
 import { useTheme } from '../../context/ThemeProvider';
 
-import Image from 'next/image';
-import React, { use, useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { FormState, useForm } from 'react-hook-form';
-import { z } from 'zod';
-import toast, { Toaster } from 'react-hot-toast';
-import { useRouter } from 'next/navigation';
 import { signOut, useSession } from 'next-auth/react';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import toast, { Toaster } from 'react-hot-toast';
+import { z } from 'zod';
 
-import {
-  codingAmbitions,
-  currentKnowledge,
-  onboardingWelcome,
-  preferSkills,
-} from '@/constants';
-import { colorsOnboardingIcons } from '@/styles/index';
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
 } from '@/components/ui/form';
-import { onboardingSchema } from '@/lib/validation';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Button } from '@/components/ui/button';
+import {
+  codingAmbitions,
+  currentKnowledge,
+  onboardingWelcome,
+  preferSkills,
+} from '@/constants';
+import { onboardingSchema } from '@/lib/validation';
+import { colorsOnboardingIcons } from '@/styles/index';
 
 interface UserWithId {
   id: string;
@@ -89,7 +88,7 @@ const Onboarding = () => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({ ...values, isOnboardingCompleted: true }),
-        },
+        }
       );
       if (result?.ok) {
         router.push('/home');
@@ -262,8 +261,8 @@ const Onboarding = () => {
                                         ])
                                       : field.onChange(
                                           field.value?.filter(
-                                            (value) => value !== item.value,
-                                          ),
+                                            (value) => value !== item.value
+                                          )
                                         );
                                   }}
                                 />
@@ -315,8 +314,8 @@ const Onboarding = () => {
                                           ])
                                         : field.onChange(
                                             field.value?.filter(
-                                              (value) => value !== item.title,
-                                            ),
+                                              (value) => value !== item.title
+                                            )
                                           );
                                     }}
                                   />

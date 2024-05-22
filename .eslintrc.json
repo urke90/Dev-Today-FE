@@ -13,7 +13,8 @@
       {
         "singleQuote": true,
         "parser": "typescript",
-        "avoidEscape": true
+        "avoidEscape": true,
+        "trailingComma": "always"
       }
     ],
     "quotes": ["error", "single", { "avoidEscape": true }],

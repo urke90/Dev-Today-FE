@@ -1,6 +1,6 @@
-import * as React from 'react';
 import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
+import * as React from 'react';
 
 import { cn } from '@/lib/utils';
 
@@ -11,9 +11,9 @@ const buttonVariants = cva(
       variant: {
         base: {},
         primary:
-          'border border-primary-500 bg-primary-500 py-3 text-white-100 transition-colors',
+          'border-primary-500 bg-primary-500 text-white-100 border py-3 transition-colors',
         cancel:
-          'gap-2.5 bg-white-100 py-3 text-black-700 shadow-[0px_3px_20px_0px_rgba(0,0,0,0.04)] dark:bg-black-800 dark:text-white-100 dark:shadow-none',
+          'bg-white-100 text-black-700 dark:bg-black-800 dark:text-white-100 gap-2.5 py-3 shadow-[0px_3px_20px_0px_rgba(0,0,0,0.04)] dark:shadow-none',
         icon: 'w-auto p-0',
       },
       size: {
@@ -28,7 +28,7 @@ const buttonVariants = cva(
       variant: 'base',
       size: 'default',
     },
-  },
+  }
 );
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
@@ -46,7 +46,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {...props}
       />
     );
-  },
+  }
 );
 Button.displayName = 'Button';
 

@@ -68,7 +68,7 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
               width={110}
               height={110}
               alt="profile"
-              className="mx-auto mb-2.5 rounded-full ring-4 ring-primary-500"
+              className="ring-primary-500 mx-auto mb-2.5 rounded-full ring-4"
             />
             <h1 className="h1-medium">{userName}</h1>
             <p className="p3-regular dark:text-white-400">{email}</p>
@@ -99,7 +99,7 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
           )}
           <div className="border border-[#C5D0E6] dark:border-[#393E4F]" />
           {bio && (
-            <p className="p3-regular text-center text-white-400 dark:text-white-300"></p>
+            <p className="p3-regular text-white-400 dark:text-white-300 text-center"></p>
           )}
           {linkedinLink || twitterLink || instagramLink}
           <p className="p3-medium text-white-300 dark:text-white-400">

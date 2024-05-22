@@ -1,7 +1,6 @@
 import EditProfile from '@/components/profile/EditProfile';
-import { auth } from '@/app/api/auth/[...nextauth]/route';
-import { typedFetch } from '@/utils/api';
 import { IUserResponse } from '@/types/user';
+import { typedFetch } from '@/utils/api';
 
 // ----------------------------------------------------------------
 

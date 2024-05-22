@@ -74,7 +74,7 @@ const SidebarContentCardItem: React.FC<ISidebarContentCardItemProps> = ({
             <p className="subtitle-normal">{author}</p>
           </div>
         </div>
-        <ArrowRightIcon className="shrink-0 text-white-400" />
+        <ArrowRightIcon className="text-white-400 shrink-0" />
       </Link>
     </li>
   );

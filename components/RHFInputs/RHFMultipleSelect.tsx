@@ -38,10 +38,7 @@ const RHFMultipleSelect: React.FC<IRHFMultipleSelectProps> = ({
   hideDropDown,
 }) => {
   const { control } = useFormContext();
-  const createOption = (label: string) => ({
-    label,
-    value: label,
-  });
+
   return (
     <FormField
       control={control}
