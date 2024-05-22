@@ -1,4 +1,4 @@
-import type { IUser } from './user';
+import type { IProfileUser } from './user';
 
 export enum EContentType {
   POSTS = 'posts',
@@ -18,9 +18,9 @@ export interface IContent {
   type?: EContentType;
   createdAt: Date;
   updatedAt?: Date;
-  author: IUser;
+  author: IProfileUser;
   authorId: string;
-  likedBy: IUser[];
+  likedBy: IProfileUser[];
   likes: ILike[];
   title?: string;
   contentDescription?: string;
@@ -39,7 +39,7 @@ export interface IContent {
 }
 
 interface ILike {
-  user: IUser;
+  user: IProfileUser;
   userId: string;
   content: IContent;
   contentId: string;

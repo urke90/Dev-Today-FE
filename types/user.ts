@@ -2,7 +2,7 @@ export enum EUserRole {
   USER = 'USER',
   ADMIN = 'ADMIN',
 }
-export interface IUser {
+export interface IProfileUser {
   id: string;
   userName: string;
   name: string;
@@ -23,6 +23,14 @@ export interface IUser {
   role: EUserRole;
   followers: string[];
   following: string[];
+  contents: IRecentContent[];
+}
+
+export interface IRecentContent {
+  id: string;
+  title: string;
+  contentDescription: string;
+  coverImage: string | null;
 }
 
 export interface IUserLatestContents {
@@ -33,7 +41,7 @@ export interface IUserLatestContents {
 }
 
 export interface IUserResponse {
-  user: IUser;
+  user: IProfileUser;
   contents: IUserLatestContents[];
   isFollowing: boolean;
 }

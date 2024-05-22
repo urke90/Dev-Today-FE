@@ -1,3 +1,4 @@
+import type { IRecentContent } from '@/types/user';
 import ArrowRightIcon from '../icons/ArrowRight';
 
 import Image from 'next/image';
@@ -7,14 +8,18 @@ import Link from 'next/link';
 
 interface ISidebarContentCardProps {
   title: string;
-  items: any[];
+  author: string;
+  items: IRecentContent[];
 }
 
 /**
  * This card will be used for rendering PODCAST or POST items in the right sidebar.
  * For Meetups, use MeetupItemCard instead.
  */
-const SidebarContentCard: React.FC<ISidebarContentCardProps> = ({ title }) => {
+const SidebarContentCard: React.FC<ISidebarContentCardProps> = ({
+  title,
+  items,
+}) => {
   return (
     <div className="right-sidebar-item">
       <div className="flex items-center gap-[3px]">
@@ -22,38 +27,31 @@ const SidebarContentCard: React.FC<ISidebarContentCardProps> = ({ title }) => {
         <ArrowRightIcon className="text-black-800 dark:text-white-200" />
       </div>
       <ul className="flex flex-col gap-5">
-        <SidebarContentCardItem
-          imgUrl="/assets/images/post-example.svg"
-          title="The Code Breaker's Toolkit: Unraveling Challenges"
-          author="by Liam Debugger"
-          link="#"
-        />
-        <SidebarContentCardItem
-          imgUrl="/assets/images/post-example.svg"
-          title="The Code Breaker's Toolkit: Unraveling Challenges"
-          author="by Liam Debugger"
-          link="#"
-        />
-        <SidebarContentCardItem
-          imgUrl="/assets/images/post-example.svg"
-          title="The Code Breaker's Toolkit: Unraveling Challenges"
-          author="by Liam Debugger"
-          link="#"
-        />
+        {items.length > 0
+          ? items.map(({ id, title, contentDescription, coverImage }) => (
+              <SidebarContentCardItem
+                key={id}
+                coverImage={coverImage}
+                title={title}
+                author={contentDescription}
+                link={id}
+              />
+            ))
+          : null}
       </ul>
     </div>
   );
 };
 
 interface ISidebarContentCardItemProps {
-  imgUrl: string;
+  coverImage: string | null;
   title: string;
   author: string;
   link: string;
 }
 
 const SidebarContentCardItem: React.FC<ISidebarContentCardItemProps> = ({
-  imgUrl,
+  coverImage,
   title,
   author,
   link,
@@ -63,7 +61,7 @@ const SidebarContentCardItem: React.FC<ISidebarContentCardItemProps> = ({
       <Link href={link} className="flex">
         <div className="flex gap-3.5">
           <Image
-            src={imgUrl}
+            src={coverImage || '/assets/images/no-image.svg'}
             alt="post"
             width={58}
             height={58}

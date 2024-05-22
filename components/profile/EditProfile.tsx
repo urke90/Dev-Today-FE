@@ -21,13 +21,13 @@ import z from 'zod';
 import RHFInput from '@/components/RHFInputs/RHFInput';
 import { Form } from '@/components/ui/form';
 import { updateProfileSchema } from '@/lib/validation';
-import type { IUser } from '@/types/user';
+import type { IProfileUser } from '@/types/user';
 import { typedFetch } from '@/utils/api';
 
 // ----------------------------------------------------------------
 
 interface IEditProfileProps {
-  user: IUser;
+  user: IProfileUser;
 }
 
 const EditProfile: React.FC<IEditProfileProps> = ({ user }) => {

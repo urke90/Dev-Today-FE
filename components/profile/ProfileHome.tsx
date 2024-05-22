@@ -10,13 +10,13 @@ import Image from 'next/image';
 
 import { EQueryContentType, IContent } from '@/types/content';
 import type { IGroup } from '@/types/group';
-import type { IUser, IUserLatestContents } from '@/types/user';
+import type { IProfileUser, IUserLatestContents } from '@/types/user';
 import { calculateTimeAgo } from '@/utils/format';
 
 // ----------------------------------------------------------------
 
 interface IProfileHomeProps {
-  user: IUser;
+  user: IProfileUser;
   contentType: EQueryContentType;
   latestContent: IUserLatestContents[];
   isPersonalProfile?: boolean;
@@ -48,6 +48,7 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
     linkedinLink,
     twitterLink,
     instagramLink,
+    contents,
   } = user ?? {};
 
   return (
@@ -121,7 +122,11 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
       </main>
       <aside className="right-sidebar">
         <div className="max-xl:hidden">
-          <SidebarContentCard title="Recent Posts" items={[]} />
+          <SidebarContentCard
+            title="Recent Posts"
+            items={contents}
+            author={name}
+          />
         </div>
         <div className="right-sidebar-item">
           <div>
