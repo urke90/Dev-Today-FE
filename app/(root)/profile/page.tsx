@@ -31,7 +31,7 @@ const MyProfilePage: React.FC<IMyProfilePageProps> = async ({
     `/user/${session?.user.id}`
   );
 
-  let content: { content: IContent[] } = { content: [] };
+  let content: IContent[] = [];
   let groupContent: IGroup[] = [];
   if (contentType === EQueryContentType.GROUPS) {
     groupContent = await typedFetch(`/user/${session.user.id}/groups`);
@@ -49,7 +49,7 @@ const MyProfilePage: React.FC<IMyProfilePageProps> = async ({
         latestContent={userResult.contents}
         isFollowing={userResult.isFollowing}
         contentType={contentType}
-        contentItems={content.content}
+        contentItems={content}
         groupItems={groupContent}
       />
     </section>

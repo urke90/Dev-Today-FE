@@ -8,7 +8,7 @@ export const fetchContent = async (
   userId: string,
   contentType: EQueryContentType,
   page: number
-): Promise<{ content: IContent[] }> => {
+): Promise<IContent[]> => {
   const response = await fetch(
     BASE_API_URL + `/user/${userId}/content?type=${contentType}&page=${page}`
   );
@@ -16,8 +16,6 @@ export const fetchContent = async (
   if (!response.ok) {
     throw new Error('Something went wrong!');
   }
-
-  console.log('response u FETCH CONTENT', await response.json());
 
   return response.json();
 };

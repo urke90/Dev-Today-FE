@@ -6,7 +6,9 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 interface IUseInfiniteScroll {
   isLoadingContent: boolean;
   isLoadingGroups: boolean;
-  updatePage: React.Dispatch<React.SetStateAction<number>>;
+  updatePage: () => void;
+  shouldFetchContent: boolean;
+  shouldFetchGroups: boolean;
 }
 
 // 1. svaki put moram da nakacim observe na novi item
@@ -15,28 +17,23 @@ export const useInfiniteScroll = ({
   updatePage,
   isLoadingContent,
   isLoadingGroups,
+  shouldFetchContent,
+  shouldFetchGroups,
 }: IUseInfiniteScroll) => {
-  const listItemRef = useRef<HTMLLIElement | null>(null);
   const observer = useRef<IntersectionObserver | null>(null);
+  const lastListItemRef = useCallback(
+    (node: HTMLLIElement) => {
+      if (isLoadingContent || isLoadingGroups) return;
+      if (observer.current) observer.current.disconnect(); // if we have to add to different elemnts
+      observer.current = new IntersectionObserver(([entry]) => {
+        if (entry.isIntersecting && (shouldFetchContent || shouldFetchGroups)) {
+          updatePage();
+        }
+      });
+      if (node) observer.current.observe(node);
+    },
+    [isLoadingContent, isLoadingGroups, shouldFetchContent, shouldFetchGroups]
+  );
 
-  const observe = useCallback((node: Element) => {
-    console.log('node', node);
-    if (observer.current) observer.current.disconnect();
-
-    observer.current = new IntersectionObserver(([item]) => {
-      if (item.isIntersecting && !isLoadingContent && !isLoadingGroups) {
-        updatePage((prevPage) => prevPage + 1);
-        console.log('OBSERVER');
-      }
-    });
-    if (node) observer.current.observe(node);
-  }, []);
-
-  useEffect(() => {
-    if (listItemRef.current) {
-      observe(listItemRef.current);
-    }
-  }, [observe, listItemRef.current]);
-
-  return { listItemRef, observe };
+  return { lastListItemRef };
 };

@@ -1,21 +1,19 @@
 'use client';
 
-import { useEffect, useState, useCallback, memo } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { fetchContent, fetchGroups } from '@/api/queries';
+import { EContentGroupItemsQueries } from '@/constants/react-query';
+import { useInfiniteScroll } from '@/hooks/use-infinite-scroll';
 import { EQueryContentType, type IContent } from '@/types/content';
 import type { IGroup } from '@/types/group';
-import { EContentGroupItemsQueries } from '@/constants/react-query';
-import PostItemCard from './PostItemCard';
+import { useQuery } from '@tanstack/react-query';
+import { memo, useCallback, useEffect, useState } from 'react';
+import GroupItemCard from './GroupItemCard';
+import LoadingSpinner from './LoadingSpinner';
 import MeetupItemCard from './MeetupItemCard';
 import PodcastItemCard from './PodcastItemCard';
-import GroupItemCard from './GroupItemCard';
-import { fetchContent, fetchGroups } from '@/api/queries';
-import { useInfiniteScroll } from '@/hooks/use-infinite-scroll';
-import LoadingSpinner from './LoadingSpinner';
+import PostItemCard from './PostItemCard';
 
 // ----------------------------------------------------------------
-
-// ako je fetch u toku treba da se disable intersection observer
 
 const updateContentQueryKey = (contentType: EQueryContentType) => {
   if (contentType === EQueryContentType.GROUPS) {
@@ -49,14 +47,27 @@ const ContentList: React.FC<IContentListProps> = ({
   const [groups, setGroups] = useState<IGroup[]>(groupItems);
   const [page, setPage] = useState(1);
 
+  const shouldFetchContent =
+    content.length % 6 === 0 &&
+    content.length !== 0 &&
+    contentType !== EQueryContentType.GROUPS;
+  const shouldFetchGroups =
+    groups.length % 6 === 0 &&
+    groups.length !== 0 &&
+    contentType === EQueryContentType.GROUPS;
+
+  const updatePage = useCallback(() => {
+    setPage((prevPage) => prevPage + 1);
+  }, []);
+
   const {
     isLoading: isLoadingContent,
     error: contentError,
     data: contentData,
-  } = useQuery<{ content: IContent[] }>({
+  } = useQuery<IContent[]>({
     queryKey: [updateContentQueryKey(contentType), contentType, userId, page],
     queryFn: () => fetchContent(userId, contentType, page),
-    enabled: contentType !== EQueryContentType.GROUPS && page !== 1,
+    enabled: shouldFetchContent && page !== 1,
     retry: false,
   });
 
@@ -67,14 +78,16 @@ const ContentList: React.FC<IContentListProps> = ({
   } = useQuery<IGroup[]>({
     queryKey: [EContentGroupItemsQueries.FETCH_GROUPS, userId, page],
     queryFn: () => fetchGroups(userId, page),
-    enabled: contentType === EQueryContentType.GROUPS && page !== 1,
+    enabled: shouldFetchGroups && page !== 1,
     retry: false,
   });
 
-  const { listItemRef, observe } = useInfiniteScroll({
-    updatePage: setPage,
+  const { lastListItemRef } = useInfiniteScroll({
+    updatePage,
     isLoadingContent,
     isLoadingGroups,
+    shouldFetchContent,
+    shouldFetchGroups,
   });
 
   useEffect(() => {
@@ -85,15 +98,9 @@ const ContentList: React.FC<IContentListProps> = ({
 
   useEffect(() => {
     if (contentData) {
-      setContent((prevContent) => [...prevContent, ...contentData.content]);
+      setContent((prevContent) => [...prevContent, ...contentData]);
     }
   }, [contentData]);
-
-  useEffect(() => {
-    if (listItemRef.current) {
-      observe(listItemRef.current);
-    }
-  }, [content, groups, listItemRef, observe]);
 
   useEffect(() => {
     setPage(1);
@@ -104,99 +111,107 @@ const ContentList: React.FC<IContentListProps> = ({
     let renderedContent;
 
     switch (contentType) {
-      case EQueryContentType.POSTS: {
-        styles = 'flex flex-col flax-wrap gap-5';
-        renderedContent = content?.map(
-          ({
-            id,
-            title = '',
-            coverImage = '',
-            contentDescription = '',
-            storyTags,
-            createdAt,
-            viewsCount,
-            likesCount,
-            commentsCount,
-          }) => (
-            <PostItemCard
-              key={id}
-              id={id}
-              coverImage={coverImage}
-              title={title}
-              description={contentDescription}
-              tags={storyTags}
-              createdAt={createdAt}
-              author={userName}
-              viewsCount={viewsCount}
-              likesCount={likesCount}
-              commentsCount={commentsCount}
-            />
-          )
-        );
-      }
-      case EQueryContentType.MEETUPS: {
-        styles = 'flex flex-col flax-wrap gap-5';
-        renderedContent = content?.map(
-          ({
-            id,
-            meetUpDate = new Date(),
-            title = '',
-            contentDescription = '',
-            coverImage,
-            storyTags,
-          }) => (
-            <MeetupItemCard
-              key={id}
-              id={id}
-              coverImage={coverImage}
-              title={title}
-              description={contentDescription}
-              tags={storyTags}
-              location="Innovation Hub, Austin"
-              meetupDate={meetUpDate}
-            />
-          )
-        );
-      }
-      case EQueryContentType.PODCASTS: {
-        styles = 'grid grid-cols-1 md:grid-cols-2 gap-5';
-        renderedContent = content?.map(
-          ({
-            id,
-            coverImage,
-            title = '',
-            contentDescription = '',
-            storyTags,
-            createdAt,
-          }) => (
-            <PodcastItemCard
-              key={id}
-              id={id}
-              coverImage={coverImage}
-              title={title}
-              description={contentDescription}
-              tags={storyTags}
-              author={userName}
-              createdAt={createdAt}
-            />
-          )
-        );
-      }
-      case EQueryContentType.GROUPS: {
-        styles = 'grid grid-cols-1 md:grid-cols-2 gap-5';
-        renderedContent = groups?.map(
-          ({ id, groupBio, coverImg, members, name }) => (
-            <GroupItemCard
-              key={id}
-              id={id}
-              coverImage={coverImg}
-              title={name}
-              description={groupBio}
-              members={members}
-            />
-          )
-        );
-      }
+      case EQueryContentType.POSTS:
+        {
+          styles = 'flex flex-col flex-wrap gap-5';
+          renderedContent = content?.map(
+            ({
+              id,
+              title = '',
+              coverImage = '',
+              contentDescription = '',
+              storyTags,
+              createdAt,
+              viewsCount,
+              likesCount,
+              commentsCount,
+            }) => (
+              <PostItemCard
+                key={id}
+                id={id}
+                coverImage={coverImage}
+                title={title}
+                description={contentDescription}
+                tags={storyTags}
+                createdAt={createdAt}
+                author={userName}
+                viewsCount={viewsCount}
+                likesCount={likesCount}
+                commentsCount={commentsCount}
+              />
+            )
+          );
+        }
+        break;
+      case EQueryContentType.MEETUPS:
+        {
+          styles = 'flex flex-col flax-wrap gap-5';
+          renderedContent = content?.map(
+            ({
+              id,
+              meetUpDate = new Date(),
+              title = '',
+              contentDescription = '',
+              coverImage,
+              storyTags,
+            }) => (
+              <MeetupItemCard
+                key={id}
+                id={id}
+                coverImage={coverImage}
+                title={title}
+                description={contentDescription}
+                tags={storyTags}
+                location="Innovation Hub, Austin"
+                meetupDate={meetUpDate}
+              />
+            )
+          );
+        }
+        break;
+      case EQueryContentType.PODCASTS:
+        {
+          styles = 'grid grid-cols-1 md:grid-cols-2 gap-5';
+          renderedContent = content?.map(
+            ({
+              id,
+              coverImage,
+              title = '',
+              contentDescription = '',
+              storyTags,
+              createdAt,
+            }) => (
+              <PodcastItemCard
+                key={id}
+                id={id}
+                coverImage={coverImage}
+                title={title}
+                description={contentDescription}
+                tags={storyTags}
+                author={userName}
+                createdAt={createdAt}
+              />
+            )
+          );
+        }
+        break;
+      case EQueryContentType.GROUPS:
+        {
+          styles = 'grid grid-cols-1 md:grid-cols-2 gap-5';
+          renderedContent = groups?.map(
+            ({ id, groupBio, coverImg, members, name }) => (
+              <GroupItemCard
+                key={id}
+                id={id}
+                coverImage={coverImg}
+                title={name}
+                description={groupBio}
+                members={members}
+              />
+            )
+          );
+        }
+        break;
       default: {
         styles = 'flex flex-col flax-wrap gap-5';
         renderedContent = content?.map(
@@ -240,7 +255,7 @@ const ContentList: React.FC<IContentListProps> = ({
   return (
     <ul className={styles}>
       {renderedContent}
-      <li ref={listItemRef} />
+      <li ref={lastListItemRef} />
       {(isLoadingContent || isLoadingGroups) && (
         <li>
           <LoadingSpinner />
