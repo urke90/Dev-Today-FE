@@ -40,3 +40,19 @@ export const profileSchema = z.object({
   followers: z.number().optional(),
   following: z.number().optional(),
 });
+
+export const createPostSchema = z.object({
+  title: z.string().min(3).max(100),
+  postType: z.enum(['posts', 'meetups', 'podcasts']),
+  selectGroup: z.object({
+    value: z.string().min(1),
+    label: z.string().min(1),
+  }),
+  coverImage: z.string().optional(),
+  meetupLocation: z.string().min(1),
+  meetupDate: z.date(),
+  podcastAudioFile: z.string().optional(),
+  audioTitle: z.string().min(1),
+  content: z.string().min(1),
+  tags: z.array(z.object({ label: z.string().min(1).max(5) })),
+});

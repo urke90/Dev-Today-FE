@@ -84,3 +84,18 @@ export const preferSkills = [
   { title: 'GraphQL' },
   { title: 'Tailwind CSS' },
 ];
+
+export const postTypes = [
+  {
+    title: 'post',
+    image: '/assets/icons/frame-white.svg',
+  },
+  {
+    title: 'meetups',
+    image: '/assets/icons/calendar-white.svg',
+  },
+  {
+    title: 'podcasts',
+    image: '/assets/icons/podcast.svg',
+  },
+];
