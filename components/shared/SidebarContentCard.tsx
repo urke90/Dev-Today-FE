@@ -19,6 +19,7 @@ interface ISidebarContentCardProps {
 const SidebarContentCard: React.FC<ISidebarContentCardProps> = ({
   title,
   items,
+  author,
 }) => {
   return (
     <div className="right-sidebar-item">
@@ -28,12 +29,12 @@ const SidebarContentCard: React.FC<ISidebarContentCardProps> = ({
       </div>
       <ul className="flex flex-col gap-5">
         {items.length > 0
-          ? items.map(({ id, title, contentDescription, coverImage }) => (
+          ? items.map(({ id, title, coverImage }) => (
               <SidebarContentCardItem
                 key={id}
                 coverImage={coverImage}
                 title={title}
-                author={contentDescription}
+                author={author}
                 link={id}
               />
             ))
@@ -69,7 +70,7 @@ const SidebarContentCardItem: React.FC<ISidebarContentCardItemProps> = ({
           />
           <div className="flex flex-col gap-[6px]">
             <p className="p4-medium">{title}</p>
-            <p className="subtitle-normal">{author}</p>
+            <p className="subtitle-normal">By {author}</p>
           </div>
         </div>
         <ArrowRightIcon className="text-white-400 shrink-0" />

@@ -1,12 +1,12 @@
-import Link from 'next/link';
 import Image from 'next/image';
+import Link from 'next/link';
 
 // ----------------------------------------------------------------
 
 interface ISocialMediaLinksProps {
-  linkedinLink?: string | null;
-  twitterLink?: string | null;
-  instagramLink?: string | null;
+  linkedinLink: string | null;
+  twitterLink: string | null;
+  instagramLink: string | null;
 }
 
 const SocialMediaLinks: React.FC<ISocialMediaLinksProps> = ({

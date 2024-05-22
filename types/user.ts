@@ -33,16 +33,9 @@ export interface IRecentContent {
   coverImage: string | null;
 }
 
-export interface IUserLatestContents {
-  id: string;
-  title: string;
-  contentDescription: string;
-  coverImage: string | null;
-}
-
 export interface IUserResponse {
   user: IProfileUser;
-  contents: IUserLatestContents[];
+  contents: IRecentContent[];
   isFollowing: boolean;
 }
 

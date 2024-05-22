@@ -1,5 +1,6 @@
 import PerformanceItem from './PerformanceItem';
 import ProfileSidebarInfo from './ProfileSidebarInfo';
+import SocialMediaLinks from './SocialMediaLinks';
 
 import BadgeItem from '../shared/BadgeItem';
 import ContentList from '../shared/ContentList';
@@ -10,7 +11,7 @@ import Image from 'next/image';
 
 import { EQueryContentType, IContent } from '@/types/content';
 import type { IGroup } from '@/types/group';
-import type { IProfileUser, IUserLatestContents } from '@/types/user';
+import type { IProfileUser, IRecentContent } from '@/types/user';
 import { calculateTimeAgo } from '@/utils/format';
 
 // ----------------------------------------------------------------
@@ -18,7 +19,7 @@ import { calculateTimeAgo } from '@/utils/format';
 interface IProfileHomeProps {
   user: IProfileUser;
   contentType: EQueryContentType;
-  latestContent: IUserLatestContents[];
+  latestContent: IRecentContent[];
   isPersonalProfile?: boolean;
   isFollowing?: boolean;
   contentItems: IContent[];
@@ -87,14 +88,9 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
             </p>
           </div>
           {preferredSkills.length > 0 && (
-            <ul className="flex flex-wrap gap-1 ">
+            <ul className="flex flex-wrap gap-1">
               {preferredSkills.map((skill) => (
-                <BadgeItem
-                  key={skill}
-                  isTechStackItem
-                  title={skill}
-                  classNames="h-[22px] grow"
-                />
+                <BadgeItem key={skill} isTechStackItem title={skill} />
               ))}
             </ul>
           )}
@@ -102,7 +98,15 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
           {bio && (
             <p className="p3-regular text-white-400 dark:text-white-300 text-center"></p>
           )}
-          {linkedinLink || twitterLink || instagramLink}
+          {(linkedinLink || twitterLink || instagramLink) && (
+            <div className="gap-6 flex-center">
+              <SocialMediaLinks
+                linkedinLink={linkedinLink}
+                twitterLink={twitterLink}
+                instagramLink={instagramLink}
+              />
+            </div>
+          )}
           <p className="p3-medium text-white-300 dark:text-white-400">
             Joined {calculateTimeAgo(createdAt)}
           </p>
