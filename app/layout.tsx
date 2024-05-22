@@ -1,12 +1,14 @@
-import type { Metadata } from 'next';
-import { Inter, IBM_Plex_Sans } from 'next/font/google';
 import { ThemeProvider } from '../context/ThemeProvider';
+import SessionProvider from '../context/SessionProvider';
+
+import type { Metadata } from 'next';
+import { IBM_Plex_Sans, Inter } from 'next/font/google';
 import { cookies } from 'next/headers';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth-options';
-import SessionProvider from '../context/SessionProvider';
-import QueryProvider from '@/context/QueryProvider';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+
+import { authOptions } from '@/lib/auth-options';
+import QueryProvider from '@/context/QueryProvider';
 
 import './globals.css';
 
@@ -37,9 +39,9 @@ export default async function RootLayout({
         <QueryProvider>
           <html lang="en" className={`${theme}`}>
             <body
-              className={`${ibmPlexSans.className} min-h-screen dark:bg-black-900 bg-white-200`}
+              className={`${ibmPlexSans.className} min-h-screen bg-white-200 dark:bg-black-900`}
             >
-              <main className="max-w-screen-xxl mx-auto">{children}</main>
+              <main className="mx-auto max-w-screen-xxl">{children}</main>
               <ReactQueryDevtools />
             </body>
           </html>

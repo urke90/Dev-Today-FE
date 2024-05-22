@@ -1,9 +1,11 @@
 'use client';
 
-import { CldImage } from 'next-cloudinary';
 import BadgeItem from './BadgeItem';
+
 import HeartIcon from '../icons/Heart';
 import { Button } from '../ui/button';
+
+import { CldImage } from 'next-cloudinary';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -32,9 +34,9 @@ const PodcastItemCard: React.FC<IPodcastItemCardProps> = ({
     <li>
       <Link
         href={'/podcasts/' + id}
-        className="flex flex-col gap-3.5 lg:gap-[18px] py-5 px-3.5 lg:p-4 bg-light100__dark800 rounded-[10px] lg:rounded-2xl"
+        className="bg-light100__dark800 flex flex-col gap-3.5 rounded-[10px] px-3.5 py-5 lg:gap-[18px] lg:rounded-2xl lg:p-4"
       >
-        <div className="flex gap-2 lg:flex-between">
+        <div className="lg:flex-between flex gap-2">
           <CldImage
             src={coverImage || '/assets/images/no-image.svg'}
             width={50}
@@ -44,7 +46,7 @@ const PodcastItemCard: React.FC<IPodcastItemCardProps> = ({
           <p className="p3-bold lg:p1-bold line-clamp-2">{title}</p>
           <Button
             variant="icon"
-            className="dark:bg-black-700 bg-white-200 size-[30px] shrink-0 rounded-full"
+            className="size-[30px] shrink-0 rounded-full bg-white-200 dark:bg-black-700"
           >
             {/* TODO: HOW TO MAKE THIS ICON RESIZE ON DIFFERENT VIEWPORTS */}
             <HeartIcon className="text-white-300" />
@@ -61,7 +63,7 @@ const PodcastItemCard: React.FC<IPodcastItemCardProps> = ({
           </ul>
         ) : null}
         <div className="flex items-center gap-[7px] lg:gap-2.5">
-          <div className="relative size-[30px] bg-white-300 dark:bg-[#F0F1FE] lg:size-[40px] rounded-full flex-center">
+          <div className="flex-center relative size-[30px] rounded-full bg-white-300 dark:bg-[#F0F1FE] lg:size-[40px]">
             <Image
               fill
               src="/assets/images/avatars/avatar-1.svg"

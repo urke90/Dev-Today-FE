@@ -5,9 +5,9 @@ interface ILoadingSpinnerProps {
 const LoadingSpinner: React.FC<ILoadingSpinnerProps> = ({ asLayout }) => {
   return (
     <div
-      className={`flex justify-center items-center ${
+      className={`flex items-center justify-center ${
         asLayout
-          ? 'absolute w-full h-full top-0 left-0 z-50 backdrop-blur-md bg-black-900 bg-opacity-80'
+          ? 'bg-opacity/80 absolute left-0 top-0 z-50 size-full bg-black-900 backdrop-blur-md'
           : ''
       }`}
     >

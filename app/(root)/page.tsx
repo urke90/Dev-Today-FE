@@ -1,6 +1,7 @@
-import { authOptions } from '@/lib/auth-options';
 import { getServerSession } from 'next-auth';
 import React from 'react';
+
+import { authOptions } from '@/lib/auth-options';
 
 const Home = async () => {
   const session = await getServerSession(authOptions);

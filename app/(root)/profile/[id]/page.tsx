@@ -25,7 +25,7 @@ const UserProfilePage: React.FC<IUserProfilePageProps> = async ({
   const page = parseSearchParams(searchParams.page, '1');
   const contentType = parseSearchParams<EQueryContentType>(
     searchParams.type,
-    EQueryContentType.POSTS
+    EQueryContentType.POSTS,
   );
 
   const userResult = await typedFetch<IUserResponse>(`/user/${id}`);
@@ -36,7 +36,7 @@ const UserProfilePage: React.FC<IUserProfilePageProps> = async ({
     groupContent = await typedFetch(`/user/${id}/groups`);
   } else {
     content = await typedFetch(
-      `/user/${id}/content?type=${contentType}&page=${page}`
+      `/user/${id}/content?type=${contentType}&page=${page}`,
     );
   }
 

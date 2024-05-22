@@ -66,7 +66,7 @@ export const authOptions = {
                 name: profile.name,
                 avatarImg: profile.picture,
               }),
-            }
+            },
           );
 
           const user = await result.json();
@@ -89,7 +89,7 @@ export const authOptions = {
             headers: {
               'Content-Type': 'application/json',
             },
-          }
+          },
         );
         const resultObject = await result.json();
         if (!resultObject) return null;

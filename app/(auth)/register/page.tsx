@@ -4,6 +4,10 @@ import React from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { set, z } from 'zod';
+import Link from 'next/link';
+import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+
 import {
   Form,
   FormControl,
@@ -14,14 +18,12 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import Link from 'next/link';
 import { signInSchema } from '@/lib/validation';
 import { Separator } from '@/components/ui/separator';
-import { signIn } from 'next-auth/react';
 import { regWelcome } from '@/constants';
 import { colorsRegister } from '@/styles/index';
+
 import { useTheme } from '@/app/context/ThemeProvider';
-import { useRouter } from 'next/navigation';
 
 const Register = () => {
   const { setMode, mode } = useTheme();
@@ -68,8 +70,8 @@ const Register = () => {
   }
 
   return (
-    <div className="bg-white-100 dark:bg-black-800 min-h-screen flex">
-      <div className="hidden lg:w-1/2 p-16 lg:flex flex-col items-center">
+    <div className="flex min-h-screen bg-white-100 dark:bg-black-800">
+      <div className="hidden flex-col items-center p-16 lg:flex lg:w-1/2">
         <div className="w-full">
           <Image
             onClick={() =>
@@ -96,10 +98,10 @@ const Register = () => {
               return (
                 <div
                   key={index + 1}
-                  className="bg-white-100 dark:bg-black-700 p-5 flex gap-5 items-center rounded-lg"
+                  className="flex items-center gap-5 rounded-lg bg-white-100 p-5 dark:bg-black-700"
                 >
                   <div
-                    className={`dark:bg-black-800 ${colorsRegister[index]} h-[60px] p-5 rounded-md`}
+                    className={`dark:bg-black-800 ${colorsRegister[index]} h-[60px] rounded-md p-5`}
                   >
                     <Image
                       src={
@@ -120,9 +122,9 @@ const Register = () => {
         </div>
       </div>
       <div
-        className="text-white-100 flex flex-col pt-10 lg:pt-44 lg:justify-start items-center 
-        dark:bg-black-900 bg-white-200
-         px-4 md:px-10 xl:px-28  w-full lg:w-1/2"
+        className="flex w-full flex-col items-center bg-white-200 px-4 pt-10 
+        text-white-100 dark:bg-black-900
+         md:px-10 lg:w-1/2 lg:justify-start  lg:pt-44 xl:px-28"
       >
         <div className="w-full lg:hidden">
           <Image
@@ -134,13 +136,13 @@ const Register = () => {
             alt="logo"
             width={147}
             height={30}
-            className="mb-14 mx-auto"
+            className="mx-auto mb-14"
           />
         </div>
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-5 w-full "
+            className="w-full space-y-5 "
           >
             <FormField
               control={form.control}
@@ -151,7 +153,7 @@ const Register = () => {
                   <FormControl>
                     <Input
                       placeholder="Full Name"
-                      className="h-11 rounded placeholder:font-normal border-[1px] dark:border-none border-gray-300/40 dark:bg-black-800 bg-white-100  p3-medium focus-visible:ring-0 focus-visible:ring-offset-0 focus:ring-offset-0 "
+                      className="p3-medium h-11 rounded border border-gray-300/40 bg-white-100 placeholder:font-normal focus:ring-offset-0  focus-visible:ring-0 focus-visible:ring-offset-0 dark:border-none dark:bg-black-800 "
                       {...field}
                     />
                   </FormControl>
@@ -168,7 +170,7 @@ const Register = () => {
                   <FormControl>
                     <Input
                       placeholder="Enter your email address"
-                      className="h-11 rounded placeholder:font-normal border-[1px] dark:border-none border-gray-300/40 dark:bg-black-800 bg-white-100  p3-medium focus-visible:ring-0 focus-visible:ring-offset-0 focus:ring-offset-0 "
+                      className="p3-medium h-11 rounded border border-gray-300/40 bg-white-100 placeholder:font-normal focus:ring-offset-0  focus-visible:ring-0 focus-visible:ring-offset-0 dark:border-none dark:bg-black-800 "
                       {...field}
                     />
                   </FormControl>
@@ -186,7 +188,7 @@ const Register = () => {
                     <Input
                       placeholder="Enter your password"
                       type="password"
-                      className="h-11 rounded placeholder:font-normal border-[1px] dark:border-none border-gray-300/40 dark:bg-black-800 bg-white-100  p3-medium focus-visible:ring-0 focus-visible:ring-offset-0 focus:ring-offset-0 "
+                      className="p3-medium h-11 rounded border border-gray-300/40 bg-white-100 placeholder:font-normal focus:ring-offset-0  focus-visible:ring-0 focus-visible:ring-offset-0 dark:border-none dark:bg-black-800 "
                       {...field}
                     />
                   </FormControl>
@@ -196,26 +198,26 @@ const Register = () => {
             />
             <Button
               type="submit"
-              className="w-full bg-primary-500 text-[14px] p2-bold "
+              className="p2-bold w-full bg-primary-500 text-[14px] "
             >
               Next
             </Button>
             <Link
               href="/login"
-              className="text-white-500/70 block cursor-pointer text-center hover:underline"
+              className="block cursor-pointer text-center text-white-500/70 hover:underline"
             >
               Already have an account?
-              <span className="text-[16px] ml-1 text-primary-500">Sign in</span>
+              <span className="ml-1 text-[16px] text-primary-500">Sign in</span>
             </Link>
             <div className="flex items-center justify-between">
-              <Separator className="w-2/5  dark:bg-black-800 bg-black-700/10" />
+              <Separator className="w-2/5  bg-black-700/10 dark:bg-black-800" />
               <p className="p4-regular">or</p>
-              <Separator className="w-2/5 dark:bg-black-800 bg-black-700/10" />
+              <Separator className="w-2/5 bg-black-700/10 dark:bg-black-800" />
             </div>
             <Button
               type="button"
               onClick={() => signIn('google', { callbackUrl: '/onboarding' })}
-              className="p3-medium flex w-full items-center gap-2 dark:bg-black-800 bg-white-100"
+              className="p3-medium flex w-full items-center gap-2 bg-white-100 dark:bg-black-800"
             >
               <Image
                 src={'/assets/icons/google.svg'}
@@ -229,7 +231,7 @@ const Register = () => {
             <Button
               onClick={() => signIn('github', { callbackUrl: '/onboarding' })}
               type="button"
-              className="p3-medium flex w-full items-center gap-2 dark:bg-black-800 bg-white-100"
+              className="p3-medium flex w-full items-center gap-2 bg-white-100 dark:bg-black-800"
             >
               <Image
                 src={'/assets/icons/github.svg'}

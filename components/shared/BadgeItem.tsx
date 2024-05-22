@@ -20,7 +20,7 @@ const BadgeItem: React.FC<IBadgeItemProps> = ({
           isTechStackItem
             ? 'capitalize rounded subtitle-normal'
             : 'uppercase rounded-[20px] cap-10'
-        } `
+        } `,
       )}
     >
       {title}

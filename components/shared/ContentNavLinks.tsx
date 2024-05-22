@@ -1,9 +1,10 @@
 'use client';
 
 import Link from 'next/link';
-import { EQueryContentType } from '@/types/content';
 import { useSearchParams } from 'next/navigation';
 import { usePathname } from 'next/navigation';
+
+import { EQueryContentType } from '@/types/content';
 
 // ----------------------------------------------------------------
 
@@ -26,7 +27,7 @@ const ContentNavLinks: React.FC<IContentNavLinksProps> = (props) => {
     'p1-medium text-white-400 dark:text-white-300 py-2 px-3.5 rounded-[7px]';
 
   return (
-    <div className="bg-light100__dark800 flex-between p-3.5 rounded-lg mx-auto w-full">
+    <div className="bg-light100__dark800 flex-between mx-auto w-full rounded-lg p-3.5">
       <Link
         href={pathname + '?' + updateQueryParams(EQueryContentType.POSTS)}
         className={`${linkStyles} ${

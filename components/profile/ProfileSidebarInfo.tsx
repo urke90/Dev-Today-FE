@@ -1,10 +1,10 @@
 'use client';
 
+import { Button } from '../ui/button';
+
 import { useSession } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-
-import { Button } from '../ui/button';
 
 // ----------------------------------------------------------------
 
@@ -24,7 +24,7 @@ const ProfileSidebarInfo: React.FC<IProfileSidebarInfoProps> = ({
       {isPersonalProfile ? (
         <Link
           href={pathname + `/${session?.user?.id}/edit`}
-          className="bg-primary-500 border border-primary-500 transition-colors text-white-100 py-3 inline-flex items-center justify-center outline-none w-full rounded-lg gap-2.5 text-sm font-bold"
+          className="inline-flex w-full items-center justify-center gap-2.5 rounded-lg border border-primary-500 bg-primary-500 py-3 text-sm font-bold text-white-100 outline-none transition-colors"
         >
           Edit Profile
         </Link>

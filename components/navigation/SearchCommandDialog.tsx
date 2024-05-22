@@ -1,17 +1,18 @@
 'use client';
 
-import { Command } from 'cmdk';
+import FrameIcon from '../icons/Frame';
+import GroupsIcon from '../icons/Groups';
+import SearchIcon from '../icons/Search';
+import { Button } from '../ui/button';
+
 import {
+  Content,
+  Overlay,
+  Portal,
   Root,
   Trigger,
-  Portal,
-  Overlay,
-  Content,
 } from '@radix-ui/react-dialog';
-import { Button } from '../ui/button';
-import FrameIcon from '../icons/Frame';
-import SearchIcon from '../icons/Search';
-import GroupsIcon from '../icons/Groups';
+import { Command } from 'cmdk';
 
 interface ISearchDialogProps {}
 
@@ -26,30 +27,30 @@ const SearchCommandDialog: React.FC<ISearchDialogProps> = (props) => {
         </Button>
       </Trigger>
       <Portal>
-        <Overlay className="data-[state=open]:animate-overlayShow fixed inset-0 backdrop-blur-sm" />
-        <Content className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[346px] lg:w-[576px] translate-x-[-50%] translate-y-[-50%]  focus:outline-none bg-white-100 ">
-          <Command className="border border-white-border dark:border-white-border shadow-search-dialog">
-            <div className="flex items-center justify-between gap-3 lg:px-6 bg-white-100 dark:bg-black-800 px-3.5 py-4">
+        <Overlay className="fixed inset-0 backdrop-blur-sm data-[state=open]:animate-overlayShow" />
+        <Content className="fixed left-1/2 top-1/2 max-h-[85vh] w-[346px] -translate-x-1/2 -translate-y-1/2 bg-white-100 focus:outline-none  data-[state=open]:animate-contentShow lg:w-[576px] ">
+          <Command className="shadow-search-dialog border border-white-border dark:border-white-border">
+            <div className="flex items-center justify-between gap-3 bg-white-100 px-3.5 py-4 dark:bg-black-800 lg:px-6">
               <div className="flex items-center gap-3">
                 <SearchIcon className="icon-light400__dark300" />
                 <Command.Input
                   placeholder="Type a command or search..."
-                  className="w-full focus-visible:outline-none dark:placeholder:text-[#ADB3CC] placeholder:text-white-400 placeholder:font-normal placeholder:text-sm dark:text-white-100 text-black-900 text-sm font-medium  bg-white-100 dark:bg-black-800"
+                  className="w-full bg-white-100 text-sm font-medium text-black-900 placeholder:text-sm placeholder:font-normal placeholder:text-white-400 focus-visible:outline-none dark:bg-black-800  dark:text-white-100 dark:placeholder:text-[#ADB3CC]"
                 />
               </div>
-              <kbd className="max-lg:hidden bg-white-200 dark:bg-black-700 rounded gap-2 w-[32px] h-[24px] text-[10px] flex-center text-white-400 dark:text-[#ADB3CC]">
+              <kbd className="flex-center h-[24px] w-[32px] gap-2 rounded bg-white-200 text-[10px] text-white-400 dark:bg-black-700 dark:text-[#ADB3CC] max-lg:hidden">
                 ESC
               </kbd>
             </div>
-            <Command.List className="py-2 px-1 lg:p-2 dark:bg-black-900 bg-white-200 text-black-700 dark:text-white-200">
-              <Command.Empty className="p3-regular lg:py-2.5 lg:px-4 flex p-2.5 gap-3 hover:bg-black-700 hover:rounded">
+            <Command.List className="bg-white-200 px-1 py-2 text-black-700 dark:bg-black-900 dark:text-white-200 lg:p-2">
+              <Command.Empty className="p3-regular flex gap-3 p-2.5 hover:rounded hover:bg-black-700 lg:px-4 lg:py-2.5">
                 No results found.
               </Command.Empty>
-              <Command.Item className="p3-regular lg:py-2.5 lg:px-4 flex p-2.5 gap-3 hover:bg-black-700 hover:rounded">
+              <Command.Item className="p3-regular flex gap-3 p-2.5 hover:rounded hover:bg-black-700 lg:px-4 lg:py-2.5">
                 <FrameIcon className="icon-light400__dark300" /> Explore all
                 posts
               </Command.Item>
-              <Command.Item className="p3-regular lg:py-2.5 lg:px-4 flex p-2.5 gap-3 hover:bg-black-700 hover:rounded">
+              <Command.Item className="p3-regular flex gap-3 p-2.5 hover:rounded hover:bg-black-700 lg:px-4 lg:py-2.5">
                 <GroupsIcon className="icon-light400__dark300" />
                 ByteBuilders Collective
               </Command.Item>

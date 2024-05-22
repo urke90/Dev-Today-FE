@@ -1,4 +1,15 @@
 'use client';
+import { useTheme } from '../../context/ThemeProvider';
+
+import Image from 'next/image';
+import React, { use, useState } from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { FormState, useForm } from 'react-hook-form';
+import { z } from 'zod';
+import toast, { Toaster } from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
+import { signOut, useSession } from 'next-auth/react';
+
 import {
   codingAmbitions,
   currentKnowledge,
@@ -6,11 +17,6 @@ import {
   preferSkills,
 } from '@/constants';
 import { colorsOnboardingIcons } from '@/styles/index';
-import Image from 'next/image';
-import React, { use, useState } from 'react';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm, FormState } from 'react-hook-form';
-import { z } from 'zod';
 import {
   Form,
   FormControl,
@@ -20,13 +26,10 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { onboardingSchema } from '@/lib/validation';
-import toast, { Toaster } from 'react-hot-toast';
-import { useRouter } from 'next/navigation';
-import { useTheme } from '../../context/ThemeProvider';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
-import { signOut, useSession } from 'next-auth/react';
+
 interface UserWithId {
   id: string;
 }
@@ -86,7 +89,7 @@ const Onboarding = () => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({ ...values, isOnboardingCompleted: true }),
-        }
+        },
       );
       if (result?.ok) {
         router.push('/home');
@@ -98,13 +101,13 @@ const Onboarding = () => {
     }
   }
   return (
-    <div className="bg-white-100 dark:bg-black-800 min-h-screen flex">
+    <div className="flex min-h-screen bg-white-100 dark:bg-black-800">
       <Toaster
         toastOptions={{
           className: '!bg-black-600 !text-white-100',
         }}
       />
-      <div className="hidden lg:w-1/2 p-16 lg:flex flex-col items-center">
+      <div className="hidden flex-col items-center p-16 lg:flex lg:w-1/2">
         <div className="w-full">
           <Image
             onClick={() =>
@@ -134,10 +137,10 @@ const Onboarding = () => {
                 key={item.label}
                 className={`${
                   mode === 'dark' ? 'bg-black-700' : 'bg-white-100'
-                } p-5 flex gap-5 items-center rounded-lg`}
+                } flex items-center gap-5 rounded-lg p-5`}
               >
                 <div
-                  className={`dark:bg-black-800 ${colorsOnboardingIcons[index]} h-[60px] p-5 rounded-md`}
+                  className={`dark:bg-black-800 ${colorsOnboardingIcons[index]} h-[60px] rounded-md p-5`}
                 >
                   <Image
                     src={item.image}
@@ -152,7 +155,7 @@ const Onboarding = () => {
           </article>
         </div>
       </div>
-      <div className="text-white-100 flex flex-col  pt-10 lg:pt-44 lg:justify-start items-center  dark:bg-black-900 bg-white-200 px-4 md:px-10 xl:px-28  w-full lg:w-1/2">
+      <div className="flex w-full flex-col  items-center bg-white-200 px-4 pt-10  text-white-100 dark:bg-black-900 md:px-10 lg:w-1/2 lg:justify-start  lg:pt-44 xl:px-28">
         <div className="w-full lg:hidden">
           <Image
             src={
@@ -163,7 +166,7 @@ const Onboarding = () => {
             alt="logo"
             width={147}
             height={30}
-            className="mb-14 mx-auto"
+            className="mx-auto mb-14"
           />
         </div>
         {step === 0 && (
@@ -178,11 +181,11 @@ const Onboarding = () => {
         )}
         {step === 2 && (
           <>
-            <h2 className="d1-bold mr-auto mb-10">
+            <h2 className="d1-bold mb-10 mr-auto">
               Select your preferred languages and frameworks for a personalized
               experience.
             </h2>
-            <p className="mr-auto mb-3 text-black-600 dark:text-white-300">
+            <p className="mb-3 mr-auto text-black-600 dark:text-white-300">
               Choose as many as you like.
             </p>
           </>
@@ -190,7 +193,7 @@ const Onboarding = () => {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-5 w-full "
+            className="w-full space-y-5 "
           >
             {step === 0 && (
               <>
@@ -214,13 +217,13 @@ const Onboarding = () => {
                                 />
                               </FormControl>
                               <FormLabel
-                                className={`w-full flex items-center
+                                className={`flex w-full items-center
                               ${
                                 item.value === field.value
                                   ? 'bg-primary-500 !text-white-100'
-                                  : 'dark:bg-black-800 bg-white-100'
+                                  : 'bg-white-100 dark:bg-black-800'
                               }
-                              px-4 justify-start  rounded border-none h-14 text-[14px] p1-medium cursor-pointer`}
+                              p1-medium h-14  cursor-pointer justify-start rounded border-none px-4 text-[14px]`}
                               >
                                 {item.title}
                               </FormLabel>
@@ -259,20 +262,20 @@ const Onboarding = () => {
                                         ])
                                       : field.onChange(
                                           field.value?.filter(
-                                            (value) => value !== item.value
-                                          )
+                                            (value) => value !== item.value,
+                                          ),
                                         );
                                   }}
                                 />
                               </FormControl>
                               <FormLabel
-                                className={`w-full flex items-center
+                                className={`flex w-full items-center
                               ${
                                 field.value.includes(item.value)
                                   ? 'bg-primary-500 !text-white-100'
-                                  : 'dark:bg-black-800 bg-white-100'
+                                  : 'bg-white-100 dark:bg-black-800'
                               }
-                              px-4  justify-start  rounded border-none h-14 text-[14px] p1-medium cursor-pointer`}
+                              p1-medium  h-14  cursor-pointer justify-start rounded border-none px-4 text-[14px]`}
                               >
                                 {item.title}
                               </FormLabel>
@@ -291,7 +294,7 @@ const Onboarding = () => {
                   control={form.control}
                   name="preferredSkills"
                   render={() => (
-                    <FormItem className="flex flex-wrap gap-3 items-center space-y-0">
+                    <FormItem className="flex flex-wrap items-center gap-3 space-y-0">
                       {preferSkills.map((item) => (
                         <FormField
                           key={item.title}
@@ -312,18 +315,18 @@ const Onboarding = () => {
                                           ])
                                         : field.onChange(
                                             field.value?.filter(
-                                              (value) => value !== item.title
-                                            )
+                                              (value) => value !== item.title,
+                                            ),
                                           );
                                     }}
                                   />
                                 </FormControl>
                                 <FormLabel
-                                  className={`border-none cursor-pointer ${
+                                  className={`cursor-pointer border-none ${
                                     field.value.includes(item.title)
                                       ? 'bg-primary-500 !text-white-100'
-                                      : 'dark:bg-black-800 bg-white-100'
-                                  } h-12  rounded-lg flex items-center p3-medium !px-5`}
+                                      : 'bg-white-100 dark:bg-black-800'
+                                  } p3-medium  flex h-12 items-center rounded-lg !px-5`}
                                 >
                                   {item.title}
                                 </FormLabel>
@@ -339,7 +342,7 @@ const Onboarding = () => {
             )}
             <Button
               onClick={() => goNext()}
-              className="w-full bg-primary-500 h-11 p2-bold "
+              className="p2-bold h-11 w-full bg-primary-500 "
             >
               {step === 2 ? 'Get Started' : 'Next'}
             </Button>

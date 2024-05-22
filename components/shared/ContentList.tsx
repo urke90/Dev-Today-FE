@@ -54,7 +54,7 @@ const ContentList: React.FC<IContentListProps> = ({
   const [page, setPage] = useState(1);
 
   const shouldFetch = getShouldFetch(
-    contentType === EQueryContentType.GROUPS ? groups : content
+    contentType === EQueryContentType.GROUPS ? groups : content,
   );
 
   const updatePage = useCallback(() => {
@@ -95,7 +95,7 @@ const ContentList: React.FC<IContentListProps> = ({
     if (groupsData) {
       setGroups((prevGroups) => [...prevGroups, ...groupsData]);
     }
-  }, []);
+  }, [groupsData]);
 
   useEffect(() => {
     if (contentData) {
@@ -140,7 +140,7 @@ const ContentList: React.FC<IContentListProps> = ({
                 likesCount={likesCount}
                 commentsCount={commentsCount}
               />
-            )
+            ),
           );
         }
         break;
@@ -166,7 +166,7 @@ const ContentList: React.FC<IContentListProps> = ({
                 location="Innovation Hub, Austin"
                 meetupDate={meetUpDate}
               />
-            )
+            ),
           );
         }
         break;
@@ -192,7 +192,7 @@ const ContentList: React.FC<IContentListProps> = ({
                 author={userName}
                 createdAt={createdAt}
               />
-            )
+            ),
           );
         }
         break;
@@ -209,7 +209,7 @@ const ContentList: React.FC<IContentListProps> = ({
                 description={groupBio}
                 members={members}
               />
-            )
+            ),
           );
         }
         break;
@@ -240,7 +240,7 @@ const ContentList: React.FC<IContentListProps> = ({
               likesCount={likesCount}
               commentsCount={commentsCount}
             />
-          )
+          ),
         );
       }
     }

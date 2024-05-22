@@ -1,4 +1,3 @@
-import { authOptions } from '@/lib/auth-options';
 import NextAuth from 'next-auth/next';
 import type {
   GetServerSidePropsContext,
@@ -7,6 +6,8 @@ import type {
 } from 'next';
 import { getServerSession } from 'next-auth/next';
 import type { Session } from 'next-auth';
+
+import { authOptions } from '@/lib/auth-options';
 
 type HandlerType = typeof NextAuth;
 

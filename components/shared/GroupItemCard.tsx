@@ -1,10 +1,11 @@
 'use client';
 
+import { Button } from '../ui/button';
+import ShareIcon from '../icons/Share';
+
 import { CldImage } from 'next-cloudinary';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Button } from '../ui/button';
-import ShareIcon from '../icons/Share';
 
 // ----------------------------------------------------------------
 
@@ -30,9 +31,9 @@ const GroupItemCard: React.FC<IGroupItemCardProps> = ({
     <li>
       <Link
         href={'/groups/' + id}
-        className="flex flex-col bg-light100__dark800 p-5 rounded-2xl gap-3.5 flex-0 shrink-0"
+        className="bg-light100__dark800 flex-0 flex shrink-0 flex-col gap-3.5 rounded-2xl p-5"
       >
-        <div className="relative w-full h-[150px]">
+        <div className="relative h-[150px] w-full">
           <CldImage
             src={coverImage || '/assets/images/no-image.svg'}
             fill
@@ -44,11 +45,11 @@ const GroupItemCard: React.FC<IGroupItemCardProps> = ({
         <p className="p1-bold">{title}</p>
         <p className="p3-regular line-clamp-3">{description}</p>
         <div className="flex-between">
-          <div className="flex ml-3">
+          <div className="ml-3 flex">
             {members.slice(0, 4).map((member, index) => (
               <div
                 key={index}
-                className="size-[30px] bg-[#F0F1FE] rounded-full flex-center -ml-3"
+                className="flex-center -ml-3 size-[30px] rounded-full bg-[#F0F1FE]"
               >
                 <Image
                   width={22}
@@ -62,13 +63,13 @@ const GroupItemCard: React.FC<IGroupItemCardProps> = ({
                 />
               </div>
             ))}
-            <div className="size-[30px] bg-[#F0F1FE] dark:bg-black-700 cap-8 text-black-700 dark:text-white-100 rounded-full flex-center -ml-3">
-              {members.length > 120 ? `120+` : members.length}
+            <div className="cap-8 flex-center -ml-3 size-[30px] rounded-full bg-[#F0F1FE] text-black-700 dark:bg-black-700 dark:text-white-100">
+              {members.length > 120 ? '120+' : members.length}
             </div>
           </div>
           <Button
             variant="icon"
-            className="size-[30px] bg-white-200 dark:bg-black-700 rounded-full"
+            className="size-[30px] rounded-full bg-white-200 dark:bg-black-700"
           >
             <ShareIcon className="text-white-300" />
           </Button>

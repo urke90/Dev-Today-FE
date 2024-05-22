@@ -21,14 +21,14 @@ const MyProfilePage: React.FC<IMyProfilePageProps> = async ({
   const page = parseSearchParams(searchParams.page, '1');
   const contentType = parseSearchParams<EQueryContentType>(
     searchParams.type,
-    EQueryContentType.POSTS
+    EQueryContentType.POSTS,
   );
 
   const session = await auth();
   if (!session?.user) throw new Error('User data not available!');
 
   const userResult = await typedFetch<IUserResponse>(
-    `/user/${session?.user.id}`
+    `/user/${session?.user.id}`,
   );
 
   let content: IContent[] = [];
@@ -37,7 +37,7 @@ const MyProfilePage: React.FC<IMyProfilePageProps> = async ({
     groupContent = await typedFetch(`/user/${session.user.id}/groups`);
   } else {
     content = await typedFetch(
-      `/user/${session.user.id}/content?type=${contentType}&page=${page}`
+      `/user/${session.user.id}/content?type=${contentType}&page=${page}`,
     );
   }
 

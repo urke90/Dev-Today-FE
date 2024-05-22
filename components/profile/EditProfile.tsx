@@ -1,26 +1,28 @@
 'use client';
 
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { useRouter } from 'next/navigation';
-import z from 'zod';
-import { Form } from '@/components/ui/form';
+import RHFMultipleSelect from '../RHFInputs/RHFMultipleSelect';
+import RHFTextarea from '../RHFInputs/RHFTextarea';
+import ImagePreviewIcon from '../icons/ImagePreview';
+import ImageUploadIcon from '../icons/ImageUpload';
+import { Button } from '../ui/button';
+
 import { zodResolver } from '@hookform/resolvers/zod';
-import { typedFetch } from '@/utils/api';
 import {
-  CldUploadButton,
   CldImage,
+  CldUploadButton,
   type CloudinaryUploadWidgetResults,
 } from 'next-cloudinary';
-import { updateProfileSchema } from '@/lib/validation';
-import { Button } from '../ui/button';
-import RHFInput from '@/components/RHFInputs/RHFInput';
-import RHFTextarea from '../RHFInputs/RHFTextarea';
-import RHFMultipleSelect from '../RHFInputs/RHFMultipleSelect';
-import ImageUploadIcon from '../icons/ImageUpload';
-import ImagePreviewIcon from '../icons/ImagePreview';
-import type { IUser } from '@/types/user';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
+import z from 'zod';
+
+import RHFInput from '@/components/RHFInputs/RHFInput';
+import { Form } from '@/components/ui/form';
+import { updateProfileSchema } from '@/lib/validation';
+import type { IUser } from '@/types/user';
+import { typedFetch } from '@/utils/api';
 
 // ----------------------------------------------------------------
 
@@ -102,8 +104,8 @@ const EditProfile: React.FC<IEditProfileProps> = ({ user }) => {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <div className="create-page-wrapper">
-          <div className="flex gap-2.5 items-center">
-            <div className="bg-white-100 dark:bg-black-800 rounded-full shrink-0 size-[60px] flex-center">
+          <div className="flex items-center gap-2.5">
+            <div className="flex-center bg-white-100 dark:bg-black-800 size-[60px] shrink-0 rounded-full">
               {previewImg ? (
                 <CldImage
                   src={previewImg}
@@ -118,7 +120,7 @@ const EditProfile: React.FC<IEditProfileProps> = ({ user }) => {
               )}
             </div>
             <CldUploadButton
-              className="flex bg-white-100 dark:bg-black-800 items-center gap-2.5 px-5 py-3 rounded-[5px] h-11"
+              className="bg-white-100 dark:bg-black-800 flex h-11 items-center gap-2.5 rounded-[5px] px-5 py-3"
               uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_PRESEST_NAME}
               onSuccess={handleUploadImage}
               options={{
@@ -148,7 +150,7 @@ const EditProfile: React.FC<IEditProfileProps> = ({ user }) => {
             />
           </div>
           <p className="p1-bold">Social Media</p>
-          <div className="flex flex-col sm:flex-row gap-5 border-b dark:border-black-800 border-white-border">
+          <div className="border-white-border dark:border-black-800 flex flex-col gap-5 border-b sm:flex-row">
             <RHFInput
               name="linkedinName"
               label="LinkedIn"
@@ -160,7 +162,7 @@ const EditProfile: React.FC<IEditProfileProps> = ({ user }) => {
               placeholder="https://linkedin.com/"
             />
           </div>
-          <div className="flex flex-col sm:flex-row gap-5 border-b dark:border-black-800 border-white-border">
+          <div className="border-white-border dark:border-black-800 flex flex-col gap-5 border-b sm:flex-row">
             <RHFInput
               name="twitterName"
               label="LinkedIn"
@@ -172,7 +174,7 @@ const EditProfile: React.FC<IEditProfileProps> = ({ user }) => {
               placeholder="https://twitter.com/"
             />
           </div>
-          <div className="flex flex-col sm:flex-row gap-5 border-b dark:border-black-800 border-white-border">
+          <div className="border-white-border dark:border-black-800 flex flex-col gap-5 border-b sm:flex-row">
             <RHFInput
               name="instagramName"
               label="Instagram"
@@ -184,7 +186,7 @@ const EditProfile: React.FC<IEditProfileProps> = ({ user }) => {
               placeholder="https://www.instagram.com/"
             />
           </div>
-          <div className="flex flex-col sm:flex-row sm:gap-5 gap-2.5">
+          <div className="flex flex-col gap-2.5 sm:flex-row sm:gap-5">
             <Button type="button" variant="cancel">
               Cancel
             </Button>

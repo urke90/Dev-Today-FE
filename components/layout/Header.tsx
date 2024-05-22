@@ -1,9 +1,10 @@
 'use client';
 
-import Image from 'next/image';
-
 import NavLinks from '../navigation/NavLinks';
 import NavMenu from '../navigation/NavMenu';
+
+import Image from 'next/image';
+
 import { useTheme } from '@/context/ThemeProvider';
 
 // ----------------------------------------------------------------
@@ -19,7 +20,7 @@ const Header: React.FC<IHeaderProps> = (props) => {
       : '/assets/images/logo-light.svg';
 
   return (
-    <header className="gap-5 bg-light100__dark800 flex-between px-3.5 py-4 lg:py-5 lg:px-8 w-full fixed top-0 left-0 z-50">
+    <header className="bg-light100__dark800 flex-between fixed left-0 top-0 z-50 w-full gap-5 px-3.5 py-4 lg:px-8 lg:py-5">
       <Image src={logoUrl} width={147} height={30} alt="Logo" />
       <div className="max-sm:hidden">
         <NavLinks />

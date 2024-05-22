@@ -1,8 +1,10 @@
 'use client';
 
+import BadgeItem from './BadgeItem';
+
 import Link from 'next/link';
 import { CldImage } from 'next-cloudinary';
-import BadgeItem from './BadgeItem';
+
 import { parseDate } from '@/utils/format';
 
 // ----------------------------------------------------------------
@@ -33,11 +35,11 @@ const MeetupItemCard: React.FC<IMeetupItemCardProps> = ({
     <li>
       <Link
         href={'/meetups/' + id}
-        className="flex flex-col gap-2.5 px-3.5 py-5 bg-light100__dark800 rounded-[10px]"
+        className="bg-light100__dark800 flex flex-col gap-2.5 rounded-[10px] px-3.5 py-5"
       >
-        <div className="flex flex-between">
+        <div className="flex-between flex">
           <div className="flex items-center gap-2 md:gap-4">
-            <div className="relative size-[56px] md:size-[72px] shrink-0">
+            <div className="relative size-[56px] shrink-0 md:size-[72px]">
               <CldImage
                 src={coverImage || '/assets/images/no-image.svg'}
                 alt="meetup"
@@ -49,15 +51,15 @@ const MeetupItemCard: React.FC<IMeetupItemCardProps> = ({
               <p className="lg:p3-regular subtitle-normal">{location}</p>
             </div>
           </div>
-          <div className="flex-center flex-col rounded-[6px] w-[38px] h-[56px] md:h-[58px] md:w-[54px] py-[5px] px-2.5 bg-light200__dark700 shrink-0">
+          <div className="flex-center bg-light200__dark700 h-[56px] w-[38px] shrink-0 flex-col rounded-[6px] px-2.5 py-[5px] md:h-[58px] md:w-[54px]">
             <span className="subtitle-normal md:p4-regular uppercase text-black-800 dark:text-white-200">
               {month}
             </span>
-            <span className="!text-primary-500 p2-bold md:d2-bold">{day}</span>
+            <span className="p2-bold md:d2-bold !text-primary-500">{day}</span>
           </div>
         </div>
         <div>
-          <p className="p4-regular line-clamp-2 md:p3-regular">{description}</p>
+          <p className="p4-regular md:p3-regular line-clamp-2">{description}</p>
         </div>
         {tags.length > 0 ? (
           <ul className="flex gap-2.5">

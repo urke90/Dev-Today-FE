@@ -1,4 +1,6 @@
+import { useFormContext } from 'react-hook-form';
 import CreatableSelect from 'react-select/creatable';
+
 import {
   FormControl,
   FormDescription,
@@ -7,8 +9,6 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { useFormContext } from 'react-hook-form';
-import { useState } from 'react';
 
 // ----------------------------------------------------------------
 
@@ -26,11 +26,6 @@ interface IRHFMultipleSelectProps {
   }[];
   placeholder?: string;
   hideDropDown?: boolean;
-}
-
-interface Option {
-  readonly label: string;
-  readonly value: string;
 }
 
 const RHFMultipleSelect: React.FC<IRHFMultipleSelectProps> = ({

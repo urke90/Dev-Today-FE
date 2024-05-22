@@ -6,7 +6,7 @@ interface IPerformanceItemProps {}
 
 const PerformanceItem: React.FC<IPerformanceItemProps> = (props) => {
   return (
-    <li className="flex gap-3.5 items-center">
+    <li className="flex items-center gap-3.5">
       <Image
         src="/assets/images/post-example.svg"
         width={50}
