@@ -1,14 +1,17 @@
-import Image from 'next/image';
-import BadgeItem from '../shared/BadgeItem';
-import { EQueryContentType, IContent } from '@/types/content';
-import type { IUser, IUserLatestContents } from '@/types/user';
-import type { IGroup } from '@/types/group';
-import ContentNavLinks from '../shared/ContentNavLinks';
 import PerformanceItem from './PerformanceItem';
-import SidebarContentCard from '../shared/SidebarContentCard';
 import ProfileSidebarInfo from './ProfileSidebarInfo';
-import SocialMediaLinks from './SocialMediaLinks';
+
+import BadgeItem from '../shared/BadgeItem';
 import ContentList from '../shared/ContentList';
+import ContentNavLinks from '../shared/ContentNavLinks';
+import SidebarContentCard from '../shared/SidebarContentCard';
+
+import Image from 'next/image';
+
+import { EQueryContentType, IContent } from '@/types/content';
+import type { IGroup } from '@/types/group';
+import type { IUser, IUserLatestContents } from '@/types/user';
+import { calculateTimeAgo } from '@/utils/format';
 
 // ----------------------------------------------------------------
 
@@ -37,6 +40,7 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
     avatarImg,
     bio,
     email,
+    createdAt,
     followers,
     following,
     preferredSkills,
@@ -48,8 +52,8 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
 
   return (
     <div className="content-wrapper">
-      <aside className="left-sidebar bg-light100__dark800 !p-0 !pb-5 text-center rounded-t-2xl rounded-b-2xl">
-        <div className="relative h-[106px] lg:h-[83px] profile-background rounded-t-2xl">
+      <aside className="left-sidebar bg-light100__dark800 rounded-2xl !p-0 !pb-10 text-center">
+        <div className="profile-background relative h-[106px] rounded-t-2xl lg:h-[83px]">
           <Image
             fill
             src="/assets/images/profile-background.svg"
@@ -57,14 +61,14 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
             className="rounded-t-2xl object-cover"
           />
         </div>
-        <div className="px-5 flex flex-col gap-y-6">
-          <div className="relative z-10 -mt-14">
+        <div className="flex flex-col gap-y-6 px-5">
+          <div className="relative z-10 -mt-20">
             <Image
               src={avatarImg ? avatarImg : '/assets/images/no-image.svg'}
               width={110}
               height={110}
               alt="profile"
-              className="ring-4 ring-primary-500 rounded-full mx-auto mb-2.5"
+              className="ring-primary-500 mx-auto mb-2.5 rounded-full ring-4"
             />
             <h1 className="h1-medium">{userName}</h1>
             <p className="p3-regular dark:text-white-400">{email}</p>
@@ -97,19 +101,13 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
           {bio && (
             <p className="p3-regular text-white-400 dark:text-white-300 text-center"></p>
           )}
-          <div className="flex gap-6 justify-center">
-            <SocialMediaLinks
-              linkedinLink={linkedinLink}
-              twitterLink={twitterLink}
-              instagramLink={instagramLink}
-            />
-          </div>
+          {linkedinLink || twitterLink || instagramLink}
           <p className="p3-medium text-white-300 dark:text-white-400">
-            joined 2 years ago
+            Joined {calculateTimeAgo(createdAt)}
           </p>
         </div>
       </aside>
-      <main className="main-content w-full mx-auto">
+      <main className="main-content mx-auto w-full">
         <div className="flex w-full flex-col gap-5">
           <ContentNavLinks />
           <ContentList

@@ -1,19 +1,25 @@
 'use client';
 
-import { fetchContent, fetchGroups } from '@/api/queries';
-import { EContentGroupItemsQueries } from '@/constants/react-query';
-import { useInfiniteScroll } from '@/hooks/use-infinite-scroll';
-import { EQueryContentType, type IContent } from '@/types/content';
-import type { IGroup } from '@/types/group';
-import { useQuery } from '@tanstack/react-query';
-import { memo, useCallback, useEffect, useState } from 'react';
 import GroupItemCard from './GroupItemCard';
 import LoadingSpinner from './LoadingSpinner';
 import MeetupItemCard from './MeetupItemCard';
 import PodcastItemCard from './PodcastItemCard';
 import PostItemCard from './PostItemCard';
 
+import { useQuery } from '@tanstack/react-query';
+import { memo, useCallback, useEffect, useState } from 'react';
+
+import { fetchContent, fetchGroups } from '@/api/queries';
+import { EContentGroupItemsQueries } from '@/constants/react-query';
+import { useInfiniteScroll } from '@/hooks/use-infinite-scroll';
+import { EQueryContentType, type IContent } from '@/types/content';
+import type { IGroup } from '@/types/group';
+
 // ----------------------------------------------------------------
+
+const getShouldFetch = (items: IContent[] | IGroup[]) => {
+  return items.length % 6 === 0 && items.length !== 0;
+};
 
 const updateContentQueryKey = (contentType: EQueryContentType) => {
   if (contentType === EQueryContentType.GROUPS) {
@@ -47,14 +53,9 @@ const ContentList: React.FC<IContentListProps> = ({
   const [groups, setGroups] = useState<IGroup[]>(groupItems);
   const [page, setPage] = useState(1);
 
-  const shouldFetchContent =
-    content.length % 6 === 0 &&
-    content.length !== 0 &&
-    contentType !== EQueryContentType.GROUPS;
-  const shouldFetchGroups =
-    groups.length % 6 === 0 &&
-    groups.length !== 0 &&
-    contentType === EQueryContentType.GROUPS;
+  const shouldFetch = getShouldFetch(
+    contentType === EQueryContentType.GROUPS ? groups : content
+  );
 
   const updatePage = useCallback(() => {
     setPage((prevPage) => prevPage + 1);
@@ -67,7 +68,8 @@ const ContentList: React.FC<IContentListProps> = ({
   } = useQuery<IContent[]>({
     queryKey: [updateContentQueryKey(contentType), contentType, userId, page],
     queryFn: () => fetchContent(userId, contentType, page),
-    enabled: shouldFetchContent && page !== 1,
+    enabled:
+      shouldFetch && contentType !== EQueryContentType.GROUPS && page !== 1,
     retry: false,
   });
 
@@ -78,23 +80,22 @@ const ContentList: React.FC<IContentListProps> = ({
   } = useQuery<IGroup[]>({
     queryKey: [EContentGroupItemsQueries.FETCH_GROUPS, userId, page],
     queryFn: () => fetchGroups(userId, page),
-    enabled: shouldFetchGroups && page !== 1,
+    enabled:
+      shouldFetch && contentType === EQueryContentType.GROUPS && page !== 1,
     retry: false,
   });
 
   const { lastListItemRef } = useInfiniteScroll({
     updatePage,
-    isLoadingContent,
-    isLoadingGroups,
-    shouldFetchContent,
-    shouldFetchGroups,
+    isLoading: isLoadingContent || isLoadingGroups,
+    shouldFetch,
   });
 
   useEffect(() => {
     if (groupsData) {
       setGroups((prevGroups) => [...prevGroups, ...groupsData]);
     }
-  }, [groupsData]);
+  }, []);
 
   useEffect(() => {
     if (contentData) {
