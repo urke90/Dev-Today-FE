@@ -5,7 +5,6 @@ import BadgeItem from './BadgeItem';
 import HeartIcon from '../icons/Heart';
 import { Button } from '../ui/button';
 
-import { CldImage } from 'next-cloudinary';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -15,7 +14,7 @@ import { calculateTimeAgo, formatNumberWithCommas } from '@/utils/format';
 
 interface IPostItemCardProps {
   id: string;
-  coverImage?: string;
+  coverImage: string | null;
   title: string;
   description: string;
   tags: string[];
@@ -24,6 +23,11 @@ interface IPostItemCardProps {
   viewsCount?: number | null;
   likesCount?: number | null;
   commentsCount?: number | null;
+  isLiked: boolean;
+  handleLikeContent: (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    contentId: string
+  ) => Promise<void>;
 }
 
 const PostItemCard: React.FC<IPostItemCardProps> = ({
@@ -36,6 +40,9 @@ const PostItemCard: React.FC<IPostItemCardProps> = ({
   likesCount,
   commentsCount,
   createdAt,
+  isLiked,
+  handleLikeContent,
+  author,
 }) => {
   return (
     <li>
@@ -43,7 +50,7 @@ const PostItemCard: React.FC<IPostItemCardProps> = ({
         href={'/posts/' + id}
         className="bg-light100__dark800 flex gap-4 rounded-2xl p-4 md:items-center md:p-5"
       >
-        <CldImage
+        <Image
           src={coverImage || '/assets/images/no-image.svg'}
           width={165}
           height={165}
@@ -54,7 +61,7 @@ const PostItemCard: React.FC<IPostItemCardProps> = ({
         <div className="flex flex-1 flex-col gap-4">
           <div className="mb-4 flex justify-between gap-2">
             <div className="flex gap-2">
-              <CldImage
+              <Image
                 src={coverImage || '/assets/images/no-image.svg'}
                 width={50}
                 height={50}
@@ -67,10 +74,13 @@ const PostItemCard: React.FC<IPostItemCardProps> = ({
               </div>
             </div>
             <Button
+              type="button"
               className="flex-center bg-white-200 dark:bg-black-700 size-[30px] shrink-0 rounded-full"
-              onClick={() => alert('radi btn')}
+              onClick={(e) => handleLikeContent(e, id)}
             >
-              <HeartIcon className="text-white-300" />
+              <HeartIcon
+                className={isLiked ? 'text-primary-500' : 'text-white-300'}
+              />
             </Button>
           </div>
           {tags.length > 0 ? (
@@ -91,7 +101,7 @@ const PostItemCard: React.FC<IPostItemCardProps> = ({
                 />
               </div>
               <div>
-                <p className="p3-bold">Pavel Gvay</p>
+                <p className="p3-bold">{author}</p>
                 <p className="subtitle-normal">{calculateTimeAgo(createdAt)}</p>
               </div>
             </div>

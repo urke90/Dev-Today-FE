@@ -17,25 +17,27 @@ export interface IContent {
   id: string;
   type?: EContentType;
   createdAt: Date;
-  updatedAt?: Date;
+  updatedAt: Date;
   author: IProfileUser;
   authorId: string;
   likedBy: IProfileUser[];
-  likes: ILike[];
-  title?: string;
-  contentDescription?: string;
+  likes: ILike[] | undefined;
+  title: string;
+  contentDescription: string;
   postGroups: string[];
-  coverImage?: string;
-  meetUpLocationImage?: string;
-  meetUpDate?: Date;
-  podcastAudioFile?: string;
-  podcastAudiTitle?: string;
+  coverImage: string | null;
+  meetUpLocationImage: string | null;
+  meetUpDate: Date | null;
+  podcastAudioFile: string | null;
+  podcastAudiTitle: string | null;
   storyTags: string[];
   comments: Comment[];
   contentGroups: [];
-  viewsCount?: number;
-  likesCount?: number;
-  commentsCount?: number;
+  viewsCount: number | null;
+  likesCount: number | null;
+  commentsCount: number | null;
+  groupId: string | null;
+  isLiked: boolean;
 }
 
 interface ILike {

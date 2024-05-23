@@ -1,14 +1,14 @@
-import { ThemeProvider } from '../context/ThemeProvider';
 import SessionProvider from '../context/SessionProvider';
+import { ThemeProvider } from '../context/ThemeProvider';
 
-import type { Metadata } from 'next';
-import { IBM_Plex_Sans, Inter } from 'next/font/google';
-import { cookies } from 'next/headers';
-import { getServerSession } from 'next-auth';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import type { Metadata } from 'next';
+import { getServerSession } from 'next-auth';
+import { IBM_Plex_Sans } from 'next/font/google';
+import { cookies } from 'next/headers';
 
-import { authOptions } from '@/lib/auth-options';
 import QueryProvider from '@/context/QueryProvider';
+import { authOptions } from '@/lib/auth-options';
 
 import './globals.css';
 

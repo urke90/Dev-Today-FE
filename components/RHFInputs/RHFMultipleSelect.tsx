@@ -51,15 +51,24 @@ const RHFMultipleSelect: React.FC<IRHFMultipleSelectProps> = ({
               isMulti
               isClearable
               options={options}
-              onChange={(newValue) => {
+              onChange={(newValue, actionMeta) => {
+                if (actionMeta.option?.value === '') return;
                 field.onChange(newValue);
               }}
+              onKeyDown={(e) => {
+                if (
+                  e.key === 'Enter' &&
+                  (e.target as HTMLInputElement).value === ''
+                )
+                  e.preventDefault();
+              }}
+              instanceId={field.name}
               placeholder={placeholder}
               defaultValue={defaultValue}
               classNames={{
                 control: () =>
                   // TODO Add different hover and focus effect since we will probably add the same to the Inputs
-                  'bg-white-100 dark:bg-black-800 border !border-white-border dark:!border-[#393E4F66] px-3 h-[46px]',
+                  'bg-white-100 dark:bg-black-800 border !border-white-border dark:!border-[#393E4F66] px-3 min-h-[46px]',
                 clearIndicator: () => '!hidden',
                 dropdownIndicator: () => '!hidden',
                 indicatorSeparator: () => '!hidden',

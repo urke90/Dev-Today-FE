@@ -1,9 +1,8 @@
 'use client';
 
-import BadgeItem from './BadgeItem';
-
-import { CldImage } from 'next-cloudinary';
+import Image from 'next/image';
 import Link from 'next/link';
+import BadgeItem from './BadgeItem';
 
 import { parseDate } from '@/utils/format';
 
@@ -12,11 +11,11 @@ import { parseDate } from '@/utils/format';
 interface IMeetupItemCardProps {
   id: string;
   title: string;
+  coverImage: string | null;
   location: string;
-  meetupDate?: Date;
+  meetupDate: Date | null;
   description: string;
   tags: string[];
-  coverImage?: string;
 }
 
 const MeetupItemCard: React.FC<IMeetupItemCardProps> = ({
@@ -40,7 +39,7 @@ const MeetupItemCard: React.FC<IMeetupItemCardProps> = ({
         <div className="flex-between flex">
           <div className="flex items-center gap-2 md:gap-4">
             <div className="relative size-[56px] shrink-0 md:size-[72px]">
-              <CldImage
+              <Image
                 src={coverImage || '/assets/images/no-image.svg'}
                 alt="meetup"
                 fill

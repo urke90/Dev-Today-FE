@@ -2,14 +2,12 @@
 
 import RHFMultipleSelect from '../RHFInputs/RHFMultipleSelect';
 import RHFTextarea from '../RHFInputs/RHFTextarea';
-import ImagePreviewIcon from '../icons/ImagePreview';
-import ImageUploadIcon from '../icons/ImageUpload';
 import { Button } from '../ui/button';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   CldImage,
-  CldUploadButton,
+  CldUploadWidget,
   type CloudinaryUploadWidgetResults,
 } from 'next-cloudinary';
 import { useRouter } from 'next/navigation';
@@ -23,6 +21,8 @@ import { Form } from '@/components/ui/form';
 import { updateProfileSchema } from '@/lib/validation';
 import type { IProfileUser } from '@/types/user';
 import { typedFetch } from '@/utils/api';
+import ImagePreviewIcon from '../icons/ImagePreview';
+import ImageUploadIcon from '../icons/ImageUpload';
 
 // ----------------------------------------------------------------
 
@@ -85,9 +85,13 @@ const EditProfile: React.FC<IEditProfileProps> = ({ user }) => {
     const mappedSkills = data.preferredSkills.map((skill) => skill.value);
 
     try {
-      await typedFetch(`/user/${id}`, 'PATCH', undefined, {
-        ...data,
-        preferredSkills: mappedSkills,
+      await typedFetch({
+        url: `/user/${id}`,
+        method: 'PATCH',
+        body: {
+          ...data,
+          preferredSkills: mappedSkills,
+        },
       });
       toast.success('Profile successfully updated');
       router.push('/profile');
@@ -102,7 +106,12 @@ const EditProfile: React.FC<IEditProfileProps> = ({ user }) => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        onKeyDown={(e: React.KeyboardEvent<HTMLFormElement>) => {
+          if (e.key === 'Enter') e.preventDefault();
+        }}
+      >
         <div className="create-page-wrapper">
           <div className="flex items-center gap-2.5">
             <div className="flex-center bg-white-100 dark:bg-black-800 size-[60px] shrink-0 rounded-full">
@@ -119,8 +128,7 @@ const EditProfile: React.FC<IEditProfileProps> = ({ user }) => {
                 <ImagePreviewIcon className="icon-light400__dark300" />
               )}
             </div>
-            <CldUploadButton
-              className="bg-white-100 dark:bg-black-800 flex h-11 items-center gap-2.5 rounded-[5px] px-5 py-3"
+            <CldUploadWidget
               uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_PRESEST_NAME}
               onSuccess={handleUploadImage}
               options={{
@@ -129,9 +137,19 @@ const EditProfile: React.FC<IEditProfileProps> = ({ user }) => {
                 croppingShowDimensions: true,
               }}
             >
-              <ImageUploadIcon className="icon-light400__dark300" />
-              <span className="p3-regular">Set a profile photo</span>
-            </CldUploadButton>
+              {({ open }) => {
+                return (
+                  <Button
+                    onClick={() => open()}
+                    type="button"
+                    className="bg-white-100 dark:bg-black-800 flex h-11 items-center gap-2.5 rounded-[5px] px-5 py-3 w-auto"
+                  >
+                    <ImageUploadIcon className="icon-light400__dark300" />
+                    <span className="p3-regular">Set a profile photo</span>
+                  </Button>
+                );
+              }}
+            </CldUploadWidget>
           </div>
           <RHFInput name="name" label="Name" placeholder="Name" />
           <RHFInput name="userName" label="Username" placeholder="Username" />

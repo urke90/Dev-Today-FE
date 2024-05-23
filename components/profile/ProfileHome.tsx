@@ -96,7 +96,9 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
           )}
           <div className="border border-[#C5D0E6] dark:border-[#393E4F]" />
           {bio && (
-            <p className="p3-regular text-white-400 dark:text-white-300 text-center"></p>
+            <p className="p3-regular text-white-400 dark:text-white-300 text-center">
+              {bio}
+            </p>
           )}
           {(linkedinLink || twitterLink || instagramLink) && (
             <div className="gap-6 flex-center">

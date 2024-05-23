@@ -14,6 +14,8 @@ import { EContentGroupItemsQueries } from '@/constants/react-query';
 import { useInfiniteScroll } from '@/hooks/use-infinite-scroll';
 import { EQueryContentType, type IContent } from '@/types/content';
 import type { IGroup } from '@/types/group';
+import { typedFetch } from '@/utils/api';
+import toast from 'react-hot-toast';
 
 // ----------------------------------------------------------------
 
@@ -53,8 +55,37 @@ const ContentList: React.FC<IContentListProps> = ({
   const [groups, setGroups] = useState<IGroup[]>(groupItems);
   const [page, setPage] = useState(1);
 
+  console.log('content', content);
+
+  const likeOrDislikeContent =
+    (userId: string) =>
+    async (
+      e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+      contentId: string
+    ) => {
+      e.preventDefault();
+      e.stopPropagation();
+      try {
+        const response: { message: string } = await typedFetch({
+          url: `/user/content/${userId}/like`,
+          method: 'POST',
+          body: { contentId },
+        });
+        setContent((prevContent) =>
+          prevContent.map((content) =>
+            content.id === contentId
+              ? { ...content, isLiked: !content.isLiked }
+              : content
+          )
+        );
+        toast.success(response.message);
+      } catch (error) {
+        toast.error("Something went wrong, could't like the post!");
+      }
+    };
+
   const shouldFetch = getShouldFetch(
-    contentType === EQueryContentType.GROUPS ? groups : content,
+    contentType === EQueryContentType.GROUPS ? groups : content
   );
 
   const updatePage = useCallback(() => {
@@ -118,14 +149,15 @@ const ContentList: React.FC<IContentListProps> = ({
           renderedContent = content?.map(
             ({
               id,
-              title = '',
-              coverImage = '',
-              contentDescription = '',
+              title,
+              coverImage,
+              contentDescription,
               storyTags,
               createdAt,
               viewsCount,
               likesCount,
               commentsCount,
+              isLiked,
             }) => (
               <PostItemCard
                 key={id}
@@ -139,8 +171,10 @@ const ContentList: React.FC<IContentListProps> = ({
                 viewsCount={viewsCount}
                 likesCount={likesCount}
                 commentsCount={commentsCount}
+                isLiked={isLiked}
+                handleLikeContent={likeOrDislikeContent(userId)}
               />
-            ),
+            )
           );
         }
         break;
@@ -150,9 +184,9 @@ const ContentList: React.FC<IContentListProps> = ({
           renderedContent = content?.map(
             ({
               id,
-              meetUpDate = new Date(),
-              title = '',
-              contentDescription = '',
+              meetUpDate,
+              title,
+              contentDescription,
               coverImage,
               storyTags,
             }) => (
@@ -166,7 +200,7 @@ const ContentList: React.FC<IContentListProps> = ({
                 location="Innovation Hub, Austin"
                 meetupDate={meetUpDate}
               />
-            ),
+            )
           );
         }
         break;
@@ -177,10 +211,11 @@ const ContentList: React.FC<IContentListProps> = ({
             ({
               id,
               coverImage,
-              title = '',
-              contentDescription = '',
+              title,
+              contentDescription,
               storyTags,
               createdAt,
+              isLiked,
             }) => (
               <PodcastItemCard
                 key={id}
@@ -191,8 +226,10 @@ const ContentList: React.FC<IContentListProps> = ({
                 tags={storyTags}
                 author={userName}
                 createdAt={createdAt}
+                isLiked={isLiked}
+                handleLikeContent={likeOrDislikeContent(userId)}
               />
-            ),
+            )
           );
         }
         break;
@@ -209,7 +246,7 @@ const ContentList: React.FC<IContentListProps> = ({
                 description={groupBio}
                 members={members}
               />
-            ),
+            )
           );
         }
         break;
@@ -218,14 +255,15 @@ const ContentList: React.FC<IContentListProps> = ({
         renderedContent = content?.map(
           ({
             id,
-            title = '',
-            coverImage = '',
-            contentDescription = '',
+            title,
+            coverImage,
+            contentDescription,
             storyTags,
             createdAt,
             viewsCount,
             likesCount,
             commentsCount,
+            isLiked,
           }) => (
             <PostItemCard
               key={id}
@@ -239,8 +277,10 @@ const ContentList: React.FC<IContentListProps> = ({
               viewsCount={viewsCount}
               likesCount={likesCount}
               commentsCount={commentsCount}
+              isLiked={isLiked}
+              handleLikeContent={likeOrDislikeContent(userId)}
             />
-          ),
+          )
         );
       }
     }

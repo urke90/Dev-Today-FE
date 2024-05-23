@@ -1,7 +1,7 @@
 import ProfileHome from '@/components/profile/ProfileHome';
 import { EQueryContentType, type IContent } from '@/types/content';
 import type { IGroup } from '@/types/group';
-import type { IUserResponse } from '@/types/user';
+import type { IProfileUserResponse } from '@/types/user';
 import { typedFetch } from '@/utils/api';
 import { parseSearchParams } from '@/utils/query';
 
@@ -28,7 +28,7 @@ const UserProfilePage: React.FC<IUserProfilePageProps> = async ({
     EQueryContentType.POSTS
   );
 
-  const userResult = await typedFetch<IUserResponse>(`/user/${id}`);
+  const userResult = await typedFetch<IProfileUserResponse>(`/user/${id}`);
 
   let content: { content: IContent[] } = { content: [] };
   let groupContent: IGroup[] = [];
