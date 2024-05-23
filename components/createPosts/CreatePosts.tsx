@@ -37,6 +37,12 @@ type SelectItemProps = {
   onValueChange?: (value: string) => void;
 };
 
+const colourOptions = [
+  { id: 'ocean', name: 'Ocean' },
+  { id: 'blue', name: 'Blue' },
+  { id: 'purple', name: 'Purple' },
+];
+
 const CreatePosts = () => {
   const [date, setDate] = React.useState<Date>();
   const [isLoading, setIsLoading] = useState(false);
@@ -60,15 +66,10 @@ const CreatePosts = () => {
 
   function onSubmit(values: z.infer<typeof createPostSchema>) {
     console.log(values);
+    form.reset();
   }
 
   const watchPostType = form.watch('postType');
-
-  const colourOptions = [
-    { id: 'ocean', name: 'Ocean' },
-    { id: 'blue', name: 'Blue' },
-    { id: 'purple', name: 'Purple' },
-  ];
 
   return (
     <>
@@ -326,7 +327,7 @@ const CreatePosts = () => {
                   <FormLabel>Content</FormLabel>
                   <FormControl>
                     <Editor
-                      apiKey="k1u3ltmn8ydlw7do8q51quscj02xqm6pbvu08pcm5jnlklnf"
+                      apiKey={process.env.NEXT_PUBLIC_TINY_SECRET}
                       onInit={(evt, editor) => (editorRef.current = editor)}
                       onEditorChange={(content) => {
                         form.setValue('content', content);
