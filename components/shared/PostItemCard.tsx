@@ -55,7 +55,7 @@ const PostItemCard: React.FC<IPostItemCardProps> = ({
           width={165}
           height={165}
           alt={title}
-          className="shrink-0 self-baseline max-md:hidden"
+          className="shrink-0 self-baseline max-md:hidden bg-primary-100 dark:bg-primary-500 rounded-2xl"
         />
         {/* RIGHT PART OF THE POST */}
         <div className="flex flex-1 flex-col gap-4">
@@ -66,7 +66,7 @@ const PostItemCard: React.FC<IPostItemCardProps> = ({
                 width={50}
                 height={50}
                 alt={title}
-                className="shrink-0 self-baseline md:hidden"
+                className="shrink-0 self-baseline md:hidden bg-primary-100 dark:bg-primary-500 rounded-[6px]"
               />
               <div>
                 <p className="p1-bold mb-2">{title}</p>

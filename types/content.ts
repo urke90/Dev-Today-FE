@@ -26,8 +26,8 @@ export interface IContent {
   contentDescription: string;
   postGroups: string[];
   coverImage: string | null;
-  meetUpLocationImage: string | null;
-  meetUpDate: Date | null;
+  meetupLocationImage: string | null;
+  meetupDate: Date | null;
   podcastAudioFile: string | null;
   podcastAudiTitle: string | null;
   storyTags: string[];

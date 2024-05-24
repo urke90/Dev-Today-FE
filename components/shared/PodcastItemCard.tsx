@@ -48,6 +48,7 @@ const PodcastItemCard: React.FC<IPodcastItemCardProps> = ({
             width={50}
             height={50}
             alt={title}
+            className="bg-primary-100 dark:bg-primary-500 rounded-[6px] "
           />
           <p className="p3-bold lg:p1-bold line-clamp-2">{title}</p>
           <Button
@@ -56,7 +57,6 @@ const PodcastItemCard: React.FC<IPodcastItemCardProps> = ({
             className="bg-white-200 dark:bg-black-700 size-[30px] shrink-0 rounded-full"
             onClick={(e) => handleLikeContent(e, id)}
           >
-            {/* TODO: HOW TO MAKE THIS ICON RESIZE ON DIFFERENT VIEWPORTS */}
             <HeartIcon
               className={isLiked ? 'text-primary-500' : 'text-white-300'}
             />

@@ -3,7 +3,6 @@
 import ShareIcon from '../icons/Share';
 import { Button } from '../ui/button';
 
-import { CldImage } from 'next-cloudinary';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -34,12 +33,12 @@ const GroupItemCard: React.FC<IGroupItemCardProps> = ({
         className="bg-light100__dark800 flex-0 flex shrink-0 flex-col gap-3.5 rounded-2xl p-5"
       >
         <div className="relative h-[150px] w-full">
-          <CldImage
+          <Image
             src={coverImage || '/assets/images/no-image.svg'}
             fill
             // crop="fill"
             alt={title}
-            className="rounded-xl object-fill"
+            className="rounded-xl object-fill bg-primary-100 dark:bg-primary-500"
           />
         </div>
         <p className="p1-bold">{title}</p>

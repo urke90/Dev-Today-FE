@@ -7,10 +7,12 @@ const BASE_API_URL = 'http://localhost:8080/api';
 export const fetchContent = async (
   userId: string,
   contentType: EQueryContentType,
-  page: number
+  page: number,
+  viewerId: string
 ): Promise<IContent[]> => {
   const response = await fetch(
-    BASE_API_URL + `/user/${userId}/content?type=${contentType}&page=${page}`
+    BASE_API_URL +
+      `/user/${userId}/content?type=${contentType}&page=${page}&viewerId=${viewerId}`
   );
 
   if (!response.ok) {

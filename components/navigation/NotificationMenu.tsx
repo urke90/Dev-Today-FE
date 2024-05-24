@@ -1,5 +1,6 @@
 'use client';
 
+import { calculateTimeAgo } from '@/utils/format';
 import CheckmarkIcon from '../icons/Checkmark';
 import NotificationIcon from '../icons/Notification';
 import { Button } from '../ui/button';
@@ -95,14 +96,14 @@ const NotificationItem: React.FC<INotificationItemProps> = ({
           width={40}
           height={40}
           alt="avatar"
-          className="size-10 rounded-full"
+          className="size-10 rounded-full bg-primary-100 dark:bg-primary-500"
         />
       </div>
       <div className="flex flex-col gap-0.5">
         <div className="flex-between">
           <span className="p3-bold">{likedBy}</span>
           <span className="text-black-700 dark:text-white-300 text-[10px] font-normal">
-            15 mins ago
+            {calculateTimeAgo(timeAgo)}
           </span>
         </div>
         <p className="p4-regular line-clamp-1">{message}</p>

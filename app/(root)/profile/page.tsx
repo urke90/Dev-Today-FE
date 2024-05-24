@@ -37,7 +37,7 @@ const MyProfilePage: React.FC<IMyProfilePageProps> = async ({
     groupContent = await typedFetch({ url: `/user/${session.user.id}/groups` });
   } else {
     content = await typedFetch({
-      url: `/user/${session.user.id}/content?type=${contentType}&page=${page}`,
+      url: `/user/${session.user.id}/content?type=${contentType}&page=${page}&viewerId=${session.user.id}}`,
     });
   }
 
@@ -46,11 +46,11 @@ const MyProfilePage: React.FC<IMyProfilePageProps> = async ({
       <ProfileHome
         isPersonalProfile
         user={userResult.user}
-        latestContent={userResult.contents}
         isFollowing={userResult.isFollowing}
         contentType={contentType}
         contentItems={content}
         groupItems={groupContent}
+        viewerId={session.user.id}
       />
     </section>
   );

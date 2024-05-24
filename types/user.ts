@@ -1,3 +1,5 @@
+import { EContentType } from './content';
+
 export enum EUserRole {
   USER = 'USER',
   ADMIN = 'ADMIN',
@@ -23,18 +25,20 @@ export interface IProfileUser {
   role: EUserRole;
   followers: string[];
   following: string[];
-  contents: IRecentContent[];
+  contents: IUserRecentContent[];
 }
 
-export interface IRecentContent {
+export interface IUserRecentContent {
   id: string;
   title: string;
   contentDescription: string;
   coverImage: string | null;
+  meetupDate: Date | null;
+  tags: string[];
+  type: EContentType;
 }
 
 export interface IProfileUserResponse {
   user: IProfileUser;
-  contents: IRecentContent[];
   isFollowing: boolean;
 }

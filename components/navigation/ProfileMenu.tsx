@@ -35,7 +35,7 @@ const ProfileMenu: React.FC<IProfileMenuProps> = (props) => {
               src="/assets/images/no-image.svg"
               alt="avatar"
               fill
-              className="ring-primary-500 ring-offset-white-100 dark:ring-offset-black-800 rounded-lg ring-1 ring-offset-[3px]"
+              className="ring-primary-500 ring-offset-white-100 dark:ring-offset-black-800 rounded-lg ring-1 ring-offset-[3px] bg-primary-100 dark:bg-primary-500"
             />
           </div>
           <span className="p2-medium max-md:hidden">Uros Bijelic</span>

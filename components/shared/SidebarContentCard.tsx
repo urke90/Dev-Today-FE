@@ -1,15 +1,18 @@
-import type { IRecentContent } from '@/types/user';
+import type { IUserRecentContent } from '@/types/user';
 import ArrowRightIcon from '../icons/ArrowRight';
 
+import { EContentType } from '@/types/content';
+import { parseDate } from '@/utils/format';
 import Image from 'next/image';
 import Link from 'next/link';
+import BadgeItem from './BadgeItem';
 
 // ----------------------------------------------------------------
 
 interface ISidebarContentCardProps {
   title: string;
   author: string;
-  items: IRecentContent[];
+  items: IUserRecentContent[];
 }
 
 /**
@@ -29,44 +32,59 @@ const SidebarContentCard: React.FC<ISidebarContentCardProps> = ({
       </div>
       <ul className="flex flex-col gap-5">
         {items.length > 0
-          ? items.map(({ id, title, coverImage }) => (
-              <SidebarContentCardItem
-                key={id}
-                coverImage={coverImage}
-                title={title}
-                author={author}
-                link={id}
-              />
-            ))
+          ? items.map(({ id, title, coverImage, type, meetupDate, tags }) =>
+              type === 'posts' ? (
+                <PostItemCard
+                  key={id}
+                  id={id}
+                  coverImage={coverImage}
+                  title={title}
+                  author={author}
+                  type={type}
+                />
+              ) : (
+                <MeetupItemCard
+                  key={id}
+                  id={id}
+                  location="LOCATION IS HARDCODED FOR NOW"
+                  title={title}
+                  tags={tags}
+                  type={type}
+                  meetupDate={meetupDate}
+                />
+              )
+            )
           : null}
       </ul>
     </div>
   );
 };
 
-interface ISidebarContentCardItemProps {
+interface IPostItemCardProps {
   coverImage: string | null;
   title: string;
   author: string;
-  link: string;
+  id: string;
+  type: EContentType;
 }
 
-const SidebarContentCardItem: React.FC<ISidebarContentCardItemProps> = ({
+const PostItemCard: React.FC<IPostItemCardProps> = ({
+  id,
   coverImage,
   title,
   author,
-  link,
+  type,
 }) => {
   return (
     <li>
-      <Link href={link} className="flex">
+      <Link href={type + '/' + id} className="flex">
         <div className="flex gap-3.5">
           <Image
             src={coverImage || '/assets/images/no-image.svg'}
             alt="post"
             width={58}
             height={58}
-            className="rounded"
+            className="rounded bg-primary-100 dark:bg-primary-500"
           />
           <div className="flex flex-col gap-[6px]">
             <p className="p4-medium">{title}</p>
@@ -74,6 +92,51 @@ const SidebarContentCardItem: React.FC<ISidebarContentCardItemProps> = ({
           </div>
         </div>
         <ArrowRightIcon className="text-white-400 shrink-0" />
+      </Link>
+    </li>
+  );
+};
+
+interface IMeetupItemCardProps {
+  title: string;
+  meetupDate: Date | null;
+  location: string;
+  id: string;
+  tags: string[];
+  type: EContentType;
+}
+
+const MeetupItemCard: React.FC<IMeetupItemCardProps> = ({
+  id,
+  location,
+  meetupDate,
+  tags,
+  title,
+  type,
+}) => {
+  const shortenedDate = meetupDate ? parseDate(meetupDate) : 'TBD';
+  const [month, day] = shortenedDate.split(' ');
+
+  return (
+    <li>
+      <Link href={type + '/' + id} className="flex items-center gap-3.5">
+        <div className="flex-center bg-light200__dark700 shrink-0 flex-col rounded-[6px] px-2.5 py-[5px] h-[66px] w-[42px]">
+          <span className="subtitle-normal md:p4-regular text-black-800 dark:text-white-200 uppercase">
+            {month}
+          </span>
+          <span className="p2-bold md:d2-bold !text-primary-500">{day}</span>
+        </div>
+        <div className="flex flex-col gap-1.5">
+          <p className="p3-medium line-clamp-1">{title}</p>
+          <p className="subtitle-normal">{location}</p>
+          {tags?.length > 0 ? (
+            <ul className="flex gap-2.5">
+              {tags.map((tag) => (
+                <BadgeItem key={tag} title={tag} />
+              ))}
+            </ul>
+          ) : null}
+        </div>
       </Link>
     </li>
   );

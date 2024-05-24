@@ -42,6 +42,7 @@ interface IContentListProps {
   groupItems: IGroup[];
   userId: string;
   userName: string;
+  viewerId: string;
 }
 
 const ContentList: React.FC<IContentListProps> = ({
@@ -50,12 +51,11 @@ const ContentList: React.FC<IContentListProps> = ({
   groupItems,
   userId,
   userName,
+  viewerId,
 }) => {
   const [content, setContent] = useState<IContent[]>(contentItems);
   const [groups, setGroups] = useState<IGroup[]>(groupItems);
   const [page, setPage] = useState(1);
-
-  console.log('content', content);
 
   const likeOrDislikeContent =
     (userId: string) =>
@@ -78,9 +78,8 @@ const ContentList: React.FC<IContentListProps> = ({
               : content
           )
         );
-        toast.success(response.message);
       } catch (error) {
-        toast.error("Something went wrong, could't like the post!");
+        toast.error('Ooops, something went wrong!');
       }
     };
 
@@ -98,7 +97,7 @@ const ContentList: React.FC<IContentListProps> = ({
     data: contentData,
   } = useQuery<IContent[]>({
     queryKey: [updateContentQueryKey(contentType), contentType, userId, page],
-    queryFn: () => fetchContent(userId, contentType, page),
+    queryFn: () => fetchContent(userId, contentType, page, viewerId),
     enabled:
       shouldFetch && contentType !== EQueryContentType.GROUPS && page !== 1,
     retry: false,
@@ -184,7 +183,7 @@ const ContentList: React.FC<IContentListProps> = ({
           renderedContent = content?.map(
             ({
               id,
-              meetUpDate,
+              meetupDate,
               title,
               contentDescription,
               coverImage,
@@ -198,7 +197,7 @@ const ContentList: React.FC<IContentListProps> = ({
                 description={contentDescription}
                 tags={storyTags}
                 location="Innovation Hub, Austin"
-                meetupDate={meetUpDate}
+                meetupDate={meetupDate}
               />
             )
           );

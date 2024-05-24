@@ -14,6 +14,7 @@ interface IUserProfilePageProps {
   searchParams: {
     page: string | string[] | undefined;
     type: string | string[] | undefined;
+    viewerId: string | string[] | undefined;
   };
 }
 
@@ -27,28 +28,31 @@ const UserProfilePage: React.FC<IUserProfilePageProps> = async ({
     searchParams.type,
     EQueryContentType.POSTS
   );
+  const viewerId = parseSearchParams(searchParams.viewerId, '');
 
-  const userResult = await typedFetch<IProfileUserResponse>(`/user/${id}`);
+  const userResult = await typedFetch<IProfileUserResponse>({
+    url: `/user/${id}`,
+  });
 
   let content: { content: IContent[] } = { content: [] };
   let groupContent: IGroup[] = [];
   if (contentType === EQueryContentType.GROUPS) {
-    groupContent = await typedFetch(`/user/${id}/groups`);
+    groupContent = await typedFetch({ url: `/user/${id}/groups` });
   } else {
-    content = await typedFetch(
-      `/user/${id}/content?type=${contentType}&page=${page}`
-    );
+    content = await typedFetch({
+      url: `/user/${id}/content?type=${contentType}&page=${page}&viewerId=${viewerId}`,
+    });
   }
 
   return (
     <section className="px-3.5 lg:px-5">
       <ProfileHome
         user={userResult.user}
-        latestContent={userResult.contents}
         isFollowing={userResult.isFollowing}
         contentType={contentType}
         contentItems={content.content}
         groupItems={groupContent}
+        viewerId={viewerId}
       />
     </section>
   );

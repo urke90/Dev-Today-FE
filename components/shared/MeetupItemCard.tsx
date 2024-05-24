@@ -43,6 +43,7 @@ const MeetupItemCard: React.FC<IMeetupItemCardProps> = ({
                 src={coverImage || '/assets/images/no-image.svg'}
                 alt="meetup"
                 fill
+                className="bg-primary-100 dark:bg-primary-500 rounded-[6px]"
               />
             </div>
             <div>

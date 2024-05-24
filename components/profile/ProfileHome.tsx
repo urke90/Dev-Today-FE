@@ -11,7 +11,7 @@ import Image from 'next/image';
 
 import { EQueryContentType, IContent } from '@/types/content';
 import type { IGroup } from '@/types/group';
-import type { IProfileUser, IRecentContent } from '@/types/user';
+import type { IProfileUser } from '@/types/user';
 import { calculateTimeAgo } from '@/utils/format';
 
 // ----------------------------------------------------------------
@@ -19,21 +19,21 @@ import { calculateTimeAgo } from '@/utils/format';
 interface IProfileHomeProps {
   user: IProfileUser;
   contentType: EQueryContentType;
-  latestContent: IRecentContent[];
   isPersonalProfile?: boolean;
   isFollowing?: boolean;
   contentItems: IContent[];
   groupItems: IGroup[];
+  viewerId: string;
 }
 
 const ProfileHome: React.FC<IProfileHomeProps> = ({
   isPersonalProfile = false,
   user,
   contentType,
-  latestContent,
   isFollowing = false,
   contentItems,
   groupItems,
+  viewerId,
 }) => {
   const {
     id,
@@ -52,6 +52,8 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
     contents,
   } = user ?? {};
 
+  console.log('contents U PROFILE PAGE', contents);
+
   return (
     <div className="content-wrapper">
       <aside className="left-sidebar bg-light100__dark800 rounded-2xl !p-0 !pb-10 text-center">
@@ -66,7 +68,7 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
         <div className="flex flex-col gap-y-6 px-5">
           <div className="relative z-10 -mt-20">
             <Image
-              src={avatarImg ? avatarImg : '/assets/images/no-image.svg'}
+              src={avatarImg ? avatarImg : '/assets/images/no-image-1.svg'}
               width={110}
               height={110}
               alt="profile"
@@ -123,6 +125,7 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
             groupItems={groupItems}
             userId={id}
             userName={name}
+            viewerId={viewerId}
           />
         </div>
       </main>
