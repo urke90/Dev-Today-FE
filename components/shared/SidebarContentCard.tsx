@@ -11,7 +11,6 @@ import BadgeItem from './BadgeItem';
 
 interface ISidebarContentCardProps {
   title: string;
-  author: string;
   items: IUserRecentContent[];
 }
 
@@ -22,7 +21,6 @@ interface ISidebarContentCardProps {
 const SidebarContentCard: React.FC<ISidebarContentCardProps> = ({
   title,
   items,
-  author,
 }) => {
   return (
     <div className="right-sidebar-item">
@@ -31,28 +29,61 @@ const SidebarContentCard: React.FC<ISidebarContentCardProps> = ({
         <ArrowRightIcon className="text-black-800 dark:text-white-200" />
       </div>
       <ul className="flex flex-col gap-5">
-        {items.length > 0
-          ? items.map(({ id, title, coverImage, type, meetupDate, tags }) =>
-              type === 'posts' ? (
-                <PostItemCard
-                  key={id}
-                  id={id}
-                  coverImage={coverImage}
-                  title={title}
-                  author={author}
-                  type={type}
-                />
-              ) : (
-                <MeetupItemCard
-                  key={id}
-                  id={id}
-                  location="LOCATION IS HARDCODED FOR NOW"
-                  title={title}
-                  tags={tags}
-                  type={type}
-                  meetupDate={meetupDate}
-                />
-              )
+        {items?.length > 0
+          ? items.map(
+              ({
+                id,
+                author,
+                contentDescription,
+                coverImage,
+                meetupDate,
+                tags,
+                title,
+                type,
+              }) => {
+                switch (type) {
+                  case EContentType.POSTS: {
+                    return (
+                      <PostItemCard
+                        key={id}
+                        id={id}
+                        coverImage={coverImage}
+                        title={title}
+                        author={author.name}
+                        type={type}
+                      />
+                    );
+                  }
+                  case EContentType.MEETUPS: {
+                    return (
+                      <MeetupItemCard
+                        key={id}
+                        id={id}
+                        location="LOCATION IS HARDCODED FOR NOW"
+                        title={title}
+                        tags={tags}
+                        type={type}
+                        meetupDate={meetupDate}
+                      />
+                    );
+                  }
+                  case EContentType.PODCASTS: {
+                    return (
+                      <PodcastItemCard
+                        key={id}
+                        id={id}
+                        author={author}
+                        contentDescription={contentDescription}
+                        tags={tags}
+                        title={title}
+                        type={type}
+                      />
+                    );
+                  }
+                  default:
+                    return 'bla';
+                }
+              }
             )
           : null}
       </ul>
@@ -137,6 +168,55 @@ const MeetupItemCard: React.FC<IMeetupItemCardProps> = ({
             </ul>
           ) : null}
         </div>
+      </Link>
+    </li>
+  );
+};
+
+interface IPodcastItemCardProps {
+  title: string;
+  contentDescription: string;
+  id: string;
+  tags: string[];
+  type: EContentType;
+  author: {
+    name: string;
+    avatarImg: string;
+  };
+}
+
+const PodcastItemCard: React.FC<IPodcastItemCardProps> = ({
+  id,
+  tags,
+  title,
+  type,
+  contentDescription,
+  author,
+}) => {
+  return (
+    <li>
+      <Link href={type + '/' + id} className="flex items-center gap-3.5">
+        <div className="flex">
+          <Image
+            src={author.avatarImg || '/assets/images/no-image.svg'}
+            width={58}
+            height={58}
+            alt={author.name}
+            className="bg-primary-100 dark:bg-primary-500 rounded-[6px]"
+          />
+        </div>
+        <div className="flex flex-col gap-1.5">
+          <p className="p3-medium line-clamp-1">{title}</p>
+          <p className="subtitle-normal">{contentDescription}</p>
+          {tags?.length > 0 ? (
+            <ul className="flex gap-2.5">
+              {tags.map((tag) => (
+                <BadgeItem key={tag} title={tag} />
+              ))}
+            </ul>
+          ) : null}
+        </div>
+        <ArrowRightIcon className="text-white-400 shrink-0" />
       </Link>
     </li>
   );

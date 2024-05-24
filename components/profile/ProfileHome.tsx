@@ -52,8 +52,6 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
     contents,
   } = user ?? {};
 
-  console.log('contents U PROFILE PAGE', contents);
-
   return (
     <div className="content-wrapper">
       <aside className="left-sidebar bg-light100__dark800 rounded-2xl !p-0 !pb-10 text-center">
@@ -131,11 +129,7 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
       </main>
       <aside className="right-sidebar">
         <div className="max-xl:hidden">
-          <SidebarContentCard
-            title="Recent Posts"
-            items={contents}
-            author={name}
-          />
+          <SidebarContentCard title="Recent Posts" items={contents} />
         </div>
         <div className="right-sidebar-item">
           <div>

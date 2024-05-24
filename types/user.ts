@@ -36,6 +36,10 @@ export interface IUserRecentContent {
   meetupDate: Date | null;
   tags: string[];
   type: EContentType;
+  author: {
+    name: string;
+    avatarImg: string;
+  };
 }
 
 export interface IProfileUserResponse {
