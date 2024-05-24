@@ -1,20 +1,17 @@
+import { auth } from '@/app/api/auth/[...nextauth]/route';
 import EditProfile from '@/components/profile/EditProfile';
 import { IProfileUserResponse } from '@/types/user';
 import { typedFetch } from '@/utils/api';
 
 // ----------------------------------------------------------------
 
-interface IUserEditPageProps {
-  params: {
-    id: string;
-  };
-}
-
-const EditProfilePage: React.FC<IUserEditPageProps> = async ({ params }) => {
-  const id = params.id;
+const EditProfilePage: React.FC = async () => {
+  const session = await auth();
+  if (!session?.user) throw new Error('User data not available!');
 
   const userResult = await typedFetch<IProfileUserResponse>({
-    url: `/user/${id}`,
+    url: `/user/${session.user.id}`,
+    cache: 'no-cache',
   });
 
   return <EditProfile user={userResult.user} />;

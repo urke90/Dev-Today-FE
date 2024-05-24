@@ -57,31 +57,29 @@ const ContentList: React.FC<IContentListProps> = ({
   const [groups, setGroups] = useState<IGroup[]>(groupItems);
   const [page, setPage] = useState(1);
 
-  const likeOrDislikeContent =
-    (userId: string) =>
-    async (
-      e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-      contentId: string
-    ) => {
-      e.preventDefault();
-      e.stopPropagation();
-      try {
-        const response: { message: string } = await typedFetch({
-          url: `/user/content/${userId}/like`,
-          method: 'POST',
-          body: { contentId },
-        });
-        setContent((prevContent) =>
-          prevContent.map((content) =>
-            content.id === contentId
-              ? { ...content, isLiked: !content.isLiked }
-              : content
-          )
-        );
-      } catch (error) {
-        toast.error('Ooops, something went wrong!');
-      }
-    };
+  const likeOrDislikeContent = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    contentId: string
+  ) => {
+    e.preventDefault();
+    e.stopPropagation();
+    try {
+      await typedFetch({
+        url: `/user/content/${userId}/like`,
+        method: 'POST',
+        body: { contentId },
+      });
+      setContent((prevContent) =>
+        prevContent.map((content) =>
+          content.id === contentId
+            ? { ...content, isLiked: !content.isLiked }
+            : content
+        )
+      );
+    } catch (error) {
+      toast.error('Ooops, something went wrong!');
+    }
+  };
 
   const shouldFetch = getShouldFetch(
     contentType === EQueryContentType.GROUPS ? groups : content
@@ -171,7 +169,7 @@ const ContentList: React.FC<IContentListProps> = ({
                 likesCount={likesCount}
                 commentsCount={commentsCount}
                 isLiked={isLiked}
-                handleLikeContent={likeOrDislikeContent(userId)}
+                handleLikeContent={likeOrDislikeContent}
               />
             )
           );
@@ -226,7 +224,7 @@ const ContentList: React.FC<IContentListProps> = ({
                 author={userName}
                 createdAt={createdAt}
                 isLiked={isLiked}
-                handleLikeContent={likeOrDislikeContent(userId)}
+                handleLikeContent={likeOrDislikeContent}
               />
             )
           );
@@ -277,7 +275,7 @@ const ContentList: React.FC<IContentListProps> = ({
               likesCount={likesCount}
               commentsCount={commentsCount}
               isLiked={isLiked}
-              handleLikeContent={likeOrDislikeContent(userId)}
+              handleLikeContent={likeOrDislikeContent}
             />
           )
         );
