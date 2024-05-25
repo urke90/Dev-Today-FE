@@ -1,6 +1,4 @@
-'use client';
 import CreatePosts from '@/components/createPosts/CreatePosts';
-import React from 'react';
 
 const Create = () => {
   return (

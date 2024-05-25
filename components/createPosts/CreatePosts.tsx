@@ -30,6 +30,67 @@ import CreatableSelect from 'react-select/creatable';
 import { z } from 'zod';
 import Preview from '../preview/Preview';
 
+const dummyContentData = [
+  {
+    id: '1a2b3c4d',
+    type: 'posts',
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    authorId: '1a2b3c4e',
+    title: 'First Post',
+    contentDescription:
+      "thext 500 words of the post's content goes here".repeat(10),
+    coverImage: 'http://example.com/cover1.jpg',
+    meetUpLocationImage: null,
+    meetupDate: null,
+    podcastAudioFile: null,
+    podcastAudiTitle: null,
+    storyTags: ['tag1', 'tag2'],
+    viewsCount: 100,
+    likesCount: 10,
+    commentsCount: 5,
+    groupId: '1a2b3c4f',
+  },
+  {
+    id: '2b3c4d5e',
+    type: 'meetups',
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    authorId: '1a2b3c4e',
+    title: 'First Meetup',
+    contentDescription: 'This is the first meetup.',
+    coverImage: 'http://example.com/cover2.jpg',
+    meetUpLocationImage: 'http://example.com/location1.jpg',
+    meetupDate: new Date(),
+    podcastAudioFile: null,
+    podcastAudiTitle: null,
+    storyTags: ['tag3', 'tag4'],
+    viewsCount: 200,
+    likesCount: 20,
+    commentsCount: 10,
+    groupId: '1a2b3c4f',
+  },
+  {
+    id: '3c4d5e6f',
+    type: 'podcasts',
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    authorId: '1a2b3c4e',
+    title: 'First Podcast',
+    contentDescription: 'This is the first podcast.',
+    coverImage: 'http://example.com/cover3.jpg',
+    meetUpLocationImage: null,
+    meetupDate: null,
+    podcastAudioFile: 'http://example.com/podcast1.mp3',
+    podcastAudiTitle: 'Podcast 1',
+    storyTags: ['tag5', 'tag6'],
+    viewsCount: 300,
+    likesCount: 30,
+    commentsCount: 15,
+    groupId: '1a2b3c4f',
+  },
+];
+
 type SelectItemProps = {
   value: string;
   children: React.ReactNode;
@@ -44,7 +105,6 @@ const colourOptions = [
 ];
 
 const CreatePosts = () => {
-  const [date, setDate] = React.useState<Date>();
   const [isLoading, setIsLoading] = useState(false);
   const [isPreview, setIsPreview] = useState(false);
   const editorRef = useRef<any>(null);
@@ -56,28 +116,33 @@ const CreatePosts = () => {
       selectGroup: undefined,
       coverImage: '',
       meetupLocation: '',
-      meetupDate: new Date(),
+      meetupDate: undefined,
       podcastAudioFile: '',
       audioTitle: '',
       content: '',
       tags: [],
     },
   });
-
-  function onSubmit(values: z.infer<typeof createPostSchema>) {
-    console.log(values);
-    form.reset();
-  }
-
   const watchPostType = form.watch('postType');
+
+  const onSubmit = async () => {
+    if (watchPostType === 'meetups') {
+      const res = await form.trigger(['meetupLocation', 'meetupDate']);
+      if (!res) return;
+    }
+    if (watchPostType === 'podcasts') {
+      const res = await form.trigger(['podcastAudioFile', 'audioTitle']);
+      if (!res) return;
+    }
+
+    console.log(form.getValues());
+  };
 
   return (
     <>
       {!isPreview ? (
         <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-8 w-full px-3 md:px-0">
+          <form className="space-y-8 w-full px-3 md:px-0">
             <RHFInput
               className="!placeholder:white-400 p3-medium dark:!placeholder-white-400"
               name="title"
@@ -134,6 +199,7 @@ const CreatePosts = () => {
                                     alt={type.title}
                                     width={24}
                                     height={24}
+                                    className="invert dark:invert-0"
                                   />
                                   <SelectItem
                                     value={type.title}
@@ -253,7 +319,7 @@ const CreatePosts = () => {
                         <Button
                           className={cn(
                             'justify-start p3-regular !text-white-400 bg-light100__dark800 border dark:border-black-700/50 px-4 h-11 !mt-2',
-                            !date && 'text-muted-foreground'
+                            !field.value && 'text-muted-foreground'
                           )}>
                           <Image
                             src="/assets/icons/calendar-create.svg"
@@ -261,8 +327,8 @@ const CreatePosts = () => {
                             width={18}
                             height={18}
                           />
-                          {date ? (
-                            format(date, 'PPP')
+                          {field.value ? (
+                            format(field.value, 'PPP')
                           ) : (
                             <span>Pick a date of the meetup</span>
                           )}
@@ -272,14 +338,19 @@ const CreatePosts = () => {
                         <Calendar
                           className="bg-white-100 dark:bg-black-800 p4-regular "
                           mode="single"
-                          selected={date}
-                          onSelect={setDate}
+                          selected={field.value}
+                          onSelect={field.onChange}
                           initialFocus
                         />
                       </PopoverContent>
                     </Popover>
                   )}
                 />
+                {form.formState.errors.meetupDate?.message && (
+                  <p className="text-[14px] text-red-500 dark:text-red-500">
+                    {form.formState.errors.meetupDate.type}
+                  </p>
+                )}
               </>
             )}
             {watchPostType === 'podcasts' && (
@@ -440,7 +511,8 @@ const CreatePosts = () => {
                 Cancel
               </Button>
               <Button
-                type="submit"
+                type="button"
+                onClick={() => onSubmit()}
                 className=" bg-light100__dark800 hover:!text-white-100 duration-200 hover:bg-primary-500 py-3 w-3/5">
                 Publish Post
               </Button>
@@ -448,7 +520,11 @@ const CreatePosts = () => {
           </form>
         </Form>
       ) : (
-        <Preview setIsPreview={setIsPreview} />
+        <Preview
+          type={watchPostType}
+          data={dummyContentData[0]}
+          setIsPreview={setIsPreview}
+        />
       )}
     </>
   );
