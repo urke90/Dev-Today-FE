@@ -1,16 +1,16 @@
 import type { IProfileUser } from './user';
 
 export enum EContentType {
-  POSTS = 'posts',
-  MEETUPS = 'meetups',
-  PODCASTS = 'podcasts',
+  POST = 'post',
+  MEETUP = 'meetup',
+  PODCAST = 'podcast',
 }
 
 export enum EQueryContentType {
-  POSTS = 'posts',
-  MEETUPS = 'meetups',
-  PODCASTS = 'podcasts',
-  GROUPS = 'groups',
+  POST = 'post',
+  MEETUP = 'meetup',
+  PODCAST = 'podcast',
+  GROUP = 'group',
 }
 
 export interface IContent {
@@ -30,7 +30,7 @@ export interface IContent {
   meetupDate: Date | null;
   podcastFile: string | null;
   podcastTitle: string | null;
-  storyTags: string[];
+  tags: string[];
   comments: Comment[];
   contentGroups: [];
   viewsCount: number | null;

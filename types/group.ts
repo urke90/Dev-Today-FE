@@ -1,7 +1,7 @@
 export interface IGroup {
   id: string;
   name: string;
-  type: 'posts' | 'meetups' | 'podcasts';
+  type: 'post' | 'meetup' | 'podcast';
   coverImg: string;
   groupBio: string;
   createdAt: Date;

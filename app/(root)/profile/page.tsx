@@ -21,7 +21,7 @@ const MyProfilePage: React.FC<IMyProfilePageProps> = async ({
   const page = parseSearchParams(searchParams.page, '1');
   const contentType = parseSearchParams<EQueryContentType>(
     searchParams.type,
-    EQueryContentType.POSTS
+    EQueryContentType.POST
   );
 
   const session = await auth();
@@ -29,11 +29,12 @@ const MyProfilePage: React.FC<IMyProfilePageProps> = async ({
 
   const userResult = await typedFetch<IProfileUserResponse>({
     url: `/user/${session?.user.id}`,
+    cache: 'no-store',
   });
 
   let content: IContent[] = [];
   let groupContent: IGroup[] = [];
-  if (contentType === EQueryContentType.GROUPS) {
+  if (contentType === EQueryContentType.GROUP) {
     groupContent = await typedFetch({ url: `/user/${session.user.id}/groups` });
   } else {
     content = await typedFetch({

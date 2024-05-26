@@ -42,7 +42,7 @@ const SidebarContentCard: React.FC<ISidebarContentCardProps> = ({
                 type,
               }) => {
                 switch (type) {
-                  case EContentType.POSTS: {
+                  case EContentType.POST: {
                     return (
                       <PostItemCard
                         key={id}
@@ -54,7 +54,7 @@ const SidebarContentCard: React.FC<ISidebarContentCardProps> = ({
                       />
                     );
                   }
-                  case EContentType.MEETUPS: {
+                  case EContentType.MEETUP: {
                     return (
                       <MeetupItemCard
                         key={id}
@@ -67,7 +67,7 @@ const SidebarContentCard: React.FC<ISidebarContentCardProps> = ({
                       />
                     );
                   }
-                  case EContentType.PODCASTS: {
+                  case EContentType.PODCAST: {
                     return (
                       <PodcastItemCard
                         key={id}

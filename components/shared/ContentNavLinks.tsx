@@ -13,7 +13,7 @@ const ContentNavLinks: React.FC<IContentNavLinksProps> = (props) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   // staviti default value
-  const type = searchParams.get('type') ?? EQueryContentType.POSTS;
+  const type = searchParams.get('type') ?? EQueryContentType.POST;
 
   const updateQueryParams = (value: string) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -28,9 +28,9 @@ const ContentNavLinks: React.FC<IContentNavLinksProps> = (props) => {
   return (
     <div className="bg-light100__dark800 flex-between mx-auto w-full rounded-lg p-3.5">
       <Link
-        href={pathname + '?' + updateQueryParams(EQueryContentType.POSTS)}
+        href={pathname + '?' + updateQueryParams(EQueryContentType.POST)}
         className={`${linkStyles} ${
-          type === EQueryContentType.POSTS
+          type === EQueryContentType.POST
             ? 'bg-primary-500 !text-white-100 dark:!text-white-100'
             : ''
         }`}
@@ -38,9 +38,9 @@ const ContentNavLinks: React.FC<IContentNavLinksProps> = (props) => {
         Posts
       </Link>
       <Link
-        href={pathname + '?' + updateQueryParams(EQueryContentType.MEETUPS)}
+        href={pathname + '?' + updateQueryParams(EQueryContentType.MEETUP)}
         className={`${linkStyles} ${
-          type === EQueryContentType.MEETUPS
+          type === EQueryContentType.MEETUP
             ? 'bg-primary-500 text-white-100 dark:!text-white-100'
             : ''
         }`}
@@ -50,7 +50,7 @@ const ContentNavLinks: React.FC<IContentNavLinksProps> = (props) => {
       <Link
         href={pathname + '?' + updateQueryParams('podcasts')}
         className={`${linkStyles} ${
-          type === EQueryContentType.PODCASTS
+          type === EQueryContentType.PODCAST
             ? 'bg-primary-500 text-white-100 dark:!text-white-100'
             : ''
         }`}
@@ -58,9 +58,9 @@ const ContentNavLinks: React.FC<IContentNavLinksProps> = (props) => {
         Podcasts
       </Link>
       <Link
-        href={pathname + '?' + updateQueryParams(EQueryContentType.GROUPS)}
+        href={pathname + '?' + updateQueryParams(EQueryContentType.GROUP)}
         className={`${linkStyles} ${
-          type === EQueryContentType.GROUPS
+          type === EQueryContentType.GROUP
             ? 'bg-primary-500 text-white-100 dark:!text-white-100'
             : ''
         }`}

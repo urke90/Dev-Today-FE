@@ -26,7 +26,7 @@ const UserProfilePage: React.FC<IUserProfilePageProps> = async ({
   const page = parseSearchParams(searchParams.page, '1');
   const contentType = parseSearchParams<EQueryContentType>(
     searchParams.type,
-    EQueryContentType.POSTS
+    EQueryContentType.POST
   );
   const viewerId = parseSearchParams(searchParams.viewerId, '');
 
@@ -36,7 +36,7 @@ const UserProfilePage: React.FC<IUserProfilePageProps> = async ({
 
   let content: { content: IContent[] } = { content: [] };
   let groupContent: IGroup[] = [];
-  if (contentType === EQueryContentType.GROUPS) {
+  if (contentType === EQueryContentType.GROUP) {
     groupContent = await typedFetch({ url: `/user/${id}/groups` });
   } else {
     content = await typedFetch({

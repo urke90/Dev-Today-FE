@@ -24,13 +24,13 @@ const getShouldFetch = (items: IContent[] | IGroup[]) => {
 };
 
 const updateContentQueryKey = (contentType: EQueryContentType) => {
-  if (contentType === EQueryContentType.GROUPS) {
+  if (contentType === EQueryContentType.GROUP) {
     return;
   }
   const FETCH_QUERIES = {
-    posts: EContentGroupItemsQueries.FETCH_POSTS,
-    meetups: EContentGroupItemsQueries.FETCH_MEETUPS,
-    podcasts: EContentGroupItemsQueries.FETCH_PODCASTS,
+    post: EContentGroupItemsQueries.FETCH_POSTS,
+    meetup: EContentGroupItemsQueries.FETCH_MEETUPS,
+    podcast: EContentGroupItemsQueries.FETCH_PODCASTS,
   };
 
   return FETCH_QUERIES[contentType];
@@ -82,7 +82,7 @@ const ContentList: React.FC<IContentListProps> = ({
   };
 
   const shouldFetch = getShouldFetch(
-    contentType === EQueryContentType.GROUPS ? groups : content
+    contentType === EQueryContentType.GROUP ? groups : content
   );
 
   const updatePage = useCallback(() => {
@@ -97,7 +97,7 @@ const ContentList: React.FC<IContentListProps> = ({
     queryKey: [updateContentQueryKey(contentType), contentType, userId, page],
     queryFn: () => fetchContent(userId, contentType, page, viewerId),
     enabled:
-      shouldFetch && contentType !== EQueryContentType.GROUPS && page !== 1,
+      shouldFetch && contentType !== EQueryContentType.GROUP && page !== 1,
     retry: false,
   });
 
@@ -109,7 +109,7 @@ const ContentList: React.FC<IContentListProps> = ({
     queryKey: [EContentGroupItemsQueries.FETCH_GROUPS, userId, page],
     queryFn: () => fetchGroups(userId, page),
     enabled:
-      shouldFetch && contentType === EQueryContentType.GROUPS && page !== 1,
+      shouldFetch && contentType === EQueryContentType.GROUP && page !== 1,
     retry: false,
   });
 
@@ -140,7 +140,7 @@ const ContentList: React.FC<IContentListProps> = ({
     let renderedContent;
 
     switch (contentType) {
-      case EQueryContentType.POSTS:
+      case EQueryContentType.POST:
         {
           styles = 'flex flex-col flex-wrap gap-5';
           renderedContent = content?.map(
@@ -149,7 +149,7 @@ const ContentList: React.FC<IContentListProps> = ({
               title,
               coverImage,
               description,
-              storyTags,
+              tags,
               createdAt,
               viewsCount,
               likesCount,
@@ -162,7 +162,7 @@ const ContentList: React.FC<IContentListProps> = ({
                 coverImage={coverImage}
                 title={title}
                 description={description}
-                tags={storyTags}
+                tags={tags}
                 createdAt={createdAt}
                 author={userName}
                 viewsCount={viewsCount}
@@ -175,18 +175,18 @@ const ContentList: React.FC<IContentListProps> = ({
           );
         }
         break;
-      case EQueryContentType.MEETUPS:
+      case EQueryContentType.MEETUP:
         {
           styles = 'flex flex-col flax-wrap gap-5';
           renderedContent = content?.map(
-            ({ id, meetupDate, title, description, coverImage, storyTags }) => (
+            ({ id, meetupDate, title, description, coverImage, tags }) => (
               <MeetupItemCard
                 key={id}
                 id={id}
                 coverImage={coverImage}
                 title={title}
                 description={description}
-                tags={storyTags}
+                tags={tags}
                 location="Innovation Hub, Austin"
                 meetupDate={meetupDate}
               />
@@ -194,7 +194,7 @@ const ContentList: React.FC<IContentListProps> = ({
           );
         }
         break;
-      case EQueryContentType.PODCASTS:
+      case EQueryContentType.PODCAST:
         {
           styles = 'grid grid-cols-1 md:grid-cols-2 gap-5';
           renderedContent = content?.map(
@@ -203,7 +203,7 @@ const ContentList: React.FC<IContentListProps> = ({
               coverImage,
               title,
               description,
-              storyTags,
+              tags,
               createdAt,
               isLiked,
             }) => (
@@ -213,7 +213,7 @@ const ContentList: React.FC<IContentListProps> = ({
                 coverImage={coverImage}
                 title={title}
                 description={description}
-                tags={storyTags}
+                tags={tags}
                 author={userName}
                 createdAt={createdAt}
                 isLiked={isLiked}
@@ -223,7 +223,7 @@ const ContentList: React.FC<IContentListProps> = ({
           );
         }
         break;
-      case EQueryContentType.GROUPS:
+      case EQueryContentType.GROUP:
         {
           styles = 'grid grid-cols-1 md:grid-cols-2 gap-5';
           renderedContent = groups?.map(
@@ -248,7 +248,7 @@ const ContentList: React.FC<IContentListProps> = ({
             title,
             coverImage,
             description,
-            storyTags,
+            tags,
             createdAt,
             viewsCount,
             likesCount,
@@ -261,7 +261,7 @@ const ContentList: React.FC<IContentListProps> = ({
               coverImage={coverImage}
               title={title}
               description={description}
-              tags={storyTags}
+              tags={tags}
               createdAt={createdAt}
               author={userName}
               viewsCount={viewsCount}
