@@ -1,7 +1,9 @@
+import { EContentType } from './content';
+
 export interface IGroup {
   id: string;
   name: string;
-  type: 'post' | 'meetup' | 'podcast';
+  type: EContentType;
   coverImg: string;
   groupBio: string;
   createdAt: Date;
