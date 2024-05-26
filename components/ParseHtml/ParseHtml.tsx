@@ -35,7 +35,9 @@ const ParseHtml = ({ data }: Props) => {
   }, []);
   const stringData = typeof data === 'string' ? data : String(data);
   return (
-    <div className={'markdown w-full min-w-full '}>{parse(stringData)}</div>
+    <div className={'markdown w-full min-w-full dark:text-white-200'}>
+      {parse(stringData)}
+    </div>
   );
 };
 

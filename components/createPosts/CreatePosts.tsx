@@ -30,67 +30,6 @@ import CreatableSelect from 'react-select/creatable';
 import { z } from 'zod';
 import Preview from '../preview/Preview';
 
-const dummyContentData = [
-  {
-    id: '1a2b3c4d',
-    type: 'posts',
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    authorId: '1a2b3c4e',
-    title: 'First Post',
-    contentDescription:
-      "thext 500 words of the post's content goes here".repeat(10),
-    coverImage: 'http://example.com/cover1.jpg',
-    meetUpLocationImage: null,
-    meetupDate: null,
-    podcastAudioFile: null,
-    podcastAudiTitle: null,
-    storyTags: ['tag1', 'tag2'],
-    viewsCount: 100,
-    likesCount: 10,
-    commentsCount: 5,
-    groupId: '1a2b3c4f',
-  },
-  {
-    id: '2b3c4d5e',
-    type: 'meetups',
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    authorId: '1a2b3c4e',
-    title: 'First Meetup',
-    contentDescription: 'This is the first meetup.',
-    coverImage: 'http://example.com/cover2.jpg',
-    meetUpLocationImage: 'http://example.com/location1.jpg',
-    meetupDate: new Date(),
-    podcastAudioFile: null,
-    podcastAudiTitle: null,
-    storyTags: ['tag3', 'tag4'],
-    viewsCount: 200,
-    likesCount: 20,
-    commentsCount: 10,
-    groupId: '1a2b3c4f',
-  },
-  {
-    id: '3c4d5e6f',
-    type: 'podcasts',
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    authorId: '1a2b3c4e',
-    title: 'First Podcast',
-    contentDescription: 'This is the first podcast.',
-    coverImage: 'http://example.com/cover3.jpg',
-    meetUpLocationImage: null,
-    meetupDate: null,
-    podcastAudioFile: 'http://example.com/podcast1.mp3',
-    podcastAudiTitle: 'Podcast 1',
-    storyTags: ['tag5', 'tag6'],
-    viewsCount: 300,
-    likesCount: 30,
-    commentsCount: 15,
-    groupId: '1a2b3c4f',
-  },
-];
-
 type SelectItemProps = {
   value: string;
   children: React.ReactNode;
@@ -134,8 +73,6 @@ const CreatePosts = () => {
       const res = await form.trigger(['podcastAudioFile', 'audioTitle']);
       if (!res) return;
     }
-
-    console.log(form.getValues());
   };
 
   return (
@@ -410,11 +347,18 @@ const CreatePosts = () => {
                         toolbar_location: 'top',
                         content_css: 'dark',
                         content_style: `
-                   body { font-family: Roboto, sans-serif; border:none font-size: 14px; color: #808191;  background-color: #262935;} body::-webkit-scrollbar {display: none; }pre, code { font-family: "Roboto Mono", monospace; background-color: transparent !important;  padding: 5px; } body::before { color: #808191 !important; } `,
+                   body { font-family: Roboto, sans-serif; border:none font-size: 14px; color: #808191;  background-color: #262935;} body::-webkit-scrollbar {display: none; }pre, code { font-family: "Roboto Mono", monospace; background-color: transparent !important;  padding: 5px; } body::before { color: #808191 !important; } h2 {color: #ffff!important}
+                   h2 {color: ${
+                     window.matchMedia &&
+                     window.matchMedia('(prefers-color-scheme: dark)').matches
+                       ? '#ffffff'
+                       : '#000000'
+                   } !important}
+                   `,
                         menubar: false,
                         plugins: 'code codesample link preview image',
                         toolbar:
-                          'customImageButton customPreview | bold italic underline link strikethrough alignleft aligncenter alignright image ',
+                          'customImageButton customPreview | H2 bold italic underline link strikethrough alignleft aligncenter alignright image ',
 
                         setup: function (editor) {
                           editor.ui.registry.addButton('customImageButton', {
@@ -522,7 +466,7 @@ const CreatePosts = () => {
       ) : (
         <Preview
           type={watchPostType}
-          data={dummyContentData[0]}
+          data={form.getValues()}
           setIsPreview={setIsPreview}
         />
       )}
