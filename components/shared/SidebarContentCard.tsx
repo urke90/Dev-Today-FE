@@ -34,7 +34,7 @@ const SidebarContentCard: React.FC<ISidebarContentCardProps> = ({
               ({
                 id,
                 author,
-                contentDescription,
+                description,
                 coverImage,
                 meetupDate,
                 tags,
@@ -73,7 +73,7 @@ const SidebarContentCard: React.FC<ISidebarContentCardProps> = ({
                         key={id}
                         id={id}
                         author={author}
-                        contentDescription={contentDescription}
+                        description={description}
                         tags={tags}
                         title={title}
                         type={type}
@@ -175,7 +175,7 @@ const MeetupItemCard: React.FC<IMeetupItemCardProps> = ({
 
 interface IPodcastItemCardProps {
   title: string;
-  contentDescription: string;
+  description: string;
   id: string;
   tags: string[];
   type: EContentType;
@@ -190,7 +190,7 @@ const PodcastItemCard: React.FC<IPodcastItemCardProps> = ({
   tags,
   title,
   type,
-  contentDescription,
+  description,
   author,
 }) => {
   return (
@@ -207,7 +207,7 @@ const PodcastItemCard: React.FC<IPodcastItemCardProps> = ({
         </div>
         <div className="flex flex-col gap-1.5">
           <p className="p3-medium line-clamp-1">{title}</p>
-          <p className="subtitle-normal">{contentDescription}</p>
+          <p className="subtitle-normal">{description}</p>
           {tags?.length > 0 ? (
             <ul className="flex gap-2.5">
               {tags.map((tag) => (

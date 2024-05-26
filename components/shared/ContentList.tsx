@@ -148,7 +148,7 @@ const ContentList: React.FC<IContentListProps> = ({
               id,
               title,
               coverImage,
-              contentDescription,
+              description,
               storyTags,
               createdAt,
               viewsCount,
@@ -161,7 +161,7 @@ const ContentList: React.FC<IContentListProps> = ({
                 id={id}
                 coverImage={coverImage}
                 title={title}
-                description={contentDescription}
+                description={description}
                 tags={storyTags}
                 createdAt={createdAt}
                 author={userName}
@@ -179,20 +179,13 @@ const ContentList: React.FC<IContentListProps> = ({
         {
           styles = 'flex flex-col flax-wrap gap-5';
           renderedContent = content?.map(
-            ({
-              id,
-              meetupDate,
-              title,
-              contentDescription,
-              coverImage,
-              storyTags,
-            }) => (
+            ({ id, meetupDate, title, description, coverImage, storyTags }) => (
               <MeetupItemCard
                 key={id}
                 id={id}
                 coverImage={coverImage}
                 title={title}
-                description={contentDescription}
+                description={description}
                 tags={storyTags}
                 location="Innovation Hub, Austin"
                 meetupDate={meetupDate}
@@ -209,7 +202,7 @@ const ContentList: React.FC<IContentListProps> = ({
               id,
               coverImage,
               title,
-              contentDescription,
+              description,
               storyTags,
               createdAt,
               isLiked,
@@ -219,7 +212,7 @@ const ContentList: React.FC<IContentListProps> = ({
                 id={id}
                 coverImage={coverImage}
                 title={title}
-                description={contentDescription}
+                description={description}
                 tags={storyTags}
                 author={userName}
                 createdAt={createdAt}
@@ -254,7 +247,7 @@ const ContentList: React.FC<IContentListProps> = ({
             id,
             title,
             coverImage,
-            contentDescription,
+            description,
             storyTags,
             createdAt,
             viewsCount,
@@ -267,7 +260,7 @@ const ContentList: React.FC<IContentListProps> = ({
               id={id}
               coverImage={coverImage}
               title={title}
-              description={contentDescription}
+              description={description}
               tags={storyTags}
               createdAt={createdAt}
               author={userName}

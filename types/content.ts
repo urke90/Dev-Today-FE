@@ -23,13 +23,13 @@ export interface IContent {
   likedBy: IProfileUser[];
   likes: ILike[] | undefined;
   title: string;
-  contentDescription: string;
+  description: string;
   postGroups: string[];
   coverImage: string | null;
   meetupLocationImage: string | null;
   meetupDate: Date | null;
-  podcastAudioFile: string | null;
-  podcastAudiTitle: string | null;
+  podcastFile: string | null;
+  podcastTitle: string | null;
   storyTags: string[];
   comments: Comment[];
   contentGroups: [];

@@ -31,7 +31,7 @@ export interface IProfileUser {
 export interface IUserRecentContent {
   id: string;
   title: string;
-  contentDescription: string;
+  description: string;
   coverImage: string | null;
   meetupDate: Date | null;
   tags: string[];
