@@ -23,7 +23,7 @@ import * as Select from '@radix-ui/react-select';
 import { Editor } from '@tinymce/tinymce-react';
 import { format } from 'date-fns';
 import Image from 'next/image';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import ReactSelect, { components } from 'react-select';
 import CreatableSelect from 'react-select/creatable';
@@ -63,6 +63,13 @@ const CreatePosts = () => {
     },
   });
   const watchPostType = form.watch('postType');
+
+  useEffect(() => {
+    const storedContent = localStorage.getItem('content');
+    if (storedContent) {
+      form.setValue('content', storedContent);
+    }
+  }, [form.watch('content')]);
 
   const onSubmit = async () => {
     if (watchPostType === 'meetups') {
@@ -353,7 +360,8 @@ const CreatePosts = () => {
                      window.matchMedia('(prefers-color-scheme: dark)').matches
                        ? '#ffffff'
                        : '#000000'
-                   } !important}
+                   } !important; 
+                  }
                    `,
                         menubar: false,
                         plugins: 'code codesample link preview image',
@@ -371,6 +379,7 @@ const CreatePosts = () => {
                             icon: 'preview',
                             onAction: function () {
                               setIsPreview(true);
+                              const content = editor.getContent();
                             },
                           });
                         },

@@ -226,4 +226,5 @@ input:-webkit-autofill:active {
 .markdown p {
   color: #808191;
   font-size: 16px;
+  margin-bottom: 10px !important;
 }
