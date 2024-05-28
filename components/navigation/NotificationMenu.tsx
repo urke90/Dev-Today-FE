@@ -1,16 +1,18 @@
 'use client';
 
-import Image from 'next/image';
-import {
-  DropdownMenu,
-  Trigger,
-  Portal,
-  Content,
-  Item,
-} from '@radix-ui/react-dropdown-menu';
-import NotificationIcon from '../icons/Notification';
+import { calculateTimeAgo } from '@/utils/format';
 import CheckmarkIcon from '../icons/Checkmark';
+import NotificationIcon from '../icons/Notification';
 import { Button } from '../ui/button';
+
+import {
+  Content,
+  DropdownMenu,
+  Item,
+  Portal,
+  Trigger,
+} from '@radix-ui/react-dropdown-menu';
+import Image from 'next/image';
 
 interface INotificationMenuProps {}
 
@@ -29,7 +31,7 @@ const NotificationMenu: React.FC<INotificationMenuProps> = (props) => {
           avoidCollisions
           collisionPadding={15}
           onCloseAutoFocus={(e) => e.preventDefault()}
-          className="w-[346px] z-20 max-lg:mt-6 mt-7 lg:w-96 flex flex-col border border-white-border dark:border-black-700 rounded-[14px] bg-light100__dark800 gap-5 p-5 shadow-header-menu data-[side=top]:animate-slideDownAndFade data-[side=right]:animate-slideLeftAndFade data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade"
+          className="bg-light100__dark800 shadow-header-menu border-white-border data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade dark:border-black-700 z-20 mt-7 flex w-[346px] flex-col gap-5 rounded-[14px] border p-5 max-lg:mt-6 lg:w-96"
         >
           <Item
             onSelect={(e) => e.preventDefault()}
@@ -38,7 +40,7 @@ const NotificationMenu: React.FC<INotificationMenuProps> = (props) => {
             <span className="p1-bold">3 Notifications</span>
             <button
               onClick={() => alert('Check All clicked')}
-              className="bg-white-200 text-white-400 dark:text-white-300 dark:bg-black-700 gap-1 px-2.5 py-2 rounded max-lg:hidden flex-between p4-medium"
+              className="flex-between p4-medium bg-white-200 text-white-400 dark:bg-black-700 dark:text-white-300 gap-1 rounded px-2.5 py-2 max-lg:hidden"
             >
               <CheckmarkIcon />
               Mark All Read
@@ -57,7 +59,7 @@ const NotificationMenu: React.FC<INotificationMenuProps> = (props) => {
           >
             <button
               onClick={() => alert('Check All clicked')}
-              className="bg-white-200 text-white-400 dark:text-white-300 dark:bg-black-700 gap-1 px-2.5 py-2 rounded flex-center w-full"
+              className="flex-center bg-white-200 text-white-400 dark:bg-black-700 dark:text-white-300 w-full gap-1 rounded px-2.5 py-2"
             >
               <CheckmarkIcon />
               Mark All Read
@@ -85,23 +87,23 @@ const NotificationItem: React.FC<INotificationItemProps> = ({
   return (
     <Item
       onSelect={(e) => e.preventDefault()}
-      className="flex gap-2.5 items-center"
+      className="flex items-center gap-2.5"
     >
       <div className="relative shrink-0">
-        <div className="size-2 bg-primary-500 absolute rounded-full right-0" />
+        <div className="bg-primary-500 absolute right-0 size-2 rounded-full" />
         <Image
           src={imgUrl}
           width={40}
           height={40}
           alt="avatar"
-          className="size-10 rounded-full"
+          className="size-10 rounded-full bg-primary-100 dark:bg-primary-500"
         />
       </div>
       <div className="flex flex-col gap-0.5">
         <div className="flex-between">
           <span className="p3-bold">{likedBy}</span>
-          <span className="dark:text-white-300 text-black-700 font-normal text-[10px]">
-            15 mins ago
+          <span className="text-black-700 dark:text-white-300 text-[10px] font-normal">
+            {calculateTimeAgo(timeAgo)}
           </span>
         </div>
         <p className="p4-regular line-clamp-1">{message}</p>

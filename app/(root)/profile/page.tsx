@@ -1,58 +1,58 @@
-import ProfileHome from '@/components/profile/ProfileHome';
 import { auth } from '@/app/api/auth/[...nextauth]/route';
+import ProfileHome from '@/components/profile/ProfileHome';
+import { EQueryContentType, type IContent } from '@/types/content';
+import type { IGroup } from '@/types/group';
+import type { IProfileUserResponse } from '@/types/user';
+import { typedFetch } from '@/utils/api';
+import { parseSearchParams } from '@/utils/query';
 
 // ----------------------------------------------------------------
 
 interface IMyProfilePageProps {
   searchParams: {
     page: string | string[] | undefined;
-    contentType: string | string[] | undefined;
+    type: string | string[] | undefined;
   };
 }
 
 const MyProfilePage: React.FC<IMyProfilePageProps> = async ({
   searchParams,
 }) => {
-  try {
-    const session = await auth();
-    console.log('session user id', session?.user.id);
-    console.log('session user id LENGTH', session?.user.id.length);
-    // if (!session?.user)
-    //   return (
-    //     <section className="px-3.5 lg:px-5 mt-[100px]">
-    //       <h1 className="d1-bold text-center text-white-300 dark:text-white:400">
-    //         Something went wrong!
-    //       </h1>
-    //     </section>
-    //   );
+  const page = parseSearchParams(searchParams.page, '1');
+  const contentType = parseSearchParams<EQueryContentType>(
+    searchParams.type,
+    EQueryContentType.POST
+  );
 
-    const userResponse = await fetch(
-      `http://localhost:8080/api/user/${session?.user.id}?userId=dada`,
-      {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-      }
-    );
-    if (!userResponse.ok)
-      console.log(
-        'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
-      );
-    const userResult = await userResponse.json();
-    console.log('userResult', userResult);
+  const session = await auth();
+  if (!session?.user) throw new Error('User data not available!');
 
-    // const userResult = await 'userResponseeeeeeeeeeeeeeeeee'.juserResponse();
-    // console.log(
-    //   'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
-    //   userResult
-    // );
-    // const contentResponse = await fetch(`http://localhost/8080/api`);
-  } catch (error) {
-    console.log('Error fetching the user', error);
+  const userResult = await typedFetch<IProfileUserResponse>({
+    url: `/user/${session?.user.id}`,
+    cache: 'no-store',
+  });
+
+  let content: IContent[] = [];
+  let groupContent: IGroup[] = [];
+  if (contentType === EQueryContentType.GROUP) {
+    groupContent = await typedFetch({ url: `/user/${session.user.id}/groups` });
+  } else {
+    content = await typedFetch({
+      url: `/user/${session.user.id}/content?type=${contentType}&page=${page}&viewerId=${session.user.id}}`,
+    });
   }
 
   return (
     <section className="px-3.5 lg:px-5">
-      <ProfileHome isPersonalProfile />;
+      <ProfileHome
+        isPersonalProfile
+        user={userResult.user}
+        isFollowing={userResult.isFollowing}
+        contentType={contentType}
+        contentItems={content}
+        groupItems={groupContent}
+        viewerId={session.user.id}
+      />
     </section>
   );
 };

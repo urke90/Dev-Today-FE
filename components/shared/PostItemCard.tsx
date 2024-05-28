@@ -1,127 +1,127 @@
 'use client';
 
-import Image from 'next/image';
-import HeartIcon from '../icons/Heart';
 import BadgeItem from './BadgeItem';
+
+import HeartIcon from '../icons/Heart';
 import { Button } from '../ui/button';
+
+import Image from 'next/image';
+import Link from 'next/link';
+
+import { calculateTimeAgo, formatNumberWithCommas } from '@/utils/format';
 
 // ----------------------------------------------------------------
 
 interface IPostItemCardProps {
-  imgUrl: string;
+  id: string;
+  coverImage: string | null;
+  title: string;
+  description: string;
+  tags: string[];
+  createdAt: Date;
+  author: string;
+  viewsCount?: number | null;
+  likesCount?: number | null;
+  commentsCount?: number | null;
+  isLiked: boolean;
+  handleLikeContent: (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    contentId: string
+  ) => Promise<void>;
 }
-// width={165} height={165}
 
-// TODO stavim 2 images i da mobile i desktop toogle hidden na different viewports
-
-const PostItemCard: React.FC<IPostItemCardProps> = ({ imgUrl }) => {
+const PostItemCard: React.FC<IPostItemCardProps> = ({
+  id,
+  coverImage,
+  title,
+  description,
+  tags,
+  viewsCount,
+  likesCount,
+  commentsCount,
+  createdAt,
+  isLiked,
+  handleLikeContent,
+  author,
+}) => {
   return (
-    <li className="flex md:items-center p-4 md:p-5 gap-4 bg-light100__dark800 rounded-2xl">
-      <div className="relative size-[100px] md:size-[165px] shrink-0">
-        <Image src={imgUrl} fill alt="post" className="shrink-0" />
-      </div>
-      {/* RIGHT PART OF THE POST */}
-      <div className="flex flex-col gap-4">
-        <div className="flex mb-4">
-          <div>
-            <p className="p1-bold mb-2">
-              What is the ideal Tech stack to build a website in 2024? 👨‍💻
-            </p>
-            <p className="p3-regular line-clamp-1">
-              The post discusses the author's preferred tech stack for building
-              a website in 2024, including the use of Typescript, Reactjs or
-              Vuejs, Postgres, and Redis.
-            </p>
-          </div>
-          <Button
-            className="size-[30px] bg-white-200 dark:bg-black-700 flex-center rounded-full shrink-0"
-            onClick={() => alert('radi btn')}
-          >
-            <HeartIcon className="text-white-300" />
-          </Button>
-        </div>
-        <ul className="flex gap-2.5">
-          <BadgeItem title="finance" />
-          <BadgeItem title="bitcoin" />
-          <BadgeItem title="crypto" />
-        </ul>
-        <div className="flex-between flex-wrap gap-5">
-          <div className="flex">
-            <div className="bg-[#F0F1FE] rounded-full size-[40px] flex-center mr-2.5">
+    <li>
+      <Link
+        href={'/posts/' + id}
+        className="bg-light100__dark800 flex gap-4 rounded-2xl p-4 md:items-center md:p-5"
+      >
+        <Image
+          src={coverImage || '/assets/images/no-image.svg'}
+          width={165}
+          height={165}
+          alt={title}
+          className="shrink-0 self-baseline max-md:hidden bg-primary-100 dark:bg-primary-500 rounded-2xl"
+        />
+        {/* RIGHT PART OF THE POST */}
+        <div className="flex flex-1 flex-col gap-4">
+          <div className="mb-4 flex justify-between gap-2">
+            <div className="flex gap-2">
               <Image
-                src="/assets/images/avatars/avatar-1.svg"
-                width={28}
-                height={34}
-                alt="avatar"
+                src={coverImage || '/assets/images/no-image.svg'}
+                width={50}
+                height={50}
+                alt={title}
+                className="shrink-0 self-baseline md:hidden bg-primary-100 dark:bg-primary-500 rounded-[6px]"
               />
+              <div>
+                <p className="p1-bold mb-2">{title}</p>
+                <p className="p3-regular line-clamp-1">{description}</p>
+              </div>
             </div>
-            <div>
-              <p className="p3-bold">Pavel Gvay</p>
-              <p className="subtitle-normal">3 weeks ago</p>
-            </div>
+            <Button
+              type="button"
+              className="flex-center bg-white-200 dark:bg-black-700 size-[30px] shrink-0 rounded-full"
+              onClick={(e) => handleLikeContent(e, id)}
+            >
+              <HeartIcon
+                className={isLiked ? 'text-primary-500' : 'text-white-300'}
+              />
+            </Button>
           </div>
-          <div className="flex gap-[30px] text-white-400 dark:text-white-300">
-            <span className="p3-regular">651,324 Views</span>
-            <span className="p3-regular">36,6545 Likes</span>
-            <span className="p3-regular">56 comments</span>
+          {tags.length > 0 ? (
+            <ul className="flex gap-2.5">
+              {tags.map((tag) => (
+                <BadgeItem key={tag} title={tag} />
+              ))}
+            </ul>
+          ) : null}
+          <div className="flex-between flex-wrap gap-5">
+            <div className="flex">
+              <div className="flex-center mr-2.5 size-[40px] rounded-full bg-[#F0F1FE]">
+                <Image
+                  src="/assets/images/avatars/avatar-1.svg"
+                  width={28}
+                  height={34}
+                  alt="avatar"
+                />
+              </div>
+              <div>
+                <p className="p3-bold">{author}</p>
+                <p className="subtitle-normal">{calculateTimeAgo(createdAt)}</p>
+              </div>
+            </div>
+            <div className="text-white-400 dark:text-white-300 flex gap-[30px]">
+              <span className="p3-regular">
+                {formatNumberWithCommas(viewsCount)} Views
+              </span>
+              <span className="p3-regular">
+                {formatNumberWithCommas(likesCount)} Likes
+              </span>
+              <span className="p3-regular">
+                {formatNumberWithCommas(commentsCount)} comments
+              </span>
+            </div>
           </div>
         </div>
-      </div>
-      {/* RIGHT PART OF THE POST */}
+        {/* RIGHT PART OF THE POST */}
+      </Link>
     </li>
   );
 };
 
 export default PostItemCard;
-
-// <li className="flex p-2 md:p-5 gap-4 bg-light100__dark800 rounded-2xl">
-//       <Image src={imgUrl} width={165} height={165} alt="post" />
-//       {/* RIGHT PART OF THE POST */}
-//       <div>
-//         <div className="flex mb-4">
-//           <div>
-//             <p className="p1-bold mb-2">
-//               What is the ideal Tech stack to build a website in 2024? 👨‍💻
-//             </p>
-//             <p className="p3-regular line-clamp-1">
-//               The post discusses the author's preferred tech stack for building
-//               a website in 2024, including the use of Typescript, Reactjs or
-//               Vuejs, Postgres, and Redis.
-//             </p>
-//           </div>
-//           <Button
-//             className="size-[30px] bg-white-200 dark:bg-black-700 flex-center rounded-full shrink-0"
-//             onClick={() => alert('radi btn')}
-//           >
-//             <HeartIcon className="text-white-300" />
-//           </Button>
-//         </div>
-//         <ul className="flex gap-2.5 mb-6">
-//           <BadgeItem title="finance" />
-//           <BadgeItem title="bitcoin" />
-//           <BadgeItem title="crypto" />
-//         </ul>
-//         <div className="flex-between flex-wrap gap-5">
-//           <div className="flex">
-//             <div className="bg-[#F0F1FE] rounded-full size-[40px] flex-center mr-2.5">
-//               <Image
-//                 src="/assets/images/avatars/avatar-1.svg"
-//                 width={28}
-//                 height={34}
-//                 alt="avatar"
-//               />
-//             </div>
-//             <div>
-//               <p className="p3-bold">Pavel Gvay</p>
-//               <p className="subtitle-normal">3 weeks ago</p>
-//             </div>
-//           </div>
-//           <div className="flex gap-[30px] text-white-400 dark:text-white-300">
-//             <span className="p3-regular">651,324 Views</span>
-//             <span className="p3-regular">36,6545 Likes</span>
-//             <span className="p3-regular">56 comments</span>
-//           </div>
-//         </div>
-//       </div>
-//       {/* RIGHT PART OF THE POST */}
-//     </li>

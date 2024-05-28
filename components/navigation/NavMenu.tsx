@@ -1,7 +1,7 @@
 'use client';
 
-import ProfileMenu from './ProfileMenu';
 import NotificationMenu from './NotificationMenu';
+import ProfileMenu from './ProfileMenu';
 import SearchCommandDialog from './SearchCommandDialog';
 
 // ----------------------------------------------------------------
@@ -10,7 +10,7 @@ interface INavMenuProps {}
 
 const NavMenu: React.FC<INavMenuProps> = () => {
   return (
-    <div className="flex items-center gap-[18px] relative z-50">
+    <div className="relative z-50 flex items-center gap-[18px]">
       <SearchCommandDialog />
       <NotificationMenu />
       <ProfileMenu />

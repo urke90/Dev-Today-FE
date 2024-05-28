@@ -4,7 +4,7 @@ import NavLinks from '../navigation/NavLinks';
 
 const Footer = () => {
   return (
-    <footer className="bg-light100__dark800 fixed bottom-0 w-full flex-center left-0 z-50 py-[18px] px-5">
+    <footer className="bg-light100__dark800 flex-center fixed bottom-0 left-0 z-50 w-full px-5 py-[18px]">
       <NavLinks />
     </footer>
   );

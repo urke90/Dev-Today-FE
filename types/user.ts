@@ -1,9 +1,10 @@
+import { EContentType } from './content';
+
 export enum EUserRole {
   USER = 'USER',
   ADMIN = 'ADMIN',
 }
-
-interface IUser {
+export interface IProfileUser {
   id: string;
   userName: string;
   name: string;
@@ -24,18 +25,24 @@ interface IUser {
   role: EUserRole;
   followers: string[];
   following: string[];
+  contents: IUserRecentContent[];
 }
 
-const userResult = {
-  user: {
-    role: 'USER',
-    followers: [],
-    following: [],
-  },
-  latestContent: [
-    { createdAt: '2024-05-08T21:41:20.477Z' },
-    { createdAt: '2024-05-08T21:40:27.702Z' },
-    { createdAt: '2024-05-08T21:39:33.834Z' },
-  ],
-  isFollowing: false,
-};
+export interface IUserRecentContent {
+  id: string;
+  title: string;
+  description: string;
+  coverImage: string | null;
+  meetupDate: Date | null;
+  tags: string[];
+  type: EContentType;
+  author: {
+    name: string;
+    avatarImg: string;
+  };
+}
+
+export interface IProfileUserResponse {
+  user: IProfileUser;
+  isFollowing: boolean;
+}

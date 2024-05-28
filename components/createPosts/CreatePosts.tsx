@@ -344,9 +344,6 @@ const CreatePosts = () => {
                     <Editor
                       apiKey={process.env.NEXT_PUBLIC_TINY_SECRET}
                       onInit={(evt, editor) => (editorRef.current = editor)}
-                      onEditorChange={(content) => {
-                        form.setValue('content', content);
-                      }}
                       onBlur={field.onBlur}
                       init={{
                         skin: 'oxide-dark',
@@ -355,12 +352,7 @@ const CreatePosts = () => {
                         content_css: 'dark',
                         content_style: `
                    body { font-family: Roboto, sans-serif; border:none font-size: 14px; color: #808191;  background-color: #262935;} body::-webkit-scrollbar {display: none; }pre, code { font-family: "Roboto Mono", monospace; background-color: transparent !important;  padding: 5px; } body::before { color: #808191 !important; } h2 {color: #ffff!important}
-                   h2 {color: ${
-                     window.matchMedia &&
-                     window.matchMedia('(prefers-color-scheme: dark)').matches
-                       ? '#ffffff'
-                       : '#000000'
-                   } !important; 
+                   h2 {color: #ffff!important}
                   }
                    `,
                         menubar: false,
@@ -378,8 +370,10 @@ const CreatePosts = () => {
                             text: 'Preview',
                             icon: 'preview',
                             onAction: function () {
-                              setIsPreview(true);
                               const content = editor.getContent();
+                              form.setValue('content', content);
+                              setIsPreview(true);
+                              console.log(content);
                             },
                           });
                         },
