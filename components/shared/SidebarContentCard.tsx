@@ -81,7 +81,7 @@ const SidebarContentCard: React.FC<ISidebarContentCardProps> = ({
                     );
                   }
                   default:
-                    return 'bla';
+                    return <p className="p3-bold">Type is not supported!</p>;
                 }
               }
             )
@@ -108,7 +108,7 @@ const PostItemCard: React.FC<IPostItemCardProps> = ({
 }) => {
   return (
     <li>
-      <Link href={type + '/' + id} className="flex">
+      <Link href={type + '/' + id} className="flex justify-between ">
         <div className="flex gap-3.5">
           <Image
             src={coverImage || '/assets/images/no-image.svg'}
@@ -122,6 +122,7 @@ const PostItemCard: React.FC<IPostItemCardProps> = ({
             <p className="subtitle-normal">By {author}</p>
           </div>
         </div>
+
         <ArrowRightIcon className="text-white-400 shrink-0" />
       </Link>
     </li>

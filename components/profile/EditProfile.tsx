@@ -99,7 +99,7 @@ const EditProfile: React.FC<IEditProfileProps> = ({ user }) => {
       console.log('Error updating user profile', error);
       if (error instanceof Error) {
         console.log('Error updating user profile', error.message);
-        toast.error("Could't update user profile");
+        toast.error("Couldn't update user profile");
       }
     }
   };
