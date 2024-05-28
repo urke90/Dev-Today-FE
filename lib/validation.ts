@@ -41,7 +41,6 @@ export const profileSchema = z.object({
   following: z.number().optional(),
 });
 
-<<<<<<< HEAD
 export const createPostSchema = z.object({
   title: z.string().min(3).max(100),
   postType: z.enum(['posts', 'meetups', 'podcasts']),
@@ -56,7 +55,8 @@ export const createPostSchema = z.object({
   audioTitle: z.string().min(3),
   content: z.string().min(30),
   tags: z.array(z.object({ label: z.string().min(1) })).max(5),
-=======
+});
+
 const preferredSkillsSchema = z.object({
   value: z.string().trim().min(1, 'Tag must be at least 2 characters long!'),
   label: z.string().trim().min(1, 'Tag must be at least 2 characters long!'),
@@ -83,5 +83,4 @@ export const updateProfileSchema = z.object({
   linkedinLink: z.string().url().optional().or(z.literal('')),
   twitterName: z.string().optional(),
   twitterLink: z.string().url().optional().or(z.literal('')),
->>>>>>> 85f714c313009a974090c94d3ac71dab1c3fe865
 });

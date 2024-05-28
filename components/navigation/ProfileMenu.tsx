@@ -46,12 +46,7 @@ const ProfileMenu: React.FC<IProfileMenuProps> = (props) => {
         <Content
           collisionPadding={10}
           onCloseAutoFocus={(e) => e.preventDefault()}
-<<<<<<< HEAD
-          className="min-w-[11rem] max-lg:mt-6 mt-7 z-20 flex flex-col border border-white-border dark:border-black-700 rounded-[14px] bg-light100__dark800 gap-5 p-5 shadow-header-menu data-[side=top]:animate-slideDownAndFade data-[side=right]:animate-slideLeftAndFade data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade">
-=======
-          className="bg-light100__dark800 shadow-header-menu border-white-border data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade dark:border-black-700 z-20 mt-7 flex min-w-44 flex-col gap-5 rounded-[14px] border p-5 max-lg:mt-6"
-        >
->>>>>>> 85f714c313009a974090c94d3ac71dab1c3fe865
+          className="bg-light100__dark800 shadow-header-menu border-white-border data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade dark:border-black-700 z-20 mt-7 flex min-w-44 flex-col gap-5 rounded-[14px] border p-5 max-lg:mt-6">
           <Item className="p3-medium">
             <Button className="justify-start gap-2.5">
               <ProfileIcon />
@@ -60,14 +55,8 @@ const ProfileMenu: React.FC<IProfileMenuProps> = (props) => {
           </Item>
           <Item className="p3-medium gap-2.5">
             <Button
-<<<<<<< HEAD
               className="justify-start gap-2.5 text-primary-500"
               onClick={() => signOut({ callbackUrl: '/login' })}>
-=======
-              className="text-primary-500 justify-start gap-2.5"
-              onClick={() => signOut()}
-            >
->>>>>>> 85f714c313009a974090c94d3ac71dab1c3fe865
               <LogoutIcon />
               Logout
             </Button>
@@ -77,27 +66,14 @@ const ProfileMenu: React.FC<IProfileMenuProps> = (props) => {
             Interface
             <div className="flex gap-2.5">
               <Button
-<<<<<<< HEAD
-                className="bg-primary-100 dark:bg-black-800 rounded-full size-[24px]"
+                className="bg-primary-100 dark:bg-black-800 size-[24px] rounded-full"
                 onClick={() => setMode('light')}>
                 <SunIcon className="text-black-700" />
               </Button>
               <Button
-                className="bg-white-200 dark:bg-black-700 rounded-full size-[24px]"
-                onClick={() => setMode('dark')}>
-                <MoonIcon className="text-white-300 dark:text-dark-700" />
-=======
-                className="bg-primary-100 dark:bg-black-800 size-[24px] rounded-full"
-                onClick={() => setMode('light')}
-              >
-                <SunIcon className="text-black-700" />
-              </Button>
-              <Button
                 className="bg-white-200 dark:bg-black-700 size-[24px] rounded-full"
-                onClick={() => setMode('dark')}
-              >
+                onClick={() => setMode('dark')}>
                 <MoonIcon className="dark:text-dark-700 text-white-300" />
->>>>>>> 85f714c313009a974090c94d3ac71dab1c3fe865
               </Button>
             </div>
           </Item>

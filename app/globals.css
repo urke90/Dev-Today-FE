@@ -164,7 +164,6 @@ input:-webkit-autofill:active {
   -webkit-text-fill-color: #ffff !important;
 }
 
-<<<<<<< HEAD
 /* dashed border */
 .dashedBorder {
   width: 100%;
@@ -246,7 +245,7 @@ input:-webkit-autofill:active {
   color: #808191;
   font-size: 16px;
   margin-bottom: 10px !important;
-=======
+}
 @keyframes rotation {
   0% {
     transform: rotate(0deg);
@@ -263,5 +262,4 @@ input:-webkit-autofill:active {
   100% {
     transform: rotate(-360deg);
   }
->>>>>>> 85f714c313009a974090c94d3ac71dab1c3fe865
 }

@@ -23,7 +23,7 @@ import * as Select from '@radix-ui/react-select';
 import { Editor } from '@tinymce/tinymce-react';
 import { format } from 'date-fns';
 import Image from 'next/image';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import ReactSelect, { components } from 'react-select';
 import CreatableSelect from 'react-select/creatable';
@@ -64,13 +64,6 @@ const CreatePosts = () => {
   });
   const watchPostType = form.watch('postType');
 
-  useEffect(() => {
-    const storedContent = localStorage.getItem('content');
-    if (storedContent) {
-      form.setValue('content', storedContent);
-    }
-  }, [form.watch('content')]);
-
   const onSubmit = async () => {
     if (watchPostType === 'meetups') {
       const res = await form.trigger(['meetupLocation', 'meetupDate']);
@@ -80,6 +73,12 @@ const CreatePosts = () => {
       const res = await form.trigger(['podcastAudioFile', 'audioTitle']);
       if (!res) return;
     }
+  };
+
+  const handlePreview = () => {
+    const content = editorRef.current.getContent();
+    form.setValue('content', content);
+    setIsPreview(true);
   };
 
   return (
@@ -345,6 +344,8 @@ const CreatePosts = () => {
                       apiKey={process.env.NEXT_PUBLIC_TINY_SECRET}
                       onInit={(evt, editor) => (editorRef.current = editor)}
                       onBlur={field.onBlur}
+                      value={field.value}
+                      onEditorChange={(content) => field.onChange(content)}
                       init={{
                         skin: 'oxide-dark',
                         icons: 'thin',
@@ -369,12 +370,7 @@ const CreatePosts = () => {
                           editor.ui.registry.addButton('customPreview', {
                             text: 'Preview',
                             icon: 'preview',
-                            onAction: function () {
-                              const content = editor.getContent();
-                              form.setValue('content', content);
-                              setIsPreview(true);
-                              console.log(content);
-                            },
+                            onAction: handlePreview,
                           });
                         },
                       }}

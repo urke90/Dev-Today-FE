@@ -1,14 +1,3 @@
-<<<<<<< HEAD
-import { authOptions } from '@/lib/auth-options';
-import type { Metadata } from 'next';
-import { getServerSession } from 'next-auth';
-import { IBM_Plex_Sans } from 'next/font/google';
-import { cookies } from 'next/headers';
-import '../styles/prism.css';
-import SessionProvider from './context/SessionProvider';
-import { ThemeProvider } from './context/ThemeProvider';
-import './globals.css';
-=======
 import SessionProvider from '../context/SessionProvider';
 import { ThemeProvider } from '../context/ThemeProvider';
 
@@ -24,7 +13,6 @@ import { authOptions } from '@/lib/auth-options';
 import './globals.css';
 
 // ----------------------------------------------------------------
->>>>>>> 85f714c313009a974090c94d3ac71dab1c3fe865
 
 const ibmPlexSans = IBM_Plex_Sans({
   weight: ['100', '200', '300', '400', '500', '600', '700'],
@@ -48,25 +36,15 @@ export default async function RootLayout({
   return (
     <ThemeProvider theme={theme}>
       <SessionProvider session={session}>
-<<<<<<< HEAD
-        <html lang="en" className={`${theme}`}>
-          <body
-            className={`${ibmPlexSans.className} min-h-screen dark:bg-black-900 bg-white-200`}>
-            <main className="max-w-screen-xxl mx-auto">{children}</main>
-          </body>
-        </html>
-=======
         <QueryProvider>
           <html lang="en" className={`${theme}`}>
             <body
-              className={`${ibmPlexSans.className} min-h-screen bg-white-200 dark:bg-black-900`}
-            >
+              className={`${ibmPlexSans.className} min-h-screen bg-white-200 dark:bg-black-900`}>
               <main className="mx-auto max-w-screen-xxl">{children}</main>
               <ReactQueryDevtools />
             </body>
           </html>
         </QueryProvider>
->>>>>>> 85f714c313009a974090c94d3ac71dab1c3fe865
       </SessionProvider>
     </ThemeProvider>
   );

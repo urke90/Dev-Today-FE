@@ -73,17 +73,9 @@ const Login = () => {
             {loginWelcome.map((item, index) => (
               <div
                 key={index + 1}
-<<<<<<< HEAD
-                className="bg-white-100 dark:bg-black-700 p-5 flex gap-5 items-center rounded-lg">
+                className="flex items-center gap-5 rounded-lg bg-white-100 p-5 dark:bg-black-700">
                 <div
-                  className={`dark:bg-black-800 ${colorsLogIn[index]} h-[60px] p-5 rounded-md`}>
-=======
-                className="flex items-center gap-5 rounded-lg bg-white-100 p-5 dark:bg-black-700"
-              >
-                <div
-                  className={`dark:bg-black-800 ${colorsLogIn[index]} h-[60px] rounded-md p-5`}
-                >
->>>>>>> 85f714c313009a974090c94d3ac71dab1c3fe865
+                  className={`dark:bg-black-800 ${colorsLogIn[index]} h-[60px] rounded-md p-5`}>
                   <Image
                     src={item.image}
                     alt={item.alt}
@@ -98,16 +90,9 @@ const Login = () => {
         </div>
       </div>
       <div
-<<<<<<< HEAD
-        className="text-white-100 flex flex-col pt-10 lg:pt-44 lg:justify-start items-center 
-        dark:bg-black-900 bg-white-200
-         px-4 md:px-10 xl:px-28  w-full lg:w-1/2">
-=======
         className="flex w-full flex-col items-center bg-white-200 px-4 pt-10 
         text-white-100 dark:bg-black-900
-         md:px-10 lg:w-1/2 lg:justify-start  lg:pt-44 xl:px-28"
-      >
->>>>>>> 85f714c313009a974090c94d3ac71dab1c3fe865
+         md:px-10 lg:w-1/2 lg:justify-start  lg:pt-44 xl:px-28">
         <div className="w-full lg:hidden">
           <Image
             src={
@@ -124,12 +109,7 @@ const Login = () => {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-<<<<<<< HEAD
-            className="space-y-5 w-full ">
-=======
-            className="w-full space-y-5 "
-          >
->>>>>>> 85f714c313009a974090c94d3ac71dab1c3fe865
+            className="w-full space-y-5 ">
             <FormField
               control={form.control}
               name="email"
@@ -167,22 +147,12 @@ const Login = () => {
             />
             <Button
               type="submit"
-<<<<<<< HEAD
               className="w-full bg-primary-500 text-[14px] h-11 p2-bold ">
-=======
-              className="p2-bold w-full bg-primary-500 text-[14px] "
-            >
->>>>>>> 85f714c313009a974090c94d3ac71dab1c3fe865
               Next
             </Button>
             <Link
               href="/register"
-<<<<<<< HEAD
               className="text-white-300 block cursor-pointer text-center hover:underline">
-=======
-              className="block cursor-pointer text-center text-white-300 hover:underline"
-            >
->>>>>>> 85f714c313009a974090c94d3ac71dab1c3fe865
               Don’t have an account yet?
               <span className="ml-1 text-[16px] text-primary-500">
                 Join the community
@@ -195,14 +165,8 @@ const Login = () => {
             </div>
             <Button
               type="button"
-<<<<<<< HEAD
               onClick={() => signIn('google', { callbackUrl: '/' })}
               className="p3-medium h-11 flex w-full items-center gap-2 dark:bg-black-800 bg-white-100">
-=======
-              onClick={() => signIn('google', { callbackUrl: '/home' })}
-              className="p3-medium flex w-full items-center gap-2 bg-white-100 dark:bg-black-800"
-            >
->>>>>>> 85f714c313009a974090c94d3ac71dab1c3fe865
               <Image
                 src={'/assets/icons/google.svg'}
                 alt="google"
@@ -215,12 +179,7 @@ const Login = () => {
             <Button
               onClick={() => signIn('github', { callbackUrl: '/home' })}
               type="button"
-<<<<<<< HEAD
               className="p3-medium h-11 flex w-full items-center gap-2 dark:bg-black-800 bg-white-100">
-=======
-              className="p3-medium flex w-full items-center gap-2 bg-white-100 dark:bg-black-800"
-            >
->>>>>>> 85f714c313009a974090c94d3ac71dab1c3fe865
               <Image
                 src={'/assets/icons/github.svg'}
                 alt="github"
