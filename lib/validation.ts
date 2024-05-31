@@ -42,8 +42,9 @@ export const profileSchema = z.object({
 });
 
 export const createPostSchema = z.object({
+  authorId: z.string(),
   title: z.string().min(3).max(100),
-  postType: z.enum(['posts', 'meetups', 'podcasts']),
+  type: z.enum(['post', 'meetup', 'podcast']),
   selectGroup: z.object({
     value: z.string().min(1),
     label: z.string().min(1),
@@ -53,7 +54,7 @@ export const createPostSchema = z.object({
   meetupDate: z.coerce.date(),
   podcastAudioFile: z.string().min(3),
   audioTitle: z.string().min(3),
-  content: z.string().min(30),
+  description: z.string().min(30),
   tags: z.array(z.object({ label: z.string().min(1) })).max(5),
 });
 

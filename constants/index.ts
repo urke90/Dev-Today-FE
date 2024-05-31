@@ -91,11 +91,11 @@ export const postTypes = [
     image: '/assets/icons/frame-white.svg',
   },
   {
-    title: 'meetups',
+    title: 'meetup',
     image: '/assets/icons/calendar-white.svg',
   },
   {
-    title: 'podcasts',
+    title: 'podcast',
     image: '/assets/icons/podcast.svg',
   },
 ];

@@ -18,10 +18,13 @@ import {
 import { postTypes } from '@/constants';
 import { cn } from '@/lib/utils';
 import { createPostSchema } from '@/lib/validation';
+import { ISelectGroup } from '@/types/group';
+import { typedFetch } from '@/utils/api';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as Select from '@radix-ui/react-select';
 import { Editor } from '@tinymce/tinymce-react';
 import { format } from 'date-fns';
+import { CldUploadWidget } from 'next-cloudinary';
 import Image from 'next/image';
 import React, { useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -37,52 +40,90 @@ type SelectItemProps = {
   onValueChange?: (value: string) => void;
 };
 
-const colourOptions = [
-  { id: 'ocean', name: 'Ocean' },
-  { id: 'blue', name: 'Blue' },
-  { id: 'purple', name: 'Purple' },
-];
+type PostProps = {
+  authorId: string;
+  allGroups: ISelectGroup;
+};
 
-const CreatePosts = () => {
+const CreatePosts = ({ authorId, allGroups }: PostProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isPreview, setIsPreview] = useState(false);
   const editorRef = useRef<any>(null);
+
+  const selectGroupOptions = allGroups.groups.map((group) => ({
+    value: group.id,
+    label: group.name,
+    profileImage: group.profileImage,
+    bio: group.bio,
+  }));
+
   const form = useForm<z.infer<typeof createPostSchema>>({
     resolver: zodResolver(createPostSchema),
     defaultValues: {
+      authorId,
       title: '',
-      postType: 'posts',
+      type: 'post',
       selectGroup: undefined,
       coverImage: '',
       meetupLocation: '',
       meetupDate: undefined,
       podcastAudioFile: '',
       audioTitle: '',
-      content: '',
+      description: '',
       tags: [],
     },
   });
-  const watchPostType = form.watch('postType');
 
+  const watchPostType = form.watch('type');
+  const watchCoverImage = form.watch('coverImage');
+  console.log(form.getValues('type'));
+
+  // console.log(form.getValues());
+  // const stringArray = form.getValues('tags').map((tag) => tag.label);
+  // console.log(stringArray);
   const onSubmit = async () => {
-    if (watchPostType === 'meetups') {
-      const res = await form.trigger(['meetupLocation', 'meetupDate']);
-      if (!res) return;
+    if (watchPostType === 'post') {
+      const result = await form.trigger([
+        'title',
+        'coverImage',
+        'description',
+        'tags',
+      ]);
+      if (!result) throw new Error('Form validation failed');
+
+      await typedFetch({
+        url: '/content/post',
+        method: 'POST',
+        body: {
+          authorId: form.getValues('authorId'),
+          title: form.getValues('title'),
+          type: form.getValues('type'),
+          selectGroup: form.getValues('selectGroup').value,
+          coverImage: form.getValues('coverImage'),
+          description: form.getValues('description'),
+          tags: form.getValues('tags'),
+        },
+      });
     }
-    if (watchPostType === 'podcasts') {
-      const res = await form.trigger(['podcastAudioFile', 'audioTitle']);
-      if (!res) return;
+
+    if (watchPostType === 'meetup') {
+      const result = await form.trigger(['meetupLocation', 'meetupDate']);
+      if (!result) return;
+    }
+    if (watchPostType === 'podcast') {
+      const result = await form.trigger(['podcastAudioFile', 'audioTitle']);
+      if (!result) return;
     }
   };
 
   const handlePreview = () => {
     const content = editorRef.current.getContent();
-    form.setValue('content', content);
+    form.setValue('description', content);
     setIsPreview(true);
   };
 
   return (
-    <>
+    <div className="w-full">
       {!isPreview ? (
         <Form {...form}>
           <form className="space-y-8 w-full px-3 md:px-0">
@@ -95,8 +136,8 @@ const CreatePosts = () => {
             <div className="flex items-end gap-3">
               <Controller
                 control={form.control}
-                defaultValue="posts"
-                name="postType"
+                defaultValue="post"
+                name="type"
                 render={({ field }) => (
                   <Select.Root
                     value={field.value}
@@ -111,10 +152,8 @@ const CreatePosts = () => {
                       </span>
                       <p
                         className={`${
-                          watchPostType !== 'posts' ? 'hidden' : ''
-                        } p3-regular !font-bold`}>
-                        Post
-                      </p>
+                          watchPostType !== 'post' ? 'hidden' : ''
+                        } p3-regular !font-bold`}></p>
                       <div className=" flex items-center p3-regular !text-black-800 dark:!text-white-100 !font-bold ">
                         <Select.Value placeholder="Post" />
                         <Image
@@ -201,10 +240,10 @@ const CreatePosts = () => {
                         isLoading={isLoading}
                         isClearable
                         isSearchable
-                        options={colourOptions.map((color) => ({
-                          value: color.id,
-                          label: color.name,
-                        }))}
+                        onChange={(selectedOption) => {
+                          field.onChange(selectedOption);
+                        }}
+                        options={selectGroupOptions}
                         components={{ Option }}
                       />
                     </FormControl>
@@ -212,6 +251,7 @@ const CreatePosts = () => {
                 )}
               />
             </div>
+
             <FormField
               name="coverImage"
               control={form.control}
@@ -219,32 +259,73 @@ const CreatePosts = () => {
                 <FormItem>
                   <FormLabel>Cover Image</FormLabel>
                   <FormControl>
-                    <div className="w-full h-64 dashedBorder !text-white-400 rounded-lg flex items-center justify-center">
-                      <div className="flex flex-col items-center">
+                    {watchCoverImage ? (
+                      <div className="relative w-full h-64">
+                        <Image
+                          src={watchCoverImage}
+                          alt="Cover Image"
+                          layout="fill"
+                          objectFit="cover"
+                          className="rounded-3xl"
+                        />
                         <Button
                           type="button"
-                          className="flex items-center max-w-[200px] dark:bg-black-800 py-2 rounded-lg bg-white-100 gap-3 mb-3">
-                          <Image
-                            src={'/assets/icons/upload-icon.svg'}
-                            alt="upload"
-                            width={16}
-                            height={16}
-                          />
-                          <p className="p3-regular !text-white-300">
-                            Upload a cover image
-                          </p>
+                          onClick={() => form.setValue('coverImage', '')}
+                          className="absolute right-0 top-[-40px] hover:bg-black-700 text-white-400  border dark:border-gray-500 size-8 dark:text-white-100">
+                          X
                         </Button>
-                        <p className="p4-regular !text-white-400">
-                          Drag & Drop or upload png or jpeg up to 16MB
-                        </p>
                       </div>
-                    </div>
+                    ) : (
+                      <div className="w-full h-64 dashedBorder !text-white-400 rounded-lg flex items-center justify-center">
+                        <div className="flex flex-col items-center">
+                          <CldUploadWidget
+                            uploadPreset={
+                              process.env.NEXT_PUBLIC_CLOUDINARY_PRESEST_NAME
+                            }
+                            onSuccess={(res) => {
+                              if (res.info && typeof res.info === 'object') {
+                                field.onChange(res.info.secure_url);
+                              } else {
+                                field.onChange(res.info);
+                              }
+                            }}
+                            options={{
+                              multiple: false,
+                              cropping: true,
+                              croppingShowDimensions: true,
+                            }}>
+                            {({ open }) => (
+                              <Button
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  open();
+                                }}
+                                type="button"
+                                className="flex items-center max-w-[200px] dark:bg-black-800 py-2 rounded-lg bg-white-100 gap-3 mb-3">
+                                <Image
+                                  src={'/assets/icons/upload-icon.svg'}
+                                  alt="upload"
+                                  width={16}
+                                  height={16}
+                                />
+                                <p className="p3-regular !text-white-300">
+                                  Upload a cover image
+                                </p>
+                              </Button>
+                            )}
+                          </CldUploadWidget>
+                          <p className="p4-regular !text-white-400">
+                            Drag & Drop or upload png or jpeg up to 16MB
+                          </p>
+                        </div>
+                      </div>
+                    )}
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            {watchPostType === 'meetups' && (
+            {watchPostType === 'meetup' && (
               <>
                 <RHFInput
                   className="!placeholder:white-400 p3-medium dark:!placeholder-white-400"
@@ -261,7 +342,7 @@ const CreatePosts = () => {
                       <PopoverTrigger asChild>
                         <Button
                           className={cn(
-                            'justify-start p3-regular !text-white-400 bg-light100__dark800 border dark:border-black-700/50 px-4 h-11 !mt-2',
+                            'justify-start p3-regular font-bold  bg-light100__dark800 border dark:border-black-700/50 px-4 h-11 !mt-2',
                             !field.value && 'text-muted-foreground'
                           )}>
                           <Image
@@ -273,7 +354,9 @@ const CreatePosts = () => {
                           {field.value ? (
                             format(field.value, 'PPP')
                           ) : (
-                            <span>Pick a date of the meetup</span>
+                            <span className="text-white-400">
+                              Pick a date of the meetup
+                            </span>
                           )}
                         </Button>
                       </PopoverTrigger>
@@ -296,7 +379,7 @@ const CreatePosts = () => {
                 )}
               </>
             )}
-            {watchPostType === 'podcasts' && (
+            {watchPostType === 'podcast' && (
               <>
                 <FormField
                   name="podcastAudioFile"
@@ -305,19 +388,37 @@ const CreatePosts = () => {
                     <FormItem>
                       <FormLabel>Podcast Audio File</FormLabel>
                       <FormControl>
-                        <Button
-                          type="button"
-                          className="w-full flex !mt-2 justify-start focus-visible:outline-none dark:placeholder:text-[#ADB3CC] placeholder:text-white-400 placeholder:font-normal placeholder:text-sm dark:text-white-100 text-black-900 text-sm font-medium px-3 border border-white-border dark:border-[#393E4F66] rounded-lg py-3 md:px-5 bg-white-100 dark:bg-black-800">
-                          <Image
-                            src="/assets/icons/microphone.svg"
-                            alt="upload"
-                            width={11}
-                            height={15}
-                          />
-                          <span className="subtitle-medium tracking-wide dark:bg-black-700 px-2 py-1 rounded-md bg-white-200 ">
-                            Choose a file
-                          </span>
-                        </Button>
+                        <CldUploadWidget
+                          uploadPreset={
+                            process.env.NEXT_PUBLIC_CLOUDINARY_PRESEST_NAME
+                          }
+                          onSuccess={(res) => {
+                            if (res.info && typeof res.info === 'object') {
+                              field.onChange(res.info.secure_url);
+                            } else {
+                              field.onChange(res.info);
+                            }
+                          }}>
+                          {({ open }) => (
+                            <Button
+                              onClick={(e) => {
+                                e.preventDefault();
+                                open();
+                              }}
+                              type="button"
+                              className="w-full flex !mt-2 justify-start focus-visible:outline-none dark:placeholder:text-[#ADB3CC] placeholder:text-white-400 placeholder:font-normal placeholder:text-sm dark:text-white-100 text-black-900 text-sm font-medium px-3 border border-white-border dark:border-[#393E4F66] rounded-lg py-3 md:px-5 bg-white-100 dark:bg-black-800">
+                              <Image
+                                src="/assets/icons/microphone.svg"
+                                alt="upload"
+                                width={11}
+                                height={15}
+                              />
+                              <span className="subtitle-medium tracking-wide dark:bg-black-700 px-2 py-1 rounded-md bg-white-200 ">
+                                Choose a file
+                              </span>
+                            </Button>
+                          )}
+                        </CldUploadWidget>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -332,10 +433,9 @@ const CreatePosts = () => {
                 />
               </>
             )}
-
             <FormField
               control={form.control}
-              name="content"
+              name="description"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Content</FormLabel>
@@ -380,7 +480,6 @@ const CreatePosts = () => {
                 </FormItem>
               )}
             />
-
             <div className="space-y-3">
               <FormLabel>
                 Add or change tags (up to 5) so readers know what your story is
@@ -413,14 +512,14 @@ const CreatePosts = () => {
                       menu: () => 'bg-white-100 dark:bg-black-800 !shadow-sm ',
                     }}
                     isMulti
-                    options={colourOptions
+                    options={selectGroupOptions
                       .filter(
                         (color) =>
-                          !field.value.find((tag) => tag.label === color.name)
+                          !field.value.find((tag) => tag.label === color.label)
                       )
                       .map((color) => ({
-                        value: color.id,
-                        label: color.name,
+                        value: color.value,
+                        label: color.label,
                       }))}
                     formatOptionLabel={(option, { context }) => {
                       if (context === 'value') {
@@ -469,7 +568,7 @@ const CreatePosts = () => {
           setIsPreview={setIsPreview}
         />
       )}
-    </>
+    </div>
   );
 };
 
@@ -480,7 +579,7 @@ const Option = (props: any) => {
     <components.Option {...props}>
       <div className="flex items-center">
         <Image
-          src="/assets/icons/bootstrap.svg"
+          src={props.data.profileImage || '/assets/icons/bootstrap.svg'}
           alt="frame"
           width={34}
           height={34}
@@ -488,7 +587,7 @@ const Option = (props: any) => {
         <div className="flex flex-col ml-2">
           <p className="p4-medium">{props.data.label}</p>
           <p className="text-[11px] text-white-400">
-            Lorem ipsum dolor sit amet consectetur adipisicing.
+            {props.data.bio || 'No bio available'}
           </p>
         </div>
       </div>

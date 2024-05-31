@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import ParseHtml from '../ParseHtml/ParseHtml';
-import { Button } from '../ui/button';
+import AudioPlayer from '../audioPlayer/AudioPlayer';
 
 type Props = {
   setIsPreview: (value: boolean) => void;
@@ -11,6 +11,7 @@ type Props = {
 };
 
 const Preview = ({ setIsPreview, type, data }: Props) => {
+  console.log(data);
   return (
     <section className="space-y-5 w-full">
       <div className="flex gap-2" onClick={() => setIsPreview(false)}>
@@ -27,74 +28,29 @@ const Preview = ({ setIsPreview, type, data }: Props) => {
           width={20}
           height={20}
         />
-        <h1 className="!text-primary-500">Preview</h1>
+        <h1 className="!text-primary-500 font-semibold">Preview</h1>
       </div>
-      {type === 'podcasts' && (
-        <div className="flex flex-row py-10 items-center p-4 bg-gray-100 dark:bg-black-800 rounded-lg shadow-md">
-          <div className="flex items-center relative space-x-4 w-2/5">
-            <Image
-              src="/assets/images/post-example.svg"
-              alt="avatar"
-              width={150}
-              height={150}
-              className="z-10 rounded-lg"
-            />
-            <Image
-              src="/assets/images/disk.png"
-              alt="avatar"
-              width={130}
-              height={130}
-              className="absolute top-1/2  left-[150px] transform -translate-x-1/2 -translate-y-1/2 dark:invert-0 invert"
-            />
-          </div>
-          <div className="w-full">
-            <div className="flex flex-col">
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                Podcast Title
-              </h2>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                Podcast Subtitle
-              </p>
-              <div className="w-full flex items-center gap-2 mt-4">
-                <input
-                  type="range"
-                  min="0"
-                  max="100"
-                  value="63"
-                  step="1"
-                  className="h-2 bg-gray-300 dark:bg-gray-700 w-full"
-                />
-                <span className="text-sm text-gray-600 dark:text-gray-400">
-                  00:00
-                </span>
-                <span className="text-white-400">|</span>
-                <span className="text-sm text-gray-600 dark:text-gray-400">
-                  63:37
-                </span>
-              </div>
-
-              <Button
-                type="button"
-                className="inline-block mt-4 w-28 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg">
-                Play/Pause
-              </Button>
-            </div>
-          </div>
-        </div>
+      {type === 'podcast' && (
+        <AudioPlayer
+          audioSrc={data?.podcastAudioFile || ''}
+          coverImage={data?.coverImage || ''}
+          title={data?.title || ''}
+          audioTitle={data?.audioTitle || ''}
+        />
       )}
-      {type !== 'podcasts' && (
+      {type !== 'podcast' && (
         <Image
-          src="/assets/icons/coding.png"
+          src={data?.coverImage || '/assets/images/post-example.svg'}
           alt="Preview"
           width={785}
           height={270}
-          className="w-full rounded-lg object-fill"
+          className="rounded-lg h-72 object-cover"
         />
       )}
       <div className="flex gap-2 max-w-3xl">
-        {type === 'meetups' && (
+        {type === 'meetup' && (
           <Image
-            src="/assets/images/post-example.svg"
+            src={data?.profileImage || '/assets/images/post-example.svg'}
             alt="avatar"
             width={72}
             height={72}
@@ -105,19 +61,19 @@ const Preview = ({ setIsPreview, type, data }: Props) => {
       </div>
       <div>
         <ul className="flex gap-2">
-          <li className="dark:bg-black-700 bg-gray-100 rounded-full px-2 py-1 cap-10 uppercase ">
+          <li className="dark:bg-black-700 bg-gray-100 rounded-full px-2 py-1 cap-10 uppercase">
             React
           </li>
-          <li className="dark:bg-black-700 bg-gray-100 rounded-full px-2 py-1 cap-10 uppercase ">
+          <li className="dark:bg-black-700 bg-gray-100 rounded-full px-2 py-1 cap-10 uppercase">
             React
           </li>
-          <li className="dark:bg-black-700 bg-gray-100 rounded-full px-2 py-1 cap-10  uppercase">
+          <li className="dark:bg-black-700 bg-gray-100 rounded-full px-2 py-1 cap-10 uppercase">
             React
           </li>
         </ul>
       </div>
-      <ParseHtml data={data?.content} />
-      {type === 'meetups' && (
+      <ParseHtml data={data?.description} />
+      {type === 'meetup' && (
         <>
           <div className="flex gap-2">
             <Image
@@ -126,7 +82,7 @@ const Preview = ({ setIsPreview, type, data }: Props) => {
               width={20}
               height={20}
             />
-            <p>
+            <p className="p3-medium">
               {new Date(data?.meetupDate).toLocaleDateString('en-US', {
                 weekday: 'long',
                 year: 'numeric',
@@ -142,11 +98,12 @@ const Preview = ({ setIsPreview, type, data }: Props) => {
               width={20}
               height={20}
             />
-            <p>{data?.meetupLocation}</p>
+            <p className="p3-medium">{data?.meetupLocation}</p>
           </div>
         </>
       )}
     </section>
   );
 };
+
 export default Preview;

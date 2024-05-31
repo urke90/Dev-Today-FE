@@ -16,3 +16,21 @@ export interface IGroup {
     avatarImg?: string;
   }[];
 }
+
+export interface ISelectGroup {
+  groups: {
+    id: string;
+    profileImage: string;
+    bio: string;
+    name: string;
+    coverImg: string;
+    updatedAt: Date;
+    _count: {
+      members: number;
+    };
+    members: {
+      id: string;
+      avatarImg?: string | undefined;
+    };
+  }[];
+}
