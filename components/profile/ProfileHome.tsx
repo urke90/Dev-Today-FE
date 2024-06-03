@@ -76,6 +76,8 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
             <p className="p3-regular dark:text-white-400">{email}</p>
           </div>
           <ProfileSidebarInfo
+            userProfileId={id}
+            viewerId={viewerId}
             isPersonalProfile={isPersonalProfile}
             isFollowing={isFollowing}
           />

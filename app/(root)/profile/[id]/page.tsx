@@ -1,3 +1,4 @@
+import { auth } from '@/app/api/auth/[...nextauth]/route';
 import ProfileHome from '@/components/profile/ProfileHome';
 import { EQueryContentType, type IContent } from '@/types/content';
 import type { IGroup } from '@/types/group';
@@ -14,7 +15,6 @@ interface IUserProfilePageProps {
   searchParams: {
     page: string | string[] | undefined;
     type: string | string[] | undefined;
-    viewerId: string | string[] | undefined;
   };
 }
 
@@ -28,19 +28,21 @@ const UserProfilePage: React.FC<IUserProfilePageProps> = async ({
     searchParams.type,
     EQueryContentType.POST
   );
-  const viewerId = parseSearchParams(searchParams.viewerId, '');
+
+  const session = await auth();
+  if (!session?.user) throw new Error('User data not available!');
 
   const userResult = await typedFetch<IProfileUserResponse>({
     url: `/user/${id}`,
   });
 
-  let content: { content: IContent[] } = { content: [] };
+  let content: IContent[] = [];
   let groupContent: IGroup[] = [];
   if (contentType === EQueryContentType.GROUP) {
-    groupContent = await typedFetch({ url: `/user/${id}/groups` });
+    groupContent = await typedFetch<IGroup[]>({ url: `/user/${id}/groups` });
   } else {
-    content = await typedFetch({
-      url: `/user/${id}/content?type=${contentType}&page=${page}&viewerId=${viewerId}`,
+    content = await typedFetch<IContent[]>({
+      url: `/user/${id}/content?type=${contentType}&page=${page}&viewerId=${session.user.id}`,
     });
   }
 
@@ -50,9 +52,9 @@ const UserProfilePage: React.FC<IUserProfilePageProps> = async ({
         user={userResult.user}
         isFollowing={userResult.isFollowing}
         contentType={contentType}
-        contentItems={content.content}
+        contentItems={content}
         groupItems={groupContent}
-        viewerId={viewerId}
+        viewerId={session.user.id}
       />
     </section>
   );
