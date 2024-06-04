@@ -17,8 +17,9 @@ import {
 } from '@/components/ui/popover';
 import { postTypes } from '@/constants';
 import { cn } from '@/lib/utils';
-import { createPostSchema } from '@/lib/validation';
-import { ISelectGroup } from '@/types/group';
+import { createContentSchema } from '@/lib/validation';
+import { EContentType } from '@/types/content';
+import { ISelectGroup, ITags } from '@/types/group';
 import { typedFetch } from '@/utils/api';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as Select from '@radix-ui/react-select';
@@ -40,12 +41,13 @@ type SelectItemProps = {
   onValueChange?: (value: string) => void;
 };
 
-type PostProps = {
+type ContentProps = {
   authorId: string;
   allGroups: ISelectGroup;
+  allTags: ITags;
 };
 
-const CreatePosts = ({ authorId, allGroups }: PostProps) => {
+const CreatePosts = ({ authorId, allGroups, allTags }: ContentProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isPreview, setIsPreview] = useState(false);
   const editorRef = useRef<any>(null);
@@ -57,32 +59,35 @@ const CreatePosts = ({ authorId, allGroups }: PostProps) => {
     bio: group.bio,
   }));
 
-  const form = useForm<z.infer<typeof createPostSchema>>({
-    resolver: zodResolver(createPostSchema),
+  const selectTagsOptions = allTags.tags.map((tag) => ({
+    value: tag.id,
+    label: tag.title,
+  }));
+
+  const form = useForm<z.infer<typeof createContentSchema>>({
+    resolver: zodResolver(createContentSchema),
     defaultValues: {
       authorId,
       title: '',
-      type: 'post',
-      selectGroup: undefined,
+      type: EContentType.POST,
+      groupId: undefined,
       coverImage: '',
       meetupLocation: '',
       meetupDate: undefined,
-      podcastAudioFile: '',
-      audioTitle: '',
+      podcastFile: '',
+      podcastTitle: '',
       description: '',
-      tags: [],
+      tags: undefined,
     },
   });
 
+  console.log(form.formState.errors);
+
   const watchPostType = form.watch('type');
   const watchCoverImage = form.watch('coverImage');
-  console.log(form.getValues('type'));
 
-  // console.log(form.getValues());
-  // const stringArray = form.getValues('tags').map((tag) => tag.label);
-  // console.log(stringArray);
   const onSubmit = async () => {
-    if (watchPostType === 'post') {
+    if (watchPostType === EContentType.POST) {
       const result = await form.trigger([
         'title',
         'coverImage',
@@ -91,28 +96,103 @@ const CreatePosts = ({ authorId, allGroups }: PostProps) => {
       ]);
       if (!result) throw new Error('Form validation failed');
 
-      await typedFetch({
-        url: '/content/post',
-        method: 'POST',
-        body: {
-          authorId: form.getValues('authorId'),
-          title: form.getValues('title'),
-          type: form.getValues('type'),
-          selectGroup: form.getValues('selectGroup').value,
-          coverImage: form.getValues('coverImage'),
-          description: form.getValues('description'),
-          tags: form.getValues('tags'),
-        },
-      });
+      try {
+        setIsLoading(true);
+        await typedFetch({
+          url: '/content/post',
+          method: 'POST',
+          body: {
+            authorId: form.getValues('authorId'),
+            title: form.getValues('title'),
+            type: form.getValues('type'),
+            groupId: form.getValues('groupId')?.value,
+            coverImage: form.getValues('coverImage'),
+            description: form.getValues('description'),
+            tags: form.getValues('tags').map((tag) => tag.label),
+          },
+        });
+        form.reset();
+        form.setValue('groupId', {
+          value: '',
+          label: '',
+        });
+        form.setValue('tags', []);
+      } catch (error) {
+        console.error(error);
+        throw new Error('Failed to create post');
+      } finally {
+        setIsLoading(false);
+      }
     }
 
-    if (watchPostType === 'meetup') {
+    if (watchPostType === EContentType.MEETUP) {
       const result = await form.trigger(['meetupLocation', 'meetupDate']);
-      if (!result) return;
+      if (!result) throw new Error('Form validation failed');
+
+      try {
+        setIsLoading(true);
+        await typedFetch({
+          url: '/content/meetup',
+          method: 'POST',
+          body: {
+            authorId: form.getValues('authorId'),
+            title: form.getValues('title'),
+            type: form.getValues('type'),
+            groupId: form.getValues('groupId').value,
+            coverImage: form.getValues('coverImage'),
+            description: form.getValues('description'),
+            tags: form.getValues('tags').map((tag) => tag.label),
+            meetupLocation: form.getValues('meetupLocation'),
+            meetupDate: form.getValues('meetupDate'),
+          },
+        });
+
+        form.reset();
+        form.setValue('groupId', {
+          value: '',
+          label: '',
+        });
+        form.setValue('tags', []);
+      } catch (error) {
+        console.error(error);
+        throw new Error('Failed to create meetup');
+      } finally {
+        setIsLoading(false);
+      }
     }
-    if (watchPostType === 'podcast') {
-      const result = await form.trigger(['podcastAudioFile', 'audioTitle']);
+    if (watchPostType === EContentType.PODCAST) {
+      const result = await form.trigger(['podcastFile', 'podcastTitle']);
       if (!result) return;
+
+      try {
+        setIsLoading(true);
+        await typedFetch({
+          url: '/content/podcast',
+          method: 'POST',
+          body: {
+            authorId: form.getValues('authorId'),
+            title: form.getValues('title'),
+            type: form.getValues('type'),
+            groupId: form.getValues('groupId').value,
+            coverImage: form.getValues('coverImage'),
+            description: form.getValues('description'),
+            tags: form.getValues('tags').map((tag) => tag.label),
+            podcastFile: form.getValues('podcastFile'),
+            podcastTitle: form.getValues('podcastTitle'),
+          },
+        });
+        form.reset();
+        form.setValue('groupId', {
+          value: '',
+          label: '',
+        });
+        form.setValue('tags', []);
+      } catch (error) {
+        console.error(error);
+        throw new Error('Failed to create podcast');
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -136,7 +216,7 @@ const CreatePosts = ({ authorId, allGroups }: PostProps) => {
             <div className="flex items-end gap-3">
               <Controller
                 control={form.control}
-                defaultValue="post"
+                defaultValue={EContentType.POST}
                 name="type"
                 render={({ field }) => (
                   <Select.Root
@@ -152,7 +232,7 @@ const CreatePosts = ({ authorId, allGroups }: PostProps) => {
                       </span>
                       <p
                         className={`${
-                          watchPostType !== 'post' ? 'hidden' : ''
+                          watchPostType !== EContentType.POST ? 'hidden' : ''
                         } p3-regular !font-bold`}></p>
                       <div className=" flex items-center p3-regular !text-black-800 dark:!text-white-100 !font-bold ">
                         <Select.Value placeholder="Post" />
@@ -184,7 +264,7 @@ const CreatePosts = ({ authorId, allGroups }: PostProps) => {
                                     className="invert dark:invert-0"
                                   />
                                   <SelectItem
-                                    value={type.title}
+                                    value={type.value}
                                     onValueChange={(value) => {
                                       field.onChange(value);
                                     }}
@@ -203,7 +283,7 @@ const CreatePosts = ({ authorId, allGroups }: PostProps) => {
               />
 
               <FormField
-                name="selectGroup"
+                name="groupId"
                 control={form.control}
                 render={({ field }) => (
                   <FormItem>
@@ -214,7 +294,7 @@ const CreatePosts = ({ authorId, allGroups }: PostProps) => {
                         {...field}
                         placeholder="Select a group..."
                         defaultValue={field.value}
-                        value={form.watch('selectGroup')}
+                        value={form.watch('groupId')}
                         styles={{
                           control: (base) => ({
                             ...base,
@@ -325,7 +405,7 @@ const CreatePosts = ({ authorId, allGroups }: PostProps) => {
                 </FormItem>
               )}
             />
-            {watchPostType === 'meetup' && (
+            {watchPostType === EContentType.MEETUP && (
               <>
                 <RHFInput
                   className="!placeholder:white-400 p3-medium dark:!placeholder-white-400"
@@ -379,10 +459,10 @@ const CreatePosts = ({ authorId, allGroups }: PostProps) => {
                 )}
               </>
             )}
-            {watchPostType === 'podcast' && (
+            {watchPostType === EContentType.PODCAST && (
               <>
                 <FormField
-                  name="podcastAudioFile"
+                  name="podcastFile"
                   control={form.control}
                   render={({ field }) => (
                     <FormItem>
@@ -427,7 +507,7 @@ const CreatePosts = ({ authorId, allGroups }: PostProps) => {
 
                 <RHFInput
                   className="!placeholder:white-400 p3-medium dark:!placeholder-white-400"
-                  name="audioTitle"
+                  name="podcastTitle"
                   label="Audio title"
                   placeholder="Ex: Codetime | Episode 8"
                 />
@@ -512,14 +592,14 @@ const CreatePosts = ({ authorId, allGroups }: PostProps) => {
                       menu: () => 'bg-white-100 dark:bg-black-800 !shadow-sm ',
                     }}
                     isMulti
-                    options={selectGroupOptions
+                    options={selectTagsOptions
                       .filter(
-                        (color) =>
-                          !field.value.find((tag) => tag.label === color.label)
+                        (item) =>
+                          !field.value?.find((tag) => tag.label === item.label)
                       )
-                      .map((color) => ({
-                        value: color.value,
-                        label: color.label,
+                      .map((item) => ({
+                        value: item.value,
+                        label: item.label,
                       }))}
                     formatOptionLabel={(option, { context }) => {
                       if (context === 'value') {
@@ -556,7 +636,7 @@ const CreatePosts = ({ authorId, allGroups }: PostProps) => {
                 type="button"
                 onClick={() => onSubmit()}
                 className=" bg-light100__dark800 hover:!text-white-100 duration-200 hover:bg-primary-500 py-3 w-3/5">
-                Publish Post
+                {isLoading ? 'Publishing Post...' : 'Publish Post'}
               </Button>
             </div>
           </form>

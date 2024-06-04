@@ -39,7 +39,7 @@ export default async function RootLayout({
         <QueryProvider>
           <html lang="en" className={`${theme}`}>
             <body
-              className={`${ibmPlexSans.className} min-h-screen bg-white-200 dark:bg-black-900`}>
+              className={`${ibmPlexSans.className} min-h-screen !overflow-auto bg-white-200 dark:bg-black-900`}>
               <main className="mx-auto max-w-screen-xxl">{children}</main>
               <ReactQueryDevtools />
             </body>

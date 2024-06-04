@@ -34,3 +34,10 @@ export interface ISelectGroup {
     };
   }[];
 }
+
+export interface ITags {
+  tags: {
+    id: string;
+    title: string;
+  }[];
+}

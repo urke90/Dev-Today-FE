@@ -1,16 +1,17 @@
 'use client';
 
+import { EContentType } from '@/types/content';
 import Image from 'next/image';
 import ParseHtml from '../ParseHtml/ParseHtml';
 import AudioPlayer from '../audioPlayer/AudioPlayer';
 
-type Props = {
+type PreviewProps = {
   setIsPreview: (value: boolean) => void;
   type: string;
   data: any;
 };
 
-const Preview = ({ setIsPreview, type, data }: Props) => {
+const Preview = ({ setIsPreview, type, data }: PreviewProps) => {
   console.log(data);
   return (
     <section className="space-y-5 w-full">
@@ -30,7 +31,7 @@ const Preview = ({ setIsPreview, type, data }: Props) => {
         />
         <h1 className="!text-primary-500 font-semibold">Preview</h1>
       </div>
-      {type === 'podcast' && (
+      {type === EContentType.PODCAST && (
         <AudioPlayer
           audioSrc={data?.podcastAudioFile || ''}
           coverImage={data?.coverImage || ''}
@@ -38,7 +39,7 @@ const Preview = ({ setIsPreview, type, data }: Props) => {
           audioTitle={data?.audioTitle || ''}
         />
       )}
-      {type !== 'podcast' && (
+      {type !== EContentType.PODCAST && (
         <Image
           src={data?.coverImage || '/assets/images/post-example.svg'}
           alt="Preview"
@@ -48,7 +49,7 @@ const Preview = ({ setIsPreview, type, data }: Props) => {
         />
       )}
       <div className="flex gap-2 max-w-3xl">
-        {type === 'meetup' && (
+        {type === EContentType.MEETUP && (
           <Image
             src={data?.profileImage || '/assets/images/post-example.svg'}
             alt="avatar"
@@ -73,7 +74,7 @@ const Preview = ({ setIsPreview, type, data }: Props) => {
         </ul>
       </div>
       <ParseHtml data={data?.description} />
-      {type === 'meetup' && (
+      {type === EContentType.MEETUP && (
         <>
           <div className="flex gap-2">
             <Image

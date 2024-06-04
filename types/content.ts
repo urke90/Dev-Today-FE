@@ -1,9 +1,9 @@
 import type { IProfileUser } from './user';
 
 export enum EContentType {
-  POST = 'post',
-  MEETUP = 'meetup',
-  PODCAST = 'podcast',
+  POST = 'POST',
+  MEETUP = 'MEETUP',
+  PODCAST = 'PODCAST',
 }
 
 export enum EQueryContentType {

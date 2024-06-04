@@ -135,17 +135,9 @@ const Onboarding = () => {
                 key={item.label}
                 className={`${
                   mode === 'dark' ? 'bg-black-700' : 'bg-white-100'
-<<<<<<< HEAD
                 } p-5 flex gap-5 items-center rounded-lg`}>
                 <div
                   className={`dark:bg-black-800 ${colorsOnboardingIcons[index]} h-[60px] p-5 rounded-md`}>
-=======
-                } flex items-center gap-5 rounded-lg p-5`}
-              >
-                <div
-                  className={`dark:bg-black-800 ${colorsOnboardingIcons[index]} h-[60px] rounded-md p-5`}
-                >
->>>>>>> 85f714c313009a974090c94d3ac71dab1c3fe865
                   <Image
                     src={item.image}
                     alt={item.alt}
@@ -197,12 +189,7 @@ const Onboarding = () => {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-<<<<<<< HEAD
             className="space-y-5 w-full ">
-=======
-            className="w-full space-y-5 "
-          >
->>>>>>> 85f714c313009a974090c94d3ac71dab1c3fe865
             {step === 0 && (
               <>
                 <FormField
@@ -230,12 +217,7 @@ const Onboarding = () => {
                                   ? 'bg-primary-500 !text-white-100'
                                   : 'bg-white-100 dark:bg-black-800'
                               }
-<<<<<<< HEAD
                               px-4 justify-start  rounded border-none h-14 p1-medium cursor-pointer`}>
-=======
-                              p1-medium h-14  cursor-pointer justify-start rounded border-none px-4 text-[14px]`}
-                              >
->>>>>>> 85f714c313009a974090c94d3ac71dab1c3fe865
                                 {item.title}
                               </FormLabel>
                             </FormItem>
@@ -286,12 +268,7 @@ const Onboarding = () => {
                                   ? 'bg-primary-500 !text-white-100'
                                   : 'bg-white-100 dark:bg-black-800'
                               }
-<<<<<<< HEAD
                               px-4  justify-start  rounded border-none h-14 text-[14px] p1-medium cursor-pointer`}>
-=======
-                              p1-medium  h-14  cursor-pointer justify-start rounded border-none px-4 text-[14px]`}
-                              >
->>>>>>> 85f714c313009a974090c94d3ac71dab1c3fe865
                                 {item.title}
                               </FormLabel>
                             </FormItem>
@@ -309,11 +286,7 @@ const Onboarding = () => {
                   control={form.control}
                   name="preferredSkills"
                   render={() => (
-<<<<<<< HEAD
                     <FormItem className="flex flex-wrap  gap-3 items-center space-y-0">
-=======
-                    <FormItem className="flex flex-wrap items-center gap-3 space-y-0">
->>>>>>> 85f714c313009a974090c94d3ac71dab1c3fe865
                       {preferSkills.map((item) => (
                         <FormField
                           key={item.title}
@@ -344,14 +317,8 @@ const Onboarding = () => {
                                   className={`cursor-pointer border-none ${
                                     field.value.includes(item.title)
                                       ? 'bg-primary-500 !text-white-100'
-<<<<<<< HEAD
                                       : 'dark:bg-black-800 bg-white-100'
                                   } h-12  rounded-lg flex items-center p3-medium !px-5`}>
-=======
-                                      : 'bg-white-100 dark:bg-black-800'
-                                  } p3-medium  flex h-12 items-center rounded-lg !px-5`}
-                                >
->>>>>>> 85f714c313009a974090c94d3ac71dab1c3fe865
                                   {item.title}
                                 </FormLabel>
                               </FormItem>
@@ -366,12 +333,7 @@ const Onboarding = () => {
             )}
             <Button
               onClick={() => goNext()}
-<<<<<<< HEAD
               className="w-full bg-primary-500 h-11 p2-bold ">
-=======
-              className="p2-bold h-11 w-full bg-primary-500 "
-            >
->>>>>>> 85f714c313009a974090c94d3ac71dab1c3fe865
               {step === 2 ? 'Get Started' : 'Next'}
             </Button>
           </form>

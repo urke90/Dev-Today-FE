@@ -1,3 +1,5 @@
+import { EContentType } from '@/types/content';
+
 export const regWelcome = [
   {
     image: '/assets/icons/business-dark.svg',
@@ -88,14 +90,17 @@ export const preferSkills = [
 export const postTypes = [
   {
     title: 'post',
+    value: EContentType.POST,
     image: '/assets/icons/frame-white.svg',
   },
   {
     title: 'meetup',
+    value: EContentType.MEETUP,
     image: '/assets/icons/calendar-white.svg',
   },
   {
     title: 'podcast',
+    value: EContentType.PODCAST,
     image: '/assets/icons/podcast.svg',
   },
 ];
