@@ -18,7 +18,7 @@ import {
 import { postTypes } from '@/constants';
 import { cn } from '@/lib/utils';
 import { createContentSchema } from '@/lib/validation';
-import { EContentType } from '@/types/content';
+import { EContentType, IContent } from '@/types/content';
 import { ISelectGroup, ITags } from '@/types/group';
 import { typedFetch } from '@/utils/api';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -42,24 +42,30 @@ type SelectItemProps = {
 };
 
 type ContentProps = {
-  authorId: string;
-  allGroups: ISelectGroup;
-  allTags: ITags;
+  authorId?: string;
+  allGroups?: ISelectGroup;
+  allTags?: ITags;
+  editType?: string;
+  editPost?: IContent;
 };
 
-const CreatePosts = ({ authorId, allGroups, allTags }: ContentProps) => {
+const CreatePosts = ({
+  authorId,
+  allGroups,
+  allTags,
+  editPost,
+}: ContentProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isPreview, setIsPreview] = useState(false);
   const editorRef = useRef<any>(null);
 
-  const selectGroupOptions = allGroups.groups.map((group) => ({
+  const selectGroupOptions = allGroups?.groups.map((group) => ({
     value: group.id,
     label: group.name,
     profileImage: group.profileImage,
     bio: group.bio,
   }));
-
-  const selectTagsOptions = allTags.tags.map((tag) => ({
+  const selectTagsOptions = allTags?.tags.map((tag) => ({
     value: tag.id,
     label: tag.title,
   }));
@@ -67,24 +73,31 @@ const CreatePosts = ({ authorId, allGroups, allTags }: ContentProps) => {
   const form = useForm<z.infer<typeof createContentSchema>>({
     resolver: zodResolver(createContentSchema),
     defaultValues: {
-      authorId,
-      title: '',
-      type: EContentType.POST,
-      groupId: undefined,
-      coverImage: '',
-      meetupLocation: '',
-      meetupDate: undefined,
-      podcastFile: '',
-      podcastTitle: '',
-      description: '',
-      tags: undefined,
+      authorId: editPost ? editPost?.authorId : authorId,
+      title: editPost ? editPost?.title : '',
+      type: editPost ? editPost?.type : EContentType.POST,
+      groupId: editPost
+        ? {
+            value: editPost?.group.id,
+            label: editPost?.group.name,
+          }
+        : undefined,
+      coverImage: editPost?.coverImage ?? '',
+      meetupLocation: editPost ? editPost?.meetupLocation ?? '' : '',
+      meetupDate: editPost ? editPost?.meetupDate ?? undefined : undefined,
+      podcastFile: editPost ? editPost?.podcastFile ?? '' : '',
+      podcastTitle: editPost ? editPost?.podcastTitle ?? '' : '',
+      description: editPost ? editPost?.description ?? '' : '',
+      tags: editPost
+        ? editPost?.tags.map((tag) => ({ value: tag.id, label: tag.title }))
+        : [],
     },
   });
 
-  console.log(form.formState.errors);
-
   const watchPostType = form.watch('type');
   const watchCoverImage = form.watch('coverImage');
+
+  console.log(form.watch('groupId'));
 
   const onSubmit = async () => {
     if (watchPostType === EContentType.POST) {
@@ -593,7 +606,7 @@ const CreatePosts = ({ authorId, allGroups, allTags }: ContentProps) => {
                     }}
                     isMulti
                     options={selectTagsOptions
-                      .filter(
+                      ?.filter(
                         (item) =>
                           !field.value?.find((tag) => tag.label === item.label)
                       )
