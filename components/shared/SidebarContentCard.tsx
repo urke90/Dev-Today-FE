@@ -1,7 +1,7 @@
 import type { IUserRecentContent } from '@/types/user';
 import ArrowRightIcon from '../icons/ArrowRight';
 
-import { EContentType } from '@/types/content';
+import { EContentType, ITag } from '@/types/content';
 import { parseDate } from '@/utils/format';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -134,7 +134,7 @@ interface IMeetupItemCardProps {
   meetupDate: Date | null;
   location: string;
   id: string;
-  tags: string[];
+  tags: ITag[];
   type: EContentType;
 }
 
@@ -163,8 +163,8 @@ const MeetupItemCard: React.FC<IMeetupItemCardProps> = ({
           <p className="subtitle-normal">{location}</p>
           {tags?.length > 0 ? (
             <ul className="flex gap-2.5">
-              {tags.map((tag) => (
-                <BadgeItem key={tag} title={tag} />
+              {tags.map(({ id, title }) => (
+                <BadgeItem key={id} title={title} />
               ))}
             </ul>
           ) : null}
@@ -178,7 +178,7 @@ interface IPodcastItemCardProps {
   title: string;
   description: string;
   id: string;
-  tags: string[];
+  tags: ITag[];
   type: EContentType;
   author: {
     name: string;
@@ -211,8 +211,8 @@ const PodcastItemCard: React.FC<IPodcastItemCardProps> = ({
           <p className="subtitle-normal">{description}</p>
           {tags?.length > 0 ? (
             <ul className="flex gap-2.5">
-              {tags.map((tag) => (
-                <BadgeItem key={tag} title={tag} />
+              {tags.map(({ id, title }) => (
+                <BadgeItem key={id} title={title} />
               ))}
             </ul>
           ) : null}

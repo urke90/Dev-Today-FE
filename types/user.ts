@@ -1,4 +1,4 @@
-import { EContentType } from './content';
+import { EContentType, ITag } from './content';
 
 export enum EUserRole {
   USER = 'USER',
@@ -34,7 +34,7 @@ export interface IUserRecentContent {
   description: string;
   coverImage: string | null;
   meetupDate: Date | null;
-  tags: string[];
+  tags: ITag[];
   type: EContentType;
   author: {
     name: string;

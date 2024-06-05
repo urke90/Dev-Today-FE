@@ -46,3 +46,8 @@ interface ILike {
   content: IContent;
   contentId: string;
 }
+
+export interface ITag {
+  id: string;
+  title: string;
+}

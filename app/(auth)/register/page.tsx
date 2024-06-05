@@ -1,13 +1,13 @@
 'use client';
-import Image from 'next/image';
-import React from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { set, z } from 'zod';
-import Link from 'next/link';
 import { signIn } from 'next-auth/react';
+import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -17,13 +17,11 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { signInSchema } from '@/lib/validation';
 import { Separator } from '@/components/ui/separator';
 import { regWelcome } from '@/constants';
+import { useTheme } from '@/context/ThemeProvider';
+import { signInSchema } from '@/lib/validation';
 import { colorsRegister } from '@/styles/index';
-
-import { useTheme } from '@/app/context/ThemeProvider';
 
 const Register = () => {
   const { setMode, mode } = useTheme();

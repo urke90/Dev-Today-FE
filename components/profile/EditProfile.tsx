@@ -32,22 +32,8 @@ interface IEditProfileProps {
 
 const EditProfile: React.FC<IEditProfileProps> = ({ user }) => {
   const router = useRouter();
-  const {
-    id,
-    userName,
-    name,
-    preferredSkills,
-    bio,
-    avatarImg,
-    instagramName,
-    instagramLink,
-    linkedinName,
-    linkedinLink,
-    twitterName,
-    twitterLink,
-  } = user ?? {};
 
-  const PREFERRED_SKILLS_OPTIONS = preferredSkills.map((skill) => ({
+  const PREFERRED_SKILLS_OPTIONS = user?.preferredSkills.map((skill) => ({
     value: skill,
     label: skill,
   }));
@@ -55,17 +41,17 @@ const EditProfile: React.FC<IEditProfileProps> = ({ user }) => {
   const form = useForm({
     resolver: zodResolver(updateProfileSchema),
     defaultValues: {
-      name: name || '',
-      userName: userName || '',
-      bio: bio || '',
+      name: user?.name || '',
+      userName: user?.userName || '',
+      bio: user?.bio || '',
       preferredSkills: PREFERRED_SKILLS_OPTIONS || [],
-      avatarImg: avatarImg || '',
-      instagramName: instagramName || '',
-      instagramLink: instagramLink || '',
-      linkedinName: linkedinName || '',
-      linkedinLink: linkedinLink || '',
-      twitterName: twitterName || '',
-      twitterLink: twitterLink || '',
+      avatarImg: user?.avatarImg || '',
+      instagramName: user?.instagramName || '',
+      instagramLink: user?.instagramLink || '',
+      linkedinName: user?.linkedinName || '',
+      linkedinLink: user?.linkedinLink || '',
+      twitterName: user?.twitterName || '',
+      twitterLink: user?.twitterLink || '',
     },
   });
 
@@ -86,7 +72,7 @@ const EditProfile: React.FC<IEditProfileProps> = ({ user }) => {
 
     try {
       await typedFetch({
-        url: `/user/${id}`,
+        url: `/user/${user?.id}`,
         method: 'PATCH',
         body: {
           ...data,
