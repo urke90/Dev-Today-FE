@@ -24,7 +24,7 @@ export interface IProfileUser {
   twitterLink: string | null;
   role: EUserRole;
   followers: string[];
-  following: string[];
+  _count: { followers: number; following: number };
   contents: IUserRecentContent[];
 }
 

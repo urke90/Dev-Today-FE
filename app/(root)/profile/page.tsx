@@ -5,6 +5,7 @@ import type { IGroup } from '@/types/group';
 import type { IProfileUserResponse } from '@/types/user';
 import { typedFetch } from '@/utils/api';
 import { parseSearchParams } from '@/utils/query';
+
 // ----------------------------------------------------------------
 
 interface IMyProfilePageProps {
@@ -47,7 +48,6 @@ const MyProfilePage: React.FC<IMyProfilePageProps> = async ({
 
   return (
     <section className="px-3.5 lg:px-5">
-      {/* <Suspense fallback={<LoadingSpinner asLayout />}> */}
       <ProfileHome
         isPersonalProfile
         user={userResult.user}
@@ -57,8 +57,6 @@ const MyProfilePage: React.FC<IMyProfilePageProps> = async ({
         groupItems={groupContent}
         viewerId={session.user.id}
       />
-
-      {/* </Suspense> */}
     </section>
   );
 };

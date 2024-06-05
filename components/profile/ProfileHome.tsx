@@ -55,7 +55,7 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
               alt="profile"
               className="ring-primary-500 mx-auto mb-2.5 rounded-full ring-4"
             />
-            <h1 className="h1-medium">{user?.userName}</h1>
+            <h1 className="h1-medium">{user.userName}</h1>
             <p className="p3-regular dark:text-white-400">{user?.email}</p>
           </div>
           <ProfileSidebarInfo
@@ -66,10 +66,10 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
           />
           <div className="flex justify-center gap-[7px] gap-y-0 sm:flex-col">
             <p className="p3-medium text-white-400 dark:text-white-300">
-              {user?.followers.length} Followers
+              {user?._count.followers} Followers
             </p>
             <p className="p3-medium text-white-400 dark:text-white-300">
-              {user?.following.length} Following
+              {user?._count.following} Following
             </p>
           </div>
           {user?.preferredSkills.length > 0 && (
