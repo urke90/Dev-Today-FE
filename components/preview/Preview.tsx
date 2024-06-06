@@ -10,6 +10,9 @@ type PreviewProps = {
   type: string;
   data: any;
 };
+type TagProps = {
+  label: string;
+};
 
 const Preview = ({ setIsPreview, type, data }: PreviewProps) => {
   console.log(data);
@@ -33,10 +36,10 @@ const Preview = ({ setIsPreview, type, data }: PreviewProps) => {
       </div>
       {type === EContentType.PODCAST && (
         <AudioPlayer
-          audioSrc={data?.podcastAudioFile || ''}
+          audioSrc={data?.podcastFile || ''}
           coverImage={data?.coverImage || ''}
           title={data?.title || ''}
-          audioTitle={data?.audioTitle || ''}
+          audioTitle={data?.podcastTitle || ''}
         />
       )}
       {type !== EContentType.PODCAST && (
@@ -62,15 +65,13 @@ const Preview = ({ setIsPreview, type, data }: PreviewProps) => {
       </div>
       <div>
         <ul className="flex gap-2">
-          <li className="dark:bg-black-700 bg-gray-100 rounded-full px-2 py-1 cap-10 uppercase">
-            React
-          </li>
-          <li className="dark:bg-black-700 bg-gray-100 rounded-full px-2 py-1 cap-10 uppercase">
-            React
-          </li>
-          <li className="dark:bg-black-700 bg-gray-100 rounded-full px-2 py-1 cap-10 uppercase">
-            React
-          </li>
+          {data?.tags?.map((tag: TagProps) => (
+            <li
+              key={tag.label}
+              className="dark:bg-black-700 bg-gray-100 rounded-full px-2 py-1 cap-10 uppercase">
+              {tag.label}
+            </li>
+          ))}
         </ul>
       </div>
       <ParseHtml data={data?.description} />

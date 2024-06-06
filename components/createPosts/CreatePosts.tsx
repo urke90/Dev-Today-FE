@@ -27,6 +27,7 @@ import { Editor } from '@tinymce/tinymce-react';
 import { format } from 'date-fns';
 import { CldUploadWidget } from 'next-cloudinary';
 import Image from 'next/image';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import ReactSelect, { components } from 'react-select';
@@ -43,8 +44,8 @@ type SelectItemProps = {
 
 type ContentProps = {
   authorId?: string;
-  allGroups?: ISelectGroup;
-  allTags?: ITags;
+  allGroups?: ISelectGroup[];
+  allTags?: ITags[];
   editType?: string;
   editPost?: IContent;
 };
@@ -58,14 +59,48 @@ const CreatePosts = ({
   const [isLoading, setIsLoading] = useState(false);
   const [isPreview, setIsPreview] = useState(false);
   const editorRef = useRef<any>(null);
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const { replace } = useRouter();
 
-  const selectGroupOptions = allGroups?.groups.map((group) => ({
+  let timeoutId: NodeJS.Timeout | null = null;
+  const handleSearchGroups = (query: string) => {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+    timeoutId = setTimeout(() => {
+      const params = new URLSearchParams(searchParams);
+      if (query) {
+        params.set('q', query);
+      } else {
+        params.delete('q');
+      }
+      replace(`${pathname}?${params.toString()}`);
+    }, 700);
+  };
+
+  const handleSearchTags = (query: string) => {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+    timeoutId = setTimeout(() => {
+      const params = new URLSearchParams(searchParams);
+      if (query) {
+        params.set('title', query);
+      } else {
+        params.delete('title');
+      }
+      replace(`${pathname}?${params.toString()}`);
+    }, 700);
+  };
+
+  const selectGroupOptions = allGroups?.map((group) => ({
     value: group.id,
     label: group.name,
     profileImage: group.profileImage,
     bio: group.bio,
   }));
-  const selectTagsOptions = allTags?.tags.map((tag) => ({
+  const selectTagsOptions = allTags?.map((tag) => ({
     value: tag.id,
     label: tag.title,
   }));
@@ -73,8 +108,8 @@ const CreatePosts = ({
   const form = useForm<z.infer<typeof createContentSchema>>({
     resolver: zodResolver(createContentSchema),
     defaultValues: {
-      authorId: editPost ? editPost?.authorId : authorId,
-      title: editPost ? editPost?.title : '',
+      authorId: editPost?.authorId ?? authorId,
+      title: editPost?.title ?? '',
       type: editPost ? editPost?.type : EContentType.POST,
       groupId: editPost
         ? {
@@ -83,11 +118,11 @@ const CreatePosts = ({
           }
         : undefined,
       coverImage: editPost?.coverImage ?? '',
-      meetupLocation: editPost ? editPost?.meetupLocation ?? '' : '',
-      meetupDate: editPost ? editPost?.meetupDate ?? undefined : undefined,
-      podcastFile: editPost ? editPost?.podcastFile ?? '' : '',
-      podcastTitle: editPost ? editPost?.podcastTitle ?? '' : '',
-      description: editPost ? editPost?.description ?? '' : '',
+      meetupLocation: editPost?.meetupLocation ?? '',
+      meetupDate: editPost?.meetupDate ?? undefined,
+      podcastFile: editPost?.podcastFile ?? '',
+      podcastTitle: editPost?.podcastTitle ?? '',
+      description: editPost?.description ?? '',
       tags: editPost
         ? editPost?.tags.map((tag) => ({ value: tag.id, label: tag.title }))
         : [],
@@ -96,8 +131,6 @@ const CreatePosts = ({
 
   const watchPostType = form.watch('type');
   const watchCoverImage = form.watch('coverImage');
-
-  console.log(form.watch('groupId'));
 
   const onSubmit = async () => {
     if (watchPostType === EContentType.POST) {
@@ -308,6 +341,7 @@ const CreatePosts = ({
                         placeholder="Select a group..."
                         defaultValue={field.value}
                         value={form.watch('groupId')}
+                        onInputChange={handleSearchGroups}
                         styles={{
                           control: (base) => ({
                             ...base,
@@ -605,6 +639,7 @@ const CreatePosts = ({
                       menu: () => 'bg-white-100 dark:bg-black-800 !shadow-sm ',
                     }}
                     isMulti
+                    onInputChange={handleSearchTags}
                     options={selectTagsOptions
                       ?.filter(
                         (item) =>

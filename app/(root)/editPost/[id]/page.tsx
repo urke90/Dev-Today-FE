@@ -17,14 +17,12 @@ const EditPost = async ({ params }: Props) => {
   if (!session) throw new Error(' User data not available!');
 
   const allGroups = await typedFetch<ISelectGroup>({
-    url: `/groups/content-create?${session.user.name}`,
+    url: `/groups`,
   });
   if (!allGroups) throw new Error('Groups not available!');
   const editPost = await typedFetch<IContent>({
     url: `/content/${contentId}`,
   });
-
-  console.log(editPost);
 
   return (
     <div className="content-wrapper max-w-[900px]">

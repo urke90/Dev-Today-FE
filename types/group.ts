@@ -18,26 +18,22 @@ export interface IGroup {
 }
 
 export interface ISelectGroup {
-  groups: {
+  id: string;
+  profileImage: string;
+  bio: string;
+  name: string;
+  coverImg: string;
+  updatedAt: Date;
+  _count: {
+    members: number;
+  };
+  members: {
     id: string;
-    profileImage: string;
-    bio: string;
-    name: string;
-    coverImg: string;
-    updatedAt: Date;
-    _count: {
-      members: number;
-    };
-    members: {
-      id: string;
-      avatarImg?: string | undefined;
-    };
-  }[];
+    avatarImg?: string | undefined;
+  };
 }
 
 export interface ITags {
-  tags: {
-    id: string;
-    title: string;
-  }[];
+  id: string;
+  title: string;
 }
