@@ -1,23 +1,24 @@
 'use client';
 
-import RHFMultipleSelect from '../RHFInputs/RHFMultipleSelect';
-import RHFTextarea from '../RHFInputs/RHFTextarea';
-import { Button } from '../ui/button';
-
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
-  CldImage,
   CldUploadWidget,
+  getCldImageUrl,
   type CloudinaryUploadWidgetResults,
 } from 'next-cloudinary';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import z from 'zod';
+import RHFMultipleSelect from '../RHFInputs/RHFMultipleSelect';
+import RHFTextarea from '../RHFInputs/RHFTextarea';
+import { Button } from '../ui/button';
 
 import RHFInput from '@/components/RHFInputs/RHFInput';
 import { Form } from '@/components/ui/form';
+import { CLOUDINARY_URL } from '@/constants';
 import { updateProfileSchema } from '@/lib/validation';
 import type { IProfileUser } from '@/types/user';
 import { typedFetch } from '@/utils/api';
@@ -38,6 +39,16 @@ const EditProfile: React.FC<IEditProfileProps> = ({ user }) => {
     label: skill,
   }));
 
+  let transformedAvatarImg = user.avatarImg;
+  if (user.avatarImg.startsWith(CLOUDINARY_URL)) {
+    transformedAvatarImg = getCldImageUrl({
+      width: 60,
+      height: 60,
+      src: user.avatarImg,
+      crop: 'fill',
+    });
+  }
+
   const form = useForm({
     resolver: zodResolver(updateProfileSchema),
     defaultValues: {
@@ -45,7 +56,7 @@ const EditProfile: React.FC<IEditProfileProps> = ({ user }) => {
       userName: user?.userName || '',
       bio: user?.bio || '',
       preferredSkills: PREFERRED_SKILLS_OPTIONS || [],
-      avatarImg: user?.avatarImg || '',
+      avatarImg: transformedAvatarImg || '',
       instagramName: user?.instagramName || '',
       instagramLink: user?.instagramLink || '',
       linkedinName: user?.linkedinName || '',
@@ -63,7 +74,14 @@ const EditProfile: React.FC<IEditProfileProps> = ({ user }) => {
     if (!result.info || typeof result.info === 'string')
       return toast.error('Image upload failed!');
 
-    setPreveiwImg(result.info.secure_url);
+    const transformedAvatarImg = getCldImageUrl({
+      width: 60,
+      height: 60,
+      src: result.info.secure_url,
+      crop: 'fill',
+    });
+
+    setPreveiwImg(transformedAvatarImg);
     setValue('avatarImg', result.info.secure_url);
   };
 
@@ -102,11 +120,10 @@ const EditProfile: React.FC<IEditProfileProps> = ({ user }) => {
           <div className="flex items-center gap-2.5">
             <div className="flex-center bg-white-100 dark:bg-black-800 size-[60px] shrink-0 rounded-full">
               {previewImg ? (
-                <CldImage
+                <Image
                   src={previewImg}
-                  width="60"
-                  height="60"
-                  crop="fill"
+                  width={60}
+                  height={60}
                   className="size-[60px] rounded-full"
                   alt="profile preview"
                 />

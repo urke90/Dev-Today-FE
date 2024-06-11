@@ -1,3 +1,6 @@
+export const CLOUDINARY_URL =
+  'https://res.cloudinary.com/dev-today/image/upload';
+
 export const regWelcome = [
   {
     image: '/assets/icons/business-dark.svg',
