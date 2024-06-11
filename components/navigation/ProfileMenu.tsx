@@ -46,8 +46,7 @@ const ProfileMenu: React.FC<IProfileMenuProps> = (props) => {
         <Content
           collisionPadding={10}
           onCloseAutoFocus={(e) => e.preventDefault()}
-          className="bg-light100__dark800 shadow-header-menu border-white-border data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade dark:border-black-700 z-20 mt-7 flex min-w-44 flex-col gap-5 rounded-[14px] border p-5 max-lg:mt-6"
-        >
+          className="bg-light100__dark800 shadow-header-menu border-white-border data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade dark:border-black-700 z-20 mt-7 flex min-w-44 flex-col gap-5 rounded-[14px] border p-5 max-lg:mt-6">
           <Item className="p3-medium">
             <Button className="justify-start gap-2.5">
               <ProfileIcon />
@@ -56,9 +55,8 @@ const ProfileMenu: React.FC<IProfileMenuProps> = (props) => {
           </Item>
           <Item className="p3-medium gap-2.5">
             <Button
-              className="text-primary-500 justify-start gap-2.5"
-              onClick={() => signOut()}
-            >
+              className="justify-start gap-2.5 text-primary-500"
+              onClick={() => signOut({ callbackUrl: '/login' })}>
               <LogoutIcon />
               Logout
             </Button>
@@ -69,14 +67,12 @@ const ProfileMenu: React.FC<IProfileMenuProps> = (props) => {
             <div className="flex gap-2.5">
               <Button
                 className="bg-primary-100 dark:bg-black-800 size-[24px] rounded-full"
-                onClick={() => setMode('light')}
-              >
+                onClick={() => setMode('light')}>
                 <SunIcon className="text-black-700" />
               </Button>
               <Button
                 className="bg-white-200 dark:bg-black-700 size-[24px] rounded-full"
-                onClick={() => setMode('dark')}
-              >
+                onClick={() => setMode('dark')}>
                 <MoonIcon className="dark:text-dark-700 text-white-300" />
               </Button>
             </div>

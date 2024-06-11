@@ -1,5 +1,6 @@
 export const CLOUDINARY_URL =
   'https://res.cloudinary.com/dev-today/image/upload';
+import { EContentType } from '@/types/content';
 
 export const regWelcome = [
   {
@@ -86,4 +87,22 @@ export const preferSkills = [
   { title: 'D3.js' },
   { title: 'GraphQL' },
   { title: 'Tailwind CSS' },
+];
+
+export const postTypes = [
+  {
+    title: 'post',
+    value: EContentType.POST,
+    image: '/assets/icons/frame-white.svg',
+  },
+  {
+    title: 'meetup',
+    value: EContentType.MEETUP,
+    image: '/assets/icons/calendar-white.svg',
+  },
+  {
+    title: 'podcast',
+    value: EContentType.PODCAST,
+    image: '/assets/icons/podcast.svg',
+  },
 ];

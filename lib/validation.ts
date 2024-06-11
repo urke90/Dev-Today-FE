@@ -1,3 +1,4 @@
+import { EContentType } from '@/types/content';
 import * as z from 'zod';
 export const signInSchema = z.object({
   userName: z.string().min(3).max(20),
@@ -39,6 +40,29 @@ export const profileSchema = z.object({
   twitterLink: z.string().optional(),
   followers: z.number().optional(),
   following: z.number().optional(),
+});
+
+export const createContentSchema = z.object({
+  authorId: z.string(),
+  title: z.string().min(3).max(100),
+  type: z.nativeEnum(EContentType),
+  groupId: z.object({
+    value: z.string().min(1),
+    label: z.string().min(1),
+  }),
+  coverImage: z.string().optional(),
+  meetupLocation: z.string().min(3),
+  meetupDate: z.coerce.date(),
+  podcastFile: z.string().min(3),
+  podcastTitle: z.string().min(3),
+  description: z.string().min(30),
+  tags: z
+    .array(
+      z.object({
+        label: z.string().min(1).max(20, ' Tag must be max 20 characters long'),
+      })
+    )
+    .max(5),
 });
 
 const preferredSkillsSchema = z.object({

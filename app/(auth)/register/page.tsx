@@ -19,9 +19,10 @@ import {
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { regWelcome } from '@/constants';
-import { useTheme } from '@/context/ThemeProvider';
 import { signInSchema } from '@/lib/validation';
 import { colorsRegister } from '@/styles/index';
+
+import { useTheme } from '@/context/ThemeProvider';
 
 const Register = () => {
   const { setMode, mode } = useTheme();
@@ -96,10 +97,10 @@ const Register = () => {
               return (
                 <div
                   key={index + 1}
-                  className="flex items-center gap-5 rounded-lg bg-white-100 p-5 dark:bg-black-700"
+                  className="bg-white-100 dark:bg-black-700 p-5 flex gap-5 items-center rounded-lg"
                 >
                   <div
-                    className={`dark:bg-black-800 ${colorsRegister[index]} h-[60px] rounded-md p-5`}
+                    className={`dark:bg-black-800 ${colorsRegister[index]} h-[60px] p-5 rounded-md`}
                   >
                     <Image
                       src={
@@ -120,9 +121,9 @@ const Register = () => {
         </div>
       </div>
       <div
-        className="flex w-full flex-col items-center bg-white-200 px-4 pt-10 
-        text-white-100 dark:bg-black-900
-         md:px-10 lg:w-1/2 lg:justify-start  lg:pt-44 xl:px-28"
+        className="text-white-100 flex flex-col pt-10 lg:pt-44 lg:justify-start items-center 
+        dark:bg-black-900 bg-white-200
+         px-4 md:px-10 xl:px-28  w-full lg:w-1/2"
       >
         <div className="w-full lg:hidden">
           <Image
@@ -140,7 +141,7 @@ const Register = () => {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="w-full space-y-5 "
+            className="space-y-5 w-full "
           >
             <FormField
               control={form.control}
@@ -196,13 +197,13 @@ const Register = () => {
             />
             <Button
               type="submit"
-              className="p2-bold w-full bg-primary-500 text-[14px] "
+              className="w-full h-11 bg-primary-500 text-[14px] p2-bold "
             >
               Next
             </Button>
             <Link
               href="/login"
-              className="block cursor-pointer text-center text-white-500/70 hover:underline"
+              className="text-white-500/70 block cursor-pointer text-center hover:underline"
             >
               Already have an account?
               <span className="ml-1 text-[16px] text-primary-500">Sign in</span>
@@ -215,7 +216,7 @@ const Register = () => {
             <Button
               type="button"
               onClick={() => signIn('google', { callbackUrl: '/onboarding' })}
-              className="p3-medium flex w-full items-center gap-2 bg-white-100 dark:bg-black-800"
+              className="p3-medium h-11 flex w-full items-center gap-2 dark:bg-black-800 bg-white-100"
             >
               <Image
                 src={'/assets/icons/google.svg'}
@@ -229,7 +230,7 @@ const Register = () => {
             <Button
               onClick={() => signIn('github', { callbackUrl: '/onboarding' })}
               type="button"
-              className="p3-medium flex w-full items-center gap-2 bg-white-100 dark:bg-black-800"
+              className="p3-medium h-11 flex w-full items-center gap-2 dark:bg-black-800 bg-white-100"
             >
               <Image
                 src={'/assets/icons/github.svg'}
