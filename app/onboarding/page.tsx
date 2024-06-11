@@ -1,83 +1,122 @@
-"use client";
-import {
-  codingAmbitions,
-  currentKnowledge,
-  onboardingWelcome,
-  preferSkills,
-} from "@/constants";
-import Image from "next/image";
-import React, { useState } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm, FormState } from "react-hook-form";
-import { z } from "zod";
+'use client';
+import { useTheme } from '../../context/ThemeProvider';
+
+import { zodResolver } from '@hookform/resolvers/zod';
+import { signOut, useSession } from 'next-auth/react';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import toast, { Toaster } from 'react-hot-toast';
+import { z } from 'zod';
+
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { onboardingSchema } from "@/lib/validation";
-import { Button } from "@/components/ui/button";
-import toast, { Toaster } from "react-hot-toast";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+} from '@/components/ui/form';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import {
+  codingAmbitions,
+  currentKnowledge,
+  onboardingWelcome,
+  preferSkills,
+} from '@/constants';
+import { onboardingSchema } from '@/lib/validation';
+import { colorsOnboardingIcons } from '@/styles/index';
+
+interface UserWithId {
+  id: string;
+}
 
 const Onboarding = () => {
+  const { mode, setMode } = useTheme();
+  const router = useRouter();
   const [step, setStep] = useState<number>(0);
+  const session = useSession();
+  const { data: user } = session;
+
+  const userId = (user?.user as UserWithId)?.id;
+
   const form = useForm<z.infer<typeof onboardingSchema>>({
     resolver: zodResolver(onboardingSchema),
     defaultValues: {
-      currentKnowledge: "",
+      currentKnowledge: '',
       codingAmbitions: [],
-      preferSkills: [],
+      preferredSkills: [],
     },
   });
 
   const goNext = async () => {
     if (step === 0) {
-      const success = await form.trigger("currentKnowledge");
+      const success = await form.trigger('currentKnowledge');
       if (success) {
         setStep(1);
       } else {
-        toast.error("Please select one option.");
+        toast.error('Please select one option.');
       }
     }
     if (step === 1) {
-      const success = await form.trigger("codingAmbitions");
+      const success = await form.trigger('codingAmbitions');
       if (success) {
         setStep(2);
       } else {
-        toast.error("Please select one or more options.");
+        toast.error('Please select one or more options.');
       }
     }
     if (step === 2) {
-      const success = await form.trigger("preferSkills");
+      const success = await form.trigger('preferredSkills');
       if (success) {
         form.handleSubmit(onSubmit)();
       } else {
-        toast.error("Please select one or more options.");
+        toast.error('Please select one or more options.');
       }
     }
   };
-  console.log(form.getValues("currentKnowledge"));
 
-  function onSubmit(values: z.infer<typeof onboardingSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof onboardingSchema>) {
+    try {
+      const result = await fetch(
+        `http://localhost:8080/api/user/${userId}/onboarding`,
+        {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ ...values, isOnboardingCompleted: true }),
+        }
+      );
+      if (result?.ok) {
+        router.push('/home');
+      } else {
+        throw new Error('Error while updating user onboarding');
+      }
+    } catch (error) {
+      toast.error('Error while updating user onboarding');
+    }
   }
   return (
-    <div className="bg-black-800 min-h-screen flex">
+    <div className="flex min-h-screen bg-white-100 dark:bg-black-800">
       <Toaster
         toastOptions={{
-          className: "!bg-black-600 !text-white-100",
+          className: '!bg-black-600 !text-white-100',
         }}
       />
-      <div className="hidden lg:w-1/2 p-16 lg:flex flex-col items-center">
+      <div className="hidden flex-col items-center p-16 lg:flex lg:w-1/2">
         <div className="w-full">
           <Image
-            src="/assets/icons/logo-dark.svg"
+            onClick={() =>
+              setMode && setMode(mode === 'dark' ? 'light' : 'dark')
+            }
+            src={`${
+              mode === 'dark'
+                ? '/assets/icons/logo-dark.svg'
+                : 'assets/icons/logo-light.svg'
+            }`}
             alt="logo"
             width={147}
             height={30}
@@ -85,13 +124,23 @@ const Onboarding = () => {
           />
         </div>
         <div className="max-w-md">
-          <h2 className="display-1-bold mb-10">Sign in to DevToday.</h2>
+          <h2
+            onClick={() => signOut({ callbackUrl: '/login' })}
+            className="d1-bold mb-10"
+          >
+            Sign in to DevToday.
+          </h2>
           <article className="flex flex-col gap-5">
-            {onboardingWelcome.map((item) => (
+            {onboardingWelcome.map((item, index) => (
               <div
                 key={item.label}
-                className="bg-black-700 p-5 flex gap-5 items-center rounded-lg">
-                <div className="bg-black-800 h-[60px] p-5 rounded-md">
+                className={`${
+                  mode === 'dark' ? 'bg-black-700' : 'bg-white-100'
+                } flex items-center gap-5 rounded-lg p-5`}
+              >
+                <div
+                  className={`dark:bg-black-800 ${colorsOnboardingIcons[index]} h-[60px] rounded-md p-5`}
+                >
                   <Image
                     src={item.image}
                     alt={item.alt}
@@ -99,45 +148,52 @@ const Onboarding = () => {
                     height={20}
                   />
                 </div>
-                <p className="paragraph-1-medium">{item.label}</p>
+                <p className="p1-medium">{item.label}</p>
               </div>
             ))}
           </article>
         </div>
       </div>
-      <div className="text-white-100 flex flex-col  pt-10 lg:pt-44 lg:justify-start items-center bg-black-900 px-4 md:px-10 xl:px-28  w-full lg:w-1/2">
+      <div className="flex w-full flex-col  items-center bg-white-200 px-4 pt-10  text-white-100 dark:bg-black-900 md:px-10 lg:w-1/2 lg:justify-start  lg:pt-44 xl:px-28">
         <div className="w-full lg:hidden">
           <Image
-            src="/assets/icons/logo-dark.svg"
+            src={
+              mode === 'dark'
+                ? '/assets/icons/logo-dark.svg'
+                : 'assets/icons/logo-light.svg'
+            }
             alt="logo"
             width={147}
             height={30}
-            className="mb-14 mx-auto"
+            className="mx-auto mb-14"
           />
         </div>
         {step === 0 && (
-          <h2 className="display-1-bold mr-auto !text-white-100 md:mb-10">
+          <h2 className="d1-bold mr-auto md:mb-10">
             Which best describes your current programming journey?
           </h2>
         )}
         {step === 1 && (
-          <h2 className="display-1-bold mr-auto !text-white-100 md:mb-10">
+          <h2 className="d1-bold mr-auto md:mb-10">
             Define your coding ambitions
           </h2>
         )}
         {step === 2 && (
           <>
-            <h2 className="display-1-bold mr-auto !text-white-100 mb-10">
+            <h2 className="d1-bold mb-10 mr-auto">
               Select your preferred languages and frameworks for a personalized
               experience.
             </h2>
-            <p className="mr-auto mb-3">Choose as many as you like.</p>
+            <p className="mb-3 mr-auto text-black-600 dark:text-white-300">
+              Choose as many as you like.
+            </p>
           </>
         )}
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-5 w-full ">
+            className="w-full space-y-5 "
+          >
             {step === 0 && (
               <>
                 <FormField
@@ -149,7 +205,8 @@ const Onboarding = () => {
                         <RadioGroup
                           onValueChange={field.onChange}
                           defaultValue={field.value}
-                          className="flex flex-col space-y-1">
+                          className="flex flex-col space-y-1"
+                        >
                           {currentKnowledge.map((item) => (
                             <FormItem key={item.value}>
                               <FormControl>
@@ -159,13 +216,14 @@ const Onboarding = () => {
                                 />
                               </FormControl>
                               <FormLabel
-                                className={`w-full flex items-center
+                                className={`flex w-full items-center
                               ${
                                 item.value === field.value
-                                  ? "bg-primary-500"
-                                  : "bg-black-800"
+                                  ? 'bg-primary-500 !text-white-100'
+                                  : 'bg-white-100 dark:bg-black-800'
                               }
-                              px-4 justify-start  rounded border-none h-14 text-[14px] paragraph-1-medium cursor-pointer`}>
+                              p1-medium h-14  cursor-pointer justify-start rounded border-none px-4 text-[14px]`}
+                              >
                                 {item.title}
                               </FormLabel>
                             </FormItem>
@@ -210,13 +268,14 @@ const Onboarding = () => {
                                 />
                               </FormControl>
                               <FormLabel
-                                className={`w-full flex items-center
+                                className={`flex w-full items-center
                               ${
                                 field.value.includes(item.value)
-                                  ? "bg-primary-500"
-                                  : "bg-black-800"
+                                  ? 'bg-primary-500 !text-white-100'
+                                  : 'bg-white-100 dark:bg-black-800'
                               }
-                              px-4  justify-start  rounded border-none h-14 text-[14px] paragraph-1-medium cursor-pointer`}>
+                              p1-medium  h-14  cursor-pointer justify-start rounded border-none px-4 text-[14px]`}
+                              >
                                 {item.title}
                               </FormLabel>
                             </FormItem>
@@ -232,14 +291,14 @@ const Onboarding = () => {
               <div>
                 <FormField
                   control={form.control}
-                  name="preferSkills"
+                  name="preferredSkills"
                   render={() => (
-                    <FormItem className="flex flex-wrap gap-3 items-center space-y-0">
+                    <FormItem className="flex flex-wrap items-center gap-3 space-y-0">
                       {preferSkills.map((item) => (
                         <FormField
                           key={item.title}
                           control={form.control}
-                          name="preferSkills"
+                          name="preferredSkills"
                           render={({ field }) => {
                             return (
                               <FormItem key={item.title} className="flex">
@@ -262,11 +321,12 @@ const Onboarding = () => {
                                   />
                                 </FormControl>
                                 <FormLabel
-                                  className={`border-none ${
+                                  className={`cursor-pointer border-none ${
                                     field.value.includes(item.title)
-                                      ? "bg-primary-500"
-                                      : "bg-black-800"
-                                  } h-12 text-[14px] rounded-lg flex items-center paragraph-3-medium !px-2 md:!px-5  `}>
+                                      ? 'bg-primary-500 !text-white-100'
+                                      : 'bg-white-100 dark:bg-black-800'
+                                  } p3-medium  flex h-12 items-center rounded-lg !px-5`}
+                                >
                                   {item.title}
                                 </FormLabel>
                               </FormItem>
@@ -281,8 +341,9 @@ const Onboarding = () => {
             )}
             <Button
               onClick={() => goNext()}
-              className="w-full bg-primary-500  paragraph-2-bold ">
-              {step === 2 ? "Get Started" : "Next"}
+              className="p2-bold h-11 w-full bg-primary-500 "
+            >
+              {step === 2 ? 'Get Started' : 'Next'}
             </Button>
           </form>
         </Form>

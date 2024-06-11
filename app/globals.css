@@ -9,6 +9,7 @@
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
+  --profile-background: linear-gradient(180deg, #c55ef6 0%, #4c3790 100%);
 }
 @media (prefers-color-scheme: dark) {
   :root {
@@ -18,65 +19,165 @@
   }
 }
 @layer utilities {
-  .display-1-bold {
-    @apply text-[19px] md:text-left md:text-[31px] md:leading-[40px] font-bold text-white-100 dark:text-black-800;
+  /* TYPOGRAPHY  */
+  .d1-bold {
+    @apply text-[21px] sm:text-[27px] md:text-[31px] md:leading-[40px] font-bold text-black-800 dark:text-white-100;
   }
-  .display-2-bold {
-    @apply text-[24px] leading-[32px] font-bold text-black-800 dark:text-white-100;
+  .d2-bold {
+    @apply text-2xl font-bold text-black-800 dark:text-white-100;
   }
-  .heading-1-medium {
+  .h1-medium {
     @apply text-[20px] leading-[28px] font-medium text-black-800 dark:text-white-200;
   }
-  .heading-2-medium {
-    @apply text-[16px] leading-[24px] font-medium text-black-800 dark:text-white-200;
+  .h2-medium {
+    @apply text-base font-medium text-black-800 dark:text-white-200;
   }
-  .paragraph-1-bold {
-    @apply text-[18px] leading-[20px] font-bold text-black-700 dark:text-white-100;
+  .p1-bold {
+    @apply text-[18px] leading-[21.6px] font-bold text-black-800 dark:text-white-200; /* DOBRO */
   }
-  .paragraph-2-bold {
-    @apply md:text-[16px] leading-[24px] font-bold text-black-800 dark:text-white-200;
+  .p2-bold {
+    @apply text-base font-bold dark:text-white-200 text-black-800; /* DOBRO */
   }
-  .paragraph-3-bold {
-    @apply text-[14px] leading-[24px] font-bold text-black-700 dark:text-white-300;
+  .p3-bold {
+    @apply text-[14px] leading-[24px] font-bold text-black-800 dark:text-white-100; /* DOBRO */
   }
-  .paragraph-4-bold {
-    @apply text-[12px] leading-[16px] font-bold text-black-700 dark:text-white-400;
+  .p4-bold {
+    @apply text-xs font-bold text-black-700 dark:text-white-400;
   }
-  .paragraph-1-medium {
-    @apply text-[16px] md:text-[18px] leading-[20px] font-medium text-white-200 dark:text-white-200;
+  .p1-medium {
+    @apply text-[14px] md:text-[18px] leading-[20px] font-medium text-white-400 dark:text-white-300; /* DOBRO */
   }
-  .paragraph-2-medium {
-    @apply text-[16px] leading-[24px] font-medium text-black-800 dark:text-white-400;
+  .p2-medium {
+    @apply text-base font-medium text-black-800 dark:text-white-200; /* DOBRO */
   }
-  .paragraph-3-medium {
-    @apply text-[11px] md:text-[14px] md:leading-[20px] font-bold text-black-800 dark:text-white-200;
+  .p3-medium {
+    @apply text-sm font-medium text-black-800 dark:text-white-200; /* DOBRO */
   }
-  .paragraph-4-medium {
-    @apply text-[12px] leading-[16px] font-medium text-black-800 dark:text-white-200;
+  .p4-medium {
+    @apply text-xs font-medium text-black-800 dark:text-white-200; /* DOBRO */
   }
-  .subtitle {
-    @apply text-[10px] leading-[16px] font-bold text-white-400;
-  }
-  .caption {
-    @apply text-[10px] leading-[16px] font-medium text-white-400;
-  }
-  .paragraph-1-regular {
+  .p1-regular {
     @apply text-[18px] leading-[20px] font-normal text-black-800 dark:text-white-100;
   }
-  .paragraph-2-regular {
-    @apply text-[16px] leading-[24px] font-normal text-white-400 dark:text-white-300;
+  .p2-regular {
+    @apply text-base font-normal text-white-400 dark:text-white-300;
   }
-  .paragraph-3-regular {
-    @apply text-[14px] leading-[20px] font-normal text-white-400 dark:text-white-200;
+  .p3-regular {
+    @apply text-sm font-normal text-white-400 dark:text-white-200; /* DOBRO*/
   }
-  .paragraph-4-regular {
-    @apply text-[12px] leading-[16px] font-normal text-black-800 dark:text-white-400;
+  .p4-regular {
+    @apply text-xs font-normal text-white-400 dark:text-white-200; /* DOBRO*/
   }
+  .subtitle-normal {
+    @apply text-[10px] leading-[14px] font-normal text-white-400;
+  }
+  .subtitle-medium {
+    @apply text-[10px] leading-[14px] font-normal text-white-400;
+  }
+  .cap-10 {
+    @apply text-[10px] leading-[13px] font-medium text-white-400;
+  }
+  .cap-8 {
+    @apply text-[8px] leading-[10.4px] font-medium text-white-400;
+  }
+  /* TYPOGRAPHY  */
+
+  /* DARK LIGHT MODE */
+  .bg-light100__dark800 {
+    @apply bg-white-100 dark:bg-black-800;
+  }
+  .bg-light200__dark700 {
+    @apply bg-white-200 dark:bg-black-700;
+  }
+  .icon-light400__dark300 {
+    @apply text-white-400 dark:text-white-300;
+  }
+  .nav-btn-light200__dark700 {
+    @apply bg-white-200 dark:bg-black-700 rounded-[7px] size-[32px] lg:size-[40px];
+  }
+  /* DARK LIGHT MODE */
+
+  /* FLEX */
+  .flex-center {
+    @apply flex justify-center items-center;
+  }
+  .flex-between {
+    @apply flex justify-between items-center;
+  }
+  /* FLEX */
+
+  /* LAYOUT */
+  .content-wrapper {
+    @apply relative top-[92px] max-sm:pb-[100px] pb-7 lg:top-[100px] flex flex-col md:flex-row gap-5 mx-auto;
+  }
+  .main-content {
+    @apply flex flex-col flex-1 sm:max-w-[80%];
+  }
+  .create-page-wrapper {
+    @apply flex flex-col gap-[30px] py-[30px] px-3.5 md:p-[30px] top-[92px] lg:top-[100px] relative mx-auto max-w-[900px] max-sm:pb-[110px];
+  }
+  .left-sidebar {
+    @apply flex flex-col gap-5 p-5 sm:w-[80%] sm:max-w-[80%] sm:mx-auto md:w-left-sidebar md:sticky left-0 h-full top-[92px] lg:top-[100px];
+  }
+  .right-sidebar {
+    @apply flex flex-col gap-5 xl:w-right-sidebar sm:hidden xl:flex xl:sticky xl:right-0 xl:top-[100px] h-full;
+  }
+  .left-sidebar-item {
+    @apply flex flex-col bg-white-100 dark:bg-black-800 rounded-2xl gap-2.5;
+  }
+  .right-sidebar-item {
+    @apply flex flex-col p-5 rounded-2xl bg-white-100 dark:bg-black-800 gap-5;
+  }
+
+  /* LAYOUT */
+
+  /* PROFILE */
+  .profile-background {
+    background-image: linear-gradient(180deg, #c55ef6 0%, #4c3790 100%);
+    /* background-repeat: no-repeat; */
+  }
+  /* PROFILE */
+
+  /* SPINNING LOADER */
+  .loader {
+    @apply size-12 rounded-full inline-block relative border-[3px] border-primary-500 border-t-transparent border-r-transparent box-border;
+    animation: rotation 1s linear infinite;
+  }
+  .loader::after,
+  .loader::before {
+    content: '';
+    @apply box-border absolute inset-0 m-auto border-[3px] border-transparent border-b-white-100 border-l-white-100 rounded-full;
+    animation: rotationBack 0.5s linear infinite;
+    transform-origin: center;
+  }
+  .loader::before {
+    @apply w-8 h-8 border-primary-500 border-t-transparent border-r-transparent;
+    animation: rotation 1.5s linear infinite;
+  }
+  /* SPINNING LOADER */
 }
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
-  transition: background-color 5000s ease-in-out 0s;
+  transition: background-color 5000s ease-in-out 0s !important;
   -webkit-text-fill-color: #ffff !important;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes rotationBack {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(-360deg);
+  }
 }
