@@ -51,22 +51,22 @@ const PostItemCard: React.FC<IPostItemCardProps> = ({
         className="bg-light100__dark800 flex gap-4 rounded-2xl p-4 md:items-center md:p-5"
       >
         <Image
-          src={coverImage || '/assets/images/no-image.svg'}
+          src={coverImage || '/assets/icons/image-preview.svg'}
           width={165}
           height={165}
           alt={title}
-          className="shrink-0 self-baseline max-md:hidden bg-primary-100 dark:bg-primary-500 rounded-2xl"
+          className=" max-md:hidden  rounded-2xl"
         />
         {/* RIGHT PART OF THE POST */}
         <div className="flex flex-1 flex-col gap-4">
           <div className="mb-4 flex justify-between gap-2">
             <div className="flex gap-2">
               <Image
-                src={coverImage || '/assets/images/no-image.svg'}
+                src={coverImage || '/assets/icons/image-preview.svg'}
                 width={50}
                 height={50}
                 alt={title}
-                className="shrink-0 self-baseline md:hidden bg-primary-100 dark:bg-primary-500 rounded-[6px]"
+                className="md:hidden"
               />
               <div>
                 <p className="p1-bold mb-2">{title}</p>

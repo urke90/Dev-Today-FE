@@ -42,15 +42,16 @@ const PodcastItemCard: React.FC<IPodcastItemCardProps> = ({
         href={'/podcasts/' + id}
         className="bg-light100__dark800 flex flex-col gap-3.5 rounded-[10px] px-3.5 py-5 lg:gap-[18px] lg:rounded-2xl lg:p-4"
       >
-        <div className="lg:flex-between flex gap-2">
-          <Image
-            src={coverImage || '/assets/images/no-image.svg'}
-            width={50}
-            height={50}
-            alt={title}
-            className="bg-primary-100 dark:bg-primary-500 rounded-[6px] "
-          />
-          <p className="p3-bold lg:p1-bold line-clamp-2">{title}</p>
+        <div className="flex-between">
+          <div className="flex gap-2">
+            <Image
+              src={coverImage || '/assets/icons/image-preview.svg'}
+              width={50}
+              height={50}
+              alt={title}
+            />
+            <p className="p3-bold lg:p1-bold line-clamp-2">{title}</p>
+          </div>
           <Button
             type="button"
             variant="icon"
@@ -65,7 +66,7 @@ const PodcastItemCard: React.FC<IPodcastItemCardProps> = ({
         <p className="p4-regular lg:p3-regular line-clamp-3 lg:line-clamp-4">
           {description}
         </p>
-        {tags.length > 0 ? (
+        {tags?.length > 0 ? (
           <ul className="flex gap-2.5">
             {tags.map((tag) => (
               <BadgeItem key={tag} title={tag} />

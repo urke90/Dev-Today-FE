@@ -40,10 +40,9 @@ const MeetupItemCard: React.FC<IMeetupItemCardProps> = ({
           <div className="flex items-center gap-2 md:gap-4">
             <div className="relative size-[56px] shrink-0 md:size-[72px]">
               <Image
-                src={coverImage || '/assets/images/no-image.svg'}
+                src={coverImage || '/assets/icons/image-preview.svg'}
                 alt="meetup"
                 fill
-                className="bg-primary-100 dark:bg-primary-500 rounded-[6px]"
               />
             </div>
             <div>
@@ -61,7 +60,7 @@ const MeetupItemCard: React.FC<IMeetupItemCardProps> = ({
         <div>
           <p className="p4-regular md:p3-regular line-clamp-2">{description}</p>
         </div>
-        {tags.length > 0 ? (
+        {tags?.length > 0 ? (
           <ul className="flex gap-2.5">
             {tags.map((tag) => (
               <BadgeItem key={tag} title={tag} />

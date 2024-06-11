@@ -49,7 +49,7 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
         <div className="flex flex-col gap-y-6 px-5">
           <div className="relative z-10 -mt-20">
             <Image
-              src={user?.avatarImg || '/assets/images/no-image-1.svg'}
+              src={user?.avatarImg || '/assets/icons/image-preview.svg'}
               width={110}
               height={110}
               alt="profile"
