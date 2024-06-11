@@ -15,7 +15,6 @@ type TagProps = {
 };
 
 const Preview = ({ setIsPreview, type, data }: PreviewProps) => {
-  console.log(data);
   return (
     <section className="space-y-5 w-full">
       <div className="flex gap-2" onClick={() => setIsPreview(false)}>
@@ -48,7 +47,7 @@ const Preview = ({ setIsPreview, type, data }: PreviewProps) => {
           alt="Preview"
           width={785}
           height={270}
-          className="rounded-lg h-72 object-cover"
+          className="rounded-lg h-72 object-cover w-full"
         />
       )}
       <div className="flex gap-2 max-w-3xl">
@@ -74,7 +73,10 @@ const Preview = ({ setIsPreview, type, data }: PreviewProps) => {
           ))}
         </ul>
       </div>
-      <ParseHtml data={data?.description} />
+      <div className="break-words">
+        <ParseHtml data={data?.description} />
+      </div>
+
       {type === EContentType.MEETUP && (
         <>
           <div className="flex gap-2">

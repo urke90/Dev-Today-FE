@@ -16,7 +16,7 @@ const EditPost = async ({ params }: Props) => {
 
   if (!session) throw new Error(' User data not available!');
 
-  const allGroups = await typedFetch<ISelectGroup>({
+  const allGroups = await typedFetch<ISelectGroup[]>({
     url: `/groups`,
   });
   if (!allGroups) throw new Error('Groups not available!');

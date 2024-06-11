@@ -56,7 +56,13 @@ export const createContentSchema = z.object({
   podcastFile: z.string().min(3),
   podcastTitle: z.string().min(3),
   description: z.string().min(30),
-  tags: z.array(z.object({ label: z.string().min(1).max(20) })).max(5),
+  tags: z
+    .array(
+      z.object({
+        label: z.string().min(1).max(20, ' Tag must be max 20 characters long'),
+      })
+    )
+    .max(5),
 });
 
 const preferredSkillsSchema = z.object({

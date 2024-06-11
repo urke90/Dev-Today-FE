@@ -31,13 +31,14 @@ export default async function RootLayout({
 }>) {
   const session = await getServerSession(authOptions);
   const cookiesProvider = cookies();
-  const theme = cookiesProvider.get('theme')?.value || 'dark';
+  const theme =
+    cookiesProvider.get('theme')?.value === 'dark' ? 'dark' : 'light';
 
   return (
     <ThemeProvider theme={theme}>
       <SessionProvider session={session}>
         <QueryProvider>
-          <html lang="en" className={`${theme}`}>
+          <html lang="en">
             <body
               className={`${ibmPlexSans.className} min-h-screen !overflow-auto bg-white-200 dark:bg-black-900`}>
               <main className="mx-auto max-w-screen-xxl">{children}</main>

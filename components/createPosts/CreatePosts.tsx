@@ -16,6 +16,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { postTypes } from '@/constants';
+import { useTheme } from '@/context/ThemeProvider';
 import { cn } from '@/lib/utils';
 import { createContentSchema } from '@/lib/validation';
 import { EContentType, IContent } from '@/types/content';
@@ -27,11 +28,11 @@ import { Editor } from '@tinymce/tinymce-react';
 import { format } from 'date-fns';
 import { CldUploadWidget } from 'next-cloudinary';
 import Image from 'next/image';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import ReactSelect, { components } from 'react-select';
 import CreatableSelect from 'react-select/creatable';
+import { useDebounce } from 'use-debounce';
 import { z } from 'zod';
 import Preview from '../preview/Preview';
 
@@ -52,47 +53,50 @@ type ContentProps = {
 
 const CreatePosts = ({
   authorId,
-  allGroups,
-  allTags,
+
   editPost,
 }: ContentProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isPreview, setIsPreview] = useState(false);
+  const [allGroups, setAllGroups] = useState<ISelectGroup[]>([]);
+  const [allTags, setAllTags] = useState<ITags[]>([]);
+  const [q, setQ] = useState('');
+  const [title, setTitle] = useState('');
+  const { mode } = useTheme();
+
+  const [debouncedQ] = useDebounce(q, 500);
+  const [debouncedTitle] = useDebounce(title, 500);
+
   const editorRef = useRef<any>(null);
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
-  const { replace } = useRouter();
 
-  let timeoutId: NodeJS.Timeout | null = null;
-  const handleSearchGroups = (query: string) => {
-    if (timeoutId) {
-      clearTimeout(timeoutId);
-    }
-    timeoutId = setTimeout(() => {
-      const params = new URLSearchParams(searchParams);
-      if (query) {
-        params.set('q', query);
-      } else {
-        params.delete('q');
+  useEffect(() => {
+    const fetchGroups = async () => {
+      try {
+        const response = await typedFetch({
+          url: `/groups?q=${q}`,
+          method: 'GET',
+        });
+        setAllGroups(response as ISelectGroup[]);
+      } catch (error) {
+        console.error(error);
       }
-      replace(`${pathname}?${params.toString()}`);
-    }, 700);
-  };
+    };
 
-  const handleSearchTags = (query: string) => {
-    if (timeoutId) {
-      clearTimeout(timeoutId);
-    }
-    timeoutId = setTimeout(() => {
-      const params = new URLSearchParams(searchParams);
-      if (query) {
-        params.set('title', query);
-      } else {
-        params.delete('title');
+    const fetchTags = async () => {
+      try {
+        const response = await typedFetch({
+          url: `/content/tags?title=${title}`,
+          method: 'GET',
+        });
+        setAllTags(response as ITags[]);
+      } catch (error) {
+        console.error(error);
       }
-      replace(`${pathname}?${params.toString()}`);
-    }, 700);
-  };
+    };
+
+    fetchGroups();
+    fetchTags();
+  }, [debouncedQ, debouncedTitle]);
 
   const selectGroupOptions = allGroups?.map((group) => ({
     value: group.id,
@@ -341,7 +345,7 @@ const CreatePosts = ({
                         placeholder="Select a group..."
                         defaultValue={field.value}
                         value={form.watch('groupId')}
-                        onInputChange={handleSearchGroups}
+                        onInputChange={(value) => setQ(value)}
                         styles={{
                           control: (base) => ({
                             ...base,
@@ -579,7 +583,12 @@ const CreatePosts = ({
                         toolbar_location: 'top',
                         content_css: 'dark',
                         content_style: `
-                   body { font-family: Roboto, sans-serif; border:none font-size: 14px; color: #808191;  background-color: #262935;} body::-webkit-scrollbar {display: none; }pre, code { font-family: "Roboto Mono", monospace; background-color: transparent !important;  padding: 5px; } body::before { color: #808191 !important; } h2 {color: #ffff!important}
+                   body { font-family: Roboto, sans-serif; font-size: 14px; color: #808191;  ${
+                     mode === 'dark'
+                       ? 'background-color: #262935;'
+                       : 'background-color: #f9f9f9;'
+                   } }
+                   }} body::-webkit-scrollbar {display: none; }pre, code { font-family: "Roboto Mono", monospace; background-color: transparent !important;  padding: 5px; } body::before { color: #808191 !important; } h2 {color: #ffff!important}
                    h2 {color: #ffff!important}
                   }
                    `,
@@ -620,6 +629,7 @@ const CreatePosts = ({
                     instanceId={field.name}
                     className="border rounded-md dark:border-black-700/50"
                     {...field}
+                    onInputChange={(value) => setTitle(value)}
                     classNames={{
                       input: () =>
                         '!text-[16px] dark:!text-white-100 text-black-800',
@@ -639,7 +649,6 @@ const CreatePosts = ({
                       menu: () => 'bg-white-100 dark:bg-black-800 !shadow-sm ',
                     }}
                     isMulti
-                    onInputChange={handleSearchTags}
                     options={selectTagsOptions
                       ?.filter(
                         (item) =>
@@ -674,6 +683,12 @@ const CreatePosts = ({
                 )}
               />
             </div>
+            {form.formState.errors.tags?.[0]?.label?.message && (
+              <p className="text-[14px] text-red-500 dark:text-red-500">
+                {form.formState.errors.tags[0].label.message}
+              </p>
+            )}
+
             <div className="flex gap-5 p3-bold ">
               <Button
                 type="button"
