@@ -92,3 +92,18 @@ export const updateProfileSchema = z.object({
   twitterName: z.string().optional(),
   twitterLink: z.string().url().optional().or(z.literal('')),
 });
+
+export const createGroupSchema = z.object({
+  authorId: z.string(),
+  name: z.string().min(1).max(50),
+  profileImage: z.string().optional(),
+  coverImage: z.string().optional(),
+  bio: z.string().min(1),
+  members: z.array(
+    z.object({
+      userId: z.string(),
+      groupId: z.string().optional(),
+      role: z.string(),
+    })
+  ),
+});
