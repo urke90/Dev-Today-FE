@@ -99,11 +99,18 @@ export const createGroupSchema = z.object({
   profileImage: z.string().optional(),
   coverImage: z.string().optional(),
   bio: z.string().min(1),
+  admins: z.array(
+    z.object({
+      value: z.string(),
+      label: z.string(),
+      avatarImage: z.string().optional(),
+    })
+  ),
   members: z.array(
     z.object({
-      userId: z.string(),
-      groupId: z.string().optional(),
-      role: z.string(),
+      value: z.string(),
+      label: z.string(),
+      avatarImage: z.string().optional(),
     })
   ),
 });

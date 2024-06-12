@@ -28,13 +28,9 @@ type AdminProps = {
 const CreateGroup = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [admins, setAdmins] = useState<AdminProps[]>([]);
-  const [members, setMembers] = useState([]);
+  const [members, setMembers] = useState<AdminProps[]>([]);
 
-  const adminOptions = admins.map((admin) => ({
-    label: admin.userName,
-    value: admin.id,
-    image: admin.avatarImg,
-  }));
+  console.log(admins, members);
 
   useEffect(() => {
     const fetchAdmins = async () => {
@@ -43,6 +39,7 @@ const CreateGroup = () => {
           url: '/user',
         });
         setAdmins(result as AdminProps[]);
+        setMembers(result as AdminProps[]);
       } catch (error) {
         console.log('Error fetching admins', error);
         throw new Error('Error fetching admins');
@@ -50,6 +47,18 @@ const CreateGroup = () => {
     };
     fetchAdmins();
   }, []);
+
+  const adminOptions = admins.map((admin) => ({
+    label: admin.userName,
+    value: admin.id,
+    avatarImage: admin.avatarImg,
+  }));
+
+  const memberOptions = members.map((member) => ({
+    label: member.userName,
+    value: member.id,
+    avatarImage: member.avatarImg,
+  }));
 
   const form = useForm<z.infer<typeof createGroupSchema>>({
     resolver: zodResolver(createGroupSchema),
@@ -59,11 +68,13 @@ const CreateGroup = () => {
       profileImage: '',
       coverImage: '',
       bio: '',
+      admins: [],
       members: [],
     },
   });
 
   console.log(form.getValues());
+
   const watchProfileImage = form.watch('profileImage');
   const watchCoverImage = form.watch('coverImage');
   const onSubmit = async () => {};
@@ -239,7 +250,7 @@ const CreateGroup = () => {
             <FormLabel>Add admins</FormLabel>
             <FormField
               control={form.control}
-              name="members"
+              name="admins"
               render={({ field }) => (
                 <CreatableSelect
                   instanceId={field.name}
@@ -322,7 +333,7 @@ const CreateGroup = () => {
                     menu: () => 'bg-white-100 dark:bg-black-800 !shadow-sm ',
                   }}
                   isMulti
-                  options={adminOptions}
+                  options={memberOptions}
                   formatOptionLabel={(option, { context }) => {
                     if (context === 'value') {
                       return (

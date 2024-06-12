@@ -1,5 +1,5 @@
 const EditGroup = () => {
-  return <div>EditGroup</div>;
+  return <div className="mt-20">EditGroup</div>;
 };
 
 export default EditGroup;
