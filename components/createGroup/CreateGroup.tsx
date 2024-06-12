@@ -17,6 +17,7 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import CreatableSelect from 'react-select/creatable';
+import { useDebounce } from 'use-debounce';
 import { z } from 'zod';
 
 type AdminProps = {
@@ -29,14 +30,16 @@ const CreateGroup = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [admins, setAdmins] = useState<AdminProps[]>([]);
   const [members, setMembers] = useState<AdminProps[]>([]);
+  const [q, setQ] = useState('');
+  const [limit, setLimit] = useState(3);
 
-  console.log(admins, members);
+  const [debouncedQ] = useDebounce(q, 700);
 
   useEffect(() => {
     const fetchAdmins = async () => {
       try {
         const result = await typedFetch({
-          url: '/user',
+          url: `/user?q=${q}&limit=${limit}`,
         });
         setAdmins(result as AdminProps[]);
         setMembers(result as AdminProps[]);
@@ -46,7 +49,7 @@ const CreateGroup = () => {
       }
     };
     fetchAdmins();
-  }, []);
+  }, [debouncedQ, limit]);
 
   const adminOptions = admins.map((admin) => ({
     label: admin.userName,
@@ -275,6 +278,7 @@ const CreateGroup = () => {
                     menu: () => 'bg-white-100 dark:bg-black-800 !shadow-sm ',
                   }}
                   isMulti
+                  onInputChange={(value) => setQ(value)}
                   options={adminOptions}
                   formatOptionLabel={(option, { context }) => {
                     if (context === 'value') {
@@ -333,6 +337,7 @@ const CreateGroup = () => {
                     menu: () => 'bg-white-100 dark:bg-black-800 !shadow-sm ',
                   }}
                   isMulti
+                  onInputChange={(value) => setQ(value)}
                   options={memberOptions}
                   formatOptionLabel={(option, { context }) => {
                     if (context === 'value') {
