@@ -1,49 +1,112 @@
+import { IGroup } from '@/types/group';
+import Link from 'next/link';
+import GroupItemCard from '../shared/GroupItemCard';
+import SidebarGroupItem from '../shared/LeftSidebarItems/SidebarGroupItem';
+import SidebarItemWrapper from '../shared/LeftSidebarItems/SidebarItemWrapper';
 import SortAndFilter from '../shared/SortAndFilter';
-import TopRankedFilter from '../shared/TopRankedFilter';
+import { Button } from '../ui/button';
 
-interface IGroupHomeProps {}
+// ----------------------------------------------------------------
+
+interface IGroupHomeProps {
+  groups: IGroup[];
+}
 
 const items = [
   {
     id: '1',
-    itemTitle: 'Understanding JavaScript Closures',
+    title: 'Understanding JavaScript Closures',
     imageUrl: '/assets/icons/image-preview.svg',
-    text: 'A deep dive into JavaScript closures, how they work, and their use cases in modern JavaScript development.',
+    description:
+      'A deep dive into JavaScript closures, how they work, and their use cases in modern JavaScript development.',
   },
   {
     id: '2',
-    itemTitle: 'Mastering Async/Await in Node.js',
+    title: 'Mastering Async/Await in Node.js',
     imageUrl: '/assets/icons/image-upload.svg',
-    text: 'Learn how to effectively use async/await in Node.js for handling asynchronous operations with ease and better readability.',
+    description:
+      'Learn how to effectively use async/await in Node.js for handling asynchronous operations with ease and better readability.',
   },
   {
     id: '3',
-    itemTitle: 'React Hooks: The Complete Guide',
+    title: 'React Hooks: The Complete Guide',
     imageUrl: '/assets/icons/image-preview.svg',
-    text: 'An in-depth guide to React Hooks, including useState, useEffect, and custom hooks for better state and side effect management.',
+    description:
+      'An in-depth guide to React Hooks, including useState, useEffect, and custom hooks for better state and side effect management.',
   },
   {
     id: '4',
-    itemTitle: 'Building RESTful APIs with Express',
+    title: 'Building RESTful APIs with Express',
     imageUrl: '/assets/icons/image-upload.svg',
-    text: 'A comprehensive tutorial on building RESTful APIs using Express.js, covering routing, middleware, and best practices.',
+    description:
+      'A comprehensive tutorial on building RESTful APIs using Express.js, covering routing, middleware, and best practices.',
   },
   {
     id: '5',
-    itemTitle: 'Exploring GraphQL: A Better Way to Query APIs',
+    title: 'Exploring GraphQL: A Better Way to Query APIs',
     imageUrl: '',
-    text: 'Discover the advantages of GraphQL over REST, and learn how to set up and use GraphQL in your applications.',
+    description:
+      'Discover the advantages of GraphQL over REST, and learn how to set up and use GraphQL in your applications.',
   },
 ];
 
-const GroupHome: React.FC<IGroupHomeProps> = (props) => {
+const GroupHome: React.FC<IGroupHomeProps> = ({ groups }) => {
+  console.log('groups', groups);
   return (
     <div className="content-wrapper">
       <aside className="left-sidebar">
-        <SortAndFilter followingCount={24} />
-        <TopRankedFilter title="Top Ranked" items={items} />
+        <SortAndFilter isGroupPage />
+        <SidebarItemWrapper
+          title="Top Ranked"
+          items={items.map(({ id, imageUrl, title, description }) => (
+            <SidebarGroupItem
+              key={id}
+              id={id}
+              description={description}
+              title={title}
+              imageUrl={imageUrl}
+            />
+          ))}
+        />
+        <SidebarItemWrapper
+          title="Active Groups"
+          items={items.map(({ id, imageUrl, title, description }) => (
+            <SidebarGroupItem
+              key={id}
+              id={id}
+              description={description}
+              title={title}
+              imageUrl={imageUrl}
+            />
+          ))}
+        />
       </aside>
-      <main className="main-content mx-auto border">MAIN</main>
+      <main className="main-content mx-auto border">
+        <div className="flex-between mb-5">
+          <h2 className="d2-bold">All Groups</h2>
+          <Button variant="primary" size="small" className="w-auto">
+            <Link href="groups/create">Create a new group</Link>
+          </Button>
+        </div>
+        <ul className="grid grid-cols-2 gap-y-3.5 gap-x-5">
+          {groups?.length > 0 ? (
+            groups.map(({ id, coverImage, bio, name, members }) => (
+              <GroupItemCard
+                key={id}
+                id={id}
+                coverImage={coverImage}
+                description={bio}
+                title={name}
+                members={members}
+              />
+            ))
+          ) : (
+            <h2 className="h2-bold">
+              There are no groups to show at the moment!
+            </h2>
+          )}
+        </ul>
+      </main>
       <aside className="right-sidebar border">RIGHT</aside>
     </div>
   );

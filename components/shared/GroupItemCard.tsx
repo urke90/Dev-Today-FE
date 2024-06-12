@@ -34,18 +34,16 @@ const GroupItemCard: React.FC<IGroupItemCardProps> = ({
       >
         <div className="relative h-[150px] w-full">
           <Image
-            src={coverImage || '/assets/images/no-image.svg'}
+            src={coverImage || '/assets/icons/image-preview.svg'}
             fill
-            // crop="fill"
             alt={title}
-            className="rounded-xl object-fill bg-primary-100 dark:bg-primary-500"
           />
         </div>
         <p className="p1-bold">{title}</p>
         <p className="p3-regular line-clamp-3">{description}</p>
         <div className="flex-between">
           <div className="ml-3 flex">
-            {members.slice(0, 4).map((member, index) => (
+            {members?.slice(0, 4).map((member, index) => (
               <div
                 key={index}
                 className="flex-center -ml-3 size-[30px] rounded-full bg-[#F0F1FE]"
@@ -63,7 +61,7 @@ const GroupItemCard: React.FC<IGroupItemCardProps> = ({
               </div>
             ))}
             <div className="cap-8 flex-center text-black-700 dark:bg-black-700 dark:text-white-100 -ml-3 size-[30px] rounded-full bg-[#F0F1FE]">
-              {members.length > 120 ? '120+' : members.length}
+              {members?.length > 120 ? '120+' : members?.length}
             </div>
           </div>
           <Button
