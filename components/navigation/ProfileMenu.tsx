@@ -20,12 +20,15 @@ import Image from 'next/image';
 
 import { useTheme } from '@/context/ThemeProvider';
 
-interface IProfileMenuProps {}
+interface IProfileMenuProps {
+  userName: string | null | undefined;
+}
 
 // ? shadcn command dialog  cmdk lib
 
-const ProfileMenu: React.FC<IProfileMenuProps> = (props) => {
+const ProfileMenu: React.FC<IProfileMenuProps> = ({ userName }) => {
   const { setMode } = useTheme();
+
   return (
     <DropdownMenu>
       <Trigger className="flex items-center gap-2" asChild>
@@ -38,7 +41,7 @@ const ProfileMenu: React.FC<IProfileMenuProps> = (props) => {
               className="ring-primary-500 ring-offset-white-100 dark:ring-offset-black-800 rounded-lg ring-1 ring-offset-[3px] bg-primary-100 dark:bg-primary-500"
             />
           </div>
-          <span className="p2-medium max-md:hidden">Uros Bijelic</span>
+          <span className="p2-medium max-md:hidden">{userName}</span>
           <ArrowDownIcon className="icon-light400__dark300 max-md:hidden" />
         </Button>
       </Trigger>
