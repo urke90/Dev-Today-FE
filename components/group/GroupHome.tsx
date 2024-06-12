@@ -3,6 +3,7 @@ import Link from 'next/link';
 import GroupItemCard from '../shared/GroupItemCard';
 import SidebarGroupItem from '../shared/LeftSidebarItems/SidebarGroupItem';
 import SidebarItemWrapper from '../shared/LeftSidebarItems/SidebarItemWrapper';
+import Pagination from '../shared/Pagination';
 import SortAndFilter from '../shared/SortAndFilter';
 import { Button } from '../ui/button';
 
@@ -81,14 +82,14 @@ const GroupHome: React.FC<IGroupHomeProps> = ({ groups }) => {
           ))}
         />
       </aside>
-      <main className="main-content mx-auto border">
+      <main className="main-content mx-auto">
         <div className="flex-between mb-5">
           <h2 className="d2-bold">All Groups</h2>
           <Button variant="primary" size="small" className="w-auto">
             <Link href="groups/create">Create a new group</Link>
           </Button>
         </div>
-        <ul className="grid grid-cols-2 gap-y-3.5 gap-x-5">
+        <ul className="grid grid-cols-2 gap-y-3.5 gap-x-5 mb-5 md:mb-10">
           {groups?.length > 0 ? (
             groups.map(({ id, coverImage, bio, name, members }) => (
               <GroupItemCard
@@ -106,6 +107,7 @@ const GroupHome: React.FC<IGroupHomeProps> = ({ groups }) => {
             </h2>
           )}
         </ul>
+        <Pagination currentPage={1} totalPage={19} />
       </main>
       <aside className="right-sidebar border">RIGHT</aside>
     </div>
