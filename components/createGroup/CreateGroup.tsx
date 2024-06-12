@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -25,13 +26,18 @@ type AdminProps = {
   userName: string;
   avatarImg: string;
 };
+type MembersProps = {
+  id: string;
+  userName: string;
+  avatarImg: string;
+};
 
-const CreateGroup = () => {
+const CreateGroup = ({ authorId }: { authorId: string }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [admins, setAdmins] = useState<AdminProps[]>([]);
-  const [members, setMembers] = useState<AdminProps[]>([]);
+  const [members, setMembers] = useState<MembersProps[]>([]);
   const [q, setQ] = useState('');
-  const [limit, setLimit] = useState(3);
+  const [limit, setLimit] = useState(5);
 
   const [debouncedQ] = useDebounce(q, 700);
 
@@ -42,7 +48,7 @@ const CreateGroup = () => {
           url: `/user?q=${q}&limit=${limit}`,
         });
         setAdmins(result as AdminProps[]);
-        setMembers(result as AdminProps[]);
+        setMembers(result as MembersProps[]);
       } catch (error) {
         console.log('Error fetching admins', error);
         throw new Error('Error fetching admins');
@@ -66,7 +72,7 @@ const CreateGroup = () => {
   const form = useForm<z.infer<typeof createGroupSchema>>({
     resolver: zodResolver(createGroupSchema),
     defaultValues: {
-      authorId: '',
+      authorId: authorId,
       name: '',
       profileImage: '',
       coverImage: '',
@@ -76,11 +82,39 @@ const CreateGroup = () => {
     },
   });
 
-  console.log(form.getValues());
-
   const watchProfileImage = form.watch('profileImage');
   const watchCoverImage = form.watch('coverImage');
-  const onSubmit = async () => {};
+
+  const onSubmit = async (data: z.infer<typeof createGroupSchema>) => {
+    const modifiedMembers = data.members.map((member) => {
+      return { userId: member.value, role: 'USER' };
+    });
+    const modifiedAdmins = data.admins.map((admin) => {
+      return { userId: admin.value, role: 'ADMIN' };
+    });
+
+    try {
+      await typedFetch({
+        url: '/groups/',
+        method: 'POST',
+        body: {
+          authorId: data.authorId,
+          name: data.name,
+          profileImage: data.profileImage,
+          coverImage: data.coverImage,
+          bio: data.bio,
+          members: [...modifiedMembers, ...modifiedAdmins],
+        },
+      });
+    } catch (error) {
+      console.log('Error creating group', error);
+      throw new Error('Error creating group');
+    }
+  };
+
+  const resetForm = () => {
+    form.reset();
+  };
 
   return (
     <div className="w-full">
@@ -108,9 +142,9 @@ const CreateGroup = () => {
                           watchProfileImage || '/assets/icons/basic-image.svg'
                         }
                         alt="upload"
-                        width={watchProfileImage ? 32 : 24} // Adjust the width
-                        height={watchProfileImage ? 32 : 24} // Adjust the height
-                        className={`invert dark:invert-0 ${watchProfileImage ? 'object-cover w-11 h-11 rounded-full' : ''}`}
+                        width={watchProfileImage ? 32 : 24}
+                        height={watchProfileImage ? 32 : 24}
+                        className={`invert-0 dark:invert-0 ${watchProfileImage ? 'object-cover w-11 invert-0 h-11 rounded-full' : ''}`}
                       />
                     </div>
                     <div className="flex flex-col items-center">
@@ -251,6 +285,9 @@ const CreateGroup = () => {
           />
           <div className="space-y-3">
             <FormLabel>Add admins</FormLabel>
+            <FormDescription className="!text-[14px]">
+              You can add up to 3 admins to your group .
+            </FormDescription>
             <FormField
               control={form.control}
               name="admins"
@@ -278,6 +315,7 @@ const CreateGroup = () => {
                     menu: () => 'bg-white-100 dark:bg-black-800 !shadow-sm ',
                   }}
                   isMulti
+                  isOptionDisabled={() => field.value.length >= 3}
                   onInputChange={(value) => setQ(value)}
                   options={adminOptions}
                   formatOptionLabel={(option, { context }) => {
@@ -310,6 +348,9 @@ const CreateGroup = () => {
 
           <div className="space-y-3">
             <FormLabel>Add members</FormLabel>
+            <FormDescription className="!text-[14px]">
+              You can add up to 5 members to your group at a time.
+            </FormDescription>
             <FormField
               control={form.control}
               name="members"
@@ -338,6 +379,7 @@ const CreateGroup = () => {
                   }}
                   isMulti
                   onInputChange={(value) => setQ(value)}
+                  isOptionDisabled={() => field.value.length >= 5}
                   options={memberOptions}
                   formatOptionLabel={(option, { context }) => {
                     if (context === 'value') {
@@ -369,6 +411,7 @@ const CreateGroup = () => {
 
           <div className="flex gap-5 p3-bold ">
             <Button
+              onClick={resetForm}
               type="button"
               className="bg-light100__dark800 hover:!text-white-100 duration-200 hover:bg-primary-500 py-3 w-3/5">
               Cancel

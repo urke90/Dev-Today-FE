@@ -95,22 +95,24 @@ export const updateProfileSchema = z.object({
 
 export const createGroupSchema = z.object({
   authorId: z.string(),
-  name: z.string().min(1).max(50),
+  name: z.string().min(1).max(50, 'Group name must be max 50 characters long'),
   profileImage: z.string().optional(),
   coverImage: z.string().optional(),
-  bio: z.string().min(1),
-  admins: z.array(
-    z.object({
-      value: z.string(),
-      label: z.string(),
-      avatarImage: z.string().optional(),
-    })
-  ),
-  members: z.array(
-    z.object({
-      value: z.string(),
-      label: z.string(),
-      avatarImage: z.string().optional(),
-    })
-  ),
+  bio: z.string().min(1).max(1000, 'Bio must be max 1000 characters long'),
+  admins: z
+    .array(
+      z.object({
+        value: z.string(),
+        label: z.string(),
+      })
+    )
+    .max(5),
+  members: z
+    .array(
+      z.object({
+        value: z.string(),
+        label: z.string(),
+      })
+    )
+    .max(5),
 });

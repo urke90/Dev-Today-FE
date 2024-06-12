@@ -252,6 +252,15 @@ const CreatePosts = ({
     setIsPreview(true);
   };
 
+  const restFrom = () => {
+    form.reset();
+    form.setValue('groupId', {
+      value: '',
+      label: '',
+    });
+    form.setValue('tags', []);
+  };
+
   return (
     <div className="w-full">
       {!isPreview ? (
@@ -263,7 +272,7 @@ const CreatePosts = ({
               label="Title"
               placeholder="Write a title of the post"
             />
-            <div className="flex items-end gap-3">
+            <div className="flex flex-col md:flex-row  items-end gap-3">
               <Controller
                 control={form.control}
                 defaultValue={EContentType.POST}
@@ -274,7 +283,7 @@ const CreatePosts = ({
                     onValueChange={field.onChange}>
                     <Select.Trigger
                       {...field}
-                      className="flex w-1/4 capitalize border dark:border-black-700/50 rounded-md px-2 items-center h-12 bg-white-100 dark:bg-black-800 justify-center outline-none"
+                      className="flex w-full md:w-1/4 capitalize border dark:border-black-700/50 rounded-md px-2 items-center h-12 bg-white-100 dark:bg-black-800 md:justify-center outline-none"
                       aria-label="Food">
                       <p className=" p3-regular dark:!text-white-400">Create</p>
                       <span className="mx-1 dark:text-white-100/70 text-black-800/60 ">
@@ -284,14 +293,14 @@ const CreatePosts = ({
                         className={`${
                           watchPostType !== EContentType.POST ? 'hidden' : ''
                         } p3-regular !font-bold`}></p>
-                      <div className=" flex items-center p3-regular !text-black-800 dark:!text-white-100 !font-bold ">
+                      <div className="flex w-full items-center p3-regular justify-between !text-black-800 dark:!text-white-100 !font-bold ">
                         <Select.Value placeholder="Post" />
                         <Image
                           src="/assets/icons/arrow-down-slim.svg"
                           alt="arrow-down"
-                          width={10}
-                          height={2}
-                          className="ml-2"
+                          width={12}
+                          height={5}
+                          className="md:ml-2 mr-5 md:mr-0"
                         />
                       </div>
                     </Select.Trigger>
@@ -357,7 +366,7 @@ const CreatePosts = ({
                             '!text-[16px] dark:!text-white-100 text-black-800',
 
                           control: () =>
-                            '!border-none dark:bg-black-800 dark:!border-[#393E4F66] px-3 h-11',
+                            '!border-none dark:bg-black-800 dark:!border-[#393E4F66] md:px-3 h-11',
                           indicatorSeparator: () => '!hidden',
                           dropdownIndicator: () =>
                             '!text-white-400 !w-10 !h-10',
@@ -632,11 +641,13 @@ const CreatePosts = ({
                     onInputChange={(value) => setTitle(value)}
                     classNames={{
                       input: () =>
-                        '!text-[16px] dark:!text-white-100 text-black-800',
+                        'md:!text-[16px] dark:!text-white-100 text-black-800',
                       control: () =>
-                        '!border-none !shadow-none  dark:bg-black-800 dark:!border-[#393E4F66] px-3 h-11',
+                        '!border-none !shadow-none relative  dark:bg-black-800 dark:!border-[#393E4F66] md:px-3 h-auto min-h-[44px]',
                       indicatorSeparator: () => '!hidden',
                       dropdownIndicator: () => '!hidden',
+                      indicatorsContainer: () => 'absolute right-0 top-[-5px]',
+
                       multiValue: () =>
                         '!bg-white-200 !px-2 !py-1 dark:!bg-black-700 !text-white-100 !rounded-full',
                       multiValueLabel: () =>
@@ -649,6 +660,7 @@ const CreatePosts = ({
                       menu: () => 'bg-white-100 dark:bg-black-800 !shadow-sm ',
                     }}
                     isMulti
+                    isOptionDisabled={() => field.value.length >= 5}
                     options={selectTagsOptions
                       ?.filter(
                         (item) =>
@@ -660,7 +672,7 @@ const CreatePosts = ({
                       }))}
                     formatOptionLabel={(option, { context }) => {
                       if (context === 'value') {
-                        return <div>{option.label}</div>;
+                        return <div className="p4-medium">{option.label}</div>;
                       }
                       return (
                         <div className="flex items-center">
@@ -691,6 +703,7 @@ const CreatePosts = ({
 
             <div className="flex gap-5 p3-bold ">
               <Button
+                onClick={restFrom}
                 type="button"
                 className="bg-light100__dark800 hover:!text-white-100 duration-200 hover:bg-primary-500 py-3 w-3/5">
                 Cancel

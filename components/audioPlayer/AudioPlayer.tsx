@@ -68,22 +68,25 @@ const AudioPlayer = ({
   const progress = (currentTime / duration) * 100;
 
   return (
-    <div className="flex flex-row py-10 items-center p-4 bg-white-200 dark:bg-black-800 rounded-lg shadow-md">
-      <div className="flex items-center relative space-x-4 w-2/5">
-        <Image
-          src={coverImage || '/assets/images/post-example.svg'}
-          alt="avatar"
-          width={150}
-          height={150}
-          className={`z-10 rounded-lg ${isPlaying && audioSrc && 'animate-bounce'}`}
-        />
-        <Image
-          src="/assets/images/disk.png"
-          alt="avatar"
-          width={130}
-          height={130}
-          className="absolute top-1/2 left-[150px] transform -translate-x-1/2 -translate-y-1/2"
-        />
+    <div className="flex flex-row sm:py-10 gap-2 items-start  md:items-center p-4 bg-white-200 dark:bg-black-800 rounded-lg shadow-md">
+      <div className="flex justify-start xs:ml-5 md:ml-0 relative space-x-4 w-2/5">
+        <div
+          className={`z-10 rounded-lg size-12 xs:size-16 sm:size-20 md:size-28 lg:size-36 ${isPlaying && audioSrc && 'animate-bounce'}`}>
+          <Image
+            src={coverImage || '/assets/images/post-example.svg'}
+            alt="avatar"
+            width={150}
+            height={150}
+          />
+        </div>
+        <div className="absolute size-12 xs:size-16 sm:size-20 md:size-24 lg:size-32 top-3/4 md:top-1/2 sm:left-[30px] md:left-[100px] lg:left-[150px] transform md:-translate-x-1/2 md:-translate-y-1/2">
+          <Image
+            src="/assets/images/disk.png"
+            alt="avatar"
+            width={130}
+            height={130}
+          />
+        </div>
       </div>
       <div className="w-full">
         <div className="flex flex-col">
@@ -114,7 +117,7 @@ const AudioPlayer = ({
           <Button
             type="button"
             onClick={togglePlay}
-            className="flex mt-4 w-28 bg-primary-500 !text-[14px] !text-white-100 hover:bg-purple-600 duration-300 text-white py-2 px-4 rounded-lg">
+            className="flex !w-full mt-4 md:!w-28 bg-primary-500 !text-[14px] !text-white-100 hover:bg-purple-600 duration-300 text-white py-2 px-4 rounded-lg">
             {isPlaying ? (
               <Image
                 src={'/assets/icons/pause.svg'}

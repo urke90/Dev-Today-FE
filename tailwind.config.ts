@@ -18,6 +18,7 @@ const config = {
     },
     extend: {
       screens: {
+        xs: '420px',
         xxl: '1440px',
         content: '1360px',
       },
