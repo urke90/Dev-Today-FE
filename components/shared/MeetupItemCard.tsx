@@ -61,7 +61,7 @@ const MeetupItemCard: React.FC<IMeetupItemCardProps> = ({
           <p className="p4-regular md:p3-regular line-clamp-2">{description}</p>
         </div>
         {tags?.length > 0 ? (
-          <ul className="flex gap-2.5">
+          <ul className="flex gap-2.5 flex-wrap">
             {tags.map((tag) => (
               <BadgeItem key={tag} title={tag} />
             ))}

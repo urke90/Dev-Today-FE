@@ -12,7 +12,7 @@ import type { IGroup } from '@/types/group';
 import type { IProfileUser } from '@/types/user';
 import { calculateTimeAgo } from '@/utils/format';
 import BadgeItem from '../shared/BadgeItem';
-import SidebarContentCard from '../shared/SidebarContentCard';
+import SidebarContentCard from '../shared/RightSidebarItems/SidebarContentCard';
 
 // ----------------------------------------------------------------
 

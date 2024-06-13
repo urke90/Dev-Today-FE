@@ -1,4 +1,4 @@
-import { EContentType, ITag } from './content';
+import { IContent } from './content';
 
 export enum EUserRole {
   USER = 'USER',
@@ -25,22 +25,22 @@ export interface IProfileUser {
   role: EUserRole;
   followers: string[];
   _count: { followers: number; following: number };
-  contents: IUserRecentContent[];
+  contents: IContent[];
 }
 
-export interface IUserRecentContent {
-  id: string;
-  title: string;
-  description: string;
-  coverImage: string | null;
-  meetupDate: Date | null;
-  tags: ITag[];
-  type: EContentType;
-  author: {
-    name: string;
-    avatarImg: string;
-  };
-}
+// export interface IUserRecentContent {
+//   id: string;
+//   title: string;
+//   description: string;
+//   coverImage: string | null;
+//   meetupDate: Date | null;
+//   tags: ITag[];
+//   type: EContentType;
+//   author: {
+//     name: string;
+//     avatarImg: string;
+//   };
+// }
 
 export interface IProfileUserResponse {
   user: IProfileUser;

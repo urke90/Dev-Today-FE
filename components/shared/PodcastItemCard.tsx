@@ -67,7 +67,7 @@ const PodcastItemCard: React.FC<IPodcastItemCardProps> = ({
           {description}
         </p>
         {tags?.length > 0 ? (
-          <ul className="flex gap-2.5">
+          <ul className="flex gap-2.5 flex-wrap">
             {tags.map((tag) => (
               <BadgeItem key={tag} title={tag} />
             ))}

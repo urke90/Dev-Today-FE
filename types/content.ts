@@ -18,7 +18,11 @@ export interface IContent {
   type?: EContentType;
   createdAt: Date;
   updatedAt: Date;
-  author: IProfileUser;
+  author: {
+    name: string;
+    avatarImg: string;
+  };
+  // author: IProfileUser;
   authorId: string;
   likedBy: IProfileUser[];
   likes: ILike[] | undefined;
@@ -26,11 +30,12 @@ export interface IContent {
   description: string;
   postGroups: string[];
   coverImage: string | null;
-  meetupLocationImage: string | null;
+  meetupLocationImage?: string | null;
+  meetupLocation?: string | null;
   meetupDate: Date | null;
-  podcastFile: string | null;
-  podcastTitle: string | null;
-  tags: string[];
+  podcastFile?: string | null;
+  podcastTitle?: string | null;
+  tags: ITag[];
   comments: Comment[];
   contentGroups: [];
   viewsCount: number | null;

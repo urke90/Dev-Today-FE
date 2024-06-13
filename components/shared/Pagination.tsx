@@ -15,8 +15,6 @@ const Pagination: React.FC<IPaginationProps> = ({
   disableNextBtn,
   disablePrevBtn,
 }) => {
-  console.log({ disableNextBtn });
-  console.log({ disablePrevBtn });
   return (
     <div className="flex-center">
       <div className="flex">

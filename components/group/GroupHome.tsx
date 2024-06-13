@@ -2,6 +2,7 @@
 
 import { fetchAllGroups } from '@/api/queries';
 import { EAllContentGroupQueries } from '@/constants/react-query';
+import { IContent } from '@/types/content';
 import { IAllGroupsResponse } from '@/types/group';
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
@@ -10,6 +11,7 @@ import GroupItemCard from '../shared/GroupItemCard';
 import SidebarGroupItem from '../shared/LeftSidebarItems/SidebarGroupItem';
 import SidebarItemWrapper from '../shared/LeftSidebarItems/SidebarItemWrapper';
 import Pagination from '../shared/Pagination';
+import SidebarContentCard from '../shared/RightSidebarItems/SidebarContentCard';
 import SortAndFilter from '../shared/SortAndFilter';
 import { Button } from '../ui/button';
 
@@ -18,6 +20,9 @@ import { Button } from '../ui/button';
 interface IGroupHomeProps {
   groupsData: IAllGroupsResponse;
   userId: string;
+  postItems: IContent[];
+  meetupItems: IContent[];
+  podcastItems: IContent[];
 }
 
 const items = [
@@ -58,7 +63,13 @@ const items = [
   },
 ];
 
-const GroupHome: React.FC<IGroupHomeProps> = ({ groupsData, userId }) => {
+const GroupHome: React.FC<IGroupHomeProps> = ({
+  groupsData,
+  userId,
+  postItems,
+  meetupItems,
+  podcastItems,
+}) => {
   const [page, setPage] = useState(1);
 
   const { data } = useQuery<IAllGroupsResponse>({
@@ -126,7 +137,11 @@ const GroupHome: React.FC<IGroupHomeProps> = ({ groupsData, userId }) => {
           disablePrevBtn={page === 1}
         />
       </main>
-      <aside className="right-sidebar border">RIGHT</aside>
+      <aside className="right-sidebar border">
+        <SidebarContentCard title="Meetups" items={meetupItems} />
+        <SidebarContentCard title="Podcasts" items={podcastItems} />
+        <SidebarContentCard title="Posts" items={postItems} />
+      </aside>
     </div>
   );
 };
