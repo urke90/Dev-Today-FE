@@ -1,3 +1,4 @@
+import { EContentType } from '@/types/content';
 import * as z from 'zod';
 export const signInSchema = z.object({
   userName: z.string().min(3).max(20),
@@ -41,6 +42,29 @@ export const profileSchema = z.object({
   following: z.number().optional(),
 });
 
+export const createContentSchema = z.object({
+  authorId: z.string(),
+  title: z.string().min(3).max(100),
+  type: z.nativeEnum(EContentType),
+  groupId: z.object({
+    value: z.string().min(1),
+    label: z.string().min(1),
+  }),
+  coverImage: z.string().optional(),
+  meetupLocation: z.string().min(3),
+  meetupDate: z.coerce.date(),
+  podcastFile: z.string().min(3),
+  podcastTitle: z.string().min(3),
+  description: z.string().min(30),
+  tags: z
+    .array(
+      z.object({
+        label: z.string().min(1).max(20, ' Tag must be max 20 characters long'),
+      })
+    )
+    .max(5),
+});
+
 const preferredSkillsSchema = z.object({
   value: z.string().trim().min(1, 'Tag must be at least 2 characters long!'),
   label: z.string().trim().min(1, 'Tag must be at least 2 characters long!'),
@@ -67,4 +91,28 @@ export const updateProfileSchema = z.object({
   linkedinLink: z.string().url().optional().or(z.literal('')),
   twitterName: z.string().optional(),
   twitterLink: z.string().url().optional().or(z.literal('')),
+});
+
+export const createGroupSchema = z.object({
+  authorId: z.string(),
+  name: z.string().min(1).max(50, 'Group name must be max 50 characters long'),
+  profileImage: z.string().optional(),
+  coverImage: z.string().optional(),
+  bio: z.string().min(1).max(1000, 'Bio must be max 1000 characters long'),
+  admins: z
+    .array(
+      z.object({
+        value: z.string(),
+        label: z.string(),
+      })
+    )
+    .max(5),
+  members: z
+    .array(
+      z.object({
+        value: z.string(),
+        label: z.string(),
+      })
+    )
+    .max(5),
 });

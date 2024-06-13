@@ -91,7 +91,7 @@ const Onboarding = () => {
         }
       );
       if (result?.ok) {
-        router.push('/home');
+        router.push('/');
       } else {
         throw new Error('Error while updating user onboarding');
       }
@@ -126,8 +126,7 @@ const Onboarding = () => {
         <div className="max-w-md">
           <h2
             onClick={() => signOut({ callbackUrl: '/login' })}
-            className="d1-bold mb-10"
-          >
+            className="d1-bold mb-10">
             Sign in to DevToday.
           </h2>
           <article className="flex flex-col gap-5">
@@ -136,11 +135,9 @@ const Onboarding = () => {
                 key={item.label}
                 className={`${
                   mode === 'dark' ? 'bg-black-700' : 'bg-white-100'
-                } flex items-center gap-5 rounded-lg p-5`}
-              >
+                } p-5 flex gap-5 items-center rounded-lg`}>
                 <div
-                  className={`dark:bg-black-800 ${colorsOnboardingIcons[index]} h-[60px] rounded-md p-5`}
-                >
+                  className={`dark:bg-black-800 ${colorsOnboardingIcons[index]} h-[60px] p-5 rounded-md`}>
                   <Image
                     src={item.image}
                     alt={item.alt}
@@ -192,8 +189,7 @@ const Onboarding = () => {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="w-full space-y-5 "
-          >
+            className="space-y-5 w-full ">
             {step === 0 && (
               <>
                 <FormField
@@ -205,8 +201,7 @@ const Onboarding = () => {
                         <RadioGroup
                           onValueChange={field.onChange}
                           defaultValue={field.value}
-                          className="flex flex-col space-y-1"
-                        >
+                          className="flex flex-col space-y-1">
                           {currentKnowledge.map((item) => (
                             <FormItem key={item.value}>
                               <FormControl>
@@ -222,8 +217,7 @@ const Onboarding = () => {
                                   ? 'bg-primary-500 !text-white-100'
                                   : 'bg-white-100 dark:bg-black-800'
                               }
-                              p1-medium h-14  cursor-pointer justify-start rounded border-none px-4 text-[14px]`}
-                              >
+                              px-4 justify-start  rounded border-none h-14 p1-medium cursor-pointer`}>
                                 {item.title}
                               </FormLabel>
                             </FormItem>
@@ -274,8 +268,7 @@ const Onboarding = () => {
                                   ? 'bg-primary-500 !text-white-100'
                                   : 'bg-white-100 dark:bg-black-800'
                               }
-                              p1-medium  h-14  cursor-pointer justify-start rounded border-none px-4 text-[14px]`}
-                              >
+                              px-4  justify-start  rounded border-none h-14 text-[14px] p1-medium cursor-pointer`}>
                                 {item.title}
                               </FormLabel>
                             </FormItem>
@@ -293,7 +286,7 @@ const Onboarding = () => {
                   control={form.control}
                   name="preferredSkills"
                   render={() => (
-                    <FormItem className="flex flex-wrap items-center gap-3 space-y-0">
+                    <FormItem className="flex flex-wrap  gap-3 items-center space-y-0">
                       {preferSkills.map((item) => (
                         <FormField
                           key={item.title}
@@ -301,7 +294,7 @@ const Onboarding = () => {
                           name="preferredSkills"
                           render={({ field }) => {
                             return (
-                              <FormItem key={item.title} className="flex">
+                              <FormItem key={item.title} className="w-fit">
                                 <FormControl>
                                   <Checkbox
                                     className="hidden"
@@ -324,9 +317,8 @@ const Onboarding = () => {
                                   className={`cursor-pointer border-none ${
                                     field.value.includes(item.title)
                                       ? 'bg-primary-500 !text-white-100'
-                                      : 'bg-white-100 dark:bg-black-800'
-                                  } p3-medium  flex h-12 items-center rounded-lg !px-5`}
-                                >
+                                      : 'dark:bg-black-800 bg-white-100'
+                                  } h-12  rounded-lg flex items-center p3-medium !px-5`}>
                                   {item.title}
                                 </FormLabel>
                               </FormItem>
@@ -341,8 +333,7 @@ const Onboarding = () => {
             )}
             <Button
               onClick={() => goNext()}
-              className="p2-bold h-11 w-full bg-primary-500 "
-            >
+              className="w-full bg-primary-500 h-11 p2-bold ">
               {step === 2 ? 'Get Started' : 'Next'}
             </Button>
           </form>

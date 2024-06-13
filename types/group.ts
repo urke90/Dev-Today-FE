@@ -23,3 +23,23 @@ export interface IAllGroupsResponse {
   hasNextPage: boolean;
   hasPrevPage: boolean;
 }
+export interface ISelectGroup {
+  id: string;
+  profileImage: string;
+  bio: string;
+  name: string;
+  coverImg: string;
+  updatedAt: Date;
+  _count: {
+    members: number;
+  };
+  members: {
+    id: string;
+    avatarImg?: string | undefined;
+  };
+}
+
+export interface ITags {
+  id: string;
+  title: string;
+}

@@ -14,6 +14,13 @@ export enum EQueryContentType {
 }
 
 export interface IContent {
+  group: {
+    id: string;
+    bio: string;
+    name: string;
+    coverImage: string;
+  };
+  content: IContent;
   id: string;
   type?: EContentType;
   createdAt: Date;

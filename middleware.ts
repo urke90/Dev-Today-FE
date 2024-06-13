@@ -1,5 +1,5 @@
-import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
 
 export async function middleware(request: NextRequest) {
   const result = await fetch('http://localhost:3000/api/user', {
@@ -9,11 +9,10 @@ export async function middleware(request: NextRequest) {
   });
 
   const session = await result.json();
-
   const url = request.nextUrl.pathname;
 
   const protectedPages = [
-    '/home',
+    '/create',
     '/posts',
     '/meetup',
     '/podcast',
@@ -28,10 +27,10 @@ export async function middleware(request: NextRequest) {
     }
   } else {
     if (url.startsWith('/register') && session.user.isOnboardingCompleted) {
-      return NextResponse.redirect(new URL('/home', request.url));
+      return NextResponse.redirect(new URL('/', request.url));
     }
     if (url.startsWith('/login') && session.user.isOnboardingCompleted) {
-      return NextResponse.redirect(new URL('/home', request.url));
+      return NextResponse.redirect(new URL('/', request.url));
     }
     if (
       protectedPages.some((page) => url.includes(page)) &&
