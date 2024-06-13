@@ -9,8 +9,8 @@ import PostItemCard from './PostItemCard';
 import { useQuery } from '@tanstack/react-query';
 import { memo, useCallback, useEffect, useState } from 'react';
 
-import { fetchContent, fetchGroups } from '@/api/queries';
-import { EContentGroupItemsQueries } from '@/constants/react-query';
+import { fetchUserContent, fetchUserGroups } from '@/api/queries';
+import { EUserContentGroupQueries } from '@/constants/react-query';
 import { useInfiniteScroll } from '@/hooks/use-infinite-scroll';
 import { EQueryContentType, type IContent } from '@/types/content';
 import type { IGroup } from '@/types/group';
@@ -28,9 +28,9 @@ const updateContentQueryKey = (contentType: EQueryContentType) => {
     return;
   }
   const FETCH_QUERIES = {
-    post: EContentGroupItemsQueries.FETCH_POSTS,
-    meetup: EContentGroupItemsQueries.FETCH_MEETUPS,
-    podcast: EContentGroupItemsQueries.FETCH_PODCASTS,
+    post: EUserContentGroupQueries.FETCH_USER_POSTS,
+    meetup: EUserContentGroupQueries.FETCH_USER_MEETUPS,
+    podcast: EUserContentGroupQueries.FETCH_USER_PODCASTS,
   };
 
   return FETCH_QUERIES[contentType];
@@ -55,7 +55,7 @@ const ContentList: React.FC<IContentListProps> = ({
 }) => {
   const [content, setContent] = useState<IContent[]>(contentItems);
   const [groups, setGroups] = useState<IGroup[]>(groupItems);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(2);
 
   const likeOrDislikeContent = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -95,7 +95,7 @@ const ContentList: React.FC<IContentListProps> = ({
     data: contentData,
   } = useQuery<IContent[]>({
     queryKey: [updateContentQueryKey(contentType), contentType, userId, page],
-    queryFn: () => fetchContent(userId, contentType, page, viewerId),
+    queryFn: () => fetchUserContent(userId, contentType, page, viewerId),
     enabled:
       shouldFetch && contentType !== EQueryContentType.GROUP && page !== 1,
     retry: false,
@@ -106,8 +106,8 @@ const ContentList: React.FC<IContentListProps> = ({
     error: groupsError,
     data: groupsData,
   } = useQuery<IGroup[]>({
-    queryKey: [EContentGroupItemsQueries.FETCH_GROUPS, userId, page],
-    queryFn: () => fetchGroups(userId, page),
+    queryKey: [EUserContentGroupQueries.FETCH_USER_GROUPS, userId, page],
+    queryFn: () => fetchUserGroups(userId, page),
     enabled:
       shouldFetch && contentType === EQueryContentType.GROUP && page !== 1,
     retry: false,

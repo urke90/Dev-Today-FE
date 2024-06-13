@@ -4,7 +4,7 @@ import { EQueryContentType, IContent } from '@/types/content';
 
 const BASE_API_URL = 'http://localhost:8080/api';
 
-export const fetchContent = async (
+export const fetchUserContent = async (
   userId: string,
   contentType: EQueryContentType,
   page: number,
@@ -22,13 +22,23 @@ export const fetchContent = async (
   return response.json();
 };
 
-export const fetchGroups = async (userId: string, page: number) => {
+export const fetchUserGroups = async (userId: string, page: number) => {
   const response = await fetch(
-    BASE_API_URL + `/user/${userId}/groups&page=${page}`
+    BASE_API_URL + `/user/${userId}/groups?page=${page}`
   );
 
   if (!response.ok) {
     throw new Error('Something went wrong!');
   }
+  return response.json();
+};
+
+export const fetchAllGroups = async (page: number) => {
+  const response = await fetch(BASE_API_URL + `/groups?page=${page}`);
+
+  if (!response.ok) {
+    throw new Error('Something went wrong!');
+  }
+
   return response.json();
 };

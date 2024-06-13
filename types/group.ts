@@ -16,3 +16,10 @@ export interface IGroup {
     avatarImg?: string;
   }[];
 }
+
+export interface IAllGroupsResponse {
+  groups: IGroup[];
+  totalPages: number;
+  hasNextPage: boolean;
+  hasPrevPage: boolean;
+}

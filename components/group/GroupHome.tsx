@@ -1,5 +1,11 @@
-import { IGroup } from '@/types/group';
+'use client';
+
+import { fetchAllGroups } from '@/api/queries';
+import { EAllContentGroupQueries } from '@/constants/react-query';
+import { IAllGroupsResponse } from '@/types/group';
+import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
+import { useState } from 'react';
 import GroupItemCard from '../shared/GroupItemCard';
 import SidebarGroupItem from '../shared/LeftSidebarItems/SidebarGroupItem';
 import SidebarItemWrapper from '../shared/LeftSidebarItems/SidebarItemWrapper';
@@ -10,7 +16,8 @@ import { Button } from '../ui/button';
 // ----------------------------------------------------------------
 
 interface IGroupHomeProps {
-  groups: IGroup[];
+  groupsData: IAllGroupsResponse;
+  userId: string;
 }
 
 const items = [
@@ -51,8 +58,17 @@ const items = [
   },
 ];
 
-const GroupHome: React.FC<IGroupHomeProps> = ({ groups }) => {
-  console.log('groups', groups);
+const GroupHome: React.FC<IGroupHomeProps> = ({ groupsData, userId }) => {
+  const [page, setPage] = useState(1);
+
+  const { data } = useQuery<IAllGroupsResponse>({
+    queryKey: [EAllContentGroupQueries.FETCH_ALL_GROUPS, page],
+    queryFn: () => fetchAllGroups(page),
+    retry: false,
+    enabled: page > 1,
+    initialData: groupsData,
+  });
+
   return (
     <div className="content-wrapper">
       <aside className="left-sidebar">
@@ -90,8 +106,8 @@ const GroupHome: React.FC<IGroupHomeProps> = ({ groups }) => {
           </Button>
         </div>
         <ul className="grid grid-cols-2 gap-y-3.5 gap-x-5 mb-5 md:mb-10">
-          {groups?.length > 0 ? (
-            groups.map(({ id, coverImage, bio, name, members }) => (
+          {data.groups?.length > 0 &&
+            data.groups.map(({ id, coverImage, bio, name, members }) => (
               <GroupItemCard
                 key={id}
                 id={id}
@@ -100,14 +116,15 @@ const GroupHome: React.FC<IGroupHomeProps> = ({ groups }) => {
                 title={name}
                 members={members}
               />
-            ))
-          ) : (
-            <h2 className="h2-bold">
-              There are no groups to show at the moment!
-            </h2>
-          )}
+            ))}
         </ul>
-        <Pagination currentPage={1} totalPage={19} />
+        <Pagination
+          currentPage={page}
+          totalPage={data.totalPages}
+          setPage={setPage}
+          disableNextBtn={!data.hasNextPage}
+          disablePrevBtn={page === 1}
+        />
       </main>
       <aside className="right-sidebar border">RIGHT</aside>
     </div>
