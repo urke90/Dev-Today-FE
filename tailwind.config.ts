@@ -60,6 +60,7 @@ const config = {
           '0px 3px 80px 0px #0000004D, dark:0px 7px 80px 0px #0000001A',
         'search-dialog':
           '0px 0px 0px 1px #1212124D, dark:0px 0px 0px 1px #1212120D',
+        card: '0px 4px 30px 0px #0000001A',
       },
       keyframes: {
         'accordion-down': {

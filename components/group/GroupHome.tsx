@@ -137,7 +137,7 @@ const GroupHome: React.FC<IGroupHomeProps> = ({
           disablePrevBtn={page === 1}
         />
       </main>
-      <aside className="right-sidebar border">
+      <aside className="right-sidebar">
         <SidebarContentCard title="Meetups" items={meetupItems} />
         <SidebarContentCard title="Podcasts" items={podcastItems} />
         <SidebarContentCard title="Posts" items={postItems} />
