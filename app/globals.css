@@ -51,7 +51,7 @@
     @apply text-base font-medium text-black-800 dark:text-white-200; /* DOBRO */
   }
   .p3-medium {
-    @apply text-[14px] md:text-[18px] !font-medium text-black-800 dark:text-white-200; /* DOBRO */
+    @apply text-sm font-medium text-black-800 dark:text-white-200; /* DOBRO */
   }
   .p4-medium {
     @apply text-[10px] md:text-xs font-medium text-black-800 dark:text-white-200; /* DOBRO */

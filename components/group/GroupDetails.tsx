@@ -21,18 +21,19 @@ const GroupDetails: React.FC<IGroupDetailsProps> = (props) => {
           <p className="p2-bold">Statistical Highlights</p>
           <ul className="flex md:flex-col  gap-2.5">
             <li>
-              <p className="p3-medium">
-                <span className="text-primary-500">300</span> Posts
+              <p className="p3-bold">
+                <span className="p3-medium !text-primary-500">300</span> Posts
               </p>
             </li>
             <li>
-              <p className="p3-medium">
-                <span className="text-primary-500">2831</span> Members
+              <p className="p3-bold">
+                <span className="p3-medium !text-primary-500">2831</span>{' '}
+                Members
               </p>
             </li>
             <li>
-              <p className="p3-medium">
-                <span className="text-primary-500">43</span> Admins
+              <p className="p3-bold">
+                <span className="p3-medium !text-primary-500">43</span> Admins
               </p>
             </li>
           </ul>
