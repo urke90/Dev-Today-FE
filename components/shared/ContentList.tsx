@@ -31,6 +31,7 @@ const updateContentQueryKey = (contentType: EQueryContentType) => {
     post: EContentGroupQueries.FETCH_POSTS,
     meetup: EContentGroupQueries.FETCH_MEETUPS,
     podcast: EContentGroupQueries.FETCH_PODCASTS,
+    members: EContentGroupQueries.FETCH_MEMBERS,
   };
 
   return FETCH_QUERIES[contentType];
