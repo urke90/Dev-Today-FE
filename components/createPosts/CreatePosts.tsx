@@ -24,12 +24,14 @@ import { ISelectGroup, ITags } from '@/types/group';
 import { typedFetch } from '@/utils/api';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as Select from '@radix-ui/react-select';
+import { useQuery } from '@tanstack/react-query';
 import { Editor } from '@tinymce/tinymce-react';
 import { format } from 'date-fns';
 import { CldUploadWidget } from 'next-cloudinary';
 import Image from 'next/image';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { toast } from 'react-hot-toast';
 import ReactSelect, { components } from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 import { useDebounce } from 'use-debounce';
@@ -51,6 +53,22 @@ type ContentProps = {
   editPost?: IContent;
 };
 
+const fetchGroups = async (query: string) => {
+  const result = await typedFetch({
+    url: `/groups?q=${query}`,
+    method: 'GET',
+  });
+  return result;
+};
+
+const fetchTags = async (query: string) => {
+  const result = await typedFetch({
+    url: `/content/tags?title=${query}`,
+    method: 'GET',
+  });
+  return result;
+};
+
 const CreatePosts = ({
   authorId,
 
@@ -58,8 +76,7 @@ const CreatePosts = ({
 }: ContentProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isPreview, setIsPreview] = useState(false);
-  const [allGroups, setAllGroups] = useState<ISelectGroup[]>([]);
-  const [allTags, setAllTags] = useState<ITags[]>([]);
+
   const [q, setQ] = useState('');
   const [title, setTitle] = useState('');
   const { mode } = useTheme();
@@ -69,42 +86,31 @@ const CreatePosts = ({
 
   const editorRef = useRef<any>(null);
 
-  useEffect(() => {
-    const fetchGroups = async () => {
-      try {
-        const response = await typedFetch({
-          url: `/groups?q=${q}`,
-          method: 'GET',
-        });
-        setAllGroups(response as ISelectGroup[]);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+  const {
+    data: allGroups,
+    error: groupsError,
+    isLoading: groupsLoading,
+  } = useQuery({
+    queryKey: ['groups', debouncedQ],
+    queryFn: () => fetchGroups(debouncedQ),
+  });
 
-    const fetchTags = async () => {
-      try {
-        const response = await typedFetch({
-          url: `/content/tags?title=${title}`,
-          method: 'GET',
-        });
-        setAllTags(response as ITags[]);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+  const {
+    data: allTags,
+    error: tagsError,
+    isLoading: tagsLoading,
+  } = useQuery({
+    queryKey: ['tags', debouncedTitle],
+    queryFn: () => fetchTags(debouncedTitle),
+  });
 
-    fetchGroups();
-    fetchTags();
-  }, [debouncedQ, debouncedTitle]);
-
-  const selectGroupOptions = allGroups?.map((group) => ({
+  const selectGroupOptions = (allGroups as ISelectGroup[])?.map((group) => ({
     value: group.id,
     label: group.name,
     profileImage: group.profileImage,
     bio: group.bio,
   }));
-  const selectTagsOptions = allTags?.map((tag) => ({
+  const selectTagsOptions = (allTags as ITags[])?.map((tag) => ({
     value: tag.id,
     label: tag.title,
   }));
@@ -143,6 +149,7 @@ const CreatePosts = ({
         'coverImage',
         'description',
         'tags',
+        'groupId',
       ]);
       if (!result) throw new Error('Form validation failed');
 
@@ -167,9 +174,10 @@ const CreatePosts = ({
           label: '',
         });
         form.setValue('tags', []);
+        toast.success('Post created successfully!');
       } catch (error) {
         console.error(error);
-        throw new Error('Failed to create post');
+        toast.error('Failed to create post');
       } finally {
         setIsLoading(false);
       }
@@ -203,9 +211,10 @@ const CreatePosts = ({
           label: '',
         });
         form.setValue('tags', []);
+        toast.success('Meetup created successfully!');
       } catch (error) {
         console.error(error);
-        throw new Error('Failed to create meetup');
+        toast.error('Failed to create meetup');
       } finally {
         setIsLoading(false);
       }
@@ -237,9 +246,10 @@ const CreatePosts = ({
           label: '',
         });
         form.setValue('tags', []);
+        toast.success('Podcast created successfully!');
       } catch (error) {
         console.error(error);
-        throw new Error('Failed to create podcast');
+        toast.error('Failed to create podcast');
       } finally {
         setIsLoading(false);
       }
@@ -595,9 +605,10 @@ const CreatePosts = ({
                    body { font-family: Roboto, sans-serif; font-size: 14px; color: #808191;  ${
                      mode === 'dark'
                        ? 'background-color: #262935;'
-                       : 'background-color: #f9f9f9;'
+                       : 'background-color: #ffff;'
                    } }
-                   }} body::-webkit-scrollbar {display: none; }pre, code { font-family: "Roboto Mono", monospace; background-color: transparent !important;  padding: 5px; } body::before { color: #808191 !important; } h2 {color: #ffff!important}
+                   }} body::-webkit-scrollbar   
+                      tox-editor-header { background-color: #f8f8f8; } {display: none; }pre, code { font-family: "Roboto Mono", monospace; background-color: transparent !important;  padding: 5px; } body::before { color: #808191 !important; } h2 {color: #ffff!important}
                    h2 {color: #ffff!important}
                   }
                    `,
