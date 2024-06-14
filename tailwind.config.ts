@@ -43,6 +43,7 @@ const config = {
         },
         error: {
           primary: '#F65E5E',
+          text: '#FF584D',
         },
         darkBorder: 'rgba(57, 62, 79, 0.4)',
         whiteBorder: 'rgba(197, 208, 230, 0.4)',

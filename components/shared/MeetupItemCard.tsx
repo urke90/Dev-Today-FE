@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import BadgeItem from './BadgeItem';
 
+import type { ITag } from '@/types/content';
 import { parseDate } from '@/utils/format';
 
 // ----------------------------------------------------------------
@@ -15,7 +16,7 @@ interface IMeetupItemCardProps {
   location: string;
   meetupDate: Date | null;
   description: string;
-  tags: string[];
+  tags: ITag[];
 }
 
 const MeetupItemCard: React.FC<IMeetupItemCardProps> = ({
@@ -62,8 +63,8 @@ const MeetupItemCard: React.FC<IMeetupItemCardProps> = ({
         </div>
         {tags?.length > 0 ? (
           <ul className="flex gap-2.5 flex-wrap">
-            {tags.map((tag) => (
-              <BadgeItem key={tag} title={tag} />
+            {tags.map(({ id, title }) => (
+              <BadgeItem key={id} title={title} />
             ))}
           </ul>
         ) : null}

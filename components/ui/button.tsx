@@ -21,7 +21,7 @@ const buttonVariants = cva(
         default: {},
         large: 'py-3.5',
         medium: 'py-2.5', // onboarding, login, register
-        small: 'py-2 px-3.5', // profile
+        small: 'py-2', // profile
       },
     },
     defaultVariants: {

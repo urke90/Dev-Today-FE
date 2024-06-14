@@ -1,7 +1,7 @@
 'use client';
 
 import { fetchAllGroups } from '@/api/queries';
-import { EAllContentGroupQueries } from '@/constants/react-query';
+import { EContentGroupQueries } from '@/constants/react-query';
 import { IContent } from '@/types/content';
 import { IAllGroupsResponse } from '@/types/group';
 import { useQuery } from '@tanstack/react-query';
@@ -73,7 +73,7 @@ const GroupHome: React.FC<IGroupHomeProps> = ({
   const [page, setPage] = useState(1);
 
   const { data } = useQuery<IAllGroupsResponse>({
-    queryKey: [EAllContentGroupQueries.FETCH_ALL_GROUPS, page],
+    queryKey: [EContentGroupQueries.FETCH_GROUPS, page],
     queryFn: () => fetchAllGroups(page),
     retry: false,
     enabled: page > 1,
@@ -112,7 +112,7 @@ const GroupHome: React.FC<IGroupHomeProps> = ({
       <main className="main-content mx-auto">
         <div className="flex-between mb-5">
           <h2 className="d2-bold">All Groups</h2>
-          <Button variant="primary" size="small" className="w-auto">
+          <Button variant="primary" size="small" className="w-auto px-3.5">
             <Link href="groups/create">Create a new group</Link>
           </Button>
         </div>

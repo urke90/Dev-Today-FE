@@ -5,6 +5,7 @@ import BadgeItem from './BadgeItem';
 import HeartIcon from '../icons/Heart';
 import { Button } from '../ui/button';
 
+import type { ITag } from '@/types/content';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -15,7 +16,7 @@ interface IPodcastItemCardProps {
   coverImage: string | null;
   title: string;
   description: string;
-  tags: string[];
+  tags: ITag[];
   author: string;
   createdAt: Date;
   isLiked: boolean;
@@ -68,8 +69,8 @@ const PodcastItemCard: React.FC<IPodcastItemCardProps> = ({
         </p>
         {tags?.length > 0 ? (
           <ul className="flex gap-2.5 flex-wrap">
-            {tags.map((tag) => (
-              <BadgeItem key={tag} title={tag} />
+            {tags.map(({ id, title }) => (
+              <BadgeItem key={id} title={title} />
             ))}
           </ul>
         ) : null}

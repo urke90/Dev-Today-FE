@@ -260,10 +260,12 @@ const GroupsPage: React.FC = async () => {
   if (!session) throw new Error('User session is not available!');
 
   const groups = await typedFetch<IAllGroupsResponse>({
-    url: `/groups`,
+    url: '/groups?members=true',
   });
 
   if (!groups) throw new Error('Internal server error!');
+
+  console.log('GROUPS U ROOT GROUPS', groups);
 
   const sidebarItems = {
     posts: postItems,

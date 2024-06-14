@@ -5,9 +5,11 @@ export interface IGroup {
   name: string;
   type: EContentType;
   coverImage: string;
+  profileImage: string;
+  authorId: string;
   bio: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string | null;
+  updatedAt: string | null;
   _count: {
     members: number;
   };

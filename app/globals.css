@@ -111,7 +111,7 @@
     @apply relative top-[92px] max-sm:pb-[100px] pb-7 lg:top-[100px] flex flex-col md:flex-row gap-5 mx-auto;
   }
   .main-content {
-    @apply flex flex-col w-full flex-1 sm:max-w-[80%] shadow-card;
+    @apply flex flex-col w-full flex-1 sm:max-w-[80%] mx-auto;
   }
   .create-page-wrapper {
     @apply flex flex-col gap-[30px] py-[30px] px-3.5 md:p-[30px] top-[92px] lg:top-[100px] relative mx-auto max-w-[900px] max-sm:pb-[110px];

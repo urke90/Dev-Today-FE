@@ -1,4 +1,4 @@
-import { IGroup } from '@/types/group';
+import type { IGroup } from '@/types/group';
 import GroupItemCard from '../shared/GroupItemCard';
 
 // ----------------------------------------------------------------

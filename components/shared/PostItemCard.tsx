@@ -8,6 +8,7 @@ import { Button } from '../ui/button';
 import Image from 'next/image';
 import Link from 'next/link';
 
+import type { ITag } from '@/types/content';
 import { calculateTimeAgo, formatNumberWithCommas } from '@/utils/format';
 
 // ----------------------------------------------------------------
@@ -17,7 +18,7 @@ interface IPostItemCardProps {
   coverImage: string | null;
   title: string;
   description: string;
-  tags: string[];
+  tags: ITag[];
   createdAt: Date;
   author: string;
   viewsCount?: number | null;
@@ -85,8 +86,8 @@ const PostItemCard: React.FC<IPostItemCardProps> = ({
           </div>
           {tags?.length > 0 ? (
             <ul className="flex gap-2.5 flex-wrap">
-              {tags.map((tag) => (
-                <BadgeItem key={tag} title={tag} />
+              {tags.map(({ id, title }) => (
+                <BadgeItem key={id} title={title} />
               ))}
             </ul>
           ) : null}

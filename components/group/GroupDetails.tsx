@@ -1,10 +1,21 @@
+import { IGroup } from '@/types/group';
+import Image from 'next/image';
+import LogoutSecondIcon from '../icons/LogoutSecond';
+import SidebarItemWrapper from '../shared/LeftSidebarItems/SidebarItemWrapper';
+import { Button } from '../ui/button';
+import GroupDropdownMenu from './GroupDropdownMenu';
+
 // ----------------------------------------------------------------
 
-import SidebarItemWrapper from '../shared/LeftSidebarItems/SidebarItemWrapper';
+interface IGroupDetailsProps {
+  group: IGroup;
+}
 
-interface IGroupDetailsProps {}
+const GroupDetails: React.FC<IGroupDetailsProps> = ({ group }) => {
+  console.log('group GROUP DETAIL PAGE', group);
 
-const GroupDetails: React.FC<IGroupDetailsProps> = (props) => {
+  const isGroupMemeber = true;
+
   return (
     <div className="content-wrapper">
       <aside className="left-sidebar">
@@ -42,9 +53,79 @@ const GroupDetails: React.FC<IGroupDetailsProps> = (props) => {
           <SidebarItemWrapper title="Top Ranked" items={[]} />
         </div>
       </aside>
-      <main className="main-content border">MAIN CONTENT</main>
+      <main className="main-content mx-auto">
+        <div className="flex flex-col gap-2.5 bg-light100__dark800 py-4 px-2.5 md:py-2.5 rounded-2xl">
+          <div className="relative w-full h-24 md:h-44">
+            <Image
+              fill
+              src="/assets/icons/image-preview.svg"
+              alt={group.name}
+              objectFit="cover"
+              className="rounded-[10px]"
+            />
+          </div>
+          <div className="flex-between gap-2.5 md:px-2.5">
+            <div className="flex items-center gap-3.5 md:gap-5">
+              <div className="relative size-14 md:size-[70px]">
+                {group.coverImage ? (
+                  <Image
+                    fill
+                    src={group.coverImage}
+                    alt={group.name}
+                    className="rounded-full"
+                  />
+                ) : (
+                  <Image
+                    width={40}
+                    height={40}
+                    src="/assets/icons/image-preview.svg"
+                    alt={group.name}
+                  />
+                )}
+              </div>
+              <div>
+                <p className="p1-bold">{group.name}</p>
+                <p className="p3-regular">
+                  <span className="text-white-400">Created by</span> UROS
+                </p>
+              </div>
+            </div>
+            <div className="flex gap-2.5">
+              <div className="max-md:hidden">
+                <JoinOrLeaveGroupBtn isGroupMemeber={isGroupMemeber} />
+              </div>
+              <GroupDropdownMenu groupId={group.id} />
+            </div>
+          </div>
+          <div className="md:hidden">
+            <JoinOrLeaveGroupBtn isGroupMemeber={isGroupMemeber} />
+          </div>
+        </div>
+      </main>
       <aside className="right-sidebar border">RIGHT SIDEBAR</aside>
     </div>
+  );
+};
+
+const JoinOrLeaveGroupBtn = ({
+  isGroupMemeber,
+}: {
+  isGroupMemeber: boolean;
+}) => {
+  return (
+    <Button
+      size="small"
+      className={`px-4 gap-1 icon-light400__dark300 ${isGroupMemeber ? 'bg-black-700' : 'bg-primary-500'}`}
+    >
+      {isGroupMemeber ? (
+        <>
+          <LogoutSecondIcon />
+          Leave Group
+        </>
+      ) : (
+        'Join group'
+      )}
+    </Button>
   );
 };
 

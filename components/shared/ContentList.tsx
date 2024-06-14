@@ -10,7 +10,7 @@ import { useQuery } from '@tanstack/react-query';
 import { memo, useCallback, useEffect, useState } from 'react';
 
 import { fetchUserContent, fetchUserGroups } from '@/api/queries';
-import { EUserContentGroupQueries } from '@/constants/react-query';
+import { EContentGroupQueries } from '@/constants/react-query';
 import { useInfiniteScroll } from '@/hooks/use-infinite-scroll';
 import { EQueryContentType, type IContent } from '@/types/content';
 import type { IGroup } from '@/types/group';
@@ -28,9 +28,9 @@ const updateContentQueryKey = (contentType: EQueryContentType) => {
     return;
   }
   const FETCH_QUERIES = {
-    post: EUserContentGroupQueries.FETCH_USER_POSTS,
-    meetup: EUserContentGroupQueries.FETCH_USER_MEETUPS,
-    podcast: EUserContentGroupQueries.FETCH_USER_PODCASTS,
+    post: EContentGroupQueries.FETCH_POSTS,
+    meetup: EContentGroupQueries.FETCH_MEETUPS,
+    podcast: EContentGroupQueries.FETCH_PODCASTS,
   };
 
   return FETCH_QUERIES[contentType];
@@ -106,7 +106,7 @@ const ContentList: React.FC<IContentListProps> = ({
     error: groupsError,
     data: groupsData,
   } = useQuery<IGroup[]>({
-    queryKey: [EUserContentGroupQueries.FETCH_USER_GROUPS, userId, page],
+    queryKey: [EContentGroupQueries.FETCH_GROUPS, userId, page],
     queryFn: () => fetchUserGroups(userId, page),
     enabled:
       shouldFetch && contentType === EQueryContentType.GROUP && page !== 1,
