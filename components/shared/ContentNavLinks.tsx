@@ -7,9 +7,13 @@ import { EQueryContentType } from '@/types/content';
 
 // ----------------------------------------------------------------
 
-interface IContentNavLinksProps {}
+interface IContentNavLinksProps {
+  isGroupPage?: boolean;
+}
 
-const ContentNavLinks: React.FC<IContentNavLinksProps> = (props) => {
+const ContentNavLinks: React.FC<IContentNavLinksProps> = ({
+  isGroupPage = false,
+}) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   // staviti default value
@@ -26,7 +30,7 @@ const ContentNavLinks: React.FC<IContentNavLinksProps> = (props) => {
     'p1-medium text-white-400 dark:text-white-300 py-2 px-3.5 rounded-[7px]';
 
   return (
-    <div className="bg-light100__dark800 flex-between mx-auto w-full rounded-lg p-3.5">
+    <div className="bg-light100__dark800 flex-between mx-auto w-full rounded-lg p-3.5 shadow-card">
       <Link
         href={pathname + '?' + updateQueryParams(EQueryContentType.POST)}
         className={`${linkStyles} ${
@@ -57,16 +61,29 @@ const ContentNavLinks: React.FC<IContentNavLinksProps> = (props) => {
       >
         Podcasts
       </Link>
-      <Link
-        href={pathname + '?' + updateQueryParams(EQueryContentType.GROUP)}
-        className={`${linkStyles} ${
-          type === EQueryContentType.GROUP
-            ? 'bg-primary-500 text-white-100 dark:!text-white-100'
-            : ''
-        }`}
-      >
-        Groups
-      </Link>
+      {isGroupPage ? (
+        <Link
+          href={pathname + '?' + updateQueryParams(EQueryContentType.MEMBERS)}
+          className={`${linkStyles} ${
+            type === EQueryContentType.MEMBERS
+              ? 'bg-primary-500 text-white-100 dark:!text-white-100'
+              : ''
+          }`}
+        >
+          Members
+        </Link>
+      ) : (
+        <Link
+          href={pathname + '?' + updateQueryParams(EQueryContentType.GROUP)}
+          className={`${linkStyles} ${
+            type === EQueryContentType.GROUP
+              ? 'bg-primary-500 text-white-100 dark:!text-white-100'
+              : ''
+          }`}
+        >
+          Groups
+        </Link>
+      )}
     </div>
   );
 };

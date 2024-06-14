@@ -11,6 +11,7 @@ export enum EQueryContentType {
   MEETUP = 'meetup',
   PODCAST = 'podcast',
   GROUP = 'group',
+  MEMBERS = 'members',
 }
 
 export interface IContent {

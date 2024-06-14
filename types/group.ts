@@ -1,5 +1,12 @@
 import { EContentType } from './content';
 
+export enum EGroupContentTyps {
+  POST = 'post',
+  MEETUP = 'meetup',
+  PODCAST = 'podcast',
+  MEMBERS = 'members',
+}
+
 export interface IGroup {
   id: string;
   name: string;

@@ -1,6 +1,7 @@
 import { IGroup } from '@/types/group';
 import Image from 'next/image';
 import LogoutSecondIcon from '../icons/LogoutSecond';
+import ContentNavLinks from '../shared/ContentNavLinks';
 import SidebarItemWrapper from '../shared/LeftSidebarItems/SidebarItemWrapper';
 import { Button } from '../ui/button';
 import GroupDropdownMenu from './GroupDropdownMenu';
@@ -12,7 +13,7 @@ interface IGroupDetailsProps {
 }
 
 const GroupDetails: React.FC<IGroupDetailsProps> = ({ group }) => {
-  console.log('group GROUP DETAIL PAGE', group);
+  console.log('group GROUP DETAIL PAGE', group.coverImage);
 
   const isGroupMemeber = true;
 
@@ -53,35 +54,34 @@ const GroupDetails: React.FC<IGroupDetailsProps> = ({ group }) => {
           <SidebarItemWrapper title="Top Ranked" items={[]} />
         </div>
       </aside>
-      <main className="main-content mx-auto">
-        <div className="flex flex-col gap-2.5 bg-light100__dark800 py-4 px-2.5 md:py-2.5 rounded-2xl">
+      <main className="main-content gap-5  mx-auto">
+        <div className="flex flex-col gap-2.5 bg-light100__dark800 py-4 px-2.5 md:py-2.5 rounded-2xl shadow-card">
           <div className="relative w-full h-24 md:h-44">
-            <Image
-              fill
-              src="/assets/icons/image-preview.svg"
-              alt={group.name}
-              objectFit="cover"
-              className="rounded-[10px]"
-            />
+            {group.coverImage ? (
+              <Image
+                fill
+                src={group.coverImage}
+                alt={group.name}
+                className="rounded-[10px] object-cover"
+              />
+            ) : (
+              <Image
+                fill
+                src="/assets/icons/image-preview.svg"
+                alt={group.name}
+                className="rounded-[10px]"
+              />
+            )}
           </div>
           <div className="flex-between gap-2.5 md:px-2.5">
             <div className="flex items-center gap-3.5 md:gap-5">
               <div className="relative size-14 md:size-[70px]">
-                {group.coverImage ? (
-                  <Image
-                    fill
-                    src={group.coverImage}
-                    alt={group.name}
-                    className="rounded-full"
-                  />
-                ) : (
-                  <Image
-                    width={40}
-                    height={40}
-                    src="/assets/icons/image-preview.svg"
-                    alt={group.name}
-                  />
-                )}
+                <Image
+                  fill
+                  src={group.profileImage || '/assets/icons/image-preview.svg'}
+                  alt={group.name}
+                  className="rounded-full"
+                />
               </div>
               <div>
                 <p className="p1-bold">{group.name}</p>
@@ -101,6 +101,7 @@ const GroupDetails: React.FC<IGroupDetailsProps> = ({ group }) => {
             <JoinOrLeaveGroupBtn isGroupMemeber={isGroupMemeber} />
           </div>
         </div>
+        <ContentNavLinks isGroupPage />
       </main>
       <aside className="right-sidebar border">RIGHT SIDEBAR</aside>
     </div>
@@ -115,7 +116,7 @@ const JoinOrLeaveGroupBtn = ({
   return (
     <Button
       size="small"
-      className={`px-4 gap-1 icon-light400__dark300 ${isGroupMemeber ? 'bg-black-700' : 'bg-primary-500'}`}
+      className={`px-4 gap-1 icon-light400__dark300 ${isGroupMemeber ? 'bg-white-200 dark:bg-black-700' : 'bg-primary-500'}`}
     >
       {isGroupMemeber ? (
         <>
