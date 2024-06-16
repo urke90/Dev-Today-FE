@@ -10,6 +10,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { createGroupSchema } from '@/lib/validation';
+import { IGroupUpdate } from '@/types/group';
 import { EUserRole } from '@/types/user';
 import { typedFetch } from '@/utils/api';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -44,7 +45,7 @@ const createGroup = async (
   data: z.infer<typeof createGroupSchema>,
   members: { userId: string; role: EUserRole }[]
 ) => {
-  const result = await typedFetch({
+  await typedFetch({
     url: '/groups/',
     method: 'POST',
     body: {
@@ -56,9 +57,14 @@ const createGroup = async (
       members,
     },
   });
-  return result;
 };
-const CreateGroup = ({ authorId }: { authorId: string }) => {
+const CreateGroup = ({
+  authorId,
+  group,
+}: {
+  authorId: string;
+  group?: IGroupUpdate;
+}) => {
   const [q, setQ] = useState('');
   const [debouncedQ] = useDebounce(q, 700);
   const router = useRouter();
@@ -88,10 +94,10 @@ const CreateGroup = ({ authorId }: { authorId: string }) => {
     resolver: zodResolver(createGroupSchema),
     defaultValues: {
       authorId: authorId,
-      name: '',
-      profileImage: '',
-      coverImage: '',
-      bio: '',
+      name: group?.name || '',
+      profileImage: group?.profileImage || '',
+      coverImage: group?.coverImage || '',
+      bio: group?.bio || '',
       admins: [],
       members: [],
     },
@@ -319,6 +325,21 @@ const CreateGroup = ({ authorId }: { authorId: string }) => {
                   }}
                   isMulti
                   onInputChange={(value) => setQ(value)}
+                  isOptionDisabled={(option) => {
+                    const tooLong = field.value.length >= 10;
+                    if (tooLong) return true;
+
+                    if (
+                      form
+                        .getValues()
+                        .members.filter(
+                          (member) => member.value === option.value
+                        ).length > 0
+                    )
+                      return true;
+
+                    return false;
+                  }}
                   options={userOptions}
                   formatOptionLabel={(option, { context }) => {
                     if (context === 'value') {
@@ -380,7 +401,7 @@ const CreateGroup = ({ authorId }: { authorId: string }) => {
                   isMulti
                   onInputChange={(value) => setQ(value)}
                   isOptionDisabled={(option) => {
-                    const tooLong = field.value.length >= 5;
+                    const tooLong = field.value.length >= 10;
                     if (tooLong) return true;
 
                     if (

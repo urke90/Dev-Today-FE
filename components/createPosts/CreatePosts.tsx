@@ -87,7 +87,7 @@ const CreatePosts = ({
   const editorRef = useRef<any>(null);
 
   const {
-    data: allGroups,
+    data: allGroups = [],
     error: groupsError,
     isLoading: groupsLoading,
   } = useQuery({
@@ -104,12 +104,16 @@ const CreatePosts = ({
     queryFn: () => fetchTags(debouncedTitle),
   });
 
-  const selectGroupOptions = (allGroups as ISelectGroup[])?.map((group) => ({
-    value: group.id,
-    label: group.name,
-    profileImage: group.profileImage,
-    bio: group.bio,
-  }));
+  console.log(allGroups, allTags);
+
+  const selectGroupOptions = (allGroups as ISelectGroup).groups?.map(
+    (group) => ({
+      value: group.id,
+      label: group.name,
+      profileImage: group.profileImage,
+      bio: group.bio,
+    })
+  );
   const selectTagsOptions = (allTags as ITags[])?.map((tag) => ({
     value: tag.id,
     label: tag.title,
@@ -282,7 +286,7 @@ const CreatePosts = ({
               label="Title"
               placeholder="Write a title of the post"
             />
-            <div className="flex flex-col md:flex-row  items-end gap-3">
+            <div className="flex flex-col md:flex-row items-center gap-3">
               <Controller
                 control={form.control}
                 defaultValue={EContentType.POST}
@@ -310,7 +314,7 @@ const CreatePosts = ({
                           alt="arrow-down"
                           width={12}
                           height={5}
-                          className="md:ml-2 mr-5 md:mr-0"
+                          className="md:ml-2 mr-2 md:mr-0"
                         />
                       </div>
                     </Select.Trigger>
@@ -386,7 +390,7 @@ const CreatePosts = ({
                           menu: () =>
                             'bg-white-100 dark:bg-black-800 !shadow-sm ',
                         }}
-                        className="w-full h-full rounded-md dark:!bg-black-800 border dark:border-black-700/50 "
+                        className="w-full h-full !mt-0 rounded-md dark:!bg-black-800 border dark:border-black-700/50 "
                         isLoading={isLoading}
                         isClearable
                         isSearchable
@@ -397,6 +401,13 @@ const CreatePosts = ({
                         components={{ Option }}
                       />
                     </FormControl>
+                    <div>
+                      {form.formState.errors.groupId?.message && (
+                        <p className="text-[14px] text-red-500 dark:text-red-500">
+                          {form.formState.errors.groupId.message}
+                        </p>
+                      )}
+                    </div>
                   </FormItem>
                 )}
               />
