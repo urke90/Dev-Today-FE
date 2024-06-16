@@ -9,7 +9,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { createGroupSchema } from '@/lib/validation';
+import { createGroupSchema, updateGroupSchema } from '@/lib/validation';
 import { IGroupUpdate } from '@/types/group';
 import { EUserRole } from '@/types/user';
 import { typedFetch } from '@/utils/api';
@@ -58,12 +58,31 @@ const createGroup = async (
     },
   });
 };
+
+const updateGroup = async (
+  id: string,
+  data: z.infer<typeof updateGroupSchema>
+) => {
+  await typedFetch({
+    url: `/groups/${id}`,
+    method: 'PATCH',
+    body: {
+      name: data.name,
+      profileImage: data.profileImage,
+      authorId: data.authorId,
+      coverImage: data.coverImage,
+      bio: data.bio,
+      updatedAt: new Date(),
+    },
+  });
+};
+
 const CreateGroup = ({
   authorId,
-  group,
+  editGroup,
 }: {
   authorId: string;
-  group?: IGroupUpdate;
+  editGroup?: IGroupUpdate;
 }) => {
   const [q, setQ] = useState('');
   const [debouncedQ] = useDebounce(q, 700);
@@ -80,10 +99,18 @@ const CreateGroup = ({
 
   const { mutateAsync } = useMutation({
     mutationFn: async ({ data, members }: CreateGroupParams) => {
-      return await createGroup(data, members);
+      await createGroup(data, members);
     },
     mutationKey: ['groups'],
   });
+
+  const { mutateAsync: updateGroupMutation } = useMutation({
+    mutationFn: async (data: z.infer<typeof updateGroupSchema>) => {
+      await updateGroup(editGroup?.id ?? '', data);
+    },
+    mutationKey: ['groups'],
+  });
+
   const userOptions = (users as UserProps[]).map((user) => ({
     label: user.userName,
     value: user.id,
@@ -94,10 +121,10 @@ const CreateGroup = ({
     resolver: zodResolver(createGroupSchema),
     defaultValues: {
       authorId: authorId,
-      name: group?.name || '',
-      profileImage: group?.profileImage || '',
-      coverImage: group?.coverImage || '',
-      bio: group?.bio || '',
+      name: editGroup?.name || '',
+      profileImage: editGroup?.profileImage || '',
+      coverImage: editGroup?.coverImage || '',
+      bio: editGroup?.bio || '',
       admins: [],
       members: [],
     },
@@ -113,13 +140,25 @@ const CreateGroup = ({
     const modifiedAdmins = data.admins.map((admin) => {
       return { userId: admin.value, role: EUserRole.ADMIN };
     });
-
     try {
-      const members = [...modifiedMembers, ...modifiedAdmins];
-      await mutateAsync({ data, members });
+      if (editGroup) {
+        await updateGroupMutation({
+          ...data,
+          id: editGroup?.id ?? '',
+          createdAt: editGroup?.createdAt ?? new Date(),
+          updatedAt: new Date(),
+        });
+        router.push(`/groups/${editGroup.id}`);
+      } else {
+        await mutateAsync({
+          data,
+          members: [...modifiedMembers, ...modifiedAdmins],
+        });
+        router.push('/groups');
+      }
     } catch (error) {
-      console.log('Error creating group', error);
-      throw new Error('Error creating group');
+      console.log(error);
+      throw new Error('Something went wrong');
     }
   };
 
@@ -455,8 +494,12 @@ const CreateGroup = ({
               className=" bg-light100__dark800 hover:!text-white-100 duration-200 hover:bg-primary-500 py-3 w-3/5"
               disabled={form.formState.isSubmitting}>
               {form.formState.isSubmitting
-                ? 'Creating Group...'
-                : 'Create Group'}
+                ? editGroup
+                  ? 'Updating Group...'
+                  : 'Creating Group...'
+                : editGroup
+                  ? 'Update Group'
+                  : 'Create Group'}
             </Button>
           </div>
         </form>

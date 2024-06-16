@@ -16,15 +16,15 @@ const EditGroup = async ({ params }: Props) => {
   const authorId = session.user.id;
   const groupId = params.id;
 
-  const group = await typedFetch<IGroupUpdate>({
+  const editGroup = await typedFetch<IGroupUpdate>({
     url: `/groups/${groupId}`,
   });
 
-  if (!group) throw new Error('Group not available!');
+  if (!editGroup) throw new Error('Group not available!');
 
   return (
     <div className="content-wrapper max-w-[900px]">
-      <CreateGroup authorId={authorId} group={group} />
+      <CreateGroup authorId={authorId} editGroup={editGroup} />
     </div>
   );
 };

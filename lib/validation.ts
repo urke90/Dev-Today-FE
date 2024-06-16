@@ -116,3 +116,14 @@ export const createGroupSchema = z.object({
     )
     .max(5),
 });
+
+export const updateGroupSchema = z.object({
+  id: z.string(),
+  name: z.string().min(1).max(50, 'Group name must be max 50 characters long'),
+  profileImage: z.string().optional(),
+  coverImage: z.string().optional(),
+  bio: z.string().min(1).max(1000, 'Bio must be max 1000 characters long'),
+  authorId: z.string(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});

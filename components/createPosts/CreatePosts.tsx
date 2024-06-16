@@ -29,6 +29,7 @@ import { Editor } from '@tinymce/tinymce-react';
 import { format } from 'date-fns';
 import { CldUploadWidget } from 'next-cloudinary';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import React, { useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
@@ -85,6 +86,7 @@ const CreatePosts = ({
   const [debouncedTitle] = useDebounce(title, 500);
 
   const editorRef = useRef<any>(null);
+  const router = useRouter();
 
   const {
     data: allGroups = [],
@@ -103,8 +105,6 @@ const CreatePosts = ({
     queryKey: ['tags', debouncedTitle],
     queryFn: () => fetchTags(debouncedTitle),
   });
-
-  console.log(allGroups, allTags);
 
   const selectGroupOptions = (allGroups as ISelectGroup).groups?.map(
     (group) => ({
@@ -159,26 +159,52 @@ const CreatePosts = ({
 
       try {
         setIsLoading(true);
-        await typedFetch({
-          url: '/content/post',
-          method: 'POST',
-          body: {
-            authorId: form.getValues('authorId'),
-            title: form.getValues('title'),
-            type: form.getValues('type'),
-            groupId: form.getValues('groupId')?.value,
-            coverImage: form.getValues('coverImage'),
-            description: form.getValues('description'),
-            tags: form.getValues('tags').map((tag) => tag.label),
-          },
-        });
-        form.reset();
-        form.setValue('groupId', {
-          value: '',
-          label: '',
-        });
-        form.setValue('tags', []);
-        toast.success('Post created successfully!');
+        if (editPost) {
+          await typedFetch({
+            url: `/content/post/${editPost.id}`,
+            method: 'PATCH',
+            body: {
+              authorId: form.getValues('authorId'),
+              title: form.getValues('title'),
+              type: form.getValues('type'),
+              groupId: form.getValues('groupId')?.value,
+              coverImage: form.getValues('coverImage'),
+              description: form.getValues('description'),
+              tags: form.getValues('tags').map((tag) => tag.label),
+            },
+          });
+          form.reset();
+          form.setValue('groupId', {
+            value: '',
+            label: '',
+          });
+          form.setValue('tags', []);
+          toast.success('Post updated successfully!');
+          router.push(`/content/${editPost.id}`);
+        } else {
+          setIsLoading(true);
+          await typedFetch({
+            url: '/content/post',
+            method: 'POST',
+            body: {
+              authorId: form.getValues('authorId'),
+              title: form.getValues('title'),
+              type: form.getValues('type'),
+              groupId: form.getValues('groupId')?.value,
+              coverImage: form.getValues('coverImage'),
+              description: form.getValues('description'),
+              tags: form.getValues('tags').map((tag) => tag.label),
+            },
+          });
+          form.reset();
+          form.setValue('groupId', {
+            value: '',
+            label: '',
+          });
+          form.setValue('tags', []);
+          toast.success('Post created successfully!');
+        }
+        router.push('/content');
       } catch (error) {
         console.error(error);
         toast.error('Failed to create post');
@@ -192,40 +218,121 @@ const CreatePosts = ({
       if (!result) throw new Error('Form validation failed');
 
       try {
-        setIsLoading(true);
-        await typedFetch({
-          url: '/content/meetup',
-          method: 'POST',
-          body: {
-            authorId: form.getValues('authorId'),
-            title: form.getValues('title'),
-            type: form.getValues('type'),
-            groupId: form.getValues('groupId').value,
-            coverImage: form.getValues('coverImage'),
-            description: form.getValues('description'),
-            tags: form.getValues('tags').map((tag) => tag.label),
-            meetupLocation: form.getValues('meetupLocation'),
-            meetupDate: form.getValues('meetupDate'),
-          },
-        });
-
-        form.reset();
-        form.setValue('groupId', {
-          value: '',
-          label: '',
-        });
-        form.setValue('tags', []);
-        toast.success('Meetup created successfully!');
+        if (editPost) {
+          await typedFetch({
+            url: `/content/meetup/${editPost.id}`,
+            method: 'PATCH',
+            body: {
+              authorId: form.getValues('authorId'),
+              title: form.getValues('title'),
+              type: form.getValues('type'),
+              groupId: form.getValues('groupId').value,
+              coverImage: form.getValues('coverImage'),
+              description: form.getValues('description'),
+              tags: form.getValues('tags').map((tag) => tag.label),
+              meetupLocation: form.getValues('meetupLocation'),
+              meetupDate: form.getValues('meetupDate'),
+            },
+          });
+          form.reset();
+          form.setValue('groupId', {
+            value: '',
+            label: '',
+          });
+          form.setValue('tags', []);
+          toast.success('Meetup updated successfully!');
+          router.push(`/content/${editPost.id}`);
+        } else {
+          setIsLoading(true);
+          await typedFetch({
+            url: '/content/meetup',
+            method: 'POST',
+            body: {
+              authorId: form.getValues('authorId'),
+              title: form.getValues('title'),
+              type: form.getValues('type'),
+              groupId: form.getValues('groupId').value,
+              coverImage: form.getValues('coverImage'),
+              description: form.getValues('description'),
+              tags: form.getValues('tags').map((tag) => tag.label),
+              meetupLocation: form.getValues('meetupLocation'),
+              meetupDate: form.getValues('meetupDate'),
+            },
+          });
+          form.reset();
+          form.setValue('groupId', {
+            value: '',
+            label: '',
+          });
+          form.setValue('tags', []);
+          toast.success('Meetup created successfully!');
+        }
+        router.push('/content');
       } catch (error) {
         console.error(error);
         toast.error('Failed to create meetup');
-      } finally {
-        setIsLoading(false);
       }
     }
+
     if (watchPostType === EContentType.PODCAST) {
       const result = await form.trigger(['podcastFile', 'podcastTitle']);
       if (!result) return;
+
+      try {
+        if (editPost) {
+          await typedFetch({
+            url: `/content/podcast/${editPost.id}`,
+            method: 'PATCH',
+            body: {
+              authorId: form.getValues('authorId'),
+              title: form.getValues('title'),
+              type: form.getValues('type'),
+              groupId: form.getValues('groupId').value,
+              coverImage: form.getValues('coverImage'),
+              description: form.getValues('description'),
+              tags: form.getValues('tags').map((tag) => tag.label),
+              podcastFile: form.getValues('podcastFile'),
+              podcastTitle: form.getValues('podcastTitle'),
+            },
+          });
+          form.reset();
+          form.setValue('groupId', {
+            value: '',
+            label: '',
+          });
+          form.setValue('tags', []);
+          toast.success('Podcast updated successfully!');
+          router.push(`/content/${editPost.id}`);
+        } else {
+          setIsLoading(true);
+          await typedFetch({
+            url: '/content/podcast',
+            method: 'POST',
+            body: {
+              authorId: form.getValues('authorId'),
+              title: form.getValues('title'),
+              type: form.getValues('type'),
+              groupId: form.getValues('groupId').value,
+              coverImage: form.getValues('coverImage'),
+              description: form.getValues('description'),
+              tags: form.getValues('tags').map((tag) => tag.label),
+              podcastFile: form.getValues('podcastFile'),
+              podcastTitle: form.getValues('podcastTitle'),
+            },
+          });
+          form.reset();
+          form.setValue('groupId', {
+            value: '',
+            label: '',
+          });
+          form.setValue('tags', []);
+          toast.success('Podcast created successfully!');
+          router.push('/content');
+        }
+      } catch (error) {
+        console.error(error);
+        toast.error('Failed to create podcast');
+      }
 
       try {
         setIsLoading(true);
@@ -286,7 +393,8 @@ const CreatePosts = ({
               label="Title"
               placeholder="Write a title of the post"
             />
-            <div className="flex flex-col md:flex-row items-center gap-3">
+            <div
+              className={`flex flex-col md:flex-row ${form.formState.errors && 'items-center'}  items-center gap-3`}>
               <Controller
                 control={form.control}
                 defaultValue={EContentType.POST}
@@ -296,8 +404,9 @@ const CreatePosts = ({
                     value={field.value}
                     onValueChange={field.onChange}>
                     <Select.Trigger
+                      disabled={editPost && true}
                       {...field}
-                      className="flex w-full md:w-1/4 capitalize border dark:border-black-700/50 rounded-md px-2 items-center h-12 bg-white-100 dark:bg-black-800 md:justify-center outline-none"
+                      className={`flex w-full md:w-1/4 ${form.formState.errors.groupId ? '!mt-2' : '!mt-6'} capitalize border dark:border-black-700/50 rounded-md px-2 items-center h-12 bg-white-100 dark:bg-black-800 md:justify-center outline-none`}
                       aria-label="Food">
                       <p className=" p3-regular dark:!text-white-400">Create</p>
                       <span className="mx-1 dark:text-white-100/70 text-black-800/60 ">
@@ -354,63 +463,65 @@ const CreatePosts = ({
                   </Select.Root>
                 )}
               />
+              <div className="w-full space-y-2">
+                <FormLabel>Select Group</FormLabel>
+                <FormField
+                  name="groupId"
+                  control={form.control}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <ReactSelect
+                          instanceId={field.name}
+                          {...field}
+                          placeholder="Select a group..."
+                          defaultValue={field.value}
+                          value={form.watch('groupId')}
+                          onInputChange={(value) => setQ(value)}
+                          styles={{
+                            control: (base) => ({
+                              ...base,
+                              boxShadow: 'none',
+                            }),
+                          }}
+                          classNames={{
+                            input: () =>
+                              '!text-[16px] dark:!text-white-100 text-black-800',
 
-              <FormField
-                name="groupId"
-                control={form.control}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Select Group</FormLabel>
-                    <FormControl>
-                      <ReactSelect
-                        instanceId={field.name}
-                        {...field}
-                        placeholder="Select a group..."
-                        defaultValue={field.value}
-                        value={form.watch('groupId')}
-                        onInputChange={(value) => setQ(value)}
-                        styles={{
-                          control: (base) => ({
-                            ...base,
-                            boxShadow: 'none',
-                          }),
-                        }}
-                        classNames={{
-                          input: () =>
-                            '!text-[16px] dark:!text-white-100 text-black-800',
-
-                          control: () =>
-                            '!border-none dark:bg-black-800 dark:!border-[#393E4F66] md:px-3 h-11',
-                          indicatorSeparator: () => '!hidden',
-                          dropdownIndicator: () =>
-                            '!text-white-400 !w-10 !h-10',
-                          option: () =>
-                            '!bg-white-100  !py-[18px]  dark:!bg-black-800  dark:!text-white-100 !text-black-800',
-                          singleValue: () => 'dark:!text-white-100',
-                          menu: () =>
-                            'bg-white-100 dark:bg-black-800 !shadow-sm ',
-                        }}
-                        className="w-full h-full !mt-0 rounded-md dark:!bg-black-800 border dark:border-black-700/50 "
-                        isLoading={isLoading}
-                        isClearable
-                        isSearchable
-                        onChange={(selectedOption) => {
-                          field.onChange(selectedOption);
-                        }}
-                        options={selectGroupOptions}
-                        components={{ Option }}
-                      />
-                    </FormControl>
-                    <div>
-                      {form.formState.errors.groupId?.message && (
-                        <p className="text-[14px] text-red-500 dark:text-red-500">
-                          {form.formState.errors.groupId.message}
-                        </p>
-                      )}
-                    </div>
-                  </FormItem>
-                )}
-              />
+                            control: () =>
+                              '!border-none dark:bg-black-800 dark:!border-[#393E4F66] md:px-3 h-11',
+                            indicatorSeparator: () => '!hidden',
+                            dropdownIndicator: () =>
+                              '!text-white-400 !w-10 !h-10',
+                            option: () =>
+                              '!bg-white-100  !py-[18px]  dark:!bg-black-800  dark:!text-white-100 !text-black-800',
+                            singleValue: () => 'dark:!text-white-100',
+                            menu: () =>
+                              'bg-white-100 dark:bg-black-800 !shadow-sm ',
+                          }}
+                          className="w-full h-full !mt-0 rounded-md dark:!bg-black-800 border dark:border-black-700/50 "
+                          isLoading={isLoading}
+                          isDisabled={editPost && true}
+                          isClearable
+                          isSearchable
+                          onChange={(selectedOption) => {
+                            field.onChange(selectedOption);
+                          }}
+                          options={selectGroupOptions}
+                          components={{ Option }}
+                        />
+                      </FormControl>
+                      <div>
+                        {form.formState.errors.groupId?.message && (
+                          <p className="text-[14px] text-red-500 dark:text-red-500">
+                            {form.formState.errors.groupId.message}
+                          </p>
+                        )}
+                      </div>
+                    </FormItem>
+                  )}
+                />
+              </div>
             </div>
 
             <FormField
@@ -723,7 +834,7 @@ const CreatePosts = ({
               </p>
             )}
 
-            <div className="flex gap-5 p3-bold ">
+            <div className="flex gap-5 p3-bold">
               <Button
                 onClick={restFrom}
                 type="button"
@@ -733,8 +844,14 @@ const CreatePosts = ({
               <Button
                 type="button"
                 onClick={() => onSubmit()}
-                className=" bg-light100__dark800 hover:!text-white-100 duration-200 hover:bg-primary-500 py-3 w-3/5">
-                {isLoading ? 'Publishing Post...' : 'Publish Post'}
+                className="bg-light100__dark800 hover:!text-white-100 duration-200 hover:bg-primary-500 py-3 w-3/5">
+                {isLoading
+                  ? editPost
+                    ? 'Updating Post...'
+                    : 'Publishing Post...'
+                  : editPost
+                    ? 'Update Post'
+                    : 'Publish Post'}
               </Button>
             </div>
           </form>
