@@ -10,6 +10,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import ContentNavLinks from '../shared/ContentNavLinks';
 import LoadingSpinner from '../shared/LoadingSpinner';
+import Pagination from '../shared/Pagination';
 
 // ----------------------------------------------------------------
 
@@ -212,6 +213,13 @@ const GroupContentWrapper: React.FC<IGroupContentWrapperProps> = ({
           </li>
         )}
       </ul>
+      <Pagination
+        currentPage={page}
+        totalPage={24}
+        disablePrevBtn={page === 1}
+        disableNextBtn={false}
+        setPage={setPage}
+      />
     </>
   );
 };
