@@ -6,14 +6,6 @@ export enum EContentType {
   PODCAST = 'PODCAST',
 }
 
-export enum EQueryContentType {
-  POST = 'post',
-  MEETUP = 'meetup',
-  PODCAST = 'podcast',
-  GROUP = 'group',
-  MEMBERS = 'members',
-}
-
 export interface IContent {
   group: {
     id: string;

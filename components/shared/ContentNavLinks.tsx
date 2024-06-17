@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
 
-import { EQueryContentType } from '@/types/content';
+import { EQueryType } from '@/types/queries';
 
 // ----------------------------------------------------------------
 
@@ -17,7 +17,7 @@ const ContentNavLinks: React.FC<IContentNavLinksProps> = ({
   const pathname = usePathname();
   const searchParams = useSearchParams();
   // staviti default value
-  const type = searchParams.get('type') ?? EQueryContentType.POST;
+  const type = searchParams.get('type') ?? EQueryType.POST;
 
   const updateQueryParams = (value: string) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -27,14 +27,14 @@ const ContentNavLinks: React.FC<IContentNavLinksProps> = ({
   };
 
   const linkStyles =
-    'p1-medium text-white-400 dark:text-white-300 py-2 px-3.5 rounded-[7px]';
+    'p1-medium text-white-400 dark:text-white-300 py-2 px-3.5 rounded-[7px] w-auto';
 
   return (
     <div className="bg-light100__dark800 flex-between mx-auto w-full rounded-lg p-3.5 shadow-card">
       <Link
-        href={pathname + '?' + updateQueryParams(EQueryContentType.POST)}
+        href={pathname + '?' + updateQueryParams(EQueryType.POST)}
         className={`${linkStyles} ${
-          type === EQueryContentType.POST
+          type === EQueryType.POST
             ? 'bg-primary-500 !text-white-100 dark:!text-white-100'
             : ''
         }`}
@@ -42,9 +42,9 @@ const ContentNavLinks: React.FC<IContentNavLinksProps> = ({
         Posts
       </Link>
       <Link
-        href={pathname + '?' + updateQueryParams(EQueryContentType.MEETUP)}
+        href={pathname + '?' + updateQueryParams(EQueryType.MEETUP)}
         className={`${linkStyles} ${
-          type === EQueryContentType.MEETUP
+          type === EQueryType.MEETUP
             ? 'bg-primary-500 text-white-100 dark:!text-white-100'
             : ''
         }`}
@@ -52,9 +52,9 @@ const ContentNavLinks: React.FC<IContentNavLinksProps> = ({
         Meetups
       </Link>
       <Link
-        href={pathname + '?' + updateQueryParams(EQueryContentType.PODCAST)}
+        href={pathname + '?' + updateQueryParams(EQueryType.PODCAST)}
         className={`${linkStyles} ${
-          type === EQueryContentType.PODCAST
+          type === EQueryType.PODCAST
             ? 'bg-primary-500 text-white-100 dark:!text-white-100'
             : ''
         }`}
@@ -63,9 +63,9 @@ const ContentNavLinks: React.FC<IContentNavLinksProps> = ({
       </Link>
       {isGroupPage ? (
         <Link
-          href={pathname + '?' + updateQueryParams(EQueryContentType.MEMBERS)}
+          href={pathname + '?' + updateQueryParams(EQueryType.MEMBERS)}
           className={`${linkStyles} ${
-            type === EQueryContentType.MEMBERS
+            type === EQueryType.MEMBERS
               ? 'bg-primary-500 text-white-100 dark:!text-white-100'
               : ''
           }`}
@@ -74,9 +74,9 @@ const ContentNavLinks: React.FC<IContentNavLinksProps> = ({
         </Link>
       ) : (
         <Link
-          href={pathname + '?' + updateQueryParams(EQueryContentType.GROUP)}
+          href={pathname + '?' + updateQueryParams(EQueryType.GROUP)}
           className={`${linkStyles} ${
-            type === EQueryContentType.GROUP
+            type === EQueryType.GROUP
               ? 'bg-primary-500 text-white-100 dark:!text-white-100'
               : ''
           }`}

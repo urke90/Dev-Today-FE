@@ -2,23 +2,23 @@ import PerformanceItem from './PerformanceItem';
 import ProfileSidebarInfo from './ProfileSidebarInfo';
 import SocialMediaLinks from './SocialMediaLinks';
 
-import ContentList from '../shared/ContentList';
-import ContentNavLinks from '../shared/ContentNavLinks';
-
 import Image from 'next/image';
 
-import { EQueryContentType, IContent } from '@/types/content';
+import type { IContent } from '@/types/content';
 import type { IGroup } from '@/types/group';
+import { EQueryType } from '@/types/queries';
 import type { IProfileUser } from '@/types/user';
 import { calculateTimeAgo } from '@/utils/format';
 import BadgeItem from '../shared/BadgeItem';
+import ContentList from '../shared/ContentList';
+import ContentNavLinks from '../shared/ContentNavLinks';
 import SidebarContentCard from '../shared/RightSidebarItems/SidebarContentCard';
 
 // ----------------------------------------------------------------
 
 interface IProfileHomeProps {
   user: IProfileUser;
-  contentType: EQueryContentType;
+  contentType: EQueryType;
   isPersonalProfile?: boolean;
   isFollowing?: boolean;
   contentItems: IContent[];

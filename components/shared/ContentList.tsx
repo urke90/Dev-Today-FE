@@ -12,8 +12,9 @@ import { memo, useCallback, useEffect, useState } from 'react';
 import { fetchUserContent, fetchUserGroups } from '@/api/queries';
 import { EContentGroupQueries } from '@/constants/react-query';
 import { useInfiniteScroll } from '@/hooks/use-infinite-scroll';
-import { EQueryContentType, type IContent } from '@/types/content';
+import type { IContent } from '@/types/content';
 import type { IGroup } from '@/types/group';
+import { EQueryType } from '@/types/queries';
 import { typedFetch } from '@/utils/api';
 import toast from 'react-hot-toast';
 
@@ -23,8 +24,8 @@ const getShouldFetch = (items: IContent[] | IGroup[]) => {
   return items.length % 6 === 0 && items.length !== 0;
 };
 
-const updateContentQueryKey = (contentType: EQueryContentType) => {
-  if (contentType === EQueryContentType.GROUP) {
+const updateContentQueryKey = (contentType: EQueryType) => {
+  if (contentType === EQueryType.GROUP) {
     return;
   }
   const FETCH_QUERIES = {
@@ -38,7 +39,7 @@ const updateContentQueryKey = (contentType: EQueryContentType) => {
 };
 
 interface IContentListProps {
-  contentType: EQueryContentType;
+  contentType: EQueryType;
   contentItems: IContent[];
   groupItems: IGroup[];
   userId: string;
@@ -83,7 +84,7 @@ const ContentList: React.FC<IContentListProps> = ({
   };
 
   const shouldFetch = getShouldFetch(
-    contentType === EQueryContentType.GROUP ? groups : content
+    contentType === EQueryType.GROUP ? groups : content
   );
 
   const updatePage = useCallback(() => {
@@ -97,8 +98,7 @@ const ContentList: React.FC<IContentListProps> = ({
   } = useQuery<IContent[]>({
     queryKey: [updateContentQueryKey(contentType), contentType, userId, page],
     queryFn: () => fetchUserContent(userId, contentType, page, viewerId),
-    enabled:
-      shouldFetch && contentType !== EQueryContentType.GROUP && page !== 1,
+    enabled: shouldFetch && contentType !== EQueryType.GROUP && page !== 1,
     retry: false,
   });
 
@@ -109,8 +109,7 @@ const ContentList: React.FC<IContentListProps> = ({
   } = useQuery<IGroup[]>({
     queryKey: [EContentGroupQueries.FETCH_GROUPS, userId, page],
     queryFn: () => fetchUserGroups(userId, page),
-    enabled:
-      shouldFetch && contentType === EQueryContentType.GROUP && page !== 1,
+    enabled: shouldFetch && contentType === EQueryType.GROUP && page !== 1,
     retry: false,
   });
 
@@ -141,7 +140,7 @@ const ContentList: React.FC<IContentListProps> = ({
     let renderedContent;
 
     switch (contentType) {
-      case EQueryContentType.POST:
+      case EQueryType.POST:
         {
           styles = 'flex flex-col flex-wrap gap-5';
           renderedContent = content?.map(
@@ -176,7 +175,7 @@ const ContentList: React.FC<IContentListProps> = ({
           );
         }
         break;
-      case EQueryContentType.MEETUP:
+      case EQueryType.MEETUP:
         {
           styles = 'flex flex-col flax-wrap gap-5';
           renderedContent = content?.map(
@@ -195,7 +194,7 @@ const ContentList: React.FC<IContentListProps> = ({
           );
         }
         break;
-      case EQueryContentType.PODCAST:
+      case EQueryType.PODCAST:
         {
           styles = 'grid grid-cols-1 md:grid-cols-2 gap-5';
           renderedContent = content?.map(
@@ -224,7 +223,7 @@ const ContentList: React.FC<IContentListProps> = ({
           );
         }
         break;
-      case EQueryContentType.GROUP:
+      case EQueryType.GROUP:
         {
           styles = 'grid grid-cols-1 md:grid-cols-2 gap-5';
           renderedContent = groups?.map(

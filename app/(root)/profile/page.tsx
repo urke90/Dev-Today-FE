@@ -1,7 +1,8 @@
 import { auth } from '@/app/api/auth/[...nextauth]/route';
 import ProfileHome from '@/components/profile/ProfileHome';
-import { EQueryContentType, type IContent } from '@/types/content';
+import type { IContent } from '@/types/content';
 import type { IGroup } from '@/types/group';
+import { EQueryType } from '@/types/queries';
 import type { IProfileUserResponse } from '@/types/user';
 import { typedFetch } from '@/utils/api';
 import { parseSearchParams } from '@/utils/query';
@@ -19,9 +20,9 @@ const MyProfilePage: React.FC<IMyProfilePageProps> = async ({
   searchParams,
 }) => {
   const page = parseSearchParams(searchParams.page, '1');
-  const contentType = parseSearchParams<EQueryContentType>(
+  const contentType = parseSearchParams<EQueryType>(
     searchParams.type,
-    EQueryContentType.POST
+    EQueryType.POST
   );
 
   const session = await auth();
@@ -32,11 +33,11 @@ const MyProfilePage: React.FC<IMyProfilePageProps> = async ({
     cache: 'no-store',
   });
 
-  if (!userResult.user) return null;
+  if (!userResult.user) throw new Error('User data not available!');
 
   let content: IContent[] = [];
   let groupContent: IGroup[] = [];
-  if (contentType === EQueryContentType.GROUP) {
+  if (contentType === EQueryType.GROUP) {
     groupContent = await typedFetch<IGroup[]>({
       url: `/user/${session.user.id}/groups`,
     });

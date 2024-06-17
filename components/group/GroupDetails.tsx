@@ -1,18 +1,20 @@
 import { IGroup } from '@/types/group';
+import { EQueryType } from '@/types/queries';
 import Image from 'next/image';
 import LogoutSecondIcon from '../icons/LogoutSecond';
-import ContentNavLinks from '../shared/ContentNavLinks';
 import SidebarItemWrapper from '../shared/LeftSidebarItems/SidebarItemWrapper';
 import { Button } from '../ui/button';
+import GroupContentWrapper from './GroupContentWrapper';
 import GroupDropdownMenu from './GroupDropdownMenu';
 
 // ----------------------------------------------------------------
 
 interface IGroupDetailsProps {
   group: IGroup;
+  contentType: EQueryType;
 }
 
-const GroupDetails: React.FC<IGroupDetailsProps> = ({ group }) => {
+const GroupDetails: React.FC<IGroupDetailsProps> = ({ group, contentType }) => {
   console.log('group GROUP DETAIL PAGE', group.coverImage);
 
   const isGroupMemeber = true;
@@ -101,7 +103,7 @@ const GroupDetails: React.FC<IGroupDetailsProps> = ({ group }) => {
             <JoinOrLeaveGroupBtn isGroupMemeber={isGroupMemeber} />
           </div>
         </div>
-        <ContentNavLinks isGroupPage />
+        <GroupContentWrapper contentType={contentType} />
       </main>
       <aside className="right-sidebar border">RIGHT SIDEBAR</aside>
     </div>
