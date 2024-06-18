@@ -22,8 +22,8 @@ const SidebarPostItem: React.FC<ISidebarPostItemProps> = ({
 }) => {
   return (
     <li>
-      <Link href={type + '/' + id} className="flex justify-between ">
-        <div className="flex gap-3.5">
+      <Link href={type + '/' + id} className="flex justify-between">
+        <div className="flex items-center gap-3.5">
           <Image
             src={coverImage || '/assets/icons/image-preview.svg'}
             alt="post"

@@ -25,8 +25,6 @@ const GroupDetailsPage: React.FC<IGroupDetailsPage> = async ({
     EQueryType.POST
   );
 
-  console.log('CONTENT TYPE U GROUPS/:ID', contentType);
-
   const group = await typedFetch<IGroup>({ url: `/groups/${id}` });
   if (!group)
     throw new Error(

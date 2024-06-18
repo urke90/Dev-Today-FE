@@ -28,20 +28,6 @@ export interface IProfileUser {
   contents: IContent[];
 }
 
-// export interface IUserRecentContent {
-//   id: string;
-//   title: string;
-//   description: string;
-//   coverImage: string | null;
-//   meetupDate: Date | null;
-//   tags: ITag[];
-//   type: EContentType;
-//   author: {
-//     name: string;
-//     avatarImg: string;
-//   };
-// }
-
 export interface IProfileUserResponse {
   user: IProfileUser;
   isFollowing: boolean;

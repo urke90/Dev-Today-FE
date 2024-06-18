@@ -1,4 +1,4 @@
-import { EContentType } from './content';
+import { EContentType, IContent } from './content';
 
 export enum EGroupContentTyps {
   POST = 'post',
@@ -18,7 +18,8 @@ export interface IGroup {
   createdAt: string | null;
   updatedAt: string | null;
   _count: {
-    members: number;
+    members?: number;
+    contents?: number;
   };
   members: {
     id: string;
@@ -32,6 +33,15 @@ export interface IAllGroupsResponse {
   hasNextPage: boolean;
   hasPrevPage: boolean;
 }
+
+export interface IAllGroupsSidebarDetails {
+  topRankedGroups: IGroup[];
+  topActiveGroups: IGroup[];
+  meetups: IContent[];
+  podcasts: IContent[];
+  posts: IContent[];
+}
+
 export interface ISelectGroup {
   id: string;
   profileImage: string;

@@ -12,10 +12,6 @@ interface ISidebarContentCardProps<> {
   items: IContent[];
 }
 
-/**
- * This card will be used for rendering PODCAST or POST items in the right sidebar.
- * For Meetups, use MeetupItemCard instead.
- */
 const SidebarContentCard: React.FC<ISidebarContentCardProps> = ({
   title,
   items,
@@ -29,16 +25,7 @@ const SidebarContentCard: React.FC<ISidebarContentCardProps> = ({
       <ul className="flex flex-col gap-5">
         {items?.length > 0
           ? items.map(
-              ({
-                id,
-                author,
-                description,
-                coverImage,
-                meetupDate,
-                tags,
-                title,
-                type,
-              }) => {
+              ({ id, author, coverImage, meetupDate, tags, title, type }) => {
                 switch (type) {
                   case EContentType.POST: {
                     return (
@@ -47,7 +34,7 @@ const SidebarContentCard: React.FC<ISidebarContentCardProps> = ({
                         id={id}
                         coverImage={coverImage}
                         title={title}
-                        author={author.name}
+                        author={author.userName}
                         type={type}
                       />
                     );
@@ -70,8 +57,8 @@ const SidebarContentCard: React.FC<ISidebarContentCardProps> = ({
                       <SidebarPodcastItem
                         key={id}
                         id={id}
-                        author={author}
-                        description={description}
+                        author={author.userName}
+                        coverImage={coverImage}
                         title={title}
                         type={type}
                       />
