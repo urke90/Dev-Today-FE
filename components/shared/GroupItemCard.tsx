@@ -46,7 +46,7 @@ const GroupItemCard: React.FC<IGroupItemCardProps> = ({
             {members?.slice(0, 4).map((member, index) => (
               <div
                 key={index}
-                className="flex-center -ml-3 size-[30px] rounded-full bg-[#F0F1FE]"
+                className="flex-center -ml-3 size-[30px] rounded-full bg-white-600"
               >
                 <Image
                   width={22}
@@ -60,7 +60,7 @@ const GroupItemCard: React.FC<IGroupItemCardProps> = ({
                 />
               </div>
             ))}
-            <div className="cap-8 flex-center text-black-700 dark:bg-black-700 dark:text-white-100 -ml-3 size-[30px] rounded-full bg-[#F0F1FE]">
+            <div className="cap-8 flex-center text-black-700 dark:bg-black-700 dark:text-white-100 -ml-3 size-[30px] rounded-full bg-white-600">
               {members?.length > 120 ? '120+' : members?.length}
             </div>
           </div>

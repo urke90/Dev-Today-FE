@@ -75,7 +75,7 @@ const PodcastItemCard: React.FC<IPodcastItemCardProps> = ({
           </ul>
         ) : null}
         <div className="flex items-center gap-[7px] lg:gap-2.5">
-          <div className="flex-center bg-white-300 relative size-[30px] rounded-full lg:size-[40px] dark:bg-[#F0F1FE]">
+          <div className="flex-center bg-white-300 relative size-[30px] rounded-full lg:size-[40px] dark:bg-white-600">
             <Image
               fill
               src="/assets/images/avatars/avatar-1.svg"

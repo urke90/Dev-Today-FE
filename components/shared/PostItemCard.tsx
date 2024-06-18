@@ -93,7 +93,7 @@ const PostItemCard: React.FC<IPostItemCardProps> = ({
           ) : null}
           <div className="flex-between flex-wrap gap-5">
             <div className="flex">
-              <div className="flex-center mr-2.5 size-[40px] rounded-full bg-[#F0F1FE]">
+              <div className="flex-center mr-2.5 size-[40px] rounded-full bg-white-600">
                 <Image
                   src="/assets/images/avatars/avatar-1.svg"
                   width={28}

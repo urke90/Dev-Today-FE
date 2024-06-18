@@ -1,6 +1,7 @@
 import { IGroup } from '@/types/group';
 import { EQueryType } from '@/types/queries';
 import Image from 'next/image';
+import Link from 'next/link';
 import LogoutSecondIcon from '../icons/LogoutSecond';
 import SidebarItemWrapper from '../shared/LeftSidebarItems/SidebarItemWrapper';
 import { Button } from '../ui/button';
@@ -105,7 +106,62 @@ const GroupDetails: React.FC<IGroupDetailsProps> = ({ group, contentType }) => {
         </div>
         <GroupContentWrapper contentType={contentType} />
       </main>
-      <aside className="right-sidebar border">RIGHT SIDEBAR</aside>
+      <aside className="right-sidebar">
+        <div className="right-sidebar-item">HERE LATEST MEETUPS ADD</div>
+        <div className="right-sidebar-item">
+          <div className="flex-between">
+            <p className="p2-bold">Active Members</p>
+            <Link href="/" className="p4-regular">
+              View All
+            </Link>
+          </div>
+          <ul className="flex flex-wrap gap-x-[21px] gap-y-3">
+            {Array.from({ length: 10 }).map(() => (
+              <li className="flex-center bg-white-600 size-10 rounded-full">
+                <Image
+                  src="/assets/images/avatars/avatar-1.svg"
+                  width={28}
+                  height={34}
+                  alt="USER NAME FOR EXAMPLE?!?!?!"
+                />
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="right-sidebar-item">
+          <div className="flex-between">
+            <p className="p2-bold">Group Admins</p>
+            <Link href="/" className="p4-regular">
+              View All
+            </Link>
+          </div>
+          <ul className="flex flex-col gap-2.5">
+            <li className="flex-between">
+              <div className="flex items-center gap-1.5">
+                <div className="flex-center bg-white-600 size-[30px] rounded-full shrink-0">
+                  <Image
+                    src="/assets/images/avatars/avatar-1.svg"
+                    width={22}
+                    height={28}
+                    alt="USER NAME FOR EXAMPLE?!?!?!"
+                  />
+                </div>
+                <span className="p3-medium !text-black-700 dark:!text-white-300">
+                  Adrian Hajdin
+                </span>
+              </div>
+              <Button className="w-auto">
+                <Image
+                  src="/assets/icons/add-user.svg"
+                  width={18}
+                  height={18}
+                  alt="Add"
+                />
+              </Button>
+            </li>
+          </ul>
+        </div>
+      </aside>
     </div>
   );
 };
