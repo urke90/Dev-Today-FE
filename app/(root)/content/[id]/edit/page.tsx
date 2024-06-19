@@ -1,4 +1,3 @@
-import { auth } from '@/app/api/auth/[...nextauth]/route';
 import CreatePosts from '@/components/createPosts/CreatePosts';
 import { IContent } from '@/types/content';
 import { ISelectGroup } from '@/types/group';
@@ -12,16 +11,15 @@ type Props = {
 
 const EditPost = async ({ params }: Props) => {
   const contentId = params.id;
-  const session = await auth();
-
-  if (!session) throw new Error(' User data not available!');
 
   const allGroups = await typedFetch<ISelectGroup[]>({
     url: `/groups`,
+    cache: 'no-cache',
   });
   if (!allGroups) throw new Error('Groups not available!');
   const editPost = await typedFetch<IContent>({
     url: `/content/${contentId}`,
+    cache: 'no-cache',
   });
 
   return (

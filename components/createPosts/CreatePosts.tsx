@@ -180,7 +180,6 @@ const CreatePosts = ({
           });
           form.setValue('tags', []);
           toast.success('Post updated successfully!');
-          router.push(`/content/${editPost.id}`);
         } else {
           setIsLoading(true);
           await typedFetch({
@@ -204,7 +203,6 @@ const CreatePosts = ({
           form.setValue('tags', []);
           toast.success('Post created successfully!');
         }
-        router.push('/content');
       } catch (error) {
         console.error(error);
         toast.error('Failed to create post');
@@ -241,7 +239,6 @@ const CreatePosts = ({
           });
           form.setValue('tags', []);
           toast.success('Meetup updated successfully!');
-          router.push(`/content/${editPost.id}`);
         } else {
           setIsLoading(true);
           await typedFetch({
@@ -267,7 +264,6 @@ const CreatePosts = ({
           form.setValue('tags', []);
           toast.success('Meetup created successfully!');
         }
-        router.push('/content');
       } catch (error) {
         console.error(error);
         toast.error('Failed to create meetup');
@@ -327,7 +323,6 @@ const CreatePosts = ({
           });
           form.setValue('tags', []);
           toast.success('Podcast created successfully!');
-          router.push('/content');
         }
       } catch (error) {
         console.error(error);
@@ -365,6 +360,11 @@ const CreatePosts = ({
         setIsLoading(false);
       }
     }
+    if (editPost) {
+      router.push(`/content/${editPost.id}`);
+    } else {
+      router.push('/content');
+    }
   };
 
   const handlePreview = () => {
@@ -395,7 +395,7 @@ const CreatePosts = ({
             />
             <div
               className={`flex flex-col md:flex-row ${form.formState.errors && 'items-center'}  items-center gap-3`}>
-              <Controller
+              <FormField
                 control={form.control}
                 defaultValue={EContentType.POST}
                 name="type"

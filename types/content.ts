@@ -20,7 +20,6 @@ export interface IContent {
     name: string;
     coverImage: string;
   };
-  content: IContent;
   id: string;
   type?: EContentType;
   createdAt: Date;
