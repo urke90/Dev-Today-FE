@@ -1,5 +1,5 @@
 import GroupDetails from '@/components/group/GroupDetails';
-import type { IGroup } from '@/types/group';
+import type { IGroupDetailsResponse } from '@/types/group';
 import { EQueryType } from '@/types/queries';
 import { typedFetch } from '@/utils/api';
 import { parseSearchParams } from '@/utils/query';
@@ -25,15 +25,22 @@ const GroupDetailsPage: React.FC<IGroupDetailsPage> = async ({
     EQueryType.POST
   );
 
-  const group = await typedFetch<IGroup>({ url: `/groups/${id}` });
-  if (!group)
+  const groupDetails = await typedFetch<IGroupDetailsResponse>({
+    url: `/groups/${id}?topRankedGroup=true&stats=true&members=true`,
+    cache: 'no-cache',
+  });
+  if (!groupDetails)
     throw new Error(
       'Internal server error. Group details not available at the moment.'
     );
 
   return (
     <section className="px-3.5 lg:px-5">
-      <GroupDetails contentType={contentType} group={group} />
+      <GroupDetails
+        contentType={contentType}
+        group={groupDetails.group}
+        topRankedGroups={groupDetails.topRankedGroups}
+      />
     </section>
   );
 };

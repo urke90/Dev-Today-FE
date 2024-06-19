@@ -1,7 +1,7 @@
 import { auth } from '@/app/api/auth/[...nextauth]/route';
 import ProfileHome from '@/components/profile/ProfileHome';
 import type { IContent } from '@/types/content';
-import type { IGroup } from '@/types/group';
+import type { IProfilePageGroup } from '@/types/group';
 import { EQueryType } from '@/types/queries';
 import type { IProfileUserResponse } from '@/types/user';
 import { typedFetch } from '@/utils/api';
@@ -36,9 +36,9 @@ const MyProfilePage: React.FC<IMyProfilePageProps> = async ({
   if (!userResult.user) throw new Error('User data not available!');
 
   let content: IContent[] = [];
-  let groupContent: IGroup[] = [];
+  let groupContent: IProfilePageGroup[] = [];
   if (contentType === EQueryType.GROUP) {
-    groupContent = await typedFetch<IGroup[]>({
+    groupContent = await typedFetch<IProfilePageGroup[]>({
       url: `/user/${session.user.id}/groups`,
     });
   } else {

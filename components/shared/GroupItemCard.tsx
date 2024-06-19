@@ -14,9 +14,10 @@ interface IGroupItemCardProps {
   title: string;
   description: string;
   members: {
-    id: string;
-    avatarImg?: string;
+    id?: string;
+    avatarImg: string | null;
   }[];
+  totalMembers: number | null;
 }
 
 const GroupItemCard: React.FC<IGroupItemCardProps> = ({
@@ -25,6 +26,7 @@ const GroupItemCard: React.FC<IGroupItemCardProps> = ({
   title,
   description,
   members,
+  totalMembers,
 }) => {
   return (
     <li>
@@ -61,7 +63,7 @@ const GroupItemCard: React.FC<IGroupItemCardProps> = ({
               </div>
             ))}
             <div className="cap-8 flex-center text-black-700 dark:bg-black-700 dark:text-white-100 -ml-3 size-[30px] rounded-full bg-white-600">
-              {members?.length > 120 ? '120+' : members?.length}
+              {totalMembers && totalMembers > 120 ? '120+' : totalMembers}
             </div>
           </div>
           <Button

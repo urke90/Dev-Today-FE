@@ -1,4 +1,4 @@
-import { IGroup } from '@/types/group';
+import type { IDetailsPageGroup, IGroup } from '@/types/group';
 import { EQueryType } from '@/types/queries';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -11,26 +11,32 @@ import GroupDropdownMenu from './GroupDropdownMenu';
 // ----------------------------------------------------------------
 
 interface IGroupDetailsProps {
-  group: IGroup;
+  group: IDetailsPageGroup;
+  topRankedGroups: IGroup[] | undefined;
   contentType: EQueryType;
 }
 
-const GroupDetails: React.FC<IGroupDetailsProps> = ({ group, contentType }) => {
-  console.log('group GROUP DETAIL PAGE', group.coverImage);
+const GroupDetails: React.FC<IGroupDetailsProps> = ({
+  group,
+  contentType,
+  topRankedGroups,
+}) => {
+  console.log('GROUP COVER IMAGE', group.coverImage);
 
   const isGroupMemeber = true;
+
+  // TODO: finish when we merge crate group feature
+  // let transformedProfileImage = group.profileImage;
+  // if (transformedProfileImage.startsWith(CLOUDINARY_URL)) {
+
+  // }
 
   return (
     <div className="content-wrapper">
       <aside className="left-sidebar">
         <div className="left-sidebar-item gap-3">
           <p className="p2-bold">About Group</p>
-          <p className="p4-regular">
-            Master Modern Web Dev With a Project Based Approach. Gain real-world
-            experience and land that dream dev job sooner. Dive into a
-            collaborative learning environment where practical application meets
-            cutting-edge technologies, propelling you towards success
-          </p>
+          <p className="p4-regular">{group.bio}</p>
         </div>
         <div className="left-sidebar-item gap-3">
           <p className="p2-bold">Statistical Highlights</p>
@@ -59,7 +65,9 @@ const GroupDetails: React.FC<IGroupDetailsProps> = ({ group, contentType }) => {
       </aside>
       <main className="main-content gap-5  mx-auto">
         <div className="flex flex-col gap-2.5 bg-light100__dark800 py-4 px-2.5 md:py-2.5 rounded-2xl shadow-card">
-          <div className="relative w-full h-24 md:h-44">
+          <div
+            className={`relative w-full h-24 md:h-44 ${!group.coverImage ? 'flex-center bg-black-700 rounded-[10px]' : ''}`}
+          >
             {group.coverImage ? (
               <Image
                 fill
@@ -69,7 +77,8 @@ const GroupDetails: React.FC<IGroupDetailsProps> = ({ group, contentType }) => {
               />
             ) : (
               <Image
-                fill
+                width={40}
+                height={40}
                 src="/assets/icons/image-preview.svg"
                 alt={group.name}
                 className="rounded-[10px]"
@@ -115,7 +124,7 @@ const GroupDetails: React.FC<IGroupDetailsProps> = ({ group, contentType }) => {
               View All
             </Link>
           </div>
-          <ul className="flex flex-wrap gap-x-[21px] gap-y-3">
+          {/* <ul className="flex flex-wrap gap-x-[21px] gap-y-3">
             {Array.from({ length: 10 }).map(() => (
               <li className="flex-center bg-white-600 size-10 rounded-full">
                 <Image
@@ -126,7 +135,7 @@ const GroupDetails: React.FC<IGroupDetailsProps> = ({ group, contentType }) => {
                 />
               </li>
             ))}
-          </ul>
+          </ul> */}
         </div>
         <div className="right-sidebar-item">
           <div className="flex-between">

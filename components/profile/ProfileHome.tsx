@@ -5,7 +5,7 @@ import SocialMediaLinks from './SocialMediaLinks';
 import Image from 'next/image';
 
 import type { IContent } from '@/types/content';
-import type { IGroup } from '@/types/group';
+import type { IProfilePageGroup } from '@/types/group';
 import { EQueryType } from '@/types/queries';
 import type { IProfileUser } from '@/types/user';
 import { calculateTimeAgo } from '@/utils/format';
@@ -22,7 +22,7 @@ interface IProfileHomeProps {
   isPersonalProfile?: boolean;
   isFollowing?: boolean;
   contentItems: IContent[];
-  groupItems: IGroup[];
+  groupItems: IProfilePageGroup[];
   viewerId: string;
 }
 

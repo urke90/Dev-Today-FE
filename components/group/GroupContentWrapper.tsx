@@ -41,8 +41,6 @@ const GroupContentWrapper: React.FC<IGroupContentWrapperProps> = ({
 }) => {
   const [page, setPage] = useState(2);
 
-  console.log('GroupContentWrapper contentType', contentType);
-
   const {
     isLoading: isLoadingContent,
     error: contentError,

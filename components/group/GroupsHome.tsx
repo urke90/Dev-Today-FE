@@ -3,8 +3,8 @@
 import { fetchAllGroups } from '@/api/queries';
 import { EContentGroupQueries } from '@/constants/react-query';
 import type {
-  IAllGroupsResponse,
   IAllGroupsSidebarDetails,
+  IHomeGroupsResponse,
 } from '@/types/group';
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
@@ -19,18 +19,18 @@ import { Button } from '../ui/button';
 
 // ----------------------------------------------------------------
 
-interface IGroupHomeProps {
-  groupsData: IAllGroupsResponse;
+interface IGroupsHomeProps {
+  groupsData: IHomeGroupsResponse;
   sidebarDetails: IAllGroupsSidebarDetails;
 }
 
-const GroupHome: React.FC<IGroupHomeProps> = ({
+const GroupsHome: React.FC<IGroupsHomeProps> = ({
   groupsData,
   sidebarDetails,
 }) => {
   const [page, setPage] = useState(1);
 
-  const { data } = useQuery<IAllGroupsResponse>({
+  const { data } = useQuery<IHomeGroupsResponse>({
     queryKey: [EContentGroupQueries.FETCH_GROUPS, page],
     queryFn: () => fetchAllGroups(page),
     retry: false,
@@ -81,16 +81,19 @@ const GroupHome: React.FC<IGroupHomeProps> = ({
           </div>
           <ul className="grid grid-cols-2 gap-y-3.5 gap-x-5 mb-5 md:mb-10">
             {data.groups?.length > 0 &&
-              data.groups.map(({ id, coverImage, bio, name, members }) => (
-                <GroupItemCard
-                  key={id}
-                  id={id}
-                  coverImage={coverImage}
-                  description={bio}
-                  title={name}
-                  members={members}
-                />
-              ))}
+              data.groups.map(
+                ({ id, coverImage, bio, name, members, _count }) => (
+                  <GroupItemCard
+                    key={id}
+                    id={id}
+                    coverImage={coverImage}
+                    description={bio}
+                    title={name}
+                    members={members.map((member) => member.user)}
+                    totalMembers={_count.members}
+                  />
+                )
+              )}
           </ul>
           <Pagination
             currentPage={page}
@@ -113,4 +116,4 @@ const GroupHome: React.FC<IGroupHomeProps> = ({
   );
 };
 
-export default GroupHome;
+export default GroupsHome;

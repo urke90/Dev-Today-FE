@@ -13,14 +13,14 @@ import { fetchUserContent, fetchUserGroups } from '@/api/queries';
 import { EContentGroupQueries } from '@/constants/react-query';
 import { useInfiniteScroll } from '@/hooks/use-infinite-scroll';
 import type { IContent } from '@/types/content';
-import type { IGroup } from '@/types/group';
+import type { IProfilePageGroup } from '@/types/group';
 import { EQueryType } from '@/types/queries';
 import { typedFetch } from '@/utils/api';
 import toast from 'react-hot-toast';
 
 // ----------------------------------------------------------------
 
-const getShouldFetch = (items: IContent[] | IGroup[]) => {
+const getShouldFetch = (items: IContent[] | IProfilePageGroup[]) => {
   return items.length % 6 === 0 && items.length !== 0;
 };
 
@@ -41,7 +41,7 @@ const updateContentQueryKey = (contentType: EQueryType) => {
 interface IContentListProps {
   contentType: EQueryType;
   contentItems: IContent[];
-  groupItems: IGroup[];
+  groupItems: IProfilePageGroup[];
   userId: string;
   userName: string;
   viewerId: string;
@@ -56,7 +56,7 @@ const ContentList: React.FC<IContentListProps> = ({
   viewerId,
 }) => {
   const [content, setContent] = useState<IContent[]>(contentItems);
-  const [groups, setGroups] = useState<IGroup[]>(groupItems);
+  const [groups, setGroups] = useState<IProfilePageGroup[]>(groupItems);
   const [page, setPage] = useState(2);
 
   const likeOrDislikeContent = async (
@@ -106,7 +106,7 @@ const ContentList: React.FC<IContentListProps> = ({
     isLoading: isLoadingGroups,
     error: groupsError,
     data: groupsData,
-  } = useQuery<IGroup[]>({
+  } = useQuery<IProfilePageGroup[]>({
     queryKey: [EContentGroupQueries.FETCH_GROUPS, userId, page],
     queryFn: () => fetchUserGroups(userId, page),
     enabled: shouldFetch && contentType === EQueryType.GROUP && page !== 1,
@@ -227,7 +227,7 @@ const ContentList: React.FC<IContentListProps> = ({
         {
           styles = 'grid grid-cols-1 md:grid-cols-2 gap-5';
           renderedContent = groups?.map(
-            ({ id, bio, coverImage, members, name }) => (
+            ({ id, bio, coverImage, members, name, _count }) => (
               <GroupItemCard
                 key={id}
                 id={id}
@@ -235,6 +235,7 @@ const ContentList: React.FC<IContentListProps> = ({
                 title={name}
                 description={bio}
                 members={members}
+                totalMembers={_count.members}
               />
             )
           );
