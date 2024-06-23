@@ -5,9 +5,9 @@ import { Button } from '../ui/button';
 
 type AudioPlayerProps = {
   audioSrc: string;
-  coverImage: string;
-  title: string;
-  audioTitle: string;
+  coverImage?: string;
+  title?: string;
+  audioTitle?: string;
 };
 
 const AudioPlayer = ({
@@ -68,7 +68,7 @@ const AudioPlayer = ({
   const progress = (currentTime / duration) * 100;
 
   return (
-    <div className="flex flex-row sm:py-10 gap-2 items-start  md:items-center p-4 bg-white-200 dark:bg-black-800 rounded-lg shadow-md">
+    <div className="flex flex-row sm:py-10 gap-4 items-start  md:items-center p-4 bg-white-200 dark:bg-black-800 rounded-lg shadow-md">
       <div className="flex justify-start xs:ml-5 md:ml-0 relative space-x-4 w-2/5">
         <div
           className={`z-10 rounded-lg size-12 xs:size-16 sm:size-20 md:size-28 lg:size-36 ${isPlaying && audioSrc && 'animate-bounce'}`}>
@@ -98,7 +98,7 @@ const AudioPlayer = ({
               max={100}
               className="relative h-2 w-full bg-white-300/40 dark:bg-black-700 rounded-lg">
               <Progress.Indicator
-                className={`h-full ${!audioSrc ? 'dark:bg-black-700' : 'bg-primary-500'} rounded-lg`}
+                className={`h-full ${audioSrc ? 'dark:bg-black-700' : 'bg-primary-500'}  rounded-lg`}
                 style={{ width: `${progress}%` }}
               />
             </Progress.Root>

@@ -1,7 +1,10 @@
 'use client';
 import ParseHtml from '@/components/ParseHtml/ParseHtml';
+import AudioPlayer from '@/components/audioPlayer/AudioPlayer';
+import Comments from '@/components/comments/Comments';
 import { Button } from '@/components/ui/button';
-import { IContent } from '@/types/content';
+import { EContentType, IContent } from '@/types/content';
+import { IProfileUser } from '@/types/user';
 import {
   Content,
   DropdownMenu,
@@ -21,22 +24,56 @@ type TagProps = {
 
 type ContentDetailsProps = {
   content: IContent;
+  getAuthorDetails: {
+    isFollowing: boolean;
+    user: IProfileUser;
+  };
 };
 
-const ContentDetails = ({ content }: ContentDetailsProps) => {
-  console.log(content);
+const ContentDetails = ({ content, getAuthorDetails }: ContentDetailsProps) => {
   const router = useRouter();
   return (
-    <div className="main-content p1-bold w-full space-y-5">
-      <Image
-        src={content?.coverImage || ` /assets/images/meetup-example.svg`}
-        width={100}
-        height={100}
-        alt="post example"
-        className="rounded-2xl w-full min-h-[232px] h-[300px] object-cover"
-      />
+    <div className="main-content p1-bold w-full mx-auto md:mx-0  space-y-5">
+      {content?.type === EContentType.PODCAST && (
+        <AudioPlayer
+          audioSrc={content.podcastFile!}
+          title={content.title}
+          audioTitle={content.podcastTitle!}
+          coverImage={content.coverImage!}
+        />
+      )}
+      {content?.type !== EContentType.PODCAST && (
+        <Image
+          src={content?.coverImage || ` /assets/images/meetup-example.svg`}
+          width={100}
+          height={100}
+          layout="responsive"
+          alt="post example"
+          className="rounded-2xl w-full min-h-[232px] max-h-[300px] object-cover"
+        />
+      )}
       <div className="flex items-center justify-between">
-        <h2 className="d2-bold">{content?.title || 'No title'}</h2>
+        {content?.type === EContentType.MEETUP && (
+          <>
+            <div className="flex gap-2 max-w-3xl">
+              <Image
+                src={
+                  getAuthorDetails.user?.avatarImg ||
+                  '/assets/images/post-example.svg'
+                }
+                alt="avatar"
+                width={72}
+                height={72}
+                className="rounded-md"
+              />
+              <h2 className="d2-bold">{content?.title || 'Title'}</h2>
+            </div>
+          </>
+        )}
+
+        {content?.type !== EContentType.MEETUP && (
+          <h2 className="d2-bold">{content?.title || 'Title'}</h2>
+        )}
         <DropdownMenu>
           <Trigger asChild>
             <Button className="w-auto">
@@ -78,7 +115,7 @@ const ContentDetails = ({ content }: ContentDetailsProps) => {
         </DropdownMenu>
       </div>
       <div>
-        <ul className="flex gap-2">
+        <ul className="flex flex-wrap gap-2">
           {content?.tags.map((tag: TagProps) => (
             <li
               key={tag.id}
@@ -89,6 +126,39 @@ const ContentDetails = ({ content }: ContentDetailsProps) => {
         </ul>
       </div>
       <ParseHtml data={content?.description} />
+
+      {content?.type === EContentType.MEETUP && (
+        <>
+          <div className="flex gap-2">
+            <Image
+              src="/assets/icons/calendar-primary.svg"
+              alt="Preview"
+              width={20}
+              height={20}
+            />
+            <p className="p3-medium">
+              {content?.meetupDate &&
+                new Date(content.meetupDate).toLocaleDateString('en-US', {
+                  weekday: 'long',
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                  hour: 'numeric',
+                })}
+            </p>
+          </div>
+          <div className="flex gap-2">
+            <Image
+              src="/assets/icons/location-primary.svg"
+              alt="Preview"
+              width={20}
+              height={20}
+            />
+            <p className="p3-medium">{content?.meetupLocation}</p>
+          </div>
+        </>
+      )}
+      <Comments />
     </div>
   );
 };

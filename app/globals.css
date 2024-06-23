@@ -267,3 +267,8 @@ input:-webkit-autofill:active {
     transform: rotate(-360deg);
   }
 }
+
+input[type='time']::-webkit-calendar-picker-indicator {
+  background-color: rgb(110, 110, 110);
+  border-radius: 50%;
+}

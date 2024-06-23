@@ -1,5 +1,5 @@
 import CreatePosts from '@/components/createPosts/CreatePosts';
-import { IContent } from '@/types/content';
+import { IContent } from '@/lib/validation';
 import { ISelectGroup } from '@/types/group';
 import { typedFetch } from '@/utils/api';
 
@@ -21,6 +21,8 @@ const EditPost = async ({ params }: Props) => {
     url: `/content/${contentId}`,
     cache: 'no-cache',
   });
+
+  if (!editPost) throw new Error('Post not available!');
 
   return (
     <div className="content-wrapper max-w-[900px]">

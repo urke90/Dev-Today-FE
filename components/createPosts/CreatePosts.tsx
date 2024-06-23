@@ -1,4 +1,13 @@
 'use client';
+import {
+  createContent,
+  createMeetupContent,
+  createPodcastContent,
+  updateContent,
+  updateMeetupContent,
+  updatePodcastContent,
+} from '@/api/mutation';
+import { fetchCreateGroups, fetchTags } from '@/api/queries';
 import RHFInput from '@/components/RHFInputs/RHFInput';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
@@ -18,13 +27,18 @@ import {
 import { postTypes } from '@/constants';
 import { useTheme } from '@/context/ThemeProvider';
 import { cn } from '@/lib/utils';
-import { createContentSchema } from '@/lib/validation';
-import { EContentType, IContent } from '@/types/content';
+import {
+  IContent,
+  IMeetup,
+  IPodcast,
+  IPost,
+  postSchema,
+} from '@/lib/validation';
+import { EContentType } from '@/types/content';
 import { ISelectGroup, ITags } from '@/types/group';
-import { typedFetch } from '@/utils/api';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as Select from '@radix-ui/react-select';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { Editor } from '@tinymce/tinymce-react';
 import { format } from 'date-fns';
 import { CldUploadWidget } from 'next-cloudinary';
@@ -36,8 +50,10 @@ import { toast } from 'react-hot-toast';
 import ReactSelect, { components } from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 import { useDebounce } from 'use-debounce';
-import { z } from 'zod';
 import Preview from '../preview/Preview';
+import { Input } from '../ui/input';
+
+import { revalidate } from '@/lib/actions/revalidate';
 
 type SelectItemProps = {
   value: string;
@@ -54,29 +70,11 @@ type ContentProps = {
   editPost?: IContent;
 };
 
-const fetchGroups = async (query: string) => {
-  const result = await typedFetch({
-    url: `/groups?q=${query}`,
-    method: 'GET',
-  });
-  return result;
-};
-
-const fetchTags = async (query: string) => {
-  const result = await typedFetch({
-    url: `/content/tags?title=${query}`,
-    method: 'GET',
-  });
-  return result;
-};
-
-const CreatePosts = ({
-  authorId,
-
-  editPost,
-}: ContentProps) => {
+const CreatePosts = ({ authorId, editPost }: ContentProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isPreview, setIsPreview] = useState(false);
+
+  console.log(editPost);
 
   const [q, setQ] = useState('');
   const [title, setTitle] = useState('');
@@ -94,8 +92,17 @@ const CreatePosts = ({
     isLoading: groupsLoading,
   } = useQuery({
     queryKey: ['groups', debouncedQ],
-    queryFn: () => fetchGroups(debouncedQ),
+    queryFn: () => fetchCreateGroups(debouncedQ),
   });
+
+  const restFrom = () => {
+    form.reset();
+    form.setValue('groupId', {
+      value: '',
+      label: '',
+    });
+    form.setValue('tags', []);
+  };
 
   const {
     data: allTags,
@@ -104,6 +111,42 @@ const CreatePosts = ({
   } = useQuery({
     queryKey: ['tags', debouncedTitle],
     queryFn: () => fetchTags(debouncedTitle),
+  });
+
+  const { mutateAsync } = useMutation({
+    mutationFn: async (data: IPost) => {
+      await createContent(data);
+    },
+  });
+
+  const { mutateAsync: updateContentMutation } = useMutation({
+    mutationFn: async (data: IPost) => {
+      await updateContent(editPost.id, data);
+    },
+  });
+
+  const { mutateAsync: createMeetupMutation } = useMutation({
+    mutationFn: async (data: IMeetup) => {
+      await createMeetupContent(data);
+    },
+  });
+
+  const { mutateAsync: updateMeetupMutation } = useMutation({
+    mutationFn: async (data: IMeetup) => {
+      await updateMeetupContent(editPost.id, data);
+    },
+  });
+
+  const { mutateAsync: createPodcastMutation } = useMutation({
+    mutationFn: async (data: IPodcast) => {
+      await createPodcastContent(data);
+    },
+  });
+
+  const { mutateAsync: updatePodcastMutation } = useMutation({
+    mutationFn: async (data: IPodcast) => {
+      await updatePodcastContent(editPost.id, data);
+    },
   });
 
   const selectGroupOptions = (allGroups as ISelectGroup).groups?.map(
@@ -119,8 +162,8 @@ const CreatePosts = ({
     label: tag.title,
   }));
 
-  const form = useForm<z.infer<typeof createContentSchema>>({
-    resolver: zodResolver(createContentSchema),
+  const form = useForm<IPost & IMeetup & IPodcast>({
+    resolver: zodResolver(postSchema),
     defaultValues: {
       authorId: editPost?.authorId ?? authorId,
       title: editPost?.title ?? '',
@@ -147,6 +190,25 @@ const CreatePosts = ({
   const watchCoverImage = form.watch('coverImage');
 
   const onSubmit = async () => {
+    const commonData: IPost = {
+      authorId: form.getValues('authorId'),
+      title: form.getValues('title'),
+      type: form.getValues('type'),
+      groupId: form.getValues('groupId')?.value,
+      coverImage: form.getValues('coverImage'),
+      description: form.getValues('description'),
+      tags: form.getValues('tags').map((tag) => tag.label),
+    };
+
+    const resetForm = () => {
+      form.reset();
+      form.setValue('groupId', {
+        value: '',
+        label: '',
+      });
+      form.setValue('tags', []);
+    };
+
     if (watchPostType === EContentType.POST) {
       const result = await form.trigger([
         'title',
@@ -160,47 +222,18 @@ const CreatePosts = ({
       try {
         setIsLoading(true);
         if (editPost) {
-          await typedFetch({
-            url: `/content/post/${editPost.id}`,
-            method: 'PATCH',
-            body: {
-              authorId: form.getValues('authorId'),
-              title: form.getValues('title'),
-              type: form.getValues('type'),
-              groupId: form.getValues('groupId')?.value,
-              coverImage: form.getValues('coverImage'),
-              description: form.getValues('description'),
-              tags: form.getValues('tags').map((tag) => tag.label),
-            },
+          await updateContentMutation({
+            ...commonData,
           });
-          form.reset();
-          form.setValue('groupId', {
-            value: '',
-            label: '',
-          });
-          form.setValue('tags', []);
+          revalidate(`/content/${editPost.id}`);
+          resetForm();
           toast.success('Post updated successfully!');
         } else {
           setIsLoading(true);
-          await typedFetch({
-            url: '/content/post',
-            method: 'POST',
-            body: {
-              authorId: form.getValues('authorId'),
-              title: form.getValues('title'),
-              type: form.getValues('type'),
-              groupId: form.getValues('groupId')?.value,
-              coverImage: form.getValues('coverImage'),
-              description: form.getValues('description'),
-              tags: form.getValues('tags').map((tag) => tag.label),
-            },
-          });
-          form.reset();
-          form.setValue('groupId', {
-            value: '',
-            label: '',
-          });
-          form.setValue('tags', []);
+          await mutateAsync(commonData);
+          revalidate('/content');
+          resetForm();
+
           toast.success('Post created successfully!');
         }
       } catch (error) {
@@ -217,51 +250,22 @@ const CreatePosts = ({
 
       try {
         if (editPost) {
-          await typedFetch({
-            url: `/content/meetup/${editPost.id}`,
-            method: 'PATCH',
-            body: {
-              authorId: form.getValues('authorId'),
-              title: form.getValues('title'),
-              type: form.getValues('type'),
-              groupId: form.getValues('groupId').value,
-              coverImage: form.getValues('coverImage'),
-              description: form.getValues('description'),
-              tags: form.getValues('tags').map((tag) => tag.label),
-              meetupLocation: form.getValues('meetupLocation'),
-              meetupDate: form.getValues('meetupDate'),
-            },
+          await updateMeetupMutation({
+            ...commonData,
+            meetupLocation: form.getValues('meetupLocation'),
+            meetupDate: form.getValues('meetupDate'),
           });
           form.reset();
-          form.setValue('groupId', {
-            value: '',
-            label: '',
-          });
-          form.setValue('tags', []);
           toast.success('Meetup updated successfully!');
         } else {
           setIsLoading(true);
-          await typedFetch({
-            url: '/content/meetup',
-            method: 'POST',
-            body: {
-              authorId: form.getValues('authorId'),
-              title: form.getValues('title'),
-              type: form.getValues('type'),
-              groupId: form.getValues('groupId').value,
-              coverImage: form.getValues('coverImage'),
-              description: form.getValues('description'),
-              tags: form.getValues('tags').map((tag) => tag.label),
-              meetupLocation: form.getValues('meetupLocation'),
-              meetupDate: form.getValues('meetupDate'),
-            },
+          await createMeetupMutation({
+            ...commonData,
+            meetupLocation: form.getValues('meetupLocation'),
+            meetupDate: form.getValues('meetupDate'),
           });
+
           form.reset();
-          form.setValue('groupId', {
-            value: '',
-            label: '',
-          });
-          form.setValue('tags', []);
           toast.success('Meetup created successfully!');
         }
       } catch (error) {
@@ -276,83 +280,24 @@ const CreatePosts = ({
 
       try {
         if (editPost) {
-          await typedFetch({
-            url: `/content/podcast/${editPost.id}`,
-            method: 'PATCH',
-            body: {
-              authorId: form.getValues('authorId'),
-              title: form.getValues('title'),
-              type: form.getValues('type'),
-              groupId: form.getValues('groupId').value,
-              coverImage: form.getValues('coverImage'),
-              description: form.getValues('description'),
-              tags: form.getValues('tags').map((tag) => tag.label),
-              podcastFile: form.getValues('podcastFile'),
-              podcastTitle: form.getValues('podcastTitle'),
-            },
+          await updatePodcastMutation({
+            ...commonData,
+            podcastFile: form.getValues('podcastFile'),
+            podcastTitle: form.getValues('podcastTitle'),
           });
-          form.reset();
-          form.setValue('groupId', {
-            value: '',
-            label: '',
-          });
-          form.setValue('tags', []);
+          resetForm();
           toast.success('Podcast updated successfully!');
           router.push(`/content/${editPost.id}`);
         } else {
           setIsLoading(true);
-          await typedFetch({
-            url: '/content/podcast',
-            method: 'POST',
-            body: {
-              authorId: form.getValues('authorId'),
-              title: form.getValues('title'),
-              type: form.getValues('type'),
-              groupId: form.getValues('groupId').value,
-              coverImage: form.getValues('coverImage'),
-              description: form.getValues('description'),
-              tags: form.getValues('tags').map((tag) => tag.label),
-              podcastFile: form.getValues('podcastFile'),
-              podcastTitle: form.getValues('podcastTitle'),
-            },
-          });
-          form.reset();
-          form.setValue('groupId', {
-            value: '',
-            label: '',
-          });
-          form.setValue('tags', []);
-          toast.success('Podcast created successfully!');
-        }
-      } catch (error) {
-        console.error(error);
-        toast.error('Failed to create podcast');
-      }
-
-      try {
-        setIsLoading(true);
-        await typedFetch({
-          url: '/content/podcast',
-          method: 'POST',
-          body: {
-            authorId: form.getValues('authorId'),
-            title: form.getValues('title'),
-            type: form.getValues('type'),
-            groupId: form.getValues('groupId').value,
-            coverImage: form.getValues('coverImage'),
-            description: form.getValues('description'),
-            tags: form.getValues('tags').map((tag) => tag.label),
+          await createPodcastMutation({
+            ...commonData,
             podcastFile: form.getValues('podcastFile'),
             podcastTitle: form.getValues('podcastTitle'),
-          },
-        });
-        form.reset();
-        form.setValue('groupId', {
-          value: '',
-          label: '',
-        });
-        form.setValue('tags', []);
-        toast.success('Podcast created successfully!');
+          });
+          resetForm();
+          toast.success('Podcast created successfully!');
+        }
       } catch (error) {
         console.error(error);
         toast.error('Failed to create podcast');
@@ -363,7 +308,6 @@ const CreatePosts = ({
     if (editPost) {
       router.push(`/content/${editPost.id}`);
     } else {
-      router.push('/content');
     }
   };
 
@@ -371,15 +315,6 @@ const CreatePosts = ({
     const content = editorRef.current.getContent();
     form.setValue('description', content);
     setIsPreview(true);
-  };
-
-  const restFrom = () => {
-    form.reset();
-    form.setValue('groupId', {
-      value: '',
-      label: '',
-    });
-    form.setValue('tags', []);
   };
 
   return (
@@ -624,7 +559,7 @@ const CreatePosts = ({
                             height={18}
                           />
                           {field.value ? (
-                            format(field.value, 'PPP')
+                            format(field.value, 'MMMM dd, yyyy hh:mm a')
                           ) : (
                             <span className="text-white-400">
                               Pick a date of the meetup
@@ -632,13 +567,29 @@ const CreatePosts = ({
                           )}
                         </Button>
                       </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0 rounded-none border-white-400">
+                      <PopoverContent className="w-auto p-0 px-2 bg-white-100 dark:bg-black-800 pb-5  rounded-none space-y-3 border-white-400">
                         <Calendar
                           className="bg-white-100 dark:bg-black-800 p4-regular "
                           mode="single"
                           selected={field.value}
                           onSelect={field.onChange}
                           initialFocus
+                        />
+                        <Input
+                          type="time"
+                          defaultValue="09:00"
+                          min="09:00"
+                          max="18:00"
+                          onChange={(event) => {
+                            const currentDate = new Date(field.value);
+                            const newDate = new Date(
+                              currentDate.toDateString() +
+                                ' ' +
+                                event.target.value
+                            );
+
+                            field.onChange(newDate);
+                          }}
                         />
                       </PopoverContent>
                     </Popover>

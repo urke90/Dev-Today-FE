@@ -10,7 +10,7 @@ type ContentProps = {
 
 const LeftSideBar = ({ content, authorName }: ContentProps) => {
   return (
-    <aside className="left-sidebar !p-0 ">
+    <>
       <div className="bg-light100__dark800 space-y-5 p-5  rounded-2xl ">
         <div className="flex items-center gap-2">
           <div className="flex items-center bg-white-100 rounded">
@@ -62,7 +62,7 @@ const LeftSideBar = ({ content, authorName }: ContentProps) => {
         <span className="text-blue-500">{authorName} </span> Posted on <br />
         {formatDate(content?.createdAt)}
       </div>
-    </aside>
+    </>
   );
 };
 export default LeftSideBar;

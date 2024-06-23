@@ -1,5 +1,4 @@
 import { Button } from '@/components/ui/button';
-import { IContent } from '@/types/content';
 import { IProfileUser } from '@/types/user';
 import { calculateTimeAgo, getFirstName } from '@/utils/format';
 import { ArrowRight, ArrowRightIcon } from 'lucide-react';
@@ -7,14 +6,13 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 type RightSidebarProps = {
-  content: IContent;
   getAuthorDetails: {
     isFollowing: boolean;
     user: IProfileUser;
   };
 };
 
-const RightSideBar = ({ content, getAuthorDetails }: RightSidebarProps) => {
+const RightSideBar = ({ getAuthorDetails }: RightSidebarProps) => {
   return (
     <aside className="p1-bold right-sidebar w-full">
       <div className="flex flex-col bg-light100__dark800 rounded-2xl items-center p-4 space-y-5">
@@ -51,7 +49,7 @@ const RightSideBar = ({ content, getAuthorDetails }: RightSidebarProps) => {
           <ArrowRight size={20} />
         </div>
         {getAuthorDetails.user?.contents.map((content) => (
-          <Link href="" className="flex ">
+          <Link key={content.id} href={`${content.id}`} className="flex ">
             <div className="flex gap-3.5">
               <Image
                 src={content.coverImage || '/assets/images/no-image.svg'}

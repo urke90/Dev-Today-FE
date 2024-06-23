@@ -1,4 +1,6 @@
 'use client';
+import { createGroup, updateGroup } from '@/api/mutation';
+import { fetchUsers } from '@/api/queries';
 import RHFInput from '@/components/RHFInputs/RHFInput';
 import { Button } from '@/components/ui/button';
 import {
@@ -12,7 +14,6 @@ import {
 import { createGroupSchema, updateGroupSchema } from '@/lib/validation';
 import { IGroupUpdate } from '@/types/group';
 import { EUserRole } from '@/types/user';
-import { typedFetch } from '@/utils/api';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { CldUploadWidget } from 'next-cloudinary';
@@ -32,49 +33,6 @@ type UserProps = {
 type CreateGroupParams = {
   data: z.infer<typeof createGroupSchema>;
   members: { userId: string; role: EUserRole }[];
-};
-
-const fetchUsers = async (query: string) => {
-  const result = await typedFetch({
-    url: `/user?q=${query}&limit=5`,
-  });
-  return result;
-};
-
-const createGroup = async (
-  data: z.infer<typeof createGroupSchema>,
-  members: { userId: string; role: EUserRole }[]
-) => {
-  await typedFetch({
-    url: '/groups/',
-    method: 'POST',
-    body: {
-      authorId: data.authorId,
-      name: data.name,
-      profileImage: data.profileImage,
-      coverImage: data.coverImage,
-      bio: data.bio,
-      members,
-    },
-  });
-};
-
-const updateGroup = async (
-  id: string,
-  data: z.infer<typeof updateGroupSchema>
-) => {
-  await typedFetch({
-    url: `/groups/${id}`,
-    method: 'PATCH',
-    body: {
-      name: data.name,
-      profileImage: data.profileImage,
-      authorId: data.authorId,
-      coverImage: data.coverImage,
-      bio: data.bio,
-      updatedAt: new Date(),
-    },
-  });
 };
 
 const CreateGroup = ({

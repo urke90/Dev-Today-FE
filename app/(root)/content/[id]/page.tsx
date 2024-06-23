@@ -36,13 +36,18 @@ const Content = async (props: ParamsProps) => {
   authorName = getFirstName(authorName);
 
   return (
-    <div className="content-wrapper">
-      <LeftSideBar content={contentDetails} authorName={authorName} />
-      <ContentDetails content={contentDetails} />
-      <RightSideBar
-        content={contentDetails}
+    <div className="content-wrapper px-4">
+      <div className="left-sidebar !hidden lg:!flex !p-0">
+        <LeftSideBar content={contentDetails} authorName={authorName} />
+      </div>
+      <ContentDetails
         getAuthorDetails={getAuthorDetails}
+        content={contentDetails}
       />
+      <div className="left-sidebar  w-full lg:hidden !p-0">
+        <LeftSideBar content={contentDetails} authorName={authorName} />
+      </div>
+      <RightSideBar getAuthorDetails={getAuthorDetails} />
     </div>
   );
 };
