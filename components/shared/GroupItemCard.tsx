@@ -45,7 +45,7 @@ const GroupItemCard: React.FC<IGroupItemCardProps> = ({
         <p className="p3-regular line-clamp-3">{description}</p>
         <div className="flex-between">
           <div className="ml-3 flex">
-            {members?.slice(0, 4).map((member, index) => (
+            {members.map((member, index) => (
               <div
                 key={index}
                 className="flex-center -ml-3 size-[30px] rounded-full bg-white-600"

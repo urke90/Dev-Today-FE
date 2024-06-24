@@ -18,6 +18,14 @@
     --background-end-rgb: 0, 0, 0;
   }
 }
+
+@layer base {
+  img {
+    /* width: auto; */
+    height: auto;
+  }
+}
+
 @layer utilities {
   /* TYPOGRAPHY  */
   .d1-bold {

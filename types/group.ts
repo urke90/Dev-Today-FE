@@ -1,4 +1,4 @@
-import { EContentType, IContent } from './content';
+import { IContent } from './content';
 import { EUserRole } from './user';
 
 export enum EGroupContentTyps {
@@ -11,9 +11,10 @@ export enum EGroupContentTyps {
 export interface IGroup {
   id: string;
   name: string;
-  type: EContentType;
+  // type: EContentType;
   coverImage: string;
   profileImage: string;
+  contents: IContent[];
   authorId: string;
   bio: string;
   createdAt: string | null;
@@ -27,6 +28,12 @@ export interface IGroup {
   //   id: string;
   //   avatarImg?: string;
   // }[];
+}
+
+export interface IGroupWithCount extends IGroup {
+  _count: {
+    [key: string]: number;
+  };
 }
 
 export interface IProfilePageGroup extends IGroup {
@@ -50,7 +57,7 @@ export interface IGroupsHomePageGroup extends IGroup {
   };
 }
 
-export interface IHomeGroupsResponse {
+export interface IHomePageGroupsResponse {
   groups: IGroupsHomePageGroup[];
   totalPages: number;
   hasNextPage: boolean;
@@ -59,14 +66,19 @@ export interface IHomeGroupsResponse {
 
 export interface IGroupDetailsResponse {
   group: IDetailsPageGroup;
-  topRankedGroups?: IGroup[];
+  topRankedGroups?: IGroupWithCount[];
+  isGroupOwner: boolean;
+  isGroupAdmin: boolean;
+  isGroupUser: boolean;
 }
 
 export interface IDetailsPageGroup extends IGroup {
   members: {
-    user?: { avatarImg: string | null; userName: string };
-    role?: EUserRole;
-  };
+    id: string;
+    role: EUserRole;
+    userName: string;
+    avatarImg: string | null;
+  }[];
   author: {
     userName: string;
   };
@@ -79,6 +91,24 @@ export interface IAllGroupsSidebarDetails {
   meetups: IContent[]; //  1. Pick -> 2. Omit
   podcasts: IContent[];
   posts: IContent[];
+}
+
+export interface IGroupContentResponse {
+  contents: IContent[];
+  totalPages: number;
+  hasNextPage: boolean;
+}
+export interface IGroupMembersResponse {
+  members: IGroupMember[];
+  totalPages: number;
+  hasNextPage: boolean;
+}
+
+export interface IGroupMember {
+  role: EUserRole;
+  id: string;
+  avatarImg: string;
+  userName: string;
 }
 
 export interface ISelectGroup {

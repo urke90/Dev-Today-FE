@@ -35,7 +35,9 @@ export const fetchUserGroups = async (userId: string, page: number) => {
 };
 
 export const fetchAllGroups = async (page: number) => {
-  const response = await fetch(BASE_API_URL + `/groups?page=${page}`);
+  const response = await fetch(
+    BASE_API_URL + `/groups?members=true&page=${page}`
+  );
 
   if (!response.ok) {
     throw new Error('Something went wrong!');
@@ -44,9 +46,13 @@ export const fetchAllGroups = async (page: number) => {
   return response.json();
 };
 
-export const fetchGroupContent = async (page: number, type: EQueryType) => {
+export const fetchGroupContent = async (
+  id: string,
+  page: number,
+  type: EQueryType
+) => {
   const response = await fetch(
-    BASE_API_URL + `/groups?page=${page}&type=${type}`
+    BASE_API_URL + `/groups/${id}/content?type=${type}&page=${page}`
   );
 
   if (!response.ok) {

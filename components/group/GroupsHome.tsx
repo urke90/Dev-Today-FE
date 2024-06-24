@@ -4,7 +4,7 @@ import { fetchAllGroups } from '@/api/queries';
 import { EContentGroupQueries } from '@/constants/react-query';
 import type {
   IAllGroupsSidebarDetails,
-  IHomeGroupsResponse,
+  IHomePageGroupsResponse,
 } from '@/types/group';
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
@@ -20,7 +20,7 @@ import { Button } from '../ui/button';
 // ----------------------------------------------------------------
 
 interface IGroupsHomeProps {
-  groupsData: IHomeGroupsResponse;
+  groupsData: IHomePageGroupsResponse;
   sidebarDetails: IAllGroupsSidebarDetails;
 }
 
@@ -30,7 +30,7 @@ const GroupsHome: React.FC<IGroupsHomeProps> = ({
 }) => {
   const [page, setPage] = useState(1);
 
-  const { data } = useQuery<IHomeGroupsResponse>({
+  const { data } = useQuery<IHomePageGroupsResponse>({
     queryKey: [EContentGroupQueries.FETCH_GROUPS, page],
     queryFn: () => fetchAllGroups(page),
     retry: false,
@@ -45,7 +45,7 @@ const GroupsHome: React.FC<IGroupsHomeProps> = ({
           <SortAndFilter isGroupPage />
           <SidebarItemWrapper
             title="Top Ranked"
-            items={sidebarDetails.topActiveGroups.map(
+            items={sidebarDetails.topRankedGroups.map(
               ({ id, profileImage, name, _count }) => (
                 <SidebarGroupItem
                   key={id}

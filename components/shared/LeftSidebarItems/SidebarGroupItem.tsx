@@ -12,7 +12,7 @@ interface ISidebarGroupItemProps {
 
 const SidebarGroupItem: React.FC<ISidebarGroupItemProps> = ({
   id,
-  totalItems,
+  totalItems = 0,
   profileImage,
   name,
 }) => {
