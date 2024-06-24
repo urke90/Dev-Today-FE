@@ -37,7 +37,7 @@ export interface IUserRecentContent {
   tags: string[];
   type: EContentType;
   author: {
-    name: string;
+    userName: string;
     avatarImg: string;
   };
 }

@@ -41,13 +41,15 @@ const Comments = () => {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <div className="flex items-center gap-3">
-            <Image
-              src="/assets/images/avatars/avatar-1.svg"
-              width={50}
-              height={50}
-              alt="avatar"
-              className="rounded-full"
-            />
+            <div className="bg-white-100 rounded-full p-1 px-2">
+              <Image
+                src="/assets/images/avatars/avatar-1.svg"
+                width={32}
+                height={30}
+                alt="avatar"
+                className="rounded-full ml-1"
+              />
+            </div>
 
             <RHFInput
               name="messageToAuthor"
@@ -167,17 +169,18 @@ const Comments = () => {
                 placeholder="Say something nice to Mansurl Haque..."
               />
               <div className="w-1/5 ml-auto flex gap-4 justify-end">
-                <span className="!text-white-400 !text-[14px] capitalize cursor-pointer p3-medium">
+                <Button className="!text-white-400 !text-[14px] capitalize cursor-pointer p3-medium">
                   Cancel
-                </span>
+                </Button>
                 <span className="text-white-400">|</span>
-                <span className="!text-primary-500 !text-[14px] capitalize cursor-pointer p3-medium">
+                <Button
+                  type="submit"
+                  className="!text-primary-500 !text-[14px] capitalize cursor-pointer p3-medium">
                   Save
-                </span>
+                </Button>
               </div>
             </div>
           </div>
-          <Button type="submit">Submit</Button>
         </form>
       </Form>
     </div>

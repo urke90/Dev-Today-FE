@@ -1,5 +1,6 @@
+import { auth } from '@/app/api/auth/[...nextauth]/route';
 import CreatePosts from '@/components/createPosts/CreatePosts';
-import { IContent } from '@/lib/validation';
+import { IContentDTO } from '@/lib/validation';
 import { ISelectGroup } from '@/types/group';
 import { typedFetch } from '@/utils/api';
 
@@ -10,6 +11,10 @@ type Props = {
 };
 
 const EditPost = async ({ params }: Props) => {
+  const session = await auth();
+
+  if (!session) throw new Error(' User data not available!');
+
   const contentId = params.id;
 
   const allGroups = await typedFetch<ISelectGroup[]>({
@@ -17,7 +22,7 @@ const EditPost = async ({ params }: Props) => {
     cache: 'no-cache',
   });
   if (!allGroups) throw new Error('Groups not available!');
-  const editPost = await typedFetch<IContent>({
+  const editPost = await typedFetch<IContentDTO>({
     url: `/content/${contentId}`,
     cache: 'no-cache',
   });
@@ -26,7 +31,11 @@ const EditPost = async ({ params }: Props) => {
 
   return (
     <div className="content-wrapper max-w-[900px]">
-      <CreatePosts editPost={editPost} allGroups={allGroups} />
+      <CreatePosts
+        editPost={editPost}
+        viewerId={session.user.id}
+        allGroups={allGroups}
+      />
     </div>
   );
 };

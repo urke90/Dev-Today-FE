@@ -57,9 +57,16 @@ export const postSchema = z.object({
     .array(
       z.object({
         label: z.string().min(1).max(20, ' Tag must be max 20 characters long'),
+        value: z.string().min(1),
       })
     )
     .max(5),
+  group: z.object({
+    id: z.string(),
+    bio: z.string(),
+    name: z.string(),
+    coverImage: z.string(),
+  }),
 });
 
 export type IPost = z.infer<typeof postSchema>;
@@ -153,3 +160,29 @@ export const updateGroupSchema = z.object({
 });
 
 export type IContent = IPost & IMeetup & IPodcast;
+export type IContentDTO = Omit<IContent, 'tags' | 'groupId'> & {
+  groupId: string;
+  tags: {
+    id: string;
+    title: string;
+  }[];
+};
+
+export type IPutPostDTO = Omit<IPost, 'tags' | 'groupId' | 'group' | 'id'> & {
+  groupId: string;
+  tags: string[];
+};
+export type IPutMeetupDTO = Omit<
+  IMeetup,
+  'tags' | 'groupId' | 'group' | 'id'
+> & {
+  groupId: string;
+  tags: string[];
+};
+export type IPutPodcastDTO = Omit<
+  IPodcast,
+  'tags' | 'groupId' | 'group' | 'id'
+> & {
+  groupId: string;
+  tags: string[];
+};

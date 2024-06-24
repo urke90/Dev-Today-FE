@@ -1,7 +1,8 @@
 import {
-  IPost,
+  IPutMeetupDTO,
+  IPutPodcastDTO,
+  IPutPostDTO,
   createGroupSchema,
-  postSchema,
   updateGroupSchema,
 } from '@/lib/validation';
 import { EUserRole } from '@/types/user';
@@ -44,7 +45,7 @@ export const updateGroup = async (
   return response.json();
 };
 
-export const createContent = async (data: IPost) => {
+export const createContent = async (data: IPutPostDTO) => {
   const response = await fetch(BASE_API_URL + '/content/post', {
     method: 'POST',
     headers: {
@@ -60,14 +61,21 @@ export const createContent = async (data: IPost) => {
   return response.json();
 };
 
-export const updateContent = async (id: string, data: IPost) => {
-  const response = await fetch(BASE_API_URL + `/content/post/${id}`, {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  });
+export const updateContent = async (
+  postId: string,
+  data: IPutPostDTO,
+  viewerId: string
+) => {
+  const response = await fetch(
+    BASE_API_URL + `/content/post/${postId}?viewerId=${viewerId}`,
+    {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    }
+  );
 
   if (!response.ok) {
     throw new Error('Something went wrong!');
@@ -76,7 +84,7 @@ export const updateContent = async (id: string, data: IPost) => {
   return response.json();
 };
 
-export const createMeetupContent = async (data: z.infer<typeof postSchema>) => {
+export const createMeetupContent = async (data: IPutMeetupDTO) => {
   const response = await fetch(BASE_API_URL + '/content/meetup', {
     method: 'POST',
     headers: {
@@ -93,16 +101,20 @@ export const createMeetupContent = async (data: z.infer<typeof postSchema>) => {
 };
 
 export const updateMeetupContent = async (
-  id: string,
-  data: z.infer<typeof postSchema>
+  postId: string,
+  data: IPutMeetupDTO,
+  viewerId: string
 ) => {
-  const response = await fetch(BASE_API_URL + `/content/meetup/${id}`, {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  });
+  const response = await fetch(
+    BASE_API_URL + `/content/meetup/${postId}?viewerId=${viewerId}`,
+    {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    }
+  );
 
   if (!response.ok) {
     throw new Error('Something went wrong!');
@@ -111,9 +123,7 @@ export const updateMeetupContent = async (
   return response.json();
 };
 
-export const createPodcastContent = async (
-  data: z.infer<typeof postSchema>
-) => {
+export const createPodcastContent = async (data: IPutPodcastDTO) => {
   const response = await fetch(BASE_API_URL + '/content/podcast', {
     method: 'POST',
     headers: {
@@ -130,16 +140,20 @@ export const createPodcastContent = async (
 };
 
 export const updatePodcastContent = async (
-  id: string,
-  data: z.infer<typeof postSchema>
+  postId: string,
+  data: IPutPodcastDTO,
+  viewerId: string
 ) => {
-  const response = await fetch(BASE_API_URL + `/content/podcast/${id}`, {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  });
+  const response = await fetch(
+    BASE_API_URL + `/content/podcast/${postId}?viewerId=${viewerId}`,
+    {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    }
+  );
 
   if (!response.ok) {
     throw new Error('Something went wrong!');

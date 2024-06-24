@@ -29,9 +29,10 @@ import { useTheme } from '@/context/ThemeProvider';
 import { cn } from '@/lib/utils';
 import {
   IContent,
-  IMeetup,
-  IPodcast,
-  IPost,
+  IContentDTO,
+  IPutMeetupDTO,
+  IPutPodcastDTO,
+  IPutPostDTO,
   postSchema,
 } from '@/lib/validation';
 import { EContentType } from '@/types/content';
@@ -67,14 +68,13 @@ type ContentProps = {
   allGroups?: ISelectGroup[];
   allTags?: ITags[];
   editType?: string;
-  editPost?: IContent;
+  editPost: IContentDTO;
+  viewerId: string;
 };
 
-const CreatePosts = ({ authorId, editPost }: ContentProps) => {
+const CreatePosts = ({ authorId, editPost, viewerId }: ContentProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isPreview, setIsPreview] = useState(false);
-
-  console.log(editPost);
 
   const [q, setQ] = useState('');
   const [title, setTitle] = useState('');
@@ -86,6 +86,16 @@ const CreatePosts = ({ authorId, editPost }: ContentProps) => {
   const editorRef = useRef<any>(null);
   const router = useRouter();
 
+  const resetForm = () => {
+    if (editPost) router.push(`/content/${editPost.id}`);
+    form.reset();
+    form.setValue('groupId', {
+      value: '',
+      label: '',
+    });
+    form.setValue('tags', []);
+  };
+
   const {
     data: allGroups = [],
     error: groupsError,
@@ -94,15 +104,6 @@ const CreatePosts = ({ authorId, editPost }: ContentProps) => {
     queryKey: ['groups', debouncedQ],
     queryFn: () => fetchCreateGroups(debouncedQ),
   });
-
-  const restFrom = () => {
-    form.reset();
-    form.setValue('groupId', {
-      value: '',
-      label: '',
-    });
-    form.setValue('tags', []);
-  };
 
   const {
     data: allTags,
@@ -114,38 +115,38 @@ const CreatePosts = ({ authorId, editPost }: ContentProps) => {
   });
 
   const { mutateAsync } = useMutation({
-    mutationFn: async (data: IPost) => {
+    mutationFn: async (data: IPutPostDTO) => {
       await createContent(data);
     },
   });
 
   const { mutateAsync: updateContentMutation } = useMutation({
-    mutationFn: async (data: IPost) => {
-      await updateContent(editPost.id, data);
+    mutationFn: async (data: IPutPostDTO) => {
+      await updateContent(editPost?.id, data, viewerId);
     },
   });
 
   const { mutateAsync: createMeetupMutation } = useMutation({
-    mutationFn: async (data: IMeetup) => {
+    mutationFn: async (data: IPutMeetupDTO) => {
       await createMeetupContent(data);
     },
   });
 
   const { mutateAsync: updateMeetupMutation } = useMutation({
-    mutationFn: async (data: IMeetup) => {
-      await updateMeetupContent(editPost.id, data);
+    mutationFn: async (data: IPutMeetupDTO) => {
+      await updateMeetupContent(editPost.id, data, viewerId);
     },
   });
 
   const { mutateAsync: createPodcastMutation } = useMutation({
-    mutationFn: async (data: IPodcast) => {
+    mutationFn: async (data: IPutPodcastDTO) => {
       await createPodcastContent(data);
     },
   });
 
   const { mutateAsync: updatePodcastMutation } = useMutation({
-    mutationFn: async (data: IPodcast) => {
-      await updatePodcastContent(editPost.id, data);
+    mutationFn: async (data: IPutPodcastDTO) => {
+      await updatePodcastContent(editPost.id, data, viewerId);
     },
   });
 
@@ -162,7 +163,7 @@ const CreatePosts = ({ authorId, editPost }: ContentProps) => {
     label: tag.title,
   }));
 
-  const form = useForm<IPost & IMeetup & IPodcast>({
+  const form = useForm<IContent>({
     resolver: zodResolver(postSchema),
     defaultValues: {
       authorId: editPost?.authorId ?? authorId,
@@ -189,8 +190,10 @@ const CreatePosts = ({ authorId, editPost }: ContentProps) => {
   const watchPostType = form.watch('type');
   const watchCoverImage = form.watch('coverImage');
 
+  console.log(form.formState.errors);
+
   const onSubmit = async () => {
-    const commonData: IPost = {
+    const commonData: IPutPostDTO = {
       authorId: form.getValues('authorId'),
       title: form.getValues('title'),
       type: form.getValues('type'),
@@ -198,15 +201,6 @@ const CreatePosts = ({ authorId, editPost }: ContentProps) => {
       coverImage: form.getValues('coverImage'),
       description: form.getValues('description'),
       tags: form.getValues('tags').map((tag) => tag.label),
-    };
-
-    const resetForm = () => {
-      form.reset();
-      form.setValue('groupId', {
-        value: '',
-        label: '',
-      });
-      form.setValue('tags', []);
     };
 
     if (watchPostType === EContentType.POST) {
@@ -222,10 +216,7 @@ const CreatePosts = ({ authorId, editPost }: ContentProps) => {
       try {
         setIsLoading(true);
         if (editPost) {
-          await updateContentMutation({
-            ...commonData,
-          });
-          revalidate(`/content/${editPost.id}`);
+          await updateContentMutation(commonData);
           resetForm();
           toast.success('Post updated successfully!');
         } else {
@@ -255,7 +246,7 @@ const CreatePosts = ({ authorId, editPost }: ContentProps) => {
             meetupLocation: form.getValues('meetupLocation'),
             meetupDate: form.getValues('meetupDate'),
           });
-          form.reset();
+          resetForm();
           toast.success('Meetup updated successfully!');
         } else {
           setIsLoading(true);
@@ -265,7 +256,7 @@ const CreatePosts = ({ authorId, editPost }: ContentProps) => {
             meetupDate: form.getValues('meetupDate'),
           });
 
-          form.reset();
+          resetForm();
           toast.success('Meetup created successfully!');
         }
       } catch (error) {
@@ -306,6 +297,7 @@ const CreatePosts = ({ authorId, editPost }: ContentProps) => {
       }
     }
     if (editPost) {
+      revalidate(`/content/${editPost.id}`);
       router.push(`/content/${editPost.id}`);
     } else {
     }
@@ -787,7 +779,7 @@ const CreatePosts = ({ authorId, editPost }: ContentProps) => {
 
             <div className="flex gap-5 p3-bold">
               <Button
-                onClick={restFrom}
+                onClick={resetForm}
                 type="button"
                 className="bg-light100__dark800 hover:!text-white-100 duration-200 hover:bg-primary-500 py-3 w-3/5">
                 Cancel

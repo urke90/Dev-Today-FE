@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { IProfileUser } from '@/types/user';
 import { calculateTimeAgo, getFirstName } from '@/utils/format';
-import { ArrowRight, ArrowRightIcon } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -43,31 +43,36 @@ const RightSideBar = ({ getAuthorDetails }: RightSidebarProps) => {
           joined {calculateTimeAgo(getAuthorDetails.user?.createdAt)}
         </p>
       </div>
-      <div className="right-sidebar bg-light100__dark800 p-5 rounded-2xl">
+      <div className="bg-light100__dark800 p-5 rounded-2xl">
         <div className="flex gap-2 items-center">
           <h3>More from {getAuthorDetails.user?.userName || 'No name'}</h3>
           <ArrowRight size={20} />
         </div>
-        {getAuthorDetails.user?.contents.map((content) => (
-          <Link key={content.id} href={`${content.id}`} className="flex ">
-            <div className="flex gap-3.5">
+        <div className="flex flex-col space-y-5 mt-5">
+          {getAuthorDetails.user?.contents.map((content) => (
+            <Link
+              key={content.id}
+              href={`${content.id}`}
+              className="flex w-full gap-3">
               <Image
                 src={content.coverImage || '/assets/images/no-image.svg'}
                 alt="post"
                 width={58}
                 height={58}
-                className="rounded bg-primary-100 dark:bg-primary-500"
+                className="rounded bg-primary-100 w-1/5 dark:bg-primary-500"
               />
-              <div className="flex flex-col gap-[6px]">
-                <p className="p4-medium">
-                  {content.title ? content.title : 'No title'}
+              <div className="w-3/5 overflow-hidden space-y-2">
+                <h4 className="p4-medium capitalize">{content.title}...</h4>
+                <p className="subtitle-normal">
+                  {' '}
+                  <span>by </span>
+                  {content.author.userName}
                 </p>
-                <p className="subtitle-normal">by {content.author.name}</p>
               </div>
-            </div>
-            <ArrowRightIcon className="text-white-400 shrink-0 ml-auto" />
-          </Link>
-        ))}
+              <ArrowRight size={20} className="ml-auto" />
+            </Link>
+          ))}
+        </div>
       </div>
     </aside>
   );
