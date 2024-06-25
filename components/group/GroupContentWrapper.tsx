@@ -2,7 +2,7 @@
 
 // ----------------------------------------------------------------
 
-import { fetchGroupContent } from '@/api/queries';
+import { fetchGroupContent, fetchGroupMembers } from '@/api/queries';
 import { EContentGroupQueries } from '@/constants/react-query';
 import type { IContent } from '@/types/content';
 import type {
@@ -21,6 +21,7 @@ import MeetupItemCard from '../shared/MeetupItemCard';
 import Pagination from '../shared/Pagination';
 import PodcastItemCard from '../shared/PodcastItemCard';
 import PostItemCard from '../shared/PostItemCard';
+import MemberItemCard from './MemberItemCard';
 
 // ----------------------------------------------------------------
 
@@ -73,8 +74,8 @@ const GroupContentWrapper: React.FC<IGroupContentWrapperProps> = ({
     error: membersError,
     data: membersData,
   } = useQuery<IGroupMembersResponse>({
-    queryKey: [updateContentQueryKey(contentType), contentType, page],
-    queryFn: () => fetchGroupContent(groupId, page, contentType),
+    queryKey: [EContentGroupQueries.FETCH_MEMBERS, page],
+    queryFn: () => fetchGroupMembers(groupId, page),
     initialData: groupMembers,
     enabled: contentType === EQueryType.MEMBERS && page !== 1,
   });
@@ -211,19 +212,15 @@ const GroupContentWrapper: React.FC<IGroupContentWrapperProps> = ({
         break;
       case EQueryType.MEMBERS:
         {
-          // styles = 'grid grid-cols-1 md:grid-cols-2 gap-5';
-          // renderedContent = groups?.map(
-          //   ({ id, bio, coverImage, members, name }) => (
-          //     <GroupItemCard
-          //       key={id}
-          //       id={id}
-          //       coverImage={coverImage}
-          //       title={name}
-          //       description={bio}
-          //       members={members}
-          //     />
-          //   )
-          // );
+          styles = 'grid grid-cols-2 md:grid-cols-2 gap-5';
+          renderedContent = members?.map(({ id, avatarImg, userName }) => (
+            <MemberItemCard
+              key={id}
+              id={id}
+              avatarImg={avatarImg}
+              userName={userName}
+            />
+          ));
         }
         break;
       default: {
@@ -281,7 +278,7 @@ const GroupContentWrapper: React.FC<IGroupContentWrapperProps> = ({
       )}
       <Pagination
         currentPage={page}
-        totalPage={
+        totalPages={
           contentType === EQueryType.MEMBERS
             ? membersData.totalPages
             : contentData.totalPages

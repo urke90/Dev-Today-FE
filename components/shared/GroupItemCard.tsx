@@ -32,13 +32,14 @@ const GroupItemCard: React.FC<IGroupItemCardProps> = ({
     <li>
       <Link
         href={'/groups/' + id}
-        className="bg-light100__dark800 flex-0 flex shrink-0 flex-col gap-3.5 rounded-2xl p-5"
+        className="bg-light100__dark800 flex-0 flex shrink-0 flex-col gap-3.5 rounded-2xl p-5 shadow-card"
       >
         <div className="relative h-[150px] w-full">
           <Image
             src={coverImage || '/assets/icons/image-preview.svg'}
             fill
             alt={title}
+            className="object-cover"
           />
         </div>
         <p className="p1-bold">{title}</p>

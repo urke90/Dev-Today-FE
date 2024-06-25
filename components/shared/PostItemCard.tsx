@@ -49,7 +49,7 @@ const PostItemCard: React.FC<IPostItemCardProps> = ({
     <li>
       <Link
         href={'/posts/' + id}
-        className="bg-light100__dark800 flex gap-4 rounded-2xl p-4 md:items-center md:p-5"
+        className="bg-light100__dark800 flex gap-4 rounded-2xl p-4 md:items-center md:p-5 shadow-card"
       >
         <Image
           src={coverImage || '/assets/icons/image-preview.svg'}

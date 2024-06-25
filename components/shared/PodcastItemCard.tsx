@@ -41,7 +41,7 @@ const PodcastItemCard: React.FC<IPodcastItemCardProps> = ({
     <li>
       <Link
         href={'/podcasts/' + id}
-        className="bg-light100__dark800 flex flex-col gap-3.5 rounded-[10px] px-3.5 py-5 lg:gap-[18px] lg:rounded-2xl lg:p-4"
+        className="bg-light100__dark800 flex flex-col gap-3.5 rounded-[10px] px-3.5 py-5 lg:gap-[18px] lg:rounded-2xl lg:p-4 shadow-card"
       >
         <div className="flex-between">
           <div className="flex gap-2">

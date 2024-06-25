@@ -24,7 +24,7 @@ const SidebarGroupItem: React.FC<ISidebarGroupItemProps> = ({
           width={32}
           height={32}
           alt={name}
-          className="shrink-0"
+          className="shrink-0 rounded"
         />
         <div>
           <p className="p4-medium line-clamp-1">{name}</p>

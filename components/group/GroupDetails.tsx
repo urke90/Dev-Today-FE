@@ -7,13 +7,13 @@ import type {
 import { EQueryType } from '@/types/queries';
 import { EUserRole } from '@/types/user';
 import Image from 'next/image';
-import LogoutSecondIcon from '../icons/LogoutSecond';
 import SidebarGroupItem from '../shared/LeftSidebarItems/SidebarGroupItem';
 import SidebarItemWrapper from '../shared/LeftSidebarItems/SidebarItemWrapper';
 import SidebarContentCard from '../shared/RightSidebarItems/SidebarContentCard';
 import { Button } from '../ui/button';
 import GroupContentWrapper from './GroupContentWrapper';
 import GroupDropdownMenu from './GroupDropdownMenu';
+import JoinOrLeaveGroupButton from './JoinOrLeaveGroupButton';
 
 // ----------------------------------------------------------------
 
@@ -47,6 +47,8 @@ const GroupDetails: React.FC<IGroupDetailsProps> = ({
 }) => {
   const isGroupMemeber = !isGroupOwner && (isGroupUser || isGroupAdmin);
   let totalUsers = { members: 0, admins: 0 };
+
+  console.log('isGroupMember', isGroupMemeber);
 
   group.members.forEach((member) => {
     member.role === EUserRole.USER ? totalUsers.members++ : totalUsers.admins++;
@@ -110,7 +112,7 @@ const GroupDetails: React.FC<IGroupDetailsProps> = ({
       <main className="main-content gap-5  mx-auto">
         <div className="flex flex-col gap-2.5 bg-light100__dark800 py-4 px-2.5 md:py-2.5 rounded-2xl shadow-card">
           <div
-            className={`relative w-full h-24 md:h-44 ${!group.coverImage ? 'flex-center bg-black-700 rounded-[10px]' : ''}`}
+            className={`relative w-full h-24 md:h-44 ${!group.coverImage ? 'flex-center bg-primary-100 dark:bg-black-700 rounded-[10px]' : ''}`}
           >
             {group.coverImage ? (
               <Image
@@ -149,13 +151,25 @@ const GroupDetails: React.FC<IGroupDetailsProps> = ({
             </div>
             <div className="flex gap-2.5">
               <div className="max-md:hidden">
-                <JoinOrLeaveGroupBtn isGroupMemeber={isGroupMemeber} />
+                {!isGroupOwner && (
+                  <JoinOrLeaveGroupButton
+                    userId={userId}
+                    groupId={group.id}
+                    isGroupMemeber={isGroupMemeber}
+                  />
+                )}
               </div>
               <GroupDropdownMenu groupId={group.id} />
             </div>
           </div>
           <div className="md:hidden">
-            <JoinOrLeaveGroupBtn isGroupMemeber={isGroupMemeber} />
+            {!isGroupOwner && (
+              <JoinOrLeaveGroupButton
+                userId={userId}
+                groupId={group.id}
+                isGroupMemeber={isGroupMemeber}
+              />
+            )}
           </div>
         </div>
         <GroupContentWrapper
@@ -171,7 +185,7 @@ const GroupDetails: React.FC<IGroupDetailsProps> = ({
         <div className="right-sidebar-item">
           <div className="flex-between">
             <p className="p2-bold">Active Members</p>
-            <Button className="w-auto p4-regular">View All</Button>
+            {/* <MembersDialog members={group.members.filter((member) => member.role === EUserRole.USER)} /> */}
           </div>
           <ul className="flex flex-wrap gap-x-[21px] gap-y-3">
             {group.members.map(({ avatarImg, id, userName }, index) => (
@@ -225,28 +239,6 @@ const GroupDetails: React.FC<IGroupDetailsProps> = ({
         </div>
       </aside>
     </div>
-  );
-};
-
-const JoinOrLeaveGroupBtn = ({
-  isGroupMemeber,
-}: {
-  isGroupMemeber: boolean;
-}) => {
-  return (
-    <Button
-      size="small"
-      className={`px-4 gap-1 icon-light400__dark300 ${isGroupMemeber ? 'bg-white-200 dark:bg-black-700' : 'bg-primary-500'}`}
-    >
-      {isGroupMemeber ? (
-        <>
-          <LogoutSecondIcon />
-          Leave Group
-        </>
-      ) : (
-        'Join group'
-      )}
-    </Button>
   );
 };
 

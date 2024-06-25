@@ -61,3 +61,15 @@ export const fetchGroupContent = async (
 
   return response.json();
 };
+
+export const fetchGroupMembers = async (id: string, page: number) => {
+  const response = await fetch(
+    BASE_API_URL + `/groups/${id}/members?page=${page}`
+  );
+
+  if (!response.ok) {
+    throw new Error('Something went wrong!');
+  }
+
+  return response.json();
+};

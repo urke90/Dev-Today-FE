@@ -35,7 +35,7 @@ const MeetupItemCard: React.FC<IMeetupItemCardProps> = ({
     <li>
       <Link
         href={'/meetups/' + id}
-        className="bg-light100__dark800 flex flex-col gap-2.5 rounded-[10px] px-3.5 py-5"
+        className="bg-light100__dark800 flex flex-col gap-2.5 rounded-[10px] px-3.5 py-5 shadow-card"
       >
         <div className="flex-between flex">
           <div className="flex items-center gap-2 md:gap-4">

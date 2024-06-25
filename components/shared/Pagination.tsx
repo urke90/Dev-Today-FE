@@ -2,7 +2,7 @@ import { Button } from '../ui/button';
 
 interface IPaginationProps {
   currentPage: number;
-  totalPage: number;
+  totalPages: number;
   setPage: React.Dispatch<React.SetStateAction<number>>;
   disableNextBtn: boolean;
   disablePrevBtn: boolean;
@@ -10,7 +10,7 @@ interface IPaginationProps {
 
 const Pagination: React.FC<IPaginationProps> = ({
   currentPage,
-  totalPage,
+  totalPages,
   setPage,
   disableNextBtn,
   disablePrevBtn,
@@ -27,7 +27,7 @@ const Pagination: React.FC<IPaginationProps> = ({
         </Button>
         <div className="flex-center py-2.5 px-8">
           <span className="p3-regular">
-            {currentPage}/{totalPage}
+            {currentPage}/{totalPages}
           </span>
         </div>
         <Button

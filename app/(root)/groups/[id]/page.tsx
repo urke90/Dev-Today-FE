@@ -24,7 +24,7 @@ const GroupDetailsPage: React.FC<IGroupDetailsPage> = async ({
   searchParams,
 }) => {
   const id = params.id;
-  // const page = parseSearchParams(searchParams.page, '1');
+  const page = parseSearchParams(searchParams.page, '1');
   const contentType = parseSearchParams<EQueryType>(
     searchParams.type,
     EQueryType.POST
@@ -34,7 +34,7 @@ const GroupDetailsPage: React.FC<IGroupDetailsPage> = async ({
   if (!session) throw new Error('User data not available!');
 
   const groupDetails = await typedFetch<IGroupDetailsResponse>({
-    url: `/groups/${id}?topRankedGroup=true&stats=true&members=true&meetups=true&viewerId=${session.user.id}`,
+    url: `/groups/${id}?topRankedGroups=true&stats=true&members=true&meetups=true&viewerId=${session.user.id}`,
     cache: 'no-cache',
   });
   if (!groupDetails)
@@ -47,16 +47,13 @@ const GroupDetailsPage: React.FC<IGroupDetailsPage> = async ({
 
   if (contentType !== EQueryType.MEMBERS) {
     groupContent = await typedFetch<IGroupContentResponse>({
-      url: `/groups/${id}/content?type=${contentType}&viewerId=${session.user.id}`,
+      url: `/groups/${id}/content?type=${contentType}&viewerId=${session.user.id}&page=${page}`,
     });
   } else if (contentType === EQueryType.MEMBERS) {
     groupMembers = await typedFetch<IGroupMembersResponse>({
-      url: `/groups/${id}/members`,
+      url: `/groups/${id}/members?page=${page}`,
     });
   }
-
-  // console.log('GROUP DETAILS groupContent', groupContent);
-  // console.log('GROUP DETAILS groupMemebers', groupMembers);
 
   return (
     <section className="px-3.5 lg:px-5">
