@@ -113,7 +113,7 @@ const ContentList: React.FC<IContentListProps> = ({
     retry: false,
   });
 
-  const { lastListItemRef } = useInfiniteScroll({
+  const lastListItemRef = useInfiniteScroll({
     updatePage,
     isLoading: isLoadingContent || isLoadingGroups,
     shouldFetch,

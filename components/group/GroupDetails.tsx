@@ -10,10 +10,11 @@ import Image from 'next/image';
 import SidebarGroupItem from '../shared/LeftSidebarItems/SidebarGroupItem';
 import SidebarItemWrapper from '../shared/LeftSidebarItems/SidebarItemWrapper';
 import SidebarContentCard from '../shared/RightSidebarItems/SidebarContentCard';
-import { Button } from '../ui/button';
+import AdminMembersDialog from './AdminMembersDialog';
 import GroupContentWrapper from './GroupContentWrapper';
 import GroupDropdownMenu from './GroupDropdownMenu';
 import JoinOrLeaveGroupButton from './JoinOrLeaveGroupButton';
+import UserMembersDialog from './UserMembersDialog';
 
 // ----------------------------------------------------------------
 
@@ -45,14 +46,14 @@ const GroupDetails: React.FC<IGroupDetailsProps> = ({
   groupMembers,
   userId,
 }) => {
-  const isGroupMemeber = !isGroupOwner && (isGroupUser || isGroupAdmin);
-  let totalUsers = { members: 0, admins: 0 };
+  const isGroupMember = !isGroupOwner && (isGroupUser || isGroupAdmin);
 
-  console.log('isGroupMember', isGroupMemeber);
-
-  group.members.forEach((member) => {
-    member.role === EUserRole.USER ? totalUsers.members++ : totalUsers.admins++;
-  });
+  const admins = group.members.filter(
+    (member) => member.role === EUserRole.ADMIN
+  );
+  const users = group.members.filter(
+    (member) => member.role === EUserRole.USER
+  );
 
   return (
     <div className="content-wrapper">
@@ -75,7 +76,7 @@ const GroupDetails: React.FC<IGroupDetailsProps> = ({
             <li>
               <p className="p3-bold">
                 <span className="p3-medium !text-primary-500">
-                  {totalUsers.members}
+                  {users.length}
                 </span>{' '}
                 Members
               </p>
@@ -83,7 +84,7 @@ const GroupDetails: React.FC<IGroupDetailsProps> = ({
             <li>
               <p className="p3-bold">
                 <span className="p3-medium !text-primary-500">
-                  {totalUsers.admins}
+                  {admins.length}
                 </span>{' '}
                 Admins
               </p>
@@ -155,7 +156,7 @@ const GroupDetails: React.FC<IGroupDetailsProps> = ({
                   <JoinOrLeaveGroupButton
                     userId={userId}
                     groupId={group.id}
-                    isGroupMemeber={isGroupMemeber}
+                    isGroupMemeber={isGroupMember}
                   />
                 )}
               </div>
@@ -167,7 +168,7 @@ const GroupDetails: React.FC<IGroupDetailsProps> = ({
               <JoinOrLeaveGroupButton
                 userId={userId}
                 groupId={group.id}
-                isGroupMemeber={isGroupMemeber}
+                isGroupMemeber={isGroupMember}
               />
             )}
           </div>
@@ -185,7 +186,11 @@ const GroupDetails: React.FC<IGroupDetailsProps> = ({
         <div className="right-sidebar-item">
           <div className="flex-between">
             <p className="p2-bold">Active Members</p>
-            {/* <MembersDialog members={group.members.filter((member) => member.role === EUserRole.USER)} /> */}
+            <AdminMembersDialog
+              // role={EUserRole.ADMIN}
+              groupId={group.id}
+              // groupMembers={groupMembers}
+            />
           </div>
           <ul className="flex flex-wrap gap-x-[21px] gap-y-3">
             {group.members.map(({ avatarImg, id, userName }, index) => (
@@ -214,7 +219,7 @@ const GroupDetails: React.FC<IGroupDetailsProps> = ({
         <div className="right-sidebar-item">
           <div className="flex-between">
             <p className="p2-bold">Group Admins</p>
-            <Button className="w-auto p4-regular">View All</Button>
+            <UserMembersDialog groupId={group.id} groupMembers={groupMembers} />
           </div>
           <ul className="flex flex-col gap-2.5">
             {group.members?.map(({ avatarImg, id, role, userName }) =>

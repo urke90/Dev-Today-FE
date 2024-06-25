@@ -1,5 +1,6 @@
 import type { IContent } from '@/types/content';
 import { EQueryType } from '@/types/queries';
+import { EUserRole } from '@/types/user';
 
 // ----------------------------------------------------------------
 
@@ -62,9 +63,15 @@ export const fetchGroupContent = async (
   return response.json();
 };
 
-export const fetchGroupMembers = async (id: string, page: number) => {
+export const fetchGroupMembers = async (
+  id: string,
+  page: number,
+  role?: EUserRole
+) => {
+  const roleQuery = role ? `&role=${role.toLowerCase()}` : '';
+
   const response = await fetch(
-    BASE_API_URL + `/groups/${id}/members?page=${page}`
+    BASE_API_URL + `/groups/${id}/members?page=${page}&limit=5${roleQuery}`
   );
 
   if (!response.ok) {

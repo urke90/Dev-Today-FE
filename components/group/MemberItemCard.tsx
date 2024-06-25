@@ -14,7 +14,7 @@ import { Button } from '../ui/button';
 interface IMemberItemCardProps {
   id: string;
   userName: string;
-  avatarImg: string;
+  avatarImg: string | null;
   isViewDialog?: boolean;
 }
 
@@ -26,7 +26,7 @@ const MemberItemCard: React.FC<IMemberItemCardProps> = ({
   isViewDialog = false,
 }) => {
   return (
-    <li className="flex-between bg-light100__dark800 rounded-xl p-5">
+    <li className="flex-between bg-light100__dark800 rounded-xl p-5 shadow-card">
       <div className="flex items-center gap-1.5">
         <div className="flex-center bg-white-600 size-[30px] rounded-full shrink-0">
           <Image

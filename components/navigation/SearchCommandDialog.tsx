@@ -27,7 +27,7 @@ const SearchCommandDialog: React.FC<ISearchDialogProps> = (props) => {
         </Button>
       </Trigger>
       <Portal>
-        <Overlay className="data-[state=open]:animate-overlayShow fixed inset-0 backdrop-blur-sm" />
+        <Overlay className="data-[state=open]:animate-overlayShow fixed inset-0 backdrop-blur-md" />
         <Content className="bg-white-100 data-[state=open]:animate-contentShow fixed left-1/2 top-1/2 max-h-[85vh] w-[346px] -translate-x-1/2 -translate-y-1/2  focus:outline-none lg:w-[576px] ">
           <Command className="shadow-search-dialog border-white-border dark:border-white-border border">
             <div className="bg-white-100 dark:bg-black-800 flex items-center justify-between gap-3 px-3.5 py-4 lg:px-6">

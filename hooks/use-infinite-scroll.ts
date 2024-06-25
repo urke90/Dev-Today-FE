@@ -27,8 +27,8 @@ export const useInfiniteScroll = ({
       });
       if (node) observer.current.observe(node);
     },
-    [isLoading, shouldFetch]
+    [isLoading, shouldFetch, updatePage]
   );
 
-  return { lastListItemRef };
+  return lastListItemRef;
 };
