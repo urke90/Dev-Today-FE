@@ -231,4 +231,12 @@ export const baseCommentSchema = z.object({
     .optional(),
 });
 
+export const editAndReplyCommentSchema = z.object({
+  id: z.string().optional(),
+  text: z.string().min(2).max(1000),
+  authorId: z.string(),
+  contentId: z.string(),
+  replyingTo: z.string().optional(),
+});
+
 export type IComment = z.infer<typeof baseCommentSchema>;

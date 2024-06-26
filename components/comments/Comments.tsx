@@ -21,6 +21,7 @@ import {
 } from '@radix-ui/react-dropdown-menu';
 import { EditIcon } from 'lucide-react';
 import { useState } from 'react';
+import RCommentForm from '../RHFInputs/RCommentForm';
 
 type AllCommentProps = {
   allComments: IComment[];
@@ -28,33 +29,30 @@ type AllCommentProps = {
   contentId: string;
 };
 
-type UpdateProps = {
-  id?: string;
-  contentId: string;
-  commentAuthorId: string;
-  replyingToId: string;
-  text?: string;
-};
-
 const Comments = ({
   allComments,
   commentAuthorId,
   contentId,
 }: AllCommentProps) => {
-  const [editCommentId, setEditCommentId] = useState<string | null>(null);
+  const [editComment, setEditComment] = useState<string | null>(null);
+  const [replyingComment, setReplyingComment] = useState<string | null>(null);
+
+  const findCommentEdit = allComments.find(
+    (comment) => comment.id === editComment
+  );
+
+  const findCommentReply = allComments.find(
+    (comment) => comment.id === replyingComment
+  );
+
   const form = useForm<z.infer<typeof commentFormSchema>>({
     resolver: zodResolver(commentFormSchema),
     defaultValues: {
-      id: '',
       text: '',
-      editMessage: '',
       authorId: commentAuthorId,
       contentId,
-      replyingTo: undefined,
     },
   });
-
-  console.log('allComments', allComments);
 
   const onSubmit = async (values: z.infer<typeof commentFormSchema>) => {
     try {
@@ -65,50 +63,14 @@ const Comments = ({
           text: values.text,
           authorId: values.authorId,
           contentId: values.contentId,
-          replyingTo: values.replyingTo,
         },
       });
       revalidate('/content/comment');
       form.reset();
+      setReplyingComment(null);
     } catch (error) {
       console.error(error);
       throw new Error('Failed to post comment');
-    }
-  };
-
-  const editMessage = (commentId: string) => {
-    const comment = allComments.find((comment) => comment.id === commentId);
-    if (comment) {
-      form.setValue('editMessage', comment.text);
-      form.setValue('id', comment.id);
-      setEditCommentId(commentId);
-    }
-  };
-
-  const updateMessage = async ({
-    id,
-    contentId,
-    commentAuthorId,
-    replyingToId,
-    text,
-  }: UpdateProps) => {
-    try {
-      await typedFetch({
-        url: '/content/comment/update',
-        method: 'PATCH',
-        body: {
-          id: id,
-          contentId: contentId,
-          text: text,
-          authorId: commentAuthorId,
-        },
-      });
-      revalidate('/content/comment');
-      form.reset();
-      setEditCommentId(null);
-    } catch (error) {
-      console.error(error);
-      throw new Error('Failed to update comment');
     }
   };
 
@@ -131,6 +93,29 @@ const Comments = ({
   return (
     <div className="!mt-20 space-y-5">
       <h2 className="h1-medium ">Comments</h2>
+      {findCommentEdit && (
+        <div className="mt-4">
+          <RCommentForm
+            comment={findCommentEdit}
+            replyingComment={replyingComment}
+            isEdit
+            setOpenEdit={() => setEditComment(null)}
+            setOpenReply={() => setReplyingComment(null)}
+          />
+        </div>
+      )}
+
+      {findCommentReply && (
+        <div className="mt-4">
+          <RCommentForm
+            comment={findCommentReply}
+            replyingComment={replyingComment}
+            isEdit={false}
+            setOpenEdit={() => setEditComment(null)}
+            setOpenReply={() => setReplyingComment(null)}
+          />
+        </div>
+      )}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <div className="flex items-center gap-3">
@@ -182,17 +167,32 @@ const Comments = ({
                       </span>
                       <span className="size-1 relative bottom-1 rounded-full bg-white-400"></span>
                       <span className="text-[14px]  relative bottom-1 text-white-400">
-                        Edited on Feb 01
+                        {formatDate(comment.updatedAt)}
                       </span>
                     </div>
                   </div>
                   <div className="flex items-center gap-4">
+                    <div
+                      className="flex gap-1 items-center cursor-pointer"
+                      onClick={() =>
+                        setReplyingComment(
+                          replyingComment === comment.id ? null : comment.id
+                        )
+                      }>
+                      <Image
+                        src="/assets/icons/reply.svg"
+                        width={16}
+                        height={16}
+                        alt="avatar"
+                        className="rounded-full invert"
+                      />
+                      <p className="text-[10px] text-white-400">Reply</p>
+                    </div>
                     <Image
                       src="/assets/icons/heart.svg"
                       width={16}
                       height={16}
                       alt="avatar"
-                      className="rounded-full"
                     />
                     <DropdownMenu>
                       <Trigger asChild>
@@ -214,7 +214,11 @@ const Comments = ({
                           onCloseAutoFocus={(e) => e.preventDefault()}
                           className="bg-black-900 border border-black-700/40 !w-48 px-5 shadow-header-menu data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade z-20 mb-4 flex  flex-col gap-2.5 rounded-[10px] py-4 ">
                           <Item
-                            onSelect={() => editMessage(comment.id)}
+                            onClick={() =>
+                              setEditComment(
+                                editComment === comment.id ? null : comment.id
+                              )
+                            }
                             className="flex items-center  gap-2.5 p2-medium cursor-pointer">
                             <EditIcon size={16} />
                             <p>Edit Comment</p>
@@ -241,69 +245,6 @@ const Comments = ({
                   {comment.text.charAt(0).toUpperCase() + comment.text.slice(1)}
                 </p>
               </div>
-
-              {editCommentId === comment.id && (
-                <div className="bg-light100__dark800  space-y-4 !w-full p-6 rounded-lg shadow-2xl mt-4">
-                  <div className="flex justify-between items-center">
-                    <div className="flex items-center gap-1">
-                      <Image
-                        src="/assets/images/avatars/avatar-1.svg"
-                        width={28}
-                        height={28}
-                        alt="avatar"
-                        className="rounded-full"
-                      />
-                      <div className="flex items-center h-6 gap-1">
-                        <h4 className=" p3-bold tracking-wide font-bold mb-2">
-                          Mishacreatrix
-                        </h4>
-                        <span className="size-1 relative bottom-1 rounded-full bg-white-400"></span>
-                        <span className="text-[14px]  relative bottom-1 text-white-400">
-                          Feb 01
-                        </span>
-                        <span className="size-1 relative bottom-1 rounded-full bg-white-400"></span>
-                        <span className="text-[14px]  relative bottom-1 text-white-400">
-                          Edited on Feb 01
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex-col space-y-4">
-                    <RHFInput
-                      name="editMessage"
-                      className="!bg-black-900 h-20 "
-                      placeholder="Say something nice to Mansurl Haque..."
-                    />
-                    <div className="w-1/5 ml-auto flex gap-4 justify-end">
-                      <Button
-                        onClick={() => {
-                          setEditCommentId(null);
-                          form.reset();
-                        }}
-                        className="!text-white-400 !text-[14px] capitalize cursor-pointer p3-medium">
-                        Cancel
-                      </Button>
-                      <span className="text-white-400">|</span>
-                      <Button
-                        onClick={() => {
-                          updateMessage({
-                            id: form.getValues('id'),
-                            contentId: contentId,
-                            commentAuthorId: commentAuthorId,
-                            replyingToId: '',
-                            text: form.getValues('editMessage'),
-                          });
-                          setEditCommentId(null);
-                        }}
-                        type="button"
-                        className="!text-primary-500 !text-[14px] capitalize cursor-pointer p3-medium">
-                        Save
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              )}
             </div>
           ))}
         </form>
