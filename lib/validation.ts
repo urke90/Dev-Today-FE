@@ -186,3 +186,49 @@ export type IPutPodcastDTO = Omit<
   groupId: string;
   tags: string[];
 };
+
+export const commentFormSchema = z.object({
+  id: z.string().optional(),
+  text: z.string().min(2).max(1000),
+  editMessage: z.string().optional(),
+  authorId: z.string(),
+  contentId: z.string(),
+  replyingTo: z
+    .object({
+      text: z.string(),
+      createdAt: z.date(),
+      updatedAt: z.date(),
+      author: z.object({
+        userName: z.string(),
+        avatarImg: z.string(),
+      }),
+    })
+    .optional(),
+});
+
+export const baseCommentSchema = z.object({
+  id: z.string(),
+  text: z.string(),
+  createdAt: z.date(),
+  authorId: z.string(),
+  userName: z.string(),
+  contentId: z.string(),
+  updatedAt: z.date(),
+  author: z.object({
+    userName: z.string(),
+    avatarImg: z.string(),
+  }),
+  replyingTo: z
+    .object({
+      text: z.string(),
+      createdAt: z.date(),
+      updatedAt: z.date(),
+      author: z.object({
+        userName: z.string(),
+        avatarImg: z.string(),
+      }),
+    })
+    .optional(),
+});
+
+export type IComment = z.infer<typeof baseCommentSchema>;

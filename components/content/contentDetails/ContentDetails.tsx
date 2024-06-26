@@ -3,6 +3,7 @@ import ParseHtml from '@/components/ParseHtml/ParseHtml';
 import AudioPlayer from '@/components/audioPlayer/AudioPlayer';
 import Comments from '@/components/comments/Comments';
 import { Button } from '@/components/ui/button';
+import { IComment } from '@/lib/validation';
 import { EContentType, IContent } from '@/types/content';
 import { IProfileUser } from '@/types/user';
 import {
@@ -24,13 +25,22 @@ type TagProps = {
 
 type ContentDetailsProps = {
   content: IContent;
+  commentAuthorId: string;
+  contentId: string;
+  allComments: IComment[];
   getAuthorDetails: {
     isFollowing: boolean;
     user: IProfileUser;
   };
 };
 
-const ContentDetails = ({ content, getAuthorDetails }: ContentDetailsProps) => {
+const ContentDetails = ({
+  content,
+  contentId,
+  commentAuthorId,
+  getAuthorDetails,
+  allComments,
+}: ContentDetailsProps) => {
   const router = useRouter();
   return (
     <div className="main-content p1-bold w-full mx-auto md:mx-0  space-y-5">
@@ -158,7 +168,11 @@ const ContentDetails = ({ content, getAuthorDetails }: ContentDetailsProps) => {
           </div>
         </>
       )}
-      <Comments />
+      <Comments
+        contentId={contentId}
+        commentAuthorId={commentAuthorId}
+        allComments={allComments}
+      />
     </div>
   );
 };
