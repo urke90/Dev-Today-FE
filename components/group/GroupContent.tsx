@@ -52,35 +52,30 @@ const GroupContent: React.FC<IGroupContentWrapperProps> = ({
   viewerId,
   groupId,
 }) => {
-  // const [content, setContent] = useState<IGroupContentResponse>(groupContent);
-  // const [members, setMembers] = useState<IGroupMembersResponse>(groupMembers);
+  const [content, setContent] = useState<IGroupContentResponse>(groupContent);
+  const [members, setMembers] = useState<IGroupMembersResponse>(groupMembers);
   const [page, setPage] = useState(1);
 
-  console.log('GROUP MEMBER U GROUP CONTENT WRAPPER', groupMembers);
-
   const {
-    isLoading: isLoadingContent,
+    // isPending: isPendingContent,
+    isLoading: isPendingContent,
     error: contentError,
     data: contentData,
   } = useQuery<IGroupContentResponse>({
     queryKey: [updateContentQueryKey(contentType), contentType, page],
     queryFn: () => fetchGroupContent(groupId, page, contentType, viewerId),
     enabled: contentType !== EQueryType.MEMBERS && page !== 1,
-    initialData: groupContent,
   });
 
   const {
-    isLoading: isLoadingMembers,
+    isLoading: isPendingMembers,
     error: membersError,
     data: membersData,
   } = useQuery<IGroupMembersResponse>({
     queryKey: [EContentGroupQueries.FETCH_MEMBERS, EQueryType.MEMBERS, page],
     queryFn: () => fetchGroupMembers(groupId, page),
     enabled: contentType === EQueryType.MEMBERS && page !== 1,
-    initialData: groupMembers,
   });
-
-  console.log('MEMBERS DATA U GROUP CONTENT WRAPPERRY');
 
   const likeOrDislikeContent = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -94,15 +89,14 @@ const GroupContent: React.FC<IGroupContentWrapperProps> = ({
         method: 'POST',
         body: { contentId },
       });
-      // setContent((prevContent) => ({
-      //   ...prevContent,
-      //   contents: prevContent.contents.map((content) =>
-      //     content.id === contentId
-      //       ? { ...content, isLiked: !content.isLiked }
-      //       : content
-      //   ),
-      // }));
-      // queryClient.setQueryData(EContentGroupQueries.FETCH_MEMBERS, )
+      setContent((prevContent) => ({
+        ...prevContent,
+        contents: prevContent.contents.map((content) =>
+          content.id === contentId
+            ? { ...content, isLiked: !content.isLiked }
+            : content
+        ),
+      }));
     } catch (error) {
       toast.error('Ooops, something went wrong!');
     }
@@ -112,21 +106,19 @@ const GroupContent: React.FC<IGroupContentWrapperProps> = ({
     setPage(1);
   }, [contentType]);
 
-  // useEffect(() => {
-  //   if (contentData) {
-  //     setContent(contentData);
-  //   }
-  // }, [contentData]);
+  //&& contentType !== EQueryType.MEMBERS
+  useEffect(() => {
+    if (contentData) {
+      setContent((prevContent) => ({ ...prevContent, ...contentData }));
+    }
+  }, [contentData]);
 
-  // useEffect(() => {
-  //   if (membersData) {
-  //     setMembers(membersData);
-  //   }
-  // }, [membersData]);
-
-  // useEffect(() => {
-  //   setMembers(groupMembers)
-  // }, [groupMembers])
+  useEffect(() => {
+    //&& contentType === EQueryType.MEMBERS
+    if (membersData) {
+      setMembers((prevMembers) => ({ ...prevMembers, ...membersData }));
+    }
+  }, [membersData]);
 
   const renderContent = () => {
     let styles;
@@ -136,7 +128,7 @@ const GroupContent: React.FC<IGroupContentWrapperProps> = ({
       case EQueryType.POST:
         {
           styles = 'flex flex-col flex-wrap gap-5';
-          renderedContent = contentData.contents?.map(
+          renderedContent = content.contents?.map(
             ({
               id,
               title,
@@ -172,7 +164,7 @@ const GroupContent: React.FC<IGroupContentWrapperProps> = ({
       case EQueryType.MEETUP:
         {
           styles = 'flex flex-col flax-wrap gap-5';
-          renderedContent = contentData.contents?.map(
+          renderedContent = groupContent.contents?.map(
             ({ id, meetupDate, title, description, coverImage, tags }) => (
               <MeetupItemCard
                 key={id}
@@ -191,7 +183,7 @@ const GroupContent: React.FC<IGroupContentWrapperProps> = ({
       case EQueryType.PODCAST:
         {
           styles = 'grid grid-cols-1 md:grid-cols-2 gap-5';
-          renderedContent = contentData.contents?.map(
+          renderedContent = content.contents?.map(
             ({
               id,
               coverImage,
@@ -221,7 +213,7 @@ const GroupContent: React.FC<IGroupContentWrapperProps> = ({
       case EQueryType.MEMBERS:
         {
           styles = 'grid grid-cols-2 md:grid-cols-2 gap-5';
-          renderedContent = membersData.members?.map(
+          renderedContent = members.members?.map(
             ({ id, avatarImg, userName }) => (
               <MemberItemCard
                 key={id}
@@ -235,7 +227,7 @@ const GroupContent: React.FC<IGroupContentWrapperProps> = ({
         break;
       default: {
         styles = 'flex flex-col flax-wrap gap-5';
-        renderedContent = contentData.contents?.map(
+        renderedContent = content.contents?.map(
           ({
             id,
             title,
@@ -281,8 +273,8 @@ const GroupContent: React.FC<IGroupContentWrapperProps> = ({
     <>
       <ContentNavLinks isGroupPage />
       <ul className={styles}>{renderedContent}</ul>
-      {(isLoadingContent || isLoadingMembers) && (
-        <div className="p-4">
+      {(isPendingContent || isPendingMembers) && (
+        <div className="p-1">
           <LoadingSpinner />
         </div>
       )}
@@ -290,14 +282,14 @@ const GroupContent: React.FC<IGroupContentWrapperProps> = ({
         currentPage={page}
         totalPages={
           contentType === EQueryType.MEMBERS
-            ? membersData.totalPages
-            : contentData.totalPages
+            ? members.totalPages
+            : content.totalPages
         }
         disablePrevBtn={page === 1}
         disableNextBtn={
           contentType === EQueryType.MEMBERS
-            ? !membersData.hasNextPage
-            : !contentData.hasNextPage
+            ? !members.hasNextPage
+            : !content.hasNextPage
         }
         setPage={setPage}
       />

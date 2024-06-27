@@ -22,7 +22,6 @@ export const useInfiniteScroll = ({
       if (observer.current) observer.current.disconnect(); // if we have to add to different elemnts
       observer.current = new IntersectionObserver(([entry]) => {
         if (entry.isIntersecting && shouldFetch) {
-          console.log('jeste u isIntersecting', entry);
           updatePage();
         }
       });

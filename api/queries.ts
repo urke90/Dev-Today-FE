@@ -57,6 +57,7 @@ export const fetchGroupContent = async (
     BASE_API_URL +
       `/groups/${id}/content?type=${type}&page=${page}&viewerId=${viewerId}`
   );
+  console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
 
   if (!response.ok) {
     throw new Error('Something went wrong!');

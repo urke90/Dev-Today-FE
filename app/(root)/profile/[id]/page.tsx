@@ -45,11 +45,9 @@ const UserProfilePage: React.FC<IUserProfilePageProps> = async ({
     });
   } else {
     content = await typedFetch<IContent[]>({
-      url: `/user/${id}/content?type=${contentType}&page=${page}&viewerId=${session.user.id}`,
+      url: `/user/${id}/content?type=${contentType}&viewerId=${session.user.id}`,
     });
   }
-
-  console.log('GROUP CONTENT U USER PROFILE PAGE', groupContent);
 
   return (
     <section className="px-3.5 lg:px-5">

@@ -57,7 +57,7 @@ const ContentList: React.FC<IContentListProps> = ({
 }) => {
   const [content, setContent] = useState<IContent[]>(contentItems);
   const [groups, setGroups] = useState<IProfilePageGroup[]>(groupItems);
-  const [page, setPage] = useState(2);
+  const [page, setPage] = useState(1);
 
   const likeOrDislikeContent = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -92,6 +92,7 @@ const ContentList: React.FC<IContentListProps> = ({
   }, []);
 
   const {
+    isPending,
     isLoading: isLoadingContent,
     error: contentError,
     data: contentData,
@@ -99,7 +100,6 @@ const ContentList: React.FC<IContentListProps> = ({
     queryKey: [updateContentQueryKey(contentType), contentType, userId, page],
     queryFn: () => fetchUserContent(userId, contentType, page, viewerId),
     enabled: shouldFetch && contentType !== EQueryType.GROUP && page !== 1,
-    retry: false,
   });
 
   const {
@@ -110,7 +110,6 @@ const ContentList: React.FC<IContentListProps> = ({
     queryKey: [EContentGroupQueries.FETCH_GROUPS, userId, page],
     queryFn: () => fetchUserGroups(userId, page),
     enabled: shouldFetch && contentType === EQueryType.GROUP && page !== 1,
-    retry: false,
   });
 
   const lastListItemRef = useInfiniteScroll({
@@ -134,6 +133,8 @@ const ContentList: React.FC<IContentListProps> = ({
   useEffect(() => {
     setPage(1);
   }, [contentType]);
+
+  console.log('contentItems', contentItems);
 
   const renderContent = () => {
     let styles;
@@ -288,7 +289,7 @@ const ContentList: React.FC<IContentListProps> = ({
     <ul className={styles}>
       {renderedContent}
       <li ref={lastListItemRef} />
-      {(isLoadingContent || isLoadingGroups) && (
+      {(isPending || isLoadingGroups) && (
         <li>
           <LoadingSpinner />
         </li>

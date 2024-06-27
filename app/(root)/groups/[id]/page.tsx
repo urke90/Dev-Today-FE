@@ -24,7 +24,7 @@ const GroupDetailsPage: React.FC<IGroupDetailsPage> = async ({
   searchParams,
 }) => {
   const id = params.id;
-  const page = parseSearchParams(searchParams.page, '1');
+  // const page = parseSearchParams(searchParams.page, '1');
   const contentType = parseSearchParams<EQueryType>(
     searchParams.type,
     EQueryType.POST
@@ -56,8 +56,6 @@ const GroupDetailsPage: React.FC<IGroupDetailsPage> = async ({
       url: `/groups/${id}/members`,
     });
   }
-
-  console.log('groupMembers', groupMembers);
 
   return (
     <section className="px-3.5 lg:px-5">

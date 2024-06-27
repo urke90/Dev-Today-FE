@@ -43,9 +43,11 @@ const MyProfilePage: React.FC<IMyProfilePageProps> = async ({
     });
   } else {
     content = await typedFetch<IContent[]>({
-      url: `/user/${session.user.id}/content?type=${contentType}&page=${page}&viewerId=${session.user.id}`,
+      url: `/user/${session.user.id}/content?type=${contentType}&viewerId=${session.user.id}`,
     });
   }
+
+  console.log('content u PROFILE PAGE-u', content);
 
   return (
     <section className="px-3.5 lg:px-5">
