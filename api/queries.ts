@@ -50,10 +50,12 @@ export const fetchAllGroups = async (page: number) => {
 export const fetchGroupContent = async (
   id: string,
   page: number,
-  type: EQueryType
+  type: EQueryType,
+  viewerId: string
 ) => {
   const response = await fetch(
-    BASE_API_URL + `/groups/${id}/content?type=${type}&page=${page}`
+    BASE_API_URL +
+      `/groups/${id}/content?type=${type}&page=${page}&viewerId=${viewerId}`
   );
 
   if (!response.ok) {
@@ -69,10 +71,12 @@ export const fetchGroupMembers = async (
   role?: EUserRole
 ) => {
   const roleQuery = role ? `&role=${role.toLowerCase()}` : '';
-
+  console.log('roleQuery', roleQuery);
   const response = await fetch(
     BASE_API_URL + `/groups/${id}/members?page=${page}&limit=5${roleQuery}`
   );
+
+  console.log('response FETCH GROUP MEMBERS', response);
 
   if (!response.ok) {
     throw new Error('Something went wrong!');

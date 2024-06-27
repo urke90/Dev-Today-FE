@@ -30,6 +30,8 @@ const GroupDetailsPage: React.FC<IGroupDetailsPage> = async ({
     EQueryType.POST
   );
 
+  console.log('CONTENT TYPE', contentType);
+
   const session = await auth();
   if (!session) throw new Error('User data not available!');
 
@@ -47,13 +49,15 @@ const GroupDetailsPage: React.FC<IGroupDetailsPage> = async ({
 
   if (contentType !== EQueryType.MEMBERS) {
     groupContent = await typedFetch<IGroupContentResponse>({
-      url: `/groups/${id}/content?type=${contentType}&viewerId=${session.user.id}&page=${page}`,
+      url: `/groups/${id}/content?type=${contentType}&viewerId=${session.user.id}`,
     });
   } else if (contentType === EQueryType.MEMBERS) {
     groupMembers = await typedFetch<IGroupMembersResponse>({
-      url: `/groups/${id}/members?page=${page}`,
+      url: `/groups/${id}/members`,
     });
   }
+
+  console.log('groupMembers', groupMembers);
 
   return (
     <section className="px-3.5 lg:px-5">
@@ -66,7 +70,7 @@ const GroupDetailsPage: React.FC<IGroupDetailsPage> = async ({
         isGroupUser={groupDetails.isGroupUser}
         groupContent={groupContent as IGroupContentResponse}
         groupMembers={groupMembers as IGroupMembersResponse}
-        userId={session.user.id}
+        viewerId={session.user.id}
       />
     </section>
   );

@@ -33,7 +33,6 @@ const GroupsHome: React.FC<IGroupsHomeProps> = ({
   const { data } = useQuery<IHomePageGroupsResponse>({
     queryKey: [EContentGroupQueries.FETCH_GROUPS, page],
     queryFn: () => fetchAllGroups(page),
-    retry: false,
     enabled: page > 1,
     initialData: groupsData,
   });
@@ -97,7 +96,7 @@ const GroupsHome: React.FC<IGroupsHomeProps> = ({
           </ul>
           <Pagination
             currentPage={page}
-            totalPage={data.totalPages}
+            totalPages={data.totalPages}
             setPage={setPage}
             disableNextBtn={!data.hasNextPage}
             disablePrevBtn={page === 1}

@@ -4,16 +4,14 @@
 
 import { fetchGroupContent, fetchGroupMembers } from '@/api/queries';
 import { EContentGroupQueries } from '@/constants/react-query';
-import type { IContent } from '@/types/content';
 import type {
   IGroupContentResponse,
-  IGroupMember,
   IGroupMembersResponse,
 } from '@/types/group';
 import { EQueryType } from '@/types/queries';
 import { typedFetch } from '@/utils/api';
 import { useQuery } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import ContentNavLinks from '../shared/ContentNavLinks';
 import LoadingSpinner from '../shared/LoadingSpinner';
@@ -43,20 +41,22 @@ interface IGroupContentWrapperProps {
   contentType: EQueryType;
   groupContent: IGroupContentResponse;
   groupMembers: IGroupMembersResponse;
-  userId: string;
+  viewerId: string;
   groupId: string;
 }
 
-const GroupContentWrapper: React.FC<IGroupContentWrapperProps> = ({
+const GroupContent: React.FC<IGroupContentWrapperProps> = ({
   contentType,
   groupContent,
   groupMembers,
-  userId,
+  viewerId,
   groupId,
 }) => {
-  const [content, setContent] = useState<IContent[]>(groupContent.contents);
-  const [members, setMembers] = useState<IGroupMember[]>(groupMembers.members);
+  // const [content, setContent] = useState<IGroupContentResponse>(groupContent);
+  // const [members, setMembers] = useState<IGroupMembersResponse>(groupMembers);
   const [page, setPage] = useState(1);
+
+  console.log('GROUP MEMBER U GROUP CONTENT WRAPPER', groupMembers);
 
   const {
     isLoading: isLoadingContent,
@@ -64,9 +64,9 @@ const GroupContentWrapper: React.FC<IGroupContentWrapperProps> = ({
     data: contentData,
   } = useQuery<IGroupContentResponse>({
     queryKey: [updateContentQueryKey(contentType), contentType, page],
-    queryFn: () => fetchGroupContent(groupId, page, contentType),
-    initialData: groupContent,
+    queryFn: () => fetchGroupContent(groupId, page, contentType, viewerId),
     enabled: contentType !== EQueryType.MEMBERS && page !== 1,
+    initialData: groupContent,
   });
 
   const {
@@ -74,11 +74,13 @@ const GroupContentWrapper: React.FC<IGroupContentWrapperProps> = ({
     error: membersError,
     data: membersData,
   } = useQuery<IGroupMembersResponse>({
-    queryKey: [EContentGroupQueries.FETCH_MEMBERS, page],
+    queryKey: [EContentGroupQueries.FETCH_MEMBERS, EQueryType.MEMBERS, page],
     queryFn: () => fetchGroupMembers(groupId, page),
-    initialData: groupMembers,
     enabled: contentType === EQueryType.MEMBERS && page !== 1,
+    initialData: groupMembers,
   });
+
+  console.log('MEMBERS DATA U GROUP CONTENT WRAPPERRY');
 
   const likeOrDislikeContent = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -88,17 +90,19 @@ const GroupContentWrapper: React.FC<IGroupContentWrapperProps> = ({
     e.stopPropagation();
     try {
       await typedFetch({
-        url: `/user/content/${userId}/like`,
+        url: `/user/content/${viewerId}/like`,
         method: 'POST',
         body: { contentId },
       });
-      setContent((prevContent) =>
-        prevContent.map((content) =>
-          content.id === contentId
-            ? { ...content, isLiked: !content.isLiked }
-            : content
-        )
-      );
+      // setContent((prevContent) => ({
+      //   ...prevContent,
+      //   contents: prevContent.contents.map((content) =>
+      //     content.id === contentId
+      //       ? { ...content, isLiked: !content.isLiked }
+      //       : content
+      //   ),
+      // }));
+      // queryClient.setQueryData(EContentGroupQueries.FETCH_MEMBERS, )
     } catch (error) {
       toast.error('Ooops, something went wrong!');
     }
@@ -108,17 +112,21 @@ const GroupContentWrapper: React.FC<IGroupContentWrapperProps> = ({
     setPage(1);
   }, [contentType]);
 
-  useEffect(() => {
-    if (contentData.contents) {
-      setContent(contentData.contents);
-    }
-  }, [contentData]);
+  // useEffect(() => {
+  //   if (contentData) {
+  //     setContent(contentData);
+  //   }
+  // }, [contentData]);
 
-  useEffect(() => {
-    if (membersData.members) {
-      setMembers(membersData.members);
-    }
-  }, [membersData.members]);
+  // useEffect(() => {
+  //   if (membersData) {
+  //     setMembers(membersData);
+  //   }
+  // }, [membersData]);
+
+  // useEffect(() => {
+  //   setMembers(groupMembers)
+  // }, [groupMembers])
 
   const renderContent = () => {
     let styles;
@@ -128,7 +136,7 @@ const GroupContentWrapper: React.FC<IGroupContentWrapperProps> = ({
       case EQueryType.POST:
         {
           styles = 'flex flex-col flex-wrap gap-5';
-          renderedContent = content?.map(
+          renderedContent = contentData.contents?.map(
             ({
               id,
               title,
@@ -164,7 +172,7 @@ const GroupContentWrapper: React.FC<IGroupContentWrapperProps> = ({
       case EQueryType.MEETUP:
         {
           styles = 'flex flex-col flax-wrap gap-5';
-          renderedContent = content?.map(
+          renderedContent = contentData.contents?.map(
             ({ id, meetupDate, title, description, coverImage, tags }) => (
               <MeetupItemCard
                 key={id}
@@ -183,7 +191,7 @@ const GroupContentWrapper: React.FC<IGroupContentWrapperProps> = ({
       case EQueryType.PODCAST:
         {
           styles = 'grid grid-cols-1 md:grid-cols-2 gap-5';
-          renderedContent = content?.map(
+          renderedContent = contentData.contents?.map(
             ({
               id,
               coverImage,
@@ -213,14 +221,16 @@ const GroupContentWrapper: React.FC<IGroupContentWrapperProps> = ({
       case EQueryType.MEMBERS:
         {
           styles = 'grid grid-cols-2 md:grid-cols-2 gap-5';
-          renderedContent = members?.map(({ id, avatarImg, userName }) => (
-            <MemberItemCard
-              key={id}
-              id={id}
-              avatarImg={avatarImg}
-              userName={userName}
-            />
-          ));
+          renderedContent = membersData.members?.map(
+            ({ id, avatarImg, userName }) => (
+              <MemberItemCard
+                key={id}
+                id={id}
+                avatarImg={avatarImg}
+                userName={userName}
+              />
+            )
+          );
         }
         break;
       default: {
@@ -295,4 +305,4 @@ const GroupContentWrapper: React.FC<IGroupContentWrapperProps> = ({
   );
 };
 
-export default GroupContentWrapper;
+export default memo(GroupContent);

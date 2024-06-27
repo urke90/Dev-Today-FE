@@ -5,15 +5,26 @@ import type {
   IHomePageGroupsResponse,
 } from '@/types/group';
 import { typedFetch } from '@/utils/api';
+import { parseSearchParams } from '@/utils/query';
 
 // ---------------------------------------- ------------------------
 
-const GroupsPage: React.FC = async () => {
+interface IGroupsPage {
+  searchParams: {
+    sortBy: string | string[] | undefined;
+  };
+}
+
+const GroupsPage: React.FC<IGroupsPage> = async ({ searchParams }) => {
+  const sortBy = parseSearchParams(searchParams.sortBy, '');
+
+  const sortQuery = sortBy ? `&sortBy=${sortBy}` : '';
+
   const session = await auth();
   if (!session) throw new Error('User session is not available!');
 
   const groupsData = await typedFetch<IHomePageGroupsResponse>({
-    url: '/groups?members=true',
+    url: `/groups?members=true${sortQuery}`,
   });
 
   if (!groupsData) throw new Error('Internal server error!');

@@ -164,6 +164,15 @@
     animation: rotation 1.5s linear infinite;
   }
   /* SPINNING LOADER */
+
+  /* Hide scrollbar for IE, Edge and Firefox etc */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
 }
 input:-webkit-autofill,
 input:-webkit-autofill:hover,

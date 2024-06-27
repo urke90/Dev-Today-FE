@@ -3,11 +3,11 @@
 import { fetchGroupMembers } from '@/api/queries';
 import { EContentGroupQueries } from '@/constants/react-query';
 import { useInfiniteScroll } from '@/hooks/use-infinite-scroll';
-import { IGroupMembersResponse } from '@/types/group';
+import type { IGroupMember, IGroupMembersResponse } from '@/types/group';
 import { EUserRole } from '@/types/user';
 import * as Dialog from '@radix-ui/react-dialog';
 import { useQuery } from '@tanstack/react-query';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import CloseIcon from '../icons/CloseIcon';
 import LoadingSpinner from '../shared/LoadingSpinner';
 import { Button } from '../ui/button';
@@ -16,19 +16,17 @@ import MemberItemCard from './MemberItemCard';
 // ----------------------------------------------------------------
 
 interface IAdminDialogProps {
-  // groupMembers: IGroupMembersResponse;
-  // role: EUserRole;
   groupId: string;
 }
 
 const AdminMembersDialog: React.FC<IAdminDialogProps> = ({ groupId }) => {
+  const [admins, setAdmins] = useState<IGroupMember[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [page, setPage] = useState(1);
 
   const { data, isFetching } = useQuery<IGroupMembersResponse>({
-    queryKey: [EContentGroupQueries.FETCH_MEMBERS, EUserRole.ADMIN],
+    queryKey: [EContentGroupQueries.FETCH_MEMBERS, page],
     queryFn: () => fetchGroupMembers(groupId, page, EUserRole.ADMIN),
-    // initialData: groupMembers,
     enabled: isOpen,
   });
 
@@ -39,8 +37,15 @@ const AdminMembersDialog: React.FC<IAdminDialogProps> = ({ groupId }) => {
   const lastListItemRef = useInfiniteScroll({
     isLoading: isFetching,
     updatePage,
-    shouldFetch: data?.hasNextPage || data?.members.length === 5,
+    shouldFetch: data?.hasNextPage || data?.members?.length === 5,
   });
+
+  // ? add data or data.members to deps array??!?!??!?!?!??!?!?!?!??!??!?!?!??!?!?
+  useEffect(() => {
+    if (data?.members) {
+      setAdmins((prevAdmins) => [...prevAdmins, ...data.members]);
+    }
+  }, [data]);
 
   return (
     <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
@@ -56,9 +61,9 @@ const AdminMembersDialog: React.FC<IAdminDialogProps> = ({ groupId }) => {
               <CloseIcon className="text-black-800 dark:text-white-200" />
             </Dialog.Close>
           </div>
-          <ul className="flex flex-col gap-2.5 max-h-[360px] overflow-scroll">
-            {data?.members && data?.members?.length > 0 ? (
-              data?.members?.map(({ id, avatarImg, userName }) => (
+          <ul className="flex flex-col gap-2.5  max-h-[400px] overflow-scroll no-scrollbar">
+            {admins?.length > 0 ? (
+              admins?.map(({ id, avatarImg, userName }) => (
                 <MemberItemCard
                   key={id}
                   id={id}
@@ -73,12 +78,12 @@ const AdminMembersDialog: React.FC<IAdminDialogProps> = ({ groupId }) => {
               </p>
             )}
             <li ref={lastListItemRef} />
+            {isFetching && (
+              <li className="mt-2">
+                <LoadingSpinner />
+              </li>
+            )}
           </ul>
-          {isFetching && (
-            <div className="mt-2">
-              <LoadingSpinner />
-            </div>
-          )}
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>
