@@ -57,7 +57,6 @@ const GroupContent: React.FC<IGroupContentWrapperProps> = ({
   const [page, setPage] = useState(1);
 
   const {
-    // isPending: isPendingContent,
     isLoading: isPendingContent,
     error: contentError,
     data: contentData,
