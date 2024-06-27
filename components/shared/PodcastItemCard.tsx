@@ -6,6 +6,7 @@ import HeartIcon from '../icons/Heart';
 import { Button } from '../ui/button';
 
 import type { ITag } from '@/types/content';
+import { calculateTimeAgo } from '@/utils/format';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -40,7 +41,7 @@ const PodcastItemCard: React.FC<IPodcastItemCardProps> = ({
   return (
     <li>
       <Link
-        href={'/podcasts/' + id}
+        href={'/content/' + id}
         className="bg-light100__dark800 flex flex-col gap-3.5 rounded-[10px] px-3.5 py-5 lg:gap-[18px] lg:rounded-2xl lg:p-4 shadow-card"
       >
         <div className="flex-between">
@@ -86,7 +87,7 @@ const PodcastItemCard: React.FC<IPodcastItemCardProps> = ({
           <div className="flex flex-col">
             <span className="p4-bold lg:p3-bold">{author}</span>
             <span className="subtitle-normal">
-              {createdAt.toLocaleString()}
+              {calculateTimeAgo(createdAt)}
             </span>
           </div>
         </div>

@@ -47,8 +47,6 @@ const MyProfilePage: React.FC<IMyProfilePageProps> = async ({
     });
   }
 
-  console.log('content u PROFILE PAGE-u', content);
-
   return (
     <section className="px-3.5 lg:px-5">
       <ProfileHome

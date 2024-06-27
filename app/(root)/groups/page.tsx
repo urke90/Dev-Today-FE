@@ -4,6 +4,7 @@ import type {
   IAllGroupsSidebarDetails,
   IHomePageGroupsResponse,
 } from '@/types/group';
+import { ESortByFilter } from '@/types/queries';
 import { typedFetch } from '@/utils/api';
 import { parseSearchParams } from '@/utils/query';
 
@@ -16,7 +17,7 @@ interface IGroupsPage {
 }
 
 const GroupsPage: React.FC<IGroupsPage> = async ({ searchParams }) => {
-  const sortBy = parseSearchParams(searchParams.sortBy, '');
+  const sortBy: ESortByFilter = parseSearchParams(searchParams.sortBy, '');
 
   const sortQuery = sortBy ? `&sortBy=${sortBy}` : '';
 
@@ -33,7 +34,13 @@ const GroupsPage: React.FC<IGroupsPage> = async ({ searchParams }) => {
     url: '/groups/stats',
   });
 
-  return <GroupsHome groupsData={groupsData} sidebarDetails={sidbarDetails} />;
+  return (
+    <GroupsHome
+      groupsData={groupsData}
+      sortBy={sortBy}
+      sidebarDetails={sidbarDetails}
+    />
+  );
 };
 
 export default GroupsPage;

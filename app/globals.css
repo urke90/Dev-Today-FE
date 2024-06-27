@@ -4,7 +4,7 @@
 
 * {
   box-sizing: border-box;
-  /* word-break: break-word; */
+  word-break: break-word;
 }
 :root {
   --foreground-rgb: 0, 0, 0;

@@ -92,7 +92,6 @@ const ContentList: React.FC<IContentListProps> = ({
   }, []);
 
   const {
-    isPending,
     isLoading: isLoadingContent,
     error: contentError,
     data: contentData,
@@ -133,8 +132,6 @@ const ContentList: React.FC<IContentListProps> = ({
   useEffect(() => {
     setPage(1);
   }, [contentType]);
-
-  console.log('contentItems', contentItems);
 
   const renderContent = () => {
     let styles;
@@ -289,7 +286,7 @@ const ContentList: React.FC<IContentListProps> = ({
     <ul className={styles}>
       {renderedContent}
       <li ref={lastListItemRef} />
-      {(isPending || isLoadingGroups) && (
+      {(isLoadingContent || isLoadingGroups) && (
         <li>
           <LoadingSpinner />
         </li>

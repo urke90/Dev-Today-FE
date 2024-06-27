@@ -48,7 +48,7 @@ const PostItemCard: React.FC<IPostItemCardProps> = ({
   return (
     <li>
       <Link
-        href={'/posts/' + id}
+        href={'/content/' + id}
         className="bg-light100__dark800 flex gap-4 rounded-2xl p-4 md:items-center md:p-5 shadow-card"
       >
         <Image

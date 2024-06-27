@@ -30,8 +30,6 @@ const GroupDetailsPage: React.FC<IGroupDetailsPage> = async ({
     EQueryType.POST
   );
 
-  console.log('CONTENT TYPE', contentType);
-
   const session = await auth();
   if (!session) throw new Error('User data not available!');
 

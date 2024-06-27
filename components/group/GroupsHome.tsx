@@ -6,6 +6,7 @@ import type {
   IAllGroupsSidebarDetails,
   IHomePageGroupsResponse,
 } from '@/types/group';
+import { ESortByFilter } from '@/types/queries';
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -22,11 +23,13 @@ import { Button } from '../ui/button';
 interface IGroupsHomeProps {
   groupsData: IHomePageGroupsResponse;
   sidebarDetails: IAllGroupsSidebarDetails;
+  sortBy: ESortByFilter;
 }
 
 const GroupsHome: React.FC<IGroupsHomeProps> = ({
   groupsData,
   sidebarDetails,
+  sortBy,
 }) => {
   const [page, setPage] = useState(1);
 
@@ -41,7 +44,7 @@ const GroupsHome: React.FC<IGroupsHomeProps> = ({
     <section className="px-3.5 lg:px-5">
       <div className="content-wrapper">
         <aside className="left-sidebar">
-          <SortAndFilter isGroupPage />
+          <SortAndFilter isGroupPage sortBy={sortBy} />
           <SidebarItemWrapper
             title="Top Ranked"
             items={sidebarDetails.topRankedGroups.map(
