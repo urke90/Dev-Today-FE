@@ -40,12 +40,12 @@ const Content = async (props: ParamsProps) => {
 
   authorName = getFirstName(authorName);
 
+  const commentAuthorId = session.user.id;
+
   const allComments = await typedFetch<IComment[]>({
-    url: `/content/${id}/comment`,
+    url: `/content/${id}/comment?viewerId=${commentAuthorId}`,
     cache: 'no-cache',
   });
-
-  const commentAuthorId = session.user.id;
 
   return (
     <div className="content-wrapper px-4">

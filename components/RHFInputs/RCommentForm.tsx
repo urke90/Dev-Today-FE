@@ -4,6 +4,7 @@ import { IComment, editAndReplyCommentSchema } from '@/lib/validation';
 import { typedFetch } from '@/utils/api';
 import { formatDate } from '@/utils/format';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -15,41 +16,41 @@ type CommentProps = {
   comment: IComment;
   setOpenEdit: (value: boolean) => void;
   setOpenReply: (value: boolean) => void;
-  replyingComment: string | null;
+  isReplying: boolean;
 };
 
 const RCommentForm = ({
   isEdit,
   setOpenEdit,
   setOpenReply,
-  replyingComment,
+  isReplying,
   comment,
 }: CommentProps) => {
+  const session = useSession();
   const form = useForm<z.infer<typeof editAndReplyCommentSchema>>({
     resolver: zodResolver(editAndReplyCommentSchema),
     defaultValues: {
-      id: comment.id,
-      text: replyingComment ? '' : comment.text ?? '',
-      authorId: comment.authorId ?? '',
-      contentId: comment.contentId ?? '',
+      text: isReplying ? '' : comment?.text ?? '',
     },
   });
 
   const onSubmit = async (
     values: z.infer<typeof editAndReplyCommentSchema>
   ) => {
-    if (replyingComment) {
+    console.log(session);
+    if (isReplying) {
       try {
         await typedFetch({
           url: '/content/comment',
           method: 'POST',
           body: {
             text: values.text,
-            authorId: values.authorId,
-            contentId: values.contentId,
+            authorId: session?.data?.user.id,
+            contentId: comment.contentId,
             replyingToId: comment.id,
           },
         });
+
         setOpenReply(false);
         revalidate('/content/comment');
       } catch (error) {
@@ -65,16 +66,17 @@ const RCommentForm = ({
             id: comment.id,
             contentId: comment.contentId,
             text: values.text,
-            authorId: values.authorId,
+            authorId: comment.authorId,
           },
         });
         setOpenEdit(false);
         revalidate('/content/comment');
-        form.reset();
       } catch (error) {
         console.error(error);
         throw new Error('Failed to update comment');
       }
+
+      form.reset();
     }
   };
 
@@ -93,7 +95,7 @@ const RCommentForm = ({
               />
               <div className="flex items-center h-6 gap-1">
                 <h4 className=" p3-bold tracking-wide font-bold mb-2">
-                  {comment.author.userName}
+                  {session?.data?.user.name}
                 </h4>
                 <span className="size-1 relative bottom-1 rounded-full bg-white-400"></span>
                 <span className="text-[14px]  relative bottom-1 text-white-400">

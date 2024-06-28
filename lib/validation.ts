@@ -193,6 +193,7 @@ export const commentFormSchema = z.object({
   editMessage: z.string().optional(),
   authorId: z.string(),
   contentId: z.string(),
+
   replyingTo: z
     .object({
       text: z.string(),
@@ -218,25 +219,25 @@ export const baseCommentSchema = z.object({
     userName: z.string(),
     avatarImg: z.string(),
   }),
-  replyingTo: z
-    .object({
-      text: z.string(),
-      createdAt: z.date(),
-      updatedAt: z.date(),
-      author: z.object({
-        userName: z.string(),
-        avatarImg: z.string(),
-      }),
-    })
+  replies: z
+    .array(
+      z.object({
+        id: z.string(),
+        text: z.string(),
+        createdAt: z.date(),
+        updatedAt: z.date(),
+        authorId: z.string(),
+        author: z.object({
+          userName: z.string(),
+          avatarImg: z.string(),
+        }),
+      })
+    )
     .optional(),
 });
 
 export const editAndReplyCommentSchema = z.object({
-  id: z.string().optional(),
   text: z.string().min(2).max(1000),
-  authorId: z.string(),
-  contentId: z.string(),
-  replyingTo: z.string().optional(),
 });
 
 export type IComment = z.infer<typeof baseCommentSchema>;
