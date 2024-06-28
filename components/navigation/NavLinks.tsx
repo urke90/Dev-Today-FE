@@ -11,8 +11,6 @@ import { usePathname } from 'next/navigation';
 
 // ----------------------------------------------------------------
 
-const CONTENT_PAGES = ['/posts', '/meetups', '/podcasts', '/content'];
-
 const NavLinks: React.FC = () => {
   const pathname = usePathname();
 

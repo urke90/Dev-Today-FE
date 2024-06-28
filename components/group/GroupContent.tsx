@@ -10,8 +10,8 @@ import type {
 } from '@/types/group';
 import { EQueryType } from '@/types/queries';
 import { typedFetch } from '@/utils/api';
-import { useQuery } from '@tanstack/react-query';
-import { memo, useEffect, useState } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import ContentNavLinks from '../shared/ContentNavLinks';
 import LoadingSpinner from '../shared/LoadingSpinner';
@@ -22,6 +22,16 @@ import PostItemCard from '../shared/PostItemCard';
 import MemberItemCard from './MemberItemCard';
 
 // ----------------------------------------------------------------
+
+// Loadamo stranicu
+// Loadamo 1. page contenta
+// Stavimo to kao initialData za useQuery
+// Odemo na page 2
+// useQuery loada page 2 contenta
+// Na clientu prikazujemo page 2
+// Ako likeamo
+// Saljemo request na BE
+// Nakon successa, update-amo lokalni state da to prikazuje
 
 const updateContentQueryKey = (contentType: EQueryType) => {
   if (contentType === EQueryType.GROUP) {
@@ -52,15 +62,17 @@ const GroupContent: React.FC<IGroupContentWrapperProps> = ({
   viewerId,
   groupId,
 }) => {
-  const [content, setContent] = useState<IGroupContentResponse>(groupContent);
-  const [members, setMembers] = useState<IGroupMembersResponse>(groupMembers);
+  // const [content, setContent] = useState<IGroupContentResponse>(groupContent);
+  // const [members, setMembers] = useState<IGroupMembersResponse>(groupMembers);
+  const queryClient = useQueryClient();
   const [page, setPage] = useState(1);
 
   const {
     isLoading: isPendingContent,
     error: contentError,
-    data: contentData,
+    data: content,
   } = useQuery<IGroupContentResponse>({
+    initialData: groupContent,
     queryKey: [updateContentQueryKey(contentType), contentType, page],
     queryFn: () => fetchGroupContent(groupId, page, contentType, viewerId),
     enabled: contentType !== EQueryType.MEMBERS && page !== 1,
@@ -69,8 +81,9 @@ const GroupContent: React.FC<IGroupContentWrapperProps> = ({
   const {
     isLoading: isPendingMembers,
     error: membersError,
-    data: membersData,
+    data: members,
   } = useQuery<IGroupMembersResponse>({
+    initialData: groupMembers,
     queryKey: [EContentGroupQueries.FETCH_MEMBERS, EQueryType.MEMBERS, page],
     queryFn: () => fetchGroupMembers(groupId, page),
     enabled: contentType === EQueryType.MEMBERS && page !== 1,
@@ -88,14 +101,25 @@ const GroupContent: React.FC<IGroupContentWrapperProps> = ({
         method: 'POST',
         body: { contentId },
       });
-      setContent((prevContent) => ({
-        ...prevContent,
-        contents: prevContent.contents.map((content) =>
-          content.id === contentId
-            ? { ...content, isLiked: !content.isLiked }
-            : content
-        ),
-      }));
+      queryClient.setQueryData(
+        [updateContentQueryKey(contentType), contentType, page],
+        {
+          ...content,
+          contents: content.contents.map((content) =>
+            content.id === contentId
+              ? { ...content, isLiked: !content.isLiked }
+              : content
+          ),
+        }
+      );
+      // setContent((prevContent) => ({
+      //   ...prevContent,
+      //   contents: prevContent.contents.map((content) =>
+      //     content.id === contentId
+      //       ? { ...content, isLiked: !content.isLiked }
+      //       : content
+      //   ),
+      // }));
     } catch (error) {
       toast.error('Ooops, something went wrong!');
     }
@@ -103,21 +127,25 @@ const GroupContent: React.FC<IGroupContentWrapperProps> = ({
 
   useEffect(() => {
     setPage(1);
+    queryClient.setQueryData(
+      [updateContentQueryKey(contentType), contentType, 1],
+      contentType === EQueryType.MEMBERS ? groupMembers : groupContent
+    );
   }, [contentType]);
 
-  //&& contentType !== EQueryType.MEMBERS
-  useEffect(() => {
-    if (contentData) {
-      setContent((prevContent) => ({ ...prevContent, ...contentData }));
-    }
-  }, [contentData]);
+  // //&& contentType !== EQueryType.MEMBERS
+  // useEffect(() => {
+  //   if (contentData) {
+  //     setContent((prevContent) => ({ ...prevContent, ...contentData }));
+  //   }
+  // }, [contentData]);
 
-  useEffect(() => {
-    //&& contentType === EQueryType.MEMBERS
-    if (membersData) {
-      setMembers((prevMembers) => ({ ...prevMembers, ...membersData }));
-    }
-  }, [membersData]);
+  // useEffect(() => {
+  //   //&& contentType === EQueryType.MEMBERS
+  //   if (membersData) {
+  //     setMembers((prevMembers) => ({ ...prevMembers, ...membersData }));
+  //   }
+  // }, [membersData]);
 
   const renderContent = () => {
     let styles;
@@ -296,4 +324,4 @@ const GroupContent: React.FC<IGroupContentWrapperProps> = ({
   );
 };
 
-export default memo(GroupContent);
+export default GroupContent;
