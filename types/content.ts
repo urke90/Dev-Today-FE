@@ -12,8 +12,27 @@ export enum EQueryContentType {
   PODCAST = 'podcast',
   GROUP = 'group',
 }
+export interface CommonData {
+  authorId?: string;
+  title: string;
+  type: EContentType;
+  groupId?: string;
+  coverImage: string | undefined;
+  description: string;
+  tags: string[];
+  meetupLocation?: string;
+  meetupDate?: Date;
+  podcastFile?: string;
+  podcastTitle?: string;
+}
 
 export interface IContent {
+  group: {
+    id: string;
+    bio: string;
+    name: string;
+    coverImage: string;
+  };
   id: string;
   type?: EContentType;
   createdAt: Date;
@@ -26,11 +45,16 @@ export interface IContent {
   description: string;
   postGroups: string[];
   coverImage: string | null;
-  meetupLocationImage: string | null;
+  meetupLocation: string | null;
   meetupDate: Date | null;
   podcastFile: string | null;
   podcastTitle: string | null;
-  tags: string[];
+  tags: [
+    {
+      id: string;
+      title: string;
+    },
+  ];
   comments: Comment[];
   contentGroups: [];
   viewsCount: number | null;

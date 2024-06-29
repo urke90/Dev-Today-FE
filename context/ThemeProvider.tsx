@@ -24,17 +24,26 @@ export const ThemeProvider: React.FC<IThemeProvider> = ({
   children,
   theme,
 }) => {
-  const [mode, setMode] = useState('dark');
+  const [mode, setMode] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const savedMode = localStorage.getItem('themeMode');
+      return savedMode ? savedMode : 'dark';
+    }
+    return 'dark';
+  });
 
   useEffect(() => {
-    if (mode === 'light') {
-      document.documentElement.classList.add('light');
-      document.documentElement.classList.remove('dark');
-    } else {
-      document.documentElement.classList.remove('light');
-      document.documentElement.classList.add('dark');
+    if (typeof window !== 'undefined') {
+      if (mode === 'light') {
+        document.documentElement.classList.add('light');
+        document.documentElement.classList.remove('dark');
+      } else {
+        document.documentElement.classList.remove('light');
+        document.documentElement.classList.add('dark');
+      }
+      localStorage.setItem('themeMode', mode);
     }
-  }, [mode, setMode, theme]);
+  }, [mode]);
 
   return (
     <ThemeContext.Provider value={{ mode, setMode, theme }}>

@@ -15,7 +15,7 @@ import {
   Separator,
   Trigger,
 } from '@radix-ui/react-dropdown-menu';
-import { signOut } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
 
 import { useTheme } from '@/context/ThemeProvider';
@@ -25,6 +25,9 @@ interface IProfileMenuProps {}
 // ? shadcn command dialog  cmdk lib
 
 const ProfileMenu: React.FC<IProfileMenuProps> = (props) => {
+  const session = useSession();
+
+  const user = session.data?.user.name;
   const { setMode } = useTheme();
   return (
     <DropdownMenu>
@@ -38,7 +41,7 @@ const ProfileMenu: React.FC<IProfileMenuProps> = (props) => {
               className="ring-primary-500 ring-offset-white-100 dark:ring-offset-black-800 rounded-lg ring-1 ring-offset-[3px] bg-primary-100 dark:bg-primary-500"
             />
           </div>
-          <span className="p2-medium max-md:hidden">Uros Bijelic</span>
+          <span className="p2-medium max-md:hidden">{user}</span>
           <ArrowDownIcon className="icon-light400__dark300 max-md:hidden" />
         </Button>
       </Trigger>
@@ -46,8 +49,7 @@ const ProfileMenu: React.FC<IProfileMenuProps> = (props) => {
         <Content
           collisionPadding={10}
           onCloseAutoFocus={(e) => e.preventDefault()}
-          className="bg-light100__dark800 shadow-header-menu border-white-border data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade dark:border-black-700 z-20 mt-7 flex min-w-44 flex-col gap-5 rounded-[14px] border p-5 max-lg:mt-6"
-        >
+          className="bg-light100__dark800 shadow-header-menu border-white-border data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade dark:border-black-700 z-20 mt-7 flex min-w-44 flex-col gap-5 rounded-[14px] border p-5 max-lg:mt-6">
           <Item className="p3-medium">
             <Button className="justify-start gap-2.5">
               <ProfileIcon />
@@ -56,9 +58,8 @@ const ProfileMenu: React.FC<IProfileMenuProps> = (props) => {
           </Item>
           <Item className="p3-medium gap-2.5">
             <Button
-              className="text-primary-500 justify-start gap-2.5"
-              onClick={() => signOut()}
-            >
+              className="justify-start gap-2.5 text-primary-500"
+              onClick={() => signOut({ callbackUrl: '/login' })}>
               <LogoutIcon />
               Logout
             </Button>
@@ -69,14 +70,12 @@ const ProfileMenu: React.FC<IProfileMenuProps> = (props) => {
             <div className="flex gap-2.5">
               <Button
                 className="bg-primary-100 dark:bg-black-800 size-[24px] rounded-full"
-                onClick={() => setMode('light')}
-              >
+                onClick={() => setMode('light')}>
                 <SunIcon className="text-black-700" />
               </Button>
               <Button
                 className="bg-white-200 dark:bg-black-700 size-[24px] rounded-full"
-                onClick={() => setMode('dark')}
-              >
+                onClick={() => setMode('dark')}>
                 <MoonIcon className="dark:text-dark-700 text-white-300" />
               </Button>
             </div>
