@@ -1,24 +1,47 @@
 'use client';
 
 import { useState } from 'react';
+import CalendarIcon from '../icons/Calendar';
 import FrameIcon from '../icons/Frame';
 import GroupsIcon from '../icons/Groups';
+import PodcastIcon from '../icons/Podcast';
 import SearchIcon from '../icons/Search';
 import { Button } from '../ui/button';
 
 import { fetchGroupsAndContents } from '@/api/queries';
 import { EContentGroupQueries } from '@/constants/react-query';
+import { EContentType } from '@/types/content';
+import type { IGlobalSearchItem } from '@/types/group';
 import * as Dialog from '@radix-ui/react-dialog';
 import { useQuery } from '@tanstack/react-query';
 import { Command } from 'cmdk';
+import Link from 'next/link';
+import { useDebounce } from 'use-debounce';
+import LoadingSpinner from '../shared/LoadingSpinner';
 
 interface ISearchDialogProps {}
 
 // ----------------------------------------------------------------
 
+const renderItemIcon = (type: EContentType | null) => {
+  switch (type) {
+    case EContentType.POST:
+      return <FrameIcon className="icon-light400__dark300 shrink-0" />;
+    case EContentType.MEETUP:
+      return <CalendarIcon className="icon-light400__dark300 shrink-0" />;
+    case EContentType.PODCAST:
+      return <PodcastIcon className="icon-light400__dark300 shrink-0" />;
+    case null:
+      return <GroupsIcon className="icon-light400__dark300 shrink-0" />;
+    default:
+      <FrameIcon className="icon-light400__dark300 shrink-0" />;
+  }
+};
+
 const SearchCommandDialog: React.FC<ISearchDialogProps> = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState('');
+  const [q] = useDebounce(query, 300);
 
   // useEffect(() => {
   //   const fetchGroupsAndContents = async () => {
@@ -26,10 +49,10 @@ const SearchCommandDialog: React.FC<ISearchDialogProps> = () => {
   //   }
   // }, []);
 
-  const { isLoading, data } = useQuery({
-    queryKey: [EContentGroupQueries.FETCH_GROUPS_AND_CONTENTS, query],
-    queryFn: () => fetchGroupsAndContents(query),
-    enabled: query.trim() !== '' && isOpen,
+  const { isLoading, data } = useQuery<IGlobalSearchItem[]>({
+    queryKey: [EContentGroupQueries.FETCH_GROUPS_AND_CONTENTS, q],
+    queryFn: () => fetchGroupsAndContents(q),
+    enabled: q.trim() !== '' && isOpen,
   });
 
   return (
@@ -47,7 +70,8 @@ const SearchCommandDialog: React.FC<ISearchDialogProps> = () => {
               <div className="flex items-center gap-3">
                 <SearchIcon className="icon-light400__dark300" />
                 <Command.Input
-                  placeholder="Type a command or search..."
+                  onValueChange={(value) => setQuery(value)}
+                  placeholder="Start typing to search..."
                   className="bg-white-100 text-black-900 placeholder:text-white-400 dark:bg-black-800 dark:text-white-100 w-full text-sm font-medium placeholder:text-sm placeholder:font-normal  focus-visible:outline-none dark:placeholder:text-[#ADB3CC]"
                 />
               </div>
@@ -55,18 +79,35 @@ const SearchCommandDialog: React.FC<ISearchDialogProps> = () => {
                 ESC
               </kbd>
             </div>
-            <Command.List className="bg-white-200 text-black-700 dark:bg-black-900 dark:text-white-200 px-1 py-2 lg:p-2">
-              <Command.Empty className="p3-regular hover:bg-black-700 flex gap-3 p-2.5 hover:rounded lg:px-4 lg:py-2.5">
-                No results found.
-              </Command.Empty>
-              <Command.Item className="p3-regular hover:bg-black-700 flex gap-3 p-2.5 hover:rounded lg:px-4 lg:py-2.5">
-                <FrameIcon className="icon-light400__dark300" /> Explore all
-                posts
-              </Command.Item>
-              <Command.Item className="p3-regular hover:bg-black-700 flex gap-3 p-2.5 hover:rounded lg:px-4 lg:py-2.5">
-                <GroupsIcon className="icon-light400__dark300" />
-                ByteBuilders Collective
-              </Command.Item>
+            <Command.List className="bg-white-200 text-black-700 dark:bg-black-900 dark:text-white-200 px-1 py-2 lg:p-2 ">
+              {isLoading && (
+                <Command.Loading>
+                  <LoadingSpinner />
+                </Command.Loading>
+              )}
+              {!isLoading && (
+                <Command.Empty className="p3-regular hover:bg-black-700 flex gap-3 p-2.5 hover:rounded lg:px-4 lg:py-2.5 transition-colors">
+                  {q.length > 0
+                    ? 'No results found.'
+                    : 'Enter at least one character to start searching.'}
+                </Command.Empty>
+              )}
+
+              {data?.map(({ id, title, type }) => (
+                <Command.Item
+                  key={id}
+                  value={title}
+                  onSelect={() => setIsOpen(false)}
+                >
+                  <Link
+                    href={type === null ? `/groups/${id}` : `/content/${id}`}
+                    className="p3-regular hover:bg-black-700 flex gap-3 p-2.5 hover:rounded lg:px-4 lg:py-2.5 line-clamp-1"
+                  >
+                    {renderItemIcon(type)}
+                    {title}
+                  </Link>
+                </Command.Item>
+              ))}
             </Command.List>
           </Command>
         </Dialog.Content>

@@ -1,7 +1,7 @@
-import { IContent } from './content';
+import { EContentType, IContent } from './content';
 import { EUserRole } from './user';
 
-export enum EGroupContentTyps {
+export enum EGroupContentTypes {
   POST = 'post',
   MEETUP = 'meetup',
   PODCAST = 'podcast',
@@ -130,4 +130,10 @@ export interface ISelectGroup {
 export interface ITags {
   id: string;
   title: string;
+}
+
+export interface IGlobalSearchItem {
+  id: string;
+  title: string;
+  type: EContentType | null;
 }

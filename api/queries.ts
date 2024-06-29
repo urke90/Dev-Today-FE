@@ -86,9 +86,7 @@ export const fetchGroupMembers = async (
 };
 
 export const fetchGroupsAndContents = async (q: string, limit: number = 3) => {
-  const response = await fetch(BASE_API_URL + `/search?q=${q}&limit=${limit}`);
-
-  console.log('response FETCH GROUP MEMBERS', response);
+  const response = await fetch(BASE_API_URL + `/search?q=${q}`);
 
   if (!response.ok) {
     throw new Error('Something went wrong!');
