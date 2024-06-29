@@ -83,7 +83,7 @@ const PostItemCard: React.FC<IPostItemCardProps> = ({
               />
             </Button>
           </div>
-          {tags.length > 0 ? (
+          {tags?.length > 0 ? (
             <ul className="flex gap-2.5">
               {tags.map((tag) => (
                 <BadgeItem key={tag} title={tag} />

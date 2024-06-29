@@ -1,7 +1,7 @@
 import type { IUserRecentContent } from '@/types/user';
 import ArrowRightIcon from '../icons/ArrowRight';
 
-import { EContentType } from '@/types/content';
+import { EContentType, ITag } from '@/types/content';
 import { parseDate } from '@/utils/format';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -81,7 +81,7 @@ const SidebarContentCard: React.FC<ISidebarContentCardProps> = ({
                     );
                   }
                   default:
-                    return 'bla';
+                    return <p className="p3-bold">Type is not supported!</p>;
                 }
               }
             )
@@ -108,7 +108,7 @@ const PostItemCard: React.FC<IPostItemCardProps> = ({
 }) => {
   return (
     <li>
-      <Link href={type + '/' + id} className="flex">
+      <Link href={type + '/' + id} className="flex justify-between ">
         <div className="flex gap-3.5">
           <Image
             src={coverImage || '/assets/images/no-image.svg'}
@@ -122,6 +122,7 @@ const PostItemCard: React.FC<IPostItemCardProps> = ({
             <p className="subtitle-normal">By {author}</p>
           </div>
         </div>
+
         <ArrowRightIcon className="text-white-400 shrink-0" />
       </Link>
     </li>
@@ -133,7 +134,7 @@ interface IMeetupItemCardProps {
   meetupDate: Date | null;
   location: string;
   id: string;
-  tags: string[];
+  tags: ITag[];
   type: EContentType;
 }
 
@@ -162,8 +163,8 @@ const MeetupItemCard: React.FC<IMeetupItemCardProps> = ({
           <p className="subtitle-normal">{location}</p>
           {tags?.length > 0 ? (
             <ul className="flex gap-2.5">
-              {tags.map((tag) => (
-                <BadgeItem key={tag} title={tag} />
+              {tags.map(({ id, title }) => (
+                <BadgeItem key={id} title={title} />
               ))}
             </ul>
           ) : null}
@@ -177,7 +178,7 @@ interface IPodcastItemCardProps {
   title: string;
   description: string;
   id: string;
-  tags: string[];
+  tags: ITag[];
   type: EContentType;
   author: {
     name: string;
@@ -210,8 +211,8 @@ const PodcastItemCard: React.FC<IPodcastItemCardProps> = ({
           <p className="subtitle-normal">{description}</p>
           {tags?.length > 0 ? (
             <ul className="flex gap-2.5">
-              {tags.map((tag) => (
-                <BadgeItem key={tag} title={tag} />
+              {tags.map(({ id, title }) => (
+                <BadgeItem key={id} title={title} />
               ))}
             </ul>
           ) : null}

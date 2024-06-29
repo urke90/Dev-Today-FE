@@ -4,8 +4,8 @@ export interface IGroup {
   id: string;
   name: string;
   type: EContentType;
-  coverImg: string;
-  groupBio: string;
+  coverImage: string;
+  bio: string;
   createdAt: Date;
   updatedAt: Date;
   _count: {

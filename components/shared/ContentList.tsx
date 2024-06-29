@@ -227,13 +227,13 @@ const ContentList: React.FC<IContentListProps> = ({
         {
           styles = 'grid grid-cols-1 md:grid-cols-2 gap-5';
           renderedContent = groups?.map(
-            ({ id, groupBio, coverImg, members, name }) => (
+            ({ id, bio, coverImage, members, name }) => (
               <GroupItemCard
                 key={id}
                 id={id}
-                coverImage={coverImg}
+                coverImage={coverImage}
                 title={name}
-                description={groupBio}
+                description={bio}
                 members={members}
               />
             )

@@ -2,10 +2,8 @@ import PerformanceItem from './PerformanceItem';
 import ProfileSidebarInfo from './ProfileSidebarInfo';
 import SocialMediaLinks from './SocialMediaLinks';
 
-import BadgeItem from '../shared/BadgeItem';
 import ContentList from '../shared/ContentList';
 import ContentNavLinks from '../shared/ContentNavLinks';
-import SidebarContentCard from '../shared/SidebarContentCard';
 
 import Image from 'next/image';
 
@@ -13,6 +11,8 @@ import { EQueryContentType, IContent } from '@/types/content';
 import type { IGroup } from '@/types/group';
 import type { IProfileUser } from '@/types/user';
 import { calculateTimeAgo } from '@/utils/format';
+import BadgeItem from '../shared/BadgeItem';
+import SidebarContentCard from '../shared/SidebarContentCard';
 
 // ----------------------------------------------------------------
 
@@ -35,23 +35,6 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
   groupItems,
   viewerId,
 }) => {
-  const {
-    id,
-    name,
-    avatarImg,
-    bio,
-    email,
-    createdAt,
-    followers,
-    following,
-    preferredSkills,
-    userName,
-    linkedinLink,
-    twitterLink,
-    instagramLink,
-    contents,
-  } = user ?? {};
-
   return (
     <div className="content-wrapper">
       <aside className="left-sidebar bg-light100__dark800 rounded-2xl !p-0 !pb-10 text-center">
@@ -66,51 +49,53 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
         <div className="flex flex-col gap-y-6 px-5">
           <div className="relative z-10 -mt-20">
             <Image
-              src={avatarImg ? avatarImg : '/assets/images/no-image-1.svg'}
+              src={user?.avatarImg || '/assets/images/no-image-1.svg'}
               width={110}
               height={110}
               alt="profile"
               className="ring-primary-500 mx-auto mb-2.5 rounded-full ring-4"
             />
-            <h1 className="h1-medium">{userName}</h1>
-            <p className="p3-regular dark:text-white-400">{email}</p>
+            <h1 className="h1-medium">{user.userName}</h1>
+            <p className="p3-regular dark:text-white-400">{user?.email}</p>
           </div>
           <ProfileSidebarInfo
+            userProfileId={user.id}
+            viewerId={viewerId}
             isPersonalProfile={isPersonalProfile}
             isFollowing={isFollowing}
           />
           <div className="flex justify-center gap-[7px] gap-y-0 sm:flex-col">
             <p className="p3-medium text-white-400 dark:text-white-300">
-              {followers.length} Followers
+              {user?._count.followers} Followers
             </p>
             <p className="p3-medium text-white-400 dark:text-white-300">
-              {following.length} Following
+              {user?._count.following} Following
             </p>
           </div>
-          {preferredSkills.length > 0 && (
+          {user?.preferredSkills.length > 0 && (
             <ul className="flex flex-wrap gap-1">
-              {preferredSkills.map((skill) => (
+              {user.preferredSkills.map((skill) => (
                 <BadgeItem key={skill} isTechStackItem title={skill} />
               ))}
             </ul>
           )}
           <div className="border border-[#C5D0E6] dark:border-[#393E4F]" />
-          {bio && (
+          {user?.bio && (
             <p className="p3-regular text-white-400 dark:text-white-300 text-center">
-              {bio}
+              {user.bio}
             </p>
           )}
-          {(linkedinLink || twitterLink || instagramLink) && (
+          {(user?.linkedinLink || user?.twitterLink || user?.instagramLink) && (
             <div className="gap-6 flex-center">
               <SocialMediaLinks
-                linkedinLink={linkedinLink}
-                twitterLink={twitterLink}
-                instagramLink={instagramLink}
+                linkedinLink={user?.linkedinLink}
+                twitterLink={user?.twitterLink}
+                instagramLink={user?.instagramLink}
               />
             </div>
           )}
           <p className="p3-medium text-white-300 dark:text-white-400">
-            Joined {calculateTimeAgo(createdAt)}
+            Joined {calculateTimeAgo(user.createdAt)}
           </p>
         </div>
       </aside>
@@ -121,15 +106,15 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
             contentType={contentType}
             contentItems={contentItems}
             groupItems={groupItems}
-            userId={id}
-            userName={name}
+            userId={user.id}
+            userName={user.name}
             viewerId={viewerId}
           />
         </div>
       </main>
       <aside className="right-sidebar">
         <div className="max-xl:hidden">
-          <SidebarContentCard title="Recent Posts" items={contents} />
+          <SidebarContentCard title="Recent Posts" items={user?.contents} />
         </div>
         <div className="right-sidebar-item">
           <div>

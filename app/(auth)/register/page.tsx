@@ -19,10 +19,9 @@ import {
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { regWelcome } from '@/constants';
+import { useTheme } from '@/context/ThemeProvider';
 import { signInSchema } from '@/lib/validation';
 import { colorsRegister } from '@/styles/index';
-
-import { useTheme } from '@/context/ThemeProvider';
 
 const Register = () => {
   const { setMode, mode } = useTheme();

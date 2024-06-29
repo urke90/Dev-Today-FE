@@ -32,12 +32,16 @@ const MyProfilePage: React.FC<IMyProfilePageProps> = async ({
     cache: 'no-store',
   });
 
+  if (!userResult.user) return null;
+
   let content: IContent[] = [];
   let groupContent: IGroup[] = [];
   if (contentType === EQueryContentType.GROUP) {
-    groupContent = await typedFetch({ url: `/user/${session.user.id}/groups` });
+    groupContent = await typedFetch<IGroup[]>({
+      url: `/user/${session.user.id}/groups`,
+    });
   } else {
-    content = await typedFetch({
+    content = await typedFetch<IContent[]>({
       url: `/user/${session.user.id}/content?type=${contentType}&page=${page}&viewerId=${session.user.id}}`,
     });
   }

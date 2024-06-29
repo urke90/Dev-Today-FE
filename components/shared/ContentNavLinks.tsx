@@ -48,7 +48,7 @@ const ContentNavLinks: React.FC<IContentNavLinksProps> = (props) => {
         Meetups
       </Link>
       <Link
-        href={pathname + '?' + updateQueryParams('podcasts')}
+        href={pathname + '?' + updateQueryParams(EQueryContentType.PODCAST)}
         className={`${linkStyles} ${
           type === EQueryContentType.PODCAST
             ? 'bg-primary-500 text-white-100 dark:!text-white-100'
