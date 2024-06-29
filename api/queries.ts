@@ -32,3 +32,33 @@ export const fetchGroups = async (userId: string, page: number) => {
   }
   return response.json();
 };
+
+export const fetchUsers = async (query: string) => {
+  const response = await fetch(BASE_API_URL + `/user?q=${query}&limit=5`);
+
+  if (!response.ok) {
+    throw new Error('Something went wrong!');
+  }
+
+  return response.json();
+};
+
+export const fetchCreateGroups = async (query: string) => {
+  const result = await fetch(BASE_API_URL + `/groups?q=${query}`);
+
+  if (!result.ok) {
+    throw new Error('Something went wrong!');
+  }
+
+  return result.json();
+};
+
+export const fetchTags = async (query: string) => {
+  const result = await fetch(BASE_API_URL + `/content/tags?title=${query}`);
+
+  if (!result.ok) {
+    throw new Error('Something went wrong!');
+  }
+
+  return result.json();
+};

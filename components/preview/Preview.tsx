@@ -16,7 +16,7 @@ type TagProps = {
 
 const Preview = ({ setIsPreview, type, data }: PreviewProps) => {
   return (
-    <section className="space-y-5 w-full">
+    <section className="space-y-5 w-full px-2">
       <div className="flex gap-2" onClick={() => setIsPreview(false)}>
         <Image
           src="/assets/icons/arrow-left.svg"

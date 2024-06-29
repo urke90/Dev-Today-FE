@@ -99,3 +99,22 @@ export const parseDate = (date: Date | string) => {
 
 //   return "just now";
 // }
+
+export const getFirstName = (authorName: string): string => {
+  if (authorName.includes(' ')) {
+    return authorName.split(' ')[0];
+  } else {
+    return authorName;
+  }
+};
+export const formatDate = (date: Date | string) => {
+  const options: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  };
+  const formattedDate = new Intl.DateTimeFormat('en-US', options).format(
+    new Date(date)
+  );
+  return formattedDate;
+};

@@ -51,10 +51,10 @@
     @apply text-base font-medium text-black-800 dark:text-white-200; /* DOBRO */
   }
   .p3-medium {
-    @apply text-[18px] !font-medium text-black-800 dark:text-white-200; /* DOBRO */
+    @apply text-[14px] md:text-[18px] !font-medium text-black-800 dark:text-white-200; /* DOBRO */
   }
   .p4-medium {
-    @apply text-xs font-medium text-black-800 dark:text-white-200; /* DOBRO */
+    @apply text-[10px] md:text-xs font-medium text-black-800 dark:text-white-200; /* DOBRO */
   }
   .p1-regular {
     @apply text-[18px] leading-[20px] font-normal text-black-800 dark:text-white-100;
@@ -86,9 +86,10 @@
   .bg-light100__dark800 {
     @apply bg-white-100 dark:bg-black-800;
   }
-  .bg-light200__dark700 {
-    @apply bg-white-200 dark:bg-black-700;
+  .bg-light200__dark800 {
+    @apply bg-white-200 dark:bg-black-800;
   }
+
   .icon-light400__dark300 {
     @apply text-white-400 dark:text-white-300;
   }
@@ -239,12 +240,15 @@ input:-webkit-autofill:active {
   letter-spacing: 0.5px;
   font-weight: 700;
   margin-bottom: 10px;
+  margin: 20px 0;
 }
 
 .markdown p {
   color: #808191;
-  font-size: 16px;
+  font-size: 18px;
   margin-bottom: 10px !important;
+  font-weight: 400;
+  line-height: 24px;
 }
 @keyframes rotation {
   0% {
@@ -262,4 +266,9 @@ input:-webkit-autofill:active {
   100% {
     transform: rotate(-360deg);
   }
+}
+
+input[type='time']::-webkit-calendar-picker-indicator {
+  background-color: rgb(110, 110, 110);
+  border-radius: 50%;
 }

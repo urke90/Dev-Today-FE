@@ -15,7 +15,7 @@ import {
   Separator,
   Trigger,
 } from '@radix-ui/react-dropdown-menu';
-import { signOut } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
 
 import { useTheme } from '@/context/ThemeProvider';
@@ -25,6 +25,9 @@ interface IProfileMenuProps {}
 // ? shadcn command dialog  cmdk lib
 
 const ProfileMenu: React.FC<IProfileMenuProps> = (props) => {
+  const session = useSession();
+
+  const user = session.data?.user.name;
   const { setMode } = useTheme();
   return (
     <DropdownMenu>
@@ -38,7 +41,7 @@ const ProfileMenu: React.FC<IProfileMenuProps> = (props) => {
               className="ring-primary-500 ring-offset-white-100 dark:ring-offset-black-800 rounded-lg ring-1 ring-offset-[3px] bg-primary-100 dark:bg-primary-500"
             />
           </div>
-          <span className="p2-medium max-md:hidden">Uros Bijelic</span>
+          <span className="p2-medium max-md:hidden">{user}</span>
           <ArrowDownIcon className="icon-light400__dark300 max-md:hidden" />
         </Button>
       </Trigger>

@@ -1,4 +1,13 @@
 'use client';
+import {
+  createContent,
+  createMeetupContent,
+  createPodcastContent,
+  updateContent,
+  updateMeetupContent,
+  updatePodcastContent,
+} from '@/api/mutation';
+import { fetchCreateGroups, fetchTags } from '@/api/queries';
 import RHFInput from '@/components/RHFInputs/RHFInput';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
@@ -18,23 +27,34 @@ import {
 import { postTypes } from '@/constants';
 import { useTheme } from '@/context/ThemeProvider';
 import { cn } from '@/lib/utils';
-import { createContentSchema } from '@/lib/validation';
-import { EContentType, IContent } from '@/types/content';
+import {
+  IContent,
+  IContentDTO,
+  IPutMeetupDTO,
+  IPutPodcastDTO,
+  IPutPostDTO,
+  postSchema,
+} from '@/lib/validation';
+import { EContentType } from '@/types/content';
 import { ISelectGroup, ITags } from '@/types/group';
-import { typedFetch } from '@/utils/api';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as Select from '@radix-ui/react-select';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { Editor } from '@tinymce/tinymce-react';
 import { format } from 'date-fns';
 import { CldUploadWidget } from 'next-cloudinary';
 import Image from 'next/image';
-import React, { useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import React, { useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { toast } from 'react-hot-toast';
 import ReactSelect, { components } from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 import { useDebounce } from 'use-debounce';
-import { z } from 'zod';
 import Preview from '../preview/Preview';
+import { Input } from '../ui/input';
+
+import { revalidate } from '@/lib/actions/revalidate';
 
 type SelectItemProps = {
   value: string;
@@ -48,18 +68,14 @@ type ContentProps = {
   allGroups?: ISelectGroup[];
   allTags?: ITags[];
   editType?: string;
-  editPost?: IContent;
+  editPost: IContentDTO;
+  viewerId: string;
 };
 
-const CreatePosts = ({
-  authorId,
-
-  editPost,
-}: ContentProps) => {
+const CreatePosts = ({ authorId, editPost, viewerId }: ContentProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isPreview, setIsPreview] = useState(false);
-  const [allGroups, setAllGroups] = useState<ISelectGroup[]>([]);
-  const [allTags, setAllTags] = useState<ITags[]>([]);
+
   const [q, setQ] = useState('');
   const [title, setTitle] = useState('');
   const { mode } = useTheme();
@@ -68,49 +84,87 @@ const CreatePosts = ({
   const [debouncedTitle] = useDebounce(title, 500);
 
   const editorRef = useRef<any>(null);
+  const router = useRouter();
 
-  useEffect(() => {
-    const fetchGroups = async () => {
-      try {
-        const response = await typedFetch({
-          url: `/groups?q=${q}`,
-          method: 'GET',
-        });
-        setAllGroups(response as ISelectGroup[]);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+  const resetForm = () => {
+    if (editPost) router.push(`/content/${editPost.id}`);
+    form.reset();
+    form.setValue('groupId', {
+      value: '',
+      label: '',
+    });
+    form.setValue('tags', []);
+  };
 
-    const fetchTags = async () => {
-      try {
-        const response = await typedFetch({
-          url: `/content/tags?title=${title}`,
-          method: 'GET',
-        });
-        setAllTags(response as ITags[]);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+  const {
+    data: allGroups = [],
+    error: groupsError,
+    isLoading: groupsLoading,
+  } = useQuery({
+    queryKey: ['groups', debouncedQ],
+    queryFn: () => fetchCreateGroups(debouncedQ),
+  });
 
-    fetchGroups();
-    fetchTags();
-  }, [debouncedQ, debouncedTitle]);
+  const {
+    data: allTags,
+    error: tagsError,
+    isLoading: tagsLoading,
+  } = useQuery({
+    queryKey: ['tags', debouncedTitle],
+    queryFn: () => fetchTags(debouncedTitle),
+  });
 
-  const selectGroupOptions = allGroups?.map((group) => ({
-    value: group.id,
-    label: group.name,
-    profileImage: group.profileImage,
-    bio: group.bio,
-  }));
-  const selectTagsOptions = allTags?.map((tag) => ({
+  const { mutateAsync } = useMutation({
+    mutationFn: async (data: IPutPostDTO) => {
+      await createContent(data);
+    },
+  });
+
+  const { mutateAsync: updateContentMutation } = useMutation({
+    mutationFn: async (data: IPutPostDTO) => {
+      await updateContent(editPost?.id, data, viewerId);
+    },
+  });
+
+  const { mutateAsync: createMeetupMutation } = useMutation({
+    mutationFn: async (data: IPutMeetupDTO) => {
+      await createMeetupContent(data);
+    },
+  });
+
+  const { mutateAsync: updateMeetupMutation } = useMutation({
+    mutationFn: async (data: IPutMeetupDTO) => {
+      await updateMeetupContent(editPost.id, data, viewerId);
+    },
+  });
+
+  const { mutateAsync: createPodcastMutation } = useMutation({
+    mutationFn: async (data: IPutPodcastDTO) => {
+      await createPodcastContent(data);
+    },
+  });
+
+  const { mutateAsync: updatePodcastMutation } = useMutation({
+    mutationFn: async (data: IPutPodcastDTO) => {
+      await updatePodcastContent(editPost.id, data, viewerId);
+    },
+  });
+
+  const selectGroupOptions = (allGroups as ISelectGroup).groups?.map(
+    (group) => ({
+      value: group.id,
+      label: group.name,
+      profileImage: group.profileImage,
+      bio: group.bio,
+    })
+  );
+  const selectTagsOptions = (allTags as ITags[])?.map((tag) => ({
     value: tag.id,
     label: tag.title,
   }));
 
-  const form = useForm<z.infer<typeof createContentSchema>>({
-    resolver: zodResolver(createContentSchema),
+  const form = useForm<IContent>({
+    resolver: zodResolver(postSchema),
     defaultValues: {
       authorId: editPost?.authorId ?? authorId,
       title: editPost?.title ?? '',
@@ -136,40 +190,46 @@ const CreatePosts = ({
   const watchPostType = form.watch('type');
   const watchCoverImage = form.watch('coverImage');
 
+  console.log(form.formState.errors);
+
   const onSubmit = async () => {
+    const commonData: IPutPostDTO = {
+      authorId: form.getValues('authorId'),
+      title: form.getValues('title'),
+      type: form.getValues('type'),
+      groupId: form.getValues('groupId')?.value,
+      coverImage: form.getValues('coverImage'),
+      description: form.getValues('description'),
+      tags: form.getValues('tags').map((tag) => tag.label),
+    };
+
     if (watchPostType === EContentType.POST) {
       const result = await form.trigger([
         'title',
         'coverImage',
         'description',
         'tags',
+        'groupId',
       ]);
       if (!result) throw new Error('Form validation failed');
 
       try {
         setIsLoading(true);
-        await typedFetch({
-          url: '/content/post',
-          method: 'POST',
-          body: {
-            authorId: form.getValues('authorId'),
-            title: form.getValues('title'),
-            type: form.getValues('type'),
-            groupId: form.getValues('groupId')?.value,
-            coverImage: form.getValues('coverImage'),
-            description: form.getValues('description'),
-            tags: form.getValues('tags').map((tag) => tag.label),
-          },
-        });
-        form.reset();
-        form.setValue('groupId', {
-          value: '',
-          label: '',
-        });
-        form.setValue('tags', []);
+        if (editPost) {
+          await updateContentMutation(commonData);
+          resetForm();
+          toast.success('Post updated successfully!');
+        } else {
+          setIsLoading(true);
+          await mutateAsync(commonData);
+          revalidate('/content');
+          resetForm();
+
+          toast.success('Post created successfully!');
+        }
       } catch (error) {
         console.error(error);
-        throw new Error('Failed to create post');
+        toast.error('Failed to create post');
       } finally {
         setIsLoading(false);
       }
@@ -180,69 +240,66 @@ const CreatePosts = ({
       if (!result) throw new Error('Form validation failed');
 
       try {
-        setIsLoading(true);
-        await typedFetch({
-          url: '/content/meetup',
-          method: 'POST',
-          body: {
-            authorId: form.getValues('authorId'),
-            title: form.getValues('title'),
-            type: form.getValues('type'),
-            groupId: form.getValues('groupId').value,
-            coverImage: form.getValues('coverImage'),
-            description: form.getValues('description'),
-            tags: form.getValues('tags').map((tag) => tag.label),
+        if (editPost) {
+          await updateMeetupMutation({
+            ...commonData,
             meetupLocation: form.getValues('meetupLocation'),
             meetupDate: form.getValues('meetupDate'),
-          },
-        });
+          });
+          resetForm();
+          toast.success('Meetup updated successfully!');
+        } else {
+          setIsLoading(true);
+          await createMeetupMutation({
+            ...commonData,
+            meetupLocation: form.getValues('meetupLocation'),
+            meetupDate: form.getValues('meetupDate'),
+          });
 
-        form.reset();
-        form.setValue('groupId', {
-          value: '',
-          label: '',
-        });
-        form.setValue('tags', []);
+          resetForm();
+          toast.success('Meetup created successfully!');
+        }
       } catch (error) {
         console.error(error);
-        throw new Error('Failed to create meetup');
-      } finally {
-        setIsLoading(false);
+        toast.error('Failed to create meetup');
       }
     }
+
     if (watchPostType === EContentType.PODCAST) {
       const result = await form.trigger(['podcastFile', 'podcastTitle']);
       if (!result) return;
 
       try {
-        setIsLoading(true);
-        await typedFetch({
-          url: '/content/podcast',
-          method: 'POST',
-          body: {
-            authorId: form.getValues('authorId'),
-            title: form.getValues('title'),
-            type: form.getValues('type'),
-            groupId: form.getValues('groupId').value,
-            coverImage: form.getValues('coverImage'),
-            description: form.getValues('description'),
-            tags: form.getValues('tags').map((tag) => tag.label),
+        if (editPost) {
+          await updatePodcastMutation({
+            ...commonData,
             podcastFile: form.getValues('podcastFile'),
             podcastTitle: form.getValues('podcastTitle'),
-          },
-        });
-        form.reset();
-        form.setValue('groupId', {
-          value: '',
-          label: '',
-        });
-        form.setValue('tags', []);
+          });
+          resetForm();
+          toast.success('Podcast updated successfully!');
+          router.push(`/content/${editPost.id}`);
+        } else {
+          setIsLoading(true);
+          await createPodcastMutation({
+            ...commonData,
+            podcastFile: form.getValues('podcastFile'),
+            podcastTitle: form.getValues('podcastTitle'),
+          });
+          resetForm();
+          toast.success('Podcast created successfully!');
+        }
       } catch (error) {
         console.error(error);
-        throw new Error('Failed to create podcast');
+        toast.error('Failed to create podcast');
       } finally {
         setIsLoading(false);
       }
+    }
+    if (editPost) {
+      revalidate(`/content/${editPost.id}`);
+      router.push(`/content/${editPost.id}`);
+    } else {
     }
   };
 
@@ -263,8 +320,9 @@ const CreatePosts = ({
               label="Title"
               placeholder="Write a title of the post"
             />
-            <div className="flex items-end gap-3">
-              <Controller
+            <div
+              className={`flex flex-col md:flex-row ${form.formState.errors && 'items-center'}  items-center gap-3`}>
+              <FormField
                 control={form.control}
                 defaultValue={EContentType.POST}
                 name="type"
@@ -273,8 +331,9 @@ const CreatePosts = ({
                     value={field.value}
                     onValueChange={field.onChange}>
                     <Select.Trigger
+                      disabled={editPost && true}
                       {...field}
-                      className="flex w-1/4 capitalize border dark:border-black-700/50 rounded-md px-2 items-center h-12 bg-white-100 dark:bg-black-800 justify-center outline-none"
+                      className={`flex w-full md:w-1/4 ${form.formState.errors.groupId ? '!mt-2' : '!mt-6'} capitalize border dark:border-black-700/50 rounded-md px-2 items-center h-12 bg-white-100 dark:bg-black-800 md:justify-center outline-none`}
                       aria-label="Food">
                       <p className=" p3-regular dark:!text-white-400">Create</p>
                       <span className="mx-1 dark:text-white-100/70 text-black-800/60 ">
@@ -284,14 +343,14 @@ const CreatePosts = ({
                         className={`${
                           watchPostType !== EContentType.POST ? 'hidden' : ''
                         } p3-regular !font-bold`}></p>
-                      <div className=" flex items-center p3-regular !text-black-800 dark:!text-white-100 !font-bold ">
+                      <div className="flex w-full items-center p3-regular justify-between !text-black-800 dark:!text-white-100 !font-bold ">
                         <Select.Value placeholder="Post" />
                         <Image
                           src="/assets/icons/arrow-down-slim.svg"
                           alt="arrow-down"
-                          width={10}
-                          height={2}
-                          className="ml-2"
+                          width={12}
+                          height={5}
+                          className="md:ml-2 mr-2 md:mr-0"
                         />
                       </div>
                     </Select.Trigger>
@@ -331,56 +390,65 @@ const CreatePosts = ({
                   </Select.Root>
                 )}
               />
+              <div className="w-full space-y-2">
+                <FormLabel>Select Group</FormLabel>
+                <FormField
+                  name="groupId"
+                  control={form.control}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <ReactSelect
+                          instanceId={field.name}
+                          {...field}
+                          placeholder="Select a group..."
+                          defaultValue={field.value}
+                          value={form.watch('groupId')}
+                          onInputChange={(value) => setQ(value)}
+                          styles={{
+                            control: (base) => ({
+                              ...base,
+                              boxShadow: 'none',
+                            }),
+                          }}
+                          classNames={{
+                            input: () =>
+                              '!text-[16px] dark:!text-white-100 text-black-800',
 
-              <FormField
-                name="groupId"
-                control={form.control}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Select Group</FormLabel>
-                    <FormControl>
-                      <ReactSelect
-                        instanceId={field.name}
-                        {...field}
-                        placeholder="Select a group..."
-                        defaultValue={field.value}
-                        value={form.watch('groupId')}
-                        onInputChange={(value) => setQ(value)}
-                        styles={{
-                          control: (base) => ({
-                            ...base,
-                            boxShadow: 'none',
-                          }),
-                        }}
-                        classNames={{
-                          input: () =>
-                            '!text-[16px] dark:!text-white-100 text-black-800',
-
-                          control: () =>
-                            '!border-none dark:bg-black-800 dark:!border-[#393E4F66] px-3 h-11',
-                          indicatorSeparator: () => '!hidden',
-                          dropdownIndicator: () =>
-                            '!text-white-400 !w-10 !h-10',
-                          option: () =>
-                            '!bg-white-100  !py-[18px]  dark:!bg-black-800  dark:!text-white-100 !text-black-800',
-                          singleValue: () => 'dark:!text-white-100',
-                          menu: () =>
-                            'bg-white-100 dark:bg-black-800 !shadow-sm ',
-                        }}
-                        className="w-full h-full rounded-md dark:!bg-black-800 border dark:border-black-700/50 "
-                        isLoading={isLoading}
-                        isClearable
-                        isSearchable
-                        onChange={(selectedOption) => {
-                          field.onChange(selectedOption);
-                        }}
-                        options={selectGroupOptions}
-                        components={{ Option }}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
+                            control: () =>
+                              '!border-none dark:bg-black-800 dark:!border-[#393E4F66] md:px-3 h-11',
+                            indicatorSeparator: () => '!hidden',
+                            dropdownIndicator: () =>
+                              '!text-white-400 !w-10 !h-10',
+                            option: () =>
+                              '!bg-white-100  !py-[18px]  dark:!bg-black-800  dark:!text-white-100 !text-black-800',
+                            singleValue: () => 'dark:!text-white-100',
+                            menu: () =>
+                              'bg-white-100 dark:bg-black-800 !shadow-sm ',
+                          }}
+                          className="w-full h-full !mt-0 rounded-md dark:!bg-black-800 border dark:border-black-700/50 "
+                          isLoading={isLoading}
+                          isDisabled={editPost && true}
+                          isClearable
+                          isSearchable
+                          onChange={(selectedOption) => {
+                            field.onChange(selectedOption);
+                          }}
+                          options={selectGroupOptions}
+                          components={{ Option }}
+                        />
+                      </FormControl>
+                      <div>
+                        {form.formState.errors.groupId?.message && (
+                          <p className="text-[14px] text-red-500 dark:text-red-500">
+                            {form.formState.errors.groupId.message}
+                          </p>
+                        )}
+                      </div>
+                    </FormItem>
+                  )}
+                />
+              </div>
             </div>
 
             <FormField
@@ -483,7 +551,7 @@ const CreatePosts = ({
                             height={18}
                           />
                           {field.value ? (
-                            format(field.value, 'PPP')
+                            format(field.value, 'MMMM dd, yyyy hh:mm a')
                           ) : (
                             <span className="text-white-400">
                               Pick a date of the meetup
@@ -491,13 +559,29 @@ const CreatePosts = ({
                           )}
                         </Button>
                       </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0 rounded-none border-white-400">
+                      <PopoverContent className="w-auto p-0 px-2 bg-white-100 dark:bg-black-800 pb-5  rounded-none space-y-3 border-white-400">
                         <Calendar
                           className="bg-white-100 dark:bg-black-800 p4-regular "
                           mode="single"
                           selected={field.value}
                           onSelect={field.onChange}
                           initialFocus
+                        />
+                        <Input
+                          type="time"
+                          defaultValue="09:00"
+                          min="09:00"
+                          max="18:00"
+                          onChange={(event) => {
+                            const currentDate = new Date(field.value);
+                            const newDate = new Date(
+                              currentDate.toDateString() +
+                                ' ' +
+                                event.target.value
+                            );
+
+                            field.onChange(newDate);
+                          }}
                         />
                       </PopoverContent>
                     </Popover>
@@ -586,9 +670,10 @@ const CreatePosts = ({
                    body { font-family: Roboto, sans-serif; font-size: 14px; color: #808191;  ${
                      mode === 'dark'
                        ? 'background-color: #262935;'
-                       : 'background-color: #f9f9f9;'
+                       : 'background-color: #ffff;'
                    } }
-                   }} body::-webkit-scrollbar {display: none; }pre, code { font-family: "Roboto Mono", monospace; background-color: transparent !important;  padding: 5px; } body::before { color: #808191 !important; } h2 {color: #ffff!important}
+                   }} body::-webkit-scrollbar   
+                      tox-editor-header { background-color: #f8f8f8; } {display: none; }pre, code { font-family: "Roboto Mono", monospace; background-color: transparent !important;  padding: 5px; } body::before { color: #808191 !important; } h2 {color: #ffff!important}
                    h2 {color: #ffff!important}
                   }
                    `,
@@ -632,11 +717,13 @@ const CreatePosts = ({
                     onInputChange={(value) => setTitle(value)}
                     classNames={{
                       input: () =>
-                        '!text-[16px] dark:!text-white-100 text-black-800',
+                        'md:!text-[16px] dark:!text-white-100 text-black-800',
                       control: () =>
-                        '!border-none !shadow-none  dark:bg-black-800 dark:!border-[#393E4F66] px-3 h-11',
+                        '!border-none !shadow-none relative  dark:bg-black-800 dark:!border-[#393E4F66] md:px-3 h-auto min-h-[44px]',
                       indicatorSeparator: () => '!hidden',
                       dropdownIndicator: () => '!hidden',
+                      indicatorsContainer: () => 'absolute right-0 top-[-5px]',
+
                       multiValue: () =>
                         '!bg-white-200 !px-2 !py-1 dark:!bg-black-700 !text-white-100 !rounded-full',
                       multiValueLabel: () =>
@@ -649,6 +736,7 @@ const CreatePosts = ({
                       menu: () => 'bg-white-100 dark:bg-black-800 !shadow-sm ',
                     }}
                     isMulti
+                    isOptionDisabled={() => field.value.length >= 5}
                     options={selectTagsOptions
                       ?.filter(
                         (item) =>
@@ -660,7 +748,7 @@ const CreatePosts = ({
                       }))}
                     formatOptionLabel={(option, { context }) => {
                       if (context === 'value') {
-                        return <div>{option.label}</div>;
+                        return <div className="p4-medium">{option.label}</div>;
                       }
                       return (
                         <div className="flex items-center">
@@ -689,8 +777,9 @@ const CreatePosts = ({
               </p>
             )}
 
-            <div className="flex gap-5 p3-bold ">
+            <div className="flex gap-5 p3-bold">
               <Button
+                onClick={resetForm}
                 type="button"
                 className="bg-light100__dark800 hover:!text-white-100 duration-200 hover:bg-primary-500 py-3 w-3/5">
                 Cancel
@@ -698,8 +787,14 @@ const CreatePosts = ({
               <Button
                 type="button"
                 onClick={() => onSubmit()}
-                className=" bg-light100__dark800 hover:!text-white-100 duration-200 hover:bg-primary-500 py-3 w-3/5">
-                {isLoading ? 'Publishing Post...' : 'Publish Post'}
+                className="bg-light100__dark800 hover:!text-white-100 duration-200 hover:bg-primary-500 py-3 w-3/5">
+                {isLoading
+                  ? editPost
+                    ? 'Updating Post...'
+                    : 'Publishing Post...'
+                  : editPost
+                    ? 'Update Post'
+                    : 'Publish Post'}
               </Button>
             </div>
           </form>
