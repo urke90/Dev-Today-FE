@@ -1,4 +1,5 @@
-import type { IContent } from '@/types/content';
+import type { IProfilePageContentResponse } from '@/types/content';
+import { IProfilePageGroupsResponse } from '@/types/group';
 import { EQueryType } from '@/types/queries';
 import { EUserRole } from '@/types/user';
 
@@ -11,7 +12,7 @@ export const fetchUserContent = async (
   contentType: EQueryType,
   page: number,
   viewerId: string
-): Promise<IContent[]> => {
+): Promise<IProfilePageContentResponse> => {
   const response = await fetch(
     BASE_API_URL +
       `/user/${userId}/content?type=${contentType}&page=${page}&viewerId=${viewerId}`
@@ -24,7 +25,10 @@ export const fetchUserContent = async (
   return response.json();
 };
 
-export const fetchUserGroups = async (userId: string, page: number) => {
+export const fetchUserGroups = async (
+  userId: string,
+  page: number
+): Promise<IProfilePageGroupsResponse> => {
   const response = await fetch(
     BASE_API_URL + `/user/${userId}/groups?page=${page}`
   );

@@ -4,8 +4,8 @@ import SocialMediaLinks from './SocialMediaLinks';
 
 import Image from 'next/image';
 
-import type { IContent } from '@/types/content';
-import type { IProfilePageGroup } from '@/types/group';
+import type { IProfilePageContentResponse } from '@/types/content';
+import type { IProfilePageGroupsResponse } from '@/types/group';
 import { EQueryType } from '@/types/queries';
 import type { IProfileUser } from '@/types/user';
 import { calculateTimeAgo } from '@/utils/format';
@@ -21,8 +21,8 @@ interface IProfileHomeProps {
   contentType: EQueryType;
   isPersonalProfile?: boolean;
   isFollowing?: boolean;
-  contentItems: IContent[];
-  groupItems: IProfilePageGroup[];
+  contentData: IProfilePageContentResponse;
+  groupsData: IProfilePageGroupsResponse;
   viewerId: string;
 }
 
@@ -31,10 +31,12 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
   user,
   contentType,
   isFollowing = false,
-  contentItems,
-  groupItems,
+  contentData,
+  groupsData,
   viewerId,
 }) => {
+  console.log('groupsData u PROFILE HOME', groupsData);
+
   return (
     <div className="content-wrapper">
       <aside className="left-sidebar bg-light100__dark800 rounded-2xl !p-0 !pb-10 text-center">
@@ -104,8 +106,8 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
           <ContentNavLinks />
           <ContentList
             contentType={contentType}
-            contentItems={contentItems}
-            groupItems={groupItems}
+            contentData={contentData}
+            groupsData={groupsData}
             userId={user.id}
             userName={user.name}
             viewerId={viewerId}

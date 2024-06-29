@@ -64,6 +64,12 @@ export interface IHomePageGroupsResponse {
   hasPrevPage: boolean;
 }
 
+export interface IProfilePageGroupsResponse {
+  groups: IProfilePageGroup[];
+  hasNextPage: boolean;
+  totalPages: number;
+}
+
 export interface IGroupDetailsResponse {
   group: IDetailsPageGroup;
   topRankedGroups?: IGroupWithCount[];

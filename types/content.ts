@@ -44,6 +44,12 @@ export interface IContent {
   isLiked: boolean;
 }
 
+export interface IProfilePageContentResponse {
+  contents: IContent[];
+  totalPages: number;
+  hasNextPage: boolean;
+}
+
 interface ILike {
   user: IProfileUser;
   userId: string;

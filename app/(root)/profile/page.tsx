@@ -1,7 +1,7 @@
 import { auth } from '@/app/api/auth/[...nextauth]/route';
 import ProfileHome from '@/components/profile/ProfileHome';
-import type { IContent } from '@/types/content';
-import type { IProfilePageGroup } from '@/types/group';
+import type { IProfilePageContentResponse } from '@/types/content';
+import type { IProfilePageGroupsResponse } from '@/types/group';
 import { EQueryType } from '@/types/queries';
 import type { IProfileUserResponse } from '@/types/user';
 import { typedFetch } from '@/utils/api';
@@ -35,17 +35,19 @@ const MyProfilePage: React.FC<IMyProfilePageProps> = async ({
 
   if (!userResult.user) throw new Error('User data not available!');
 
-  let content: IContent[] = [];
-  let groupContent: IProfilePageGroup[] = [];
+  let content = {};
+  let groups = {};
   if (contentType === EQueryType.GROUP) {
-    groupContent = await typedFetch<IProfilePageGroup[]>({
+    groups = await typedFetch<IProfilePageGroupsResponse>({
       url: `/user/${session.user.id}/groups`,
     });
   } else {
-    content = await typedFetch<IContent[]>({
+    content = await typedFetch<IProfilePageContentResponse>({
       url: `/user/${session.user.id}/content?type=${contentType}&viewerId=${session.user.id}`,
     });
   }
+
+  console.log('groups U PAGE-U', groups);
 
   return (
     <section className="px-3.5 lg:px-5">
@@ -54,8 +56,8 @@ const MyProfilePage: React.FC<IMyProfilePageProps> = async ({
         user={userResult.user}
         isFollowing={userResult.isFollowing}
         contentType={contentType}
-        contentItems={content}
-        groupItems={groupContent}
+        contentData={content as IProfilePageContentResponse}
+        groupsData={groups as IProfilePageGroupsResponse}
         viewerId={session.user.id}
       />
     </section>

@@ -16,8 +16,9 @@ export const useInfiniteScroll = ({
   shouldFetch,
 }: IUseInfiniteScroll) => {
   const observer = useRef<IntersectionObserver | null>(null);
+
   const lastListItemRef = useCallback(
-    (node: HTMLLIElement) => {
+    (node: HTMLElement | null) => {
       if (isLoading) return;
       if (observer.current) observer.current.disconnect(); // if we have to add to different elemnts
       observer.current = new IntersectionObserver(([entry]) => {
