@@ -58,7 +58,7 @@ const LeftSideBar = ({ content, authorName }: ContentProps) => {
         </div>
       </div>
       <SharePost />
-      <div className="bg-light100__dark800  p-5  rounded-2xl p2-medium !text-white-400 ">
+      <div className="bg-light100__dark800 hidden md:block  p-5  rounded-2xl p2-medium !text-white-400 ">
         <span className="text-blue-500">{authorName} </span> Posted on <br />
         {formatDate(content?.createdAt)}
       </div>

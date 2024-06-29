@@ -118,6 +118,7 @@ const Comments = ({
             onSubmit={form.handleSubmit(onSubmit)}
             className="space-y-8 w-full">
             <RHFInput
+              className="bg-white-200"
               name="text"
               onChange={(e) => form.setValue('text', e.target.value)}
               placeholder="Say something nice to Mansurl Haque..."
@@ -144,34 +145,40 @@ const Comments = ({
             />
           ) : (
             <div key={comment.id}>
-              <div className="bg-light100__dark800 space-y-4  p-6 rounded-lg shadow-lg">
-                <div className="flex justify-between items-center">
+              <div className="bg-light200__dark800 space-y-4 p-3 md:p-6 rounded-lg shadow-lg">
+                <div className="flex  justify-between items-start sm:items-center">
                   <div className="flex items-center gap-1">
-                    <Image
-                      src={
-                        comment.author.avatarImg ||
-                        '/assets/images/avatars/avatar-1.svg'
-                      }
-                      width={28}
-                      height={28}
-                      alt="avatar"
-                      className="rounded-full"
-                    />
-                    <div className="flex items-center h-6 gap-1">
-                      <h4 className="p3-bold tracking-wide font-bold mb-2">
-                        {comment.author.userName}
-                      </h4>
-                      <span className="size-1 relative bottom-1 rounded-full bg-white-400"></span>
-                      <span className="text-[14px] relative bottom-1 text-white-400">
-                        {formatDate(comment.createdAt)}
-                      </span>
-                      <span className="size-1 relative bottom-1 rounded-full bg-white-400"></span>
-                      <span className="text-[14px] relative bottom-1 text-white-400">
-                        {formatDate(comment.updatedAt)}
-                      </span>
+                    <div className="flex items-center gap-1">
+                      <div className="flex items-center h-full">
+                        <Image
+                          src={
+                            comment.author.avatarImg ||
+                            '/assets/images/avatars/avatar-1.svg'
+                          }
+                          width={28}
+                          height={28}
+                          alt="avatar"
+                          className="rounded-full h-full object-cover"
+                        />
+                      </div>
+
+                      <div className="flex items-start flex-col md:flex-row md:items-center h-6 ml-1 sm:ml-0 md:gap-2">
+                        <h4 className="p3-bold tracking-wide !text-[12px] sm:!text-[14px] !font-semibold md:font-bold md:mb-2">
+                          {comment.author.userName}
+                        </h4>
+                        <div className="text-[8px] sm:text-[10px] lg:text-[14px]">
+                          <span className="relative bottom-1 text-white-400">
+                            {formatDate(comment.createdAt)}
+                          </span>
+                          <span className="size-1 relative bottom-1 rounded-full bg-white-400"></span>
+                          <span className="relative bottom-1 text-white-400">
+                            {formatDate(comment.updatedAt)}
+                          </span>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-2 md:gap-4 lg:mt-4 sm:mt-0">
                     <div
                       className="flex gap-1 items-center cursor-pointer"
                       onClick={() => setReplyingComment(comment.id)}>
@@ -187,13 +194,14 @@ const Comments = ({
                     <Image
                       onClick={() => handleLike(comment.id)}
                       src={
-                        comment.viewerHasLiked
-                          ? '/assets/icons/hart-violet.svg'
+                        comment?.viewerHasLiked
+                          ? '/assets/icons/like.svg'
                           : '/assets/icons/heart.svg'
                       }
                       width={16}
                       height={16}
                       alt="avatar"
+                      className="w-[16px] h-[16px] cursor-pointer"
                     />
                     <DropdownMenu>
                       <Trigger asChild>
@@ -238,13 +246,13 @@ const Comments = ({
                   </div>
                 </div>
 
-                <p className="p2-regular !font-bold">
+                <p className="p2-regular !text-[12px] md:!text-[14px] !ml-3 !mt-3 md:!mt-1 !text-white-400 !font-semibold">
                   {comment.text.charAt(0).toUpperCase() + comment.text.slice(1)}
                 </p>
                 {comment.replies && (
-                  <div className="!w-full space-y-2 !mt-0 text-white-400 text-[11px] p-2 rounded-lg text-wrap break-words overflow-wrap break-word overflow-hidden">
-                    {comment.replies.map((reply) => (
-                      <div key={reply.id}>
+                  <div className="!w-full space-y-2 !mt-0 text-[11px] p-2 rounded-lg text-wrap break-words overflow-wrap break-word overflow-hidden">
+                    {comment.replies.map((reply, idx) => (
+                      <div key={idx + 1}>
                         <div className="flex items-center">
                           <div className="flex gap-1">
                             <Image
@@ -264,7 +272,7 @@ const Comments = ({
                             </p>
                           </div>
                         </div>
-                        <p>
+                        <p className="ml-7 text-white-400 font-semibold">
                           {reply.text.charAt(0).toUpperCase() +
                             reply.text.slice(1)}
                         </p>

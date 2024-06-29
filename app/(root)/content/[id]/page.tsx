@@ -48,7 +48,7 @@ const Content = async (props: ParamsProps) => {
   });
 
   return (
-    <div className="content-wrapper px-4">
+    <div className="content-wrapper px-4 !bg-white-100 dark:!bg-black-900 min-h-screen">
       <div className="left-sidebar !hidden lg:!flex !p-0">
         <LeftSideBar content={contentDetails} authorName={authorName} />
       </div>
@@ -62,7 +62,11 @@ const Content = async (props: ParamsProps) => {
       <div className="left-sidebar  w-full lg:hidden !p-0">
         <LeftSideBar content={contentDetails} authorName={authorName} />
       </div>
-      <RightSideBar getAuthorDetails={getAuthorDetails} />
+      <RightSideBar
+        getAuthorDetails={getAuthorDetails}
+        contentDetails={contentDetails}
+        commentAuthorId={commentAuthorId}
+      />
     </div>
   );
 };

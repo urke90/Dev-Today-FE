@@ -219,6 +219,7 @@ export const baseCommentSchema = z.object({
     userName: z.string(),
     avatarImg: z.string(),
   }),
+  viewerHasLiked: z.boolean().optional(),
   replies: z
     .array(
       z.object({

@@ -1,21 +1,48 @@
+'use client';
 import { Button } from '@/components/ui/button';
+import { revalidate } from '@/lib/actions/revalidate';
+import { IContent } from '@/types/content';
 import { IProfileUser } from '@/types/user';
+import { typedFetch } from '@/utils/api';
 import { calculateTimeAgo, getFirstName } from '@/utils/format';
 import { ArrowRight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
 type RightSidebarProps = {
+  contentDetails: IContent;
+  commentAuthorId: string;
   getAuthorDetails: {
     isFollowing: boolean;
     user: IProfileUser;
   };
 };
 
-const RightSideBar = ({ getAuthorDetails }: RightSidebarProps) => {
+const RightSideBar = ({
+  getAuthorDetails,
+  contentDetails,
+  commentAuthorId,
+}: RightSidebarProps) => {
+  console.log(getAuthorDetails);
+
+  const handleFollow = async () => {
+    try {
+      await typedFetch({
+        url: `/user/${contentDetails.authorId}/follow`,
+        method: 'POST',
+        body: {
+          userId: commentAuthorId,
+        },
+      });
+      revalidate(`/user/${contentDetails.authorId}`);
+    } catch (error) {
+      console.error(error);
+      throw new Error('Failed to follow user');
+    }
+  };
   return (
     <aside className="p1-bold right-sidebar w-full">
-      <div className="flex flex-col bg-light100__dark800 rounded-2xl items-center p-4 space-y-5">
+      <div className="flex flex-col bg-light200__dark800 rounded-2xl items-center p-4 space-y-5">
         <Image
           src={
             getAuthorDetails.user?.avatarImg || '/assets/images/no-image.svg'
@@ -31,12 +58,16 @@ const RightSideBar = ({ getAuthorDetails }: RightSidebarProps) => {
         <p className="p2-medium !text-white-400 lowercase">
           @{getFirstName(getAuthorDetails.user.userName) || 'No username'}
         </p>
-        <Button className="dark:bg-black-900 text-purple-500 py-[10px] rounded ">
-          {getAuthorDetails?.isFollowing ? 'Fallowing' : 'Follow'}
-        </Button>
+        {commentAuthorId !== contentDetails.authorId && (
+          <Button
+            onClick={handleFollow}
+            className="dark:bg-black-900 bg-white-100 hover:bg-white-300/30 hover:dark:bg-black-700 text-purple-500 py-[10px] rounded ">
+            {getAuthorDetails?.isFollowing ? 'Fallowing' : 'Follow'}
+          </Button>
+        )}
         <Link
           href={`/profile/${getAuthorDetails.user?.id}`}
-          className="dark:bg-black-700 text-purple-500 p3-bold py-[10px] rounded  w-full text-center">
+          className="dark:bg-black-900 bg-white-100 hover:bg-white-300/30 hover:dark:bg-black-700 text-purple-500 p3-bold py-[10px] rounded  w-full text-center">
           Visit Profile
         </Link>
         <p className="p2-regular">

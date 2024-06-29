@@ -76,53 +76,59 @@ const ContentDetails = ({
                 height={72}
                 className="rounded-md"
               />
-              <h2 className="d2-bold">{content?.title || 'Title'}</h2>
+              <h2 className="d2-bold !text-[16px] sm:!text-[20px] lg:!text-[24px] !leading-6 lg:leading-7">
+                {content?.title || 'Title'}
+              </h2>
             </div>
           </>
         )}
 
         {content?.type !== EContentType.MEETUP && (
-          <h2 className="d2-bold">{content?.title || 'Title'}</h2>
+          <h2 className="d2-bold text-wrap break-words overflow-wrap break-word overflow-hidden">
+            {content?.title || 'Title'}
+          </h2>
         )}
-        <DropdownMenu>
-          <Trigger asChild>
-            <Button className="w-auto">
-              <Image
-                src="/assets/icons/menu-vertical.svg"
-                alt="Menu"
-                width={20}
-                height={20}
-              />
-            </Button>
-          </Trigger>
-          <Portal>
-            <Content
-              avoidCollisions
-              collisionPadding={15}
-              sideOffset={8}
-              align="end"
-              onCloseAutoFocus={(e) => e.preventDefault()}
-              className="bg-light200__dark800 !w-48 px-5 shadow-header-menu data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade z-20 mb-4 flex  flex-col gap-2.5 rounded-[10px] py-4 ">
-              <Item
-                onSelect={() => router.push(`/content/${content?.id}/edit`)}
-                className="flex items-center  gap-2.5 p3-medium cursor-pointer">
-                <EditIcon />
-                <p>Edit Post</p>
-              </Item>
-              <Item
-                onSelect={(e) => e.preventDefault()}
-                className="flex items-center  gap-2.5 p3-medium !text-[#FF584D] cursor-pointer">
+        {content?.authorId === commentAuthorId && (
+          <DropdownMenu>
+            <Trigger asChild>
+              <Button className="w-auto">
                 <Image
-                  src="/assets/icons/trash.svg"
+                  src="/assets/icons/menu-vertical.svg"
+                  alt="Menu"
                   width={20}
-                  height={18}
-                  alt="Delete"
+                  height={20}
                 />
-                Delete Post
-              </Item>
-            </Content>
-          </Portal>
-        </DropdownMenu>
+              </Button>
+            </Trigger>
+            <Portal>
+              <Content
+                avoidCollisions
+                collisionPadding={15}
+                sideOffset={8}
+                align="end"
+                onCloseAutoFocus={(e) => e.preventDefault()}
+                className="bg-light200__dark800 !w-48 px-5 shadow-header-menu data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade z-20 mb-4 flex  flex-col gap-2.5 rounded-[10px] py-4 ">
+                <Item
+                  onSelect={() => router.push(`/content/${content?.id}/edit`)}
+                  className="flex items-center  gap-2.5 p3-medium cursor-pointer">
+                  <EditIcon />
+                  <p>Edit Post</p>
+                </Item>
+                <Item
+                  onSelect={(e) => e.preventDefault()}
+                  className="flex items-center  gap-2.5 p3-medium !text-[#FF584D] cursor-pointer">
+                  <Image
+                    src="/assets/icons/trash.svg"
+                    width={20}
+                    height={18}
+                    alt="Delete"
+                  />
+                  Delete Post
+                </Item>
+              </Content>
+            </Portal>
+          </DropdownMenu>
+        )}
       </div>
       <div>
         <ul className="flex flex-wrap gap-2">
@@ -135,7 +141,9 @@ const ContentDetails = ({
           ))}
         </ul>
       </div>
-      <ParseHtml data={content?.description} />
+      <div className="break-words">
+        <ParseHtml data={content?.description} />
+      </div>
 
       {content?.type === EContentType.MEETUP && (
         <>
