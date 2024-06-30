@@ -1,82 +1,88 @@
 'use client';
+import { createGroup, updateGroup } from '@/api/mutation';
+import { fetchUsers } from '@/api/queries';
 import RHFInput from '@/components/RHFInputs/RHFInput';
 import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { createGroupSchema } from '@/lib/validation';
-import { typedFetch } from '@/utils/api';
+import { createGroupSchema, updateGroupSchema } from '@/lib/validation';
+import { IGroupUpdate } from '@/types/group';
+import { EUserRole } from '@/types/user';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { CldUploadWidget } from 'next-cloudinary';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import CreatableSelect from 'react-select/creatable';
 import { useDebounce } from 'use-debounce';
 import { z } from 'zod';
 
-type AdminProps = {
+type UserProps = {
   id: string;
   userName: string;
   avatarImg: string;
 };
-type MembersProps = {
-  id: string;
-  userName: string;
-  avatarImg: string;
+type CreateGroupParams = {
+  data: z.infer<typeof createGroupSchema>;
+  members: { userId: string; role: EUserRole }[];
 };
 
-const CreateGroup = ({ authorId }: { authorId: string }) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [admins, setAdmins] = useState<AdminProps[]>([]);
-  const [members, setMembers] = useState<MembersProps[]>([]);
+const CreateGroup = ({
+  authorId,
+  editGroup,
+}: {
+  authorId: string;
+  editGroup?: IGroupUpdate;
+}) => {
   const [q, setQ] = useState('');
-  const [limit, setLimit] = useState(5);
-
   const [debouncedQ] = useDebounce(q, 700);
+  const router = useRouter();
 
-  useEffect(() => {
-    const fetchAdmins = async () => {
-      try {
-        const result = await typedFetch({
-          url: `/user?q=${q}&limit=${limit}`,
-        });
-        setAdmins(result as AdminProps[]);
-        setMembers(result as MembersProps[]);
-      } catch (error) {
-        console.log('Error fetching admins', error);
-        throw new Error('Error fetching admins');
-      }
-    };
-    fetchAdmins();
-  }, [debouncedQ, limit]);
+  const {
+    data: users = [],
+    error: usersError,
+    isLoading: isFetchingUsers,
+  } = useQuery({
+    queryKey: ['users', debouncedQ],
+    queryFn: () => fetchUsers(debouncedQ),
+  });
 
-  const adminOptions = admins.map((admin) => ({
-    label: admin.userName,
-    value: admin.id,
-    avatarImage: admin.avatarImg,
-  }));
+  const { mutateAsync } = useMutation({
+    mutationFn: async ({ data, members }: CreateGroupParams) => {
+      await createGroup(data, members);
+    },
+    mutationKey: ['groups'],
+  });
 
-  const memberOptions = members.map((member) => ({
-    label: member.userName,
-    value: member.id,
-    avatarImage: member.avatarImg,
+  const { mutateAsync: updateGroupMutation } = useMutation({
+    mutationFn: async (data: z.infer<typeof updateGroupSchema>) => {
+      await updateGroup(editGroup?.id ?? '', data);
+    },
+    mutationKey: ['groups'],
+  });
+
+  const userOptions = (users as UserProps[]).map((user) => ({
+    label: user.userName,
+    value: user.id,
+    avatarImage: user.avatarImg,
   }));
 
   const form = useForm<z.infer<typeof createGroupSchema>>({
     resolver: zodResolver(createGroupSchema),
     defaultValues: {
       authorId: authorId,
-      name: '',
-      profileImage: '',
-      coverImage: '',
-      bio: '',
+      name: editGroup?.name || '',
+      profileImage: editGroup?.profileImage || '',
+      coverImage: editGroup?.coverImage || '',
+      bio: editGroup?.bio || '',
       admins: [],
       members: [],
     },
@@ -87,28 +93,30 @@ const CreateGroup = ({ authorId }: { authorId: string }) => {
 
   const onSubmit = async (data: z.infer<typeof createGroupSchema>) => {
     const modifiedMembers = data.members.map((member) => {
-      return { userId: member.value, role: 'USER' };
+      return { userId: member.value, role: EUserRole.USER };
     });
     const modifiedAdmins = data.admins.map((admin) => {
-      return { userId: admin.value, role: 'ADMIN' };
+      return { userId: admin.value, role: EUserRole.ADMIN };
     });
-
     try {
-      await typedFetch({
-        url: '/groups/',
-        method: 'POST',
-        body: {
-          authorId: data.authorId,
-          name: data.name,
-          profileImage: data.profileImage,
-          coverImage: data.coverImage,
-          bio: data.bio,
+      if (editGroup) {
+        await updateGroupMutation({
+          ...data,
+          id: editGroup?.id ?? '',
+          createdAt: editGroup?.createdAt ?? new Date(),
+          updatedAt: new Date(),
+        });
+        router.push(`/groups/${editGroup.id}`);
+      } else {
+        await mutateAsync({
+          data,
           members: [...modifiedMembers, ...modifiedAdmins],
-        },
-      });
+        });
+        router.push('/groups');
+      }
     } catch (error) {
-      console.log('Error creating group', error);
-      throw new Error('Error creating group');
+      console.log(error);
+      throw new Error('Something went wrong');
     }
   };
 
@@ -285,9 +293,7 @@ const CreateGroup = ({ authorId }: { authorId: string }) => {
           />
           <div className="space-y-3">
             <FormLabel>Add admins</FormLabel>
-            <FormDescription className="!text-[14px]">
-              You can add up to 3 admins to your group .
-            </FormDescription>
+
             <FormField
               control={form.control}
               name="admins"
@@ -300,7 +306,7 @@ const CreateGroup = ({ authorId }: { authorId: string }) => {
                     input: () =>
                       '!text-[16px] dark:!text-white-100 text-black-800',
                     control: () =>
-                      '!border-none !shadow-none  dark:bg-black-800 dark:!border-[#393E4F66] px-3 h-11',
+                      '!border-none !shadow-none  dark:bg-black-800 dark:!border-[#393E4F66] px-3 h-auto min-h-[44px]',
                     indicatorSeparator: () => '!hidden',
                     dropdownIndicator: () => '!hidden',
                     multiValue: () =>
@@ -315,9 +321,23 @@ const CreateGroup = ({ authorId }: { authorId: string }) => {
                     menu: () => 'bg-white-100 dark:bg-black-800 !shadow-sm ',
                   }}
                   isMulti
-                  isOptionDisabled={() => field.value.length >= 3}
                   onInputChange={(value) => setQ(value)}
-                  options={adminOptions}
+                  isOptionDisabled={(option) => {
+                    const tooLong = field.value.length >= 10;
+                    if (tooLong) return true;
+
+                    if (
+                      form
+                        .getValues()
+                        .members.filter(
+                          (member) => member.value === option.value
+                        ).length > 0
+                    )
+                      return true;
+
+                    return false;
+                  }}
+                  options={userOptions}
                   formatOptionLabel={(option, { context }) => {
                     if (context === 'value') {
                       return (
@@ -348,9 +368,7 @@ const CreateGroup = ({ authorId }: { authorId: string }) => {
 
           <div className="space-y-3">
             <FormLabel>Add members</FormLabel>
-            <FormDescription className="!text-[14px]">
-              You can add up to 5 members to your group at a time.
-            </FormDescription>
+
             <FormField
               control={form.control}
               name="members"
@@ -363,7 +381,7 @@ const CreateGroup = ({ authorId }: { authorId: string }) => {
                     input: () =>
                       '!text-[16px] dark:!text-white-100 text-black-800',
                     control: () =>
-                      '!border-none !shadow-none  dark:bg-black-800 dark:!border-[#393E4F66] px-3 h-11',
+                      '!border-none !shadow-none  dark:bg-black-800 dark:!border-[#393E4F66] px-3 h-auto min-h-[44px]',
                     indicatorSeparator: () => '!hidden',
                     dropdownIndicator: () => '!hidden',
                     multiValue: () =>
@@ -379,8 +397,21 @@ const CreateGroup = ({ authorId }: { authorId: string }) => {
                   }}
                   isMulti
                   onInputChange={(value) => setQ(value)}
-                  isOptionDisabled={() => field.value.length >= 5}
-                  options={memberOptions}
+                  isOptionDisabled={(option) => {
+                    const tooLong = field.value.length >= 10;
+                    if (tooLong) return true;
+
+                    if (
+                      form
+                        .getValues()
+                        .admins.filter((admin) => admin.value === option.value)
+                        .length > 0
+                    )
+                      return true;
+
+                    return false;
+                  }}
+                  options={userOptions}
                   formatOptionLabel={(option, { context }) => {
                     if (context === 'value') {
                       return (
@@ -418,12 +449,20 @@ const CreateGroup = ({ authorId }: { authorId: string }) => {
             </Button>
             <Button
               type="submit"
-              className=" bg-light100__dark800 hover:!text-white-100 duration-200 hover:bg-primary-500 py-3 w-3/5">
-              {isLoading ? 'Publishing Post...' : 'Publish Post'}
+              className=" bg-light100__dark800 hover:!text-white-100 duration-200 hover:bg-primary-500 py-3 w-3/5"
+              disabled={form.formState.isSubmitting}>
+              {form.formState.isSubmitting
+                ? editGroup
+                  ? 'Updating Group...'
+                  : 'Creating Group...'
+                : editGroup
+                  ? 'Update Group'
+                  : 'Create Group'}
             </Button>
           </div>
         </form>
       </Form>
+      {isFetchingUsers && <p>Loading users...</p>}
     </div>
   );
 };

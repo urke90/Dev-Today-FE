@@ -35,8 +35,6 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
   groupsData,
   viewerId,
 }) => {
-  console.log('groupsData u PROFILE HOME', groupsData);
-
   return (
     <div className="content-wrapper">
       <aside className="left-sidebar bg-light100__dark800 rounded-2xl !p-0 !pb-10 text-center">

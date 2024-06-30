@@ -1,6 +1,6 @@
 import type { IProfilePageContentResponse } from '@/types/content';
 import { IProfilePageGroupsResponse } from '@/types/group';
-import { EQueryType } from '@/types/queries';
+import { EQueryType, ESortByFilter } from '@/types/queries';
 import { EUserRole } from '@/types/user';
 
 // ----------------------------------------------------------------
@@ -39,10 +39,27 @@ export const fetchUserGroups = async (
   return response.json();
 };
 
-export const fetchAllGroups = async (page: number) => {
+export const fetchAllGroups = async (
+  page: number,
+  viewerId: string,
+  sortBy: ESortByFilter
+) => {
+  const sortQuery = sortBy ? `&sortBy=${sortBy}` : '';
+
   const response = await fetch(
-    BASE_API_URL + `/groups?members=true&page=${page}`
+    BASE_API_URL +
+      `/groups?members=true&page=${page}&viewerId=${viewerId}${sortQuery}`
   );
+
+  if (!response.ok) {
+    throw new Error('Something went wrong!');
+  }
+
+  return response.json();
+};
+
+export const fetchUsers = async (query: string) => {
+  const response = await fetch(BASE_API_URL + `/user?q=${query}&limit=5`);
 
   if (!response.ok) {
     throw new Error('Something went wrong!');
@@ -75,12 +92,10 @@ export const fetchGroupMembers = async (
   role?: EUserRole
 ) => {
   const roleQuery = role ? `&role=${role.toLowerCase()}` : '';
-  console.log('roleQuery', roleQuery);
+
   const response = await fetch(
     BASE_API_URL + `/groups/${id}/members?page=${page}&limit=5${roleQuery}`
   );
-
-  console.log('response FETCH GROUP MEMBERS', response);
 
   if (!response.ok) {
     throw new Error('Something went wrong!');
@@ -97,4 +112,24 @@ export const fetchGroupsAndContents = async (q: string, limit: number = 3) => {
   }
 
   return response.json();
+};
+
+export const fetchCreateGroups = async (query: string) => {
+  const result = await fetch(BASE_API_URL + `/groups?q=${query}`);
+
+  if (!result.ok) {
+    throw new Error('Something went wrong!');
+  }
+
+  return result.json();
+};
+
+export const fetchTags = async (query: string) => {
+  const result = await fetch(BASE_API_URL + `/content/tags?title=${query}`);
+
+  if (!result.ok) {
+    throw new Error('Something went wrong!');
+  }
+
+  return result.json();
 };

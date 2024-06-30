@@ -9,7 +9,7 @@ import type {
 import { ESortByFilter } from '@/types/queries';
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import GroupItemCard from '../shared/GroupItemCard';
 import SidebarGroupItem from '../shared/LeftSidebarItems/SidebarGroupItem';
 import SidebarItemWrapper from '../shared/LeftSidebarItems/SidebarItemWrapper';
@@ -24,21 +24,27 @@ interface IGroupsHomeProps {
   groupsData: IHomePageGroupsResponse;
   sidebarDetails: IAllGroupsSidebarDetails;
   sortBy: ESortByFilter;
+  viewerId: string;
 }
 
 const GroupsHome: React.FC<IGroupsHomeProps> = ({
   groupsData,
   sidebarDetails,
+  viewerId,
   sortBy,
 }) => {
   const [page, setPage] = useState(1);
 
   const { data } = useQuery<IHomePageGroupsResponse>({
     queryKey: [EContentGroupQueries.FETCH_GROUPS, page],
-    queryFn: () => fetchAllGroups(page),
+    queryFn: () => fetchAllGroups(page, viewerId, sortBy),
     enabled: page > 1,
     initialData: groupsData,
   });
+
+  useEffect(() => {
+    setPage(1);
+  }, [sortBy]);
 
   return (
     <section className="px-3.5 lg:px-5">

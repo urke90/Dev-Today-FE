@@ -25,6 +25,7 @@ export interface IProfileUser {
   role: EUserRole;
   followers: string[];
   _count: { followers: number; following: number };
+
   contents: IContent[];
 }
 

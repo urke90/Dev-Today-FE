@@ -25,7 +25,7 @@ const GroupsPage: React.FC<IGroupsPage> = async ({ searchParams }) => {
   if (!session) throw new Error('User session is not available!');
 
   const groupsData = await typedFetch<IHomePageGroupsResponse>({
-    url: `/groups?members=true${sortQuery}`,
+    url: `/groups?members=true&viewerId=${session.user.id}${sortQuery}`,
   });
 
   if (!groupsData) throw new Error('Internal server error!');
@@ -39,6 +39,7 @@ const GroupsPage: React.FC<IGroupsPage> = async ({ searchParams }) => {
       groupsData={groupsData}
       sortBy={sortBy}
       sidebarDetails={sidbarDetails}
+      viewerId={session.user.id}
     />
   );
 };

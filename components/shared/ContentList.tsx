@@ -83,8 +83,6 @@ const ContentList: React.FC<IContentListProps> = ({
       pageParams: [1],
     },
     getNextPageParam: (lastPage, allPages) => {
-      console.log('lastPage', lastPage);
-      console.log('allPages', allPages);
       return lastPage.hasNextPage ? allPages?.length + 1 : undefined;
     },
     enabled: contentType !== EQueryType.GROUP,
@@ -168,11 +166,6 @@ const ContentList: React.FC<IContentListProps> = ({
     // );
   }, [contentType, groupsData, contentData]);
 
-  // console.log('groups to render', groupsToRender);
-  // console.log('groups', groups);
-  // console.log('groupsData TESTING GROUPS DATA', !groupsData);
-  // console.log('contentToRender', contentToRender);
-
   const renderContent = () => {
     let styles;
     let renderedContent;
@@ -184,7 +177,117 @@ const ContentList: React.FC<IContentListProps> = ({
       case EQueryType.POST:
         {
           styles = 'flex flex-col flex-wrap gap-5';
-          renderedContent = contentToRender?.map(
+          renderedContent =
+            contentToRender[0] !== undefined &&
+            contentToRender?.map(
+              ({
+                id,
+                title,
+                coverImage,
+                description,
+                tags,
+                createdAt,
+                viewsCount,
+                likesCount,
+                commentsCount,
+                isLiked,
+              }) => (
+                <PostItemCard
+                  key={id}
+                  id={id}
+                  coverImage={coverImage}
+                  title={title}
+                  description={description}
+                  tags={tags}
+                  createdAt={createdAt}
+                  author={userName}
+                  viewsCount={viewsCount}
+                  likesCount={likesCount}
+                  commentsCount={commentsCount}
+                  isLiked={isLiked}
+                  handleLikeContent={likeOrDislikeContent}
+                />
+              )
+            );
+        }
+        break;
+      case EQueryType.MEETUP:
+        {
+          styles = 'flex flex-col flax-wrap gap-5';
+          renderedContent =
+            contentToRender[0] !== undefined &&
+            contentToRender?.map(
+              ({ id, meetupDate, title, description, coverImage, tags }) => (
+                <MeetupItemCard
+                  key={id}
+                  id={id}
+                  coverImage={coverImage}
+                  title={title}
+                  description={description}
+                  tags={tags}
+                  location="Innovation Hub, Austin"
+                  meetupDate={meetupDate}
+                />
+              )
+            );
+        }
+        break;
+      case EQueryType.PODCAST:
+        {
+          styles = 'grid grid-cols-1 md:grid-cols-2 gap-5';
+          renderedContent =
+            contentToRender[0] !== undefined &&
+            contentToRender?.map(
+              ({
+                id,
+                coverImage,
+                title,
+                description,
+                tags,
+                createdAt,
+                isLiked,
+              }) => (
+                <PodcastItemCard
+                  key={id}
+                  id={id}
+                  coverImage={coverImage}
+                  title={title}
+                  description={description}
+                  tags={tags}
+                  author={userName}
+                  createdAt={createdAt}
+                  isLiked={isLiked}
+                  handleLikeContent={likeOrDislikeContent}
+                />
+              )
+            );
+        }
+        break;
+      case EQueryType.GROUP:
+        {
+          styles = 'grid grid-cols-1 md:grid-cols-2 gap-5';
+          renderedContent =
+            groupsToRender[0] !== undefined &&
+            groupsToRender?.map(
+              ({ id, bio, coverImage, members, name, _count }) => (
+                <GroupItemCard
+                  key={id}
+                  id={id}
+                  coverImage={coverImage}
+                  title={name}
+                  description={bio}
+                  members={members}
+                  totalMembers={_count?.members}
+                />
+              )
+            );
+        }
+        break;
+      default: {
+        styles = 'flex flex-col flax-wrap gap-5';
+        renderedContent =
+          contentToRender[0] !== undefined &&
+          contentToRender?.map(
             ({
               id,
               title,
@@ -214,108 +317,6 @@ const ContentList: React.FC<IContentListProps> = ({
               />
             )
           );
-        }
-        break;
-      case EQueryType.MEETUP:
-        {
-          styles = 'flex flex-col flax-wrap gap-5';
-          renderedContent = contentToRender?.map(
-            ({ id, meetupDate, title, description, coverImage, tags }) => (
-              <MeetupItemCard
-                key={id}
-                id={id}
-                coverImage={coverImage}
-                title={title}
-                description={description}
-                tags={tags}
-                location="Innovation Hub, Austin"
-                meetupDate={meetupDate}
-              />
-            )
-          );
-        }
-        break;
-      case EQueryType.PODCAST:
-        {
-          styles = 'grid grid-cols-1 md:grid-cols-2 gap-5';
-          renderedContent = contentToRender?.map(
-            ({
-              id,
-              coverImage,
-              title,
-              description,
-              tags,
-              createdAt,
-              isLiked,
-            }) => (
-              <PodcastItemCard
-                key={id}
-                id={id}
-                coverImage={coverImage}
-                title={title}
-                description={description}
-                tags={tags}
-                author={userName}
-                createdAt={createdAt}
-                isLiked={isLiked}
-                handleLikeContent={likeOrDislikeContent}
-              />
-            )
-          );
-        }
-        break;
-      case EQueryType.GROUP:
-        {
-          styles = 'grid grid-cols-1 md:grid-cols-2 gap-5';
-          renderedContent =
-            groupsToRender[0] !== undefined &&
-            groupsToRender?.map(
-              ({ id, bio, coverImage, members, name, _count }) => (
-                <GroupItemCard
-                  key={id}
-                  id={id}
-                  coverImage={coverImage}
-                  title={name}
-                  description={bio}
-                  members={members}
-                  totalMembers={_count?.members}
-                />
-              )
-            );
-        }
-        break;
-      default: {
-        styles = 'flex flex-col flax-wrap gap-5';
-        renderedContent = contentToRender?.map(
-          ({
-            id,
-            title,
-            coverImage,
-            description,
-            tags,
-            createdAt,
-            viewsCount,
-            likesCount,
-            commentsCount,
-            isLiked,
-          }) => (
-            <PostItemCard
-              key={id}
-              id={id}
-              coverImage={coverImage}
-              title={title}
-              description={description}
-              tags={tags}
-              createdAt={createdAt}
-              author={userName}
-              viewsCount={viewsCount}
-              likesCount={likesCount}
-              commentsCount={commentsCount}
-              isLiked={isLiked}
-              handleLikeContent={likeOrDislikeContent}
-            />
-          )
-        );
       }
     }
 
