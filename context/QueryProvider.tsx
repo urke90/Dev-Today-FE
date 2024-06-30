@@ -8,7 +8,7 @@ interface IQueryProviderProps {
   children: React.ReactNode;
 }
 
-const client = new QueryClient({
+export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       refetchOnWindowFocus: false,
@@ -17,7 +17,9 @@ const client = new QueryClient({
 });
 
 const QueryProvider: React.FC<IQueryProviderProps> = ({ children }) => {
-  return <QueryClientProvider client={client}>{children}</QueryClientProvider>;
+  return (
+    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+  );
 };
 
 export default QueryProvider;

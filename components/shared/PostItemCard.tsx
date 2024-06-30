@@ -8,6 +8,7 @@ import { Button } from '../ui/button';
 import Image from 'next/image';
 import Link from 'next/link';
 
+import type { ITag } from '@/types/content';
 import { calculateTimeAgo, formatNumberWithCommas } from '@/utils/format';
 
 // ----------------------------------------------------------------
@@ -17,7 +18,7 @@ interface IPostItemCardProps {
   coverImage: string | null;
   title: string;
   description: string;
-  tags: string[];
+  tags: ITag[];
   createdAt: Date;
   author: string;
   viewsCount?: number | null;
@@ -47,26 +48,26 @@ const PostItemCard: React.FC<IPostItemCardProps> = ({
   return (
     <li>
       <Link
-        href={'/posts/' + id}
-        className="bg-light100__dark800 flex gap-4 rounded-2xl p-4 md:items-center md:p-5"
+        href={'/content/' + id}
+        className="bg-light100__dark800 flex gap-4 rounded-2xl p-4 md:items-center md:p-5 shadow-card"
       >
         <Image
-          src={coverImage || '/assets/images/no-image.svg'}
+          src={coverImage || '/assets/icons/image-preview.svg'}
           width={165}
           height={165}
           alt={title}
-          className="shrink-0 self-baseline max-md:hidden bg-primary-100 dark:bg-primary-500 rounded-2xl"
+          className=" max-md:hidden  rounded-2xl"
         />
         {/* RIGHT PART OF THE POST */}
         <div className="flex flex-1 flex-col gap-4">
           <div className="mb-4 flex justify-between gap-2">
             <div className="flex gap-2">
               <Image
-                src={coverImage || '/assets/images/no-image.svg'}
+                src={coverImage || '/assets/icons/image-preview.svg'}
                 width={50}
                 height={50}
                 alt={title}
-                className="shrink-0 self-baseline md:hidden bg-primary-100 dark:bg-primary-500 rounded-[6px]"
+                className="md:hidden"
               />
               <div>
                 <p className="p1-bold mb-2">{title}</p>
@@ -84,15 +85,15 @@ const PostItemCard: React.FC<IPostItemCardProps> = ({
             </Button>
           </div>
           {tags?.length > 0 ? (
-            <ul className="flex gap-2.5">
-              {tags.map((tag) => (
-                <BadgeItem key={tag} title={tag} />
+            <ul className="flex gap-2.5 flex-wrap">
+              {tags.map(({ id, title }) => (
+                <BadgeItem key={id} title={title} />
               ))}
             </ul>
           ) : null}
           <div className="flex-between flex-wrap gap-5">
             <div className="flex">
-              <div className="flex-center mr-2.5 size-[40px] rounded-full bg-[#F0F1FE]">
+              <div className="flex-center mr-2.5 size-[40px] rounded-full bg-white-600">
                 <Image
                   src="/assets/images/avatars/avatar-1.svg"
                   width={28}

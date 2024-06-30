@@ -5,6 +5,8 @@ import BadgeItem from './BadgeItem';
 import HeartIcon from '../icons/Heart';
 import { Button } from '../ui/button';
 
+import type { ITag } from '@/types/content';
+import { calculateTimeAgo } from '@/utils/format';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -15,7 +17,7 @@ interface IPodcastItemCardProps {
   coverImage: string | null;
   title: string;
   description: string;
-  tags: string[];
+  tags: ITag[];
   author: string;
   createdAt: Date;
   isLiked: boolean;
@@ -39,18 +41,19 @@ const PodcastItemCard: React.FC<IPodcastItemCardProps> = ({
   return (
     <li>
       <Link
-        href={'/podcasts/' + id}
-        className="bg-light100__dark800 flex flex-col gap-3.5 rounded-[10px] px-3.5 py-5 lg:gap-[18px] lg:rounded-2xl lg:p-4"
+        href={'/content/' + id}
+        className="bg-light100__dark800 flex flex-col gap-3.5 rounded-[10px] px-3.5 py-5 lg:gap-[18px] lg:rounded-2xl lg:p-4 shadow-card"
       >
-        <div className="lg:flex-between flex gap-2">
-          <Image
-            src={coverImage || '/assets/images/no-image.svg'}
-            width={50}
-            height={50}
-            alt={title}
-            className="bg-primary-100 dark:bg-primary-500 rounded-[6px] "
-          />
-          <p className="p3-bold lg:p1-bold line-clamp-2">{title}</p>
+        <div className="flex-between">
+          <div className="flex gap-2">
+            <Image
+              src={coverImage || '/assets/icons/image-preview.svg'}
+              width={50}
+              height={50}
+              alt={title}
+            />
+            <p className="p3-bold lg:p1-bold line-clamp-2">{title}</p>
+          </div>
           <Button
             type="button"
             variant="icon"
@@ -65,15 +68,15 @@ const PodcastItemCard: React.FC<IPodcastItemCardProps> = ({
         <p className="p4-regular lg:p3-regular line-clamp-3 lg:line-clamp-4">
           {description}
         </p>
-        {tags.length > 0 ? (
-          <ul className="flex gap-2.5">
-            {tags.map((tag) => (
-              <BadgeItem key={tag} title={tag} />
+        {tags?.length > 0 ? (
+          <ul className="flex gap-2.5 flex-wrap">
+            {tags.map(({ id, title }) => (
+              <BadgeItem key={id} title={title} />
             ))}
           </ul>
         ) : null}
         <div className="flex items-center gap-[7px] lg:gap-2.5">
-          <div className="flex-center bg-white-300 relative size-[30px] rounded-full lg:size-[40px] dark:bg-[#F0F1FE]">
+          <div className="flex-center bg-white-300 relative size-[30px] rounded-full lg:size-[40px] dark:bg-white-600">
             <Image
               fill
               src="/assets/images/avatars/avatar-1.svg"
@@ -84,7 +87,7 @@ const PodcastItemCard: React.FC<IPodcastItemCardProps> = ({
           <div className="flex flex-col">
             <span className="p4-bold lg:p3-bold">{author}</span>
             <span className="subtitle-normal">
-              {createdAt.toLocaleString()}
+              {calculateTimeAgo(createdAt)}
             </span>
           </div>
         </div>

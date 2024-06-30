@@ -1,15 +1,18 @@
-import { EQueryContentType, IContent } from '@/types/content';
+import type { IProfilePageContentResponse } from '@/types/content';
+import { IProfilePageGroupsResponse } from '@/types/group';
+import { EQueryType, ESortByFilter } from '@/types/queries';
+import { EUserRole } from '@/types/user';
 
 // ----------------------------------------------------------------
 
 const BASE_API_URL = 'http://localhost:8080/api';
 
-export const fetchContent = async (
+export const fetchUserContent = async (
   userId: string,
-  contentType: EQueryContentType,
+  contentType: EQueryType,
   page: number,
   viewerId: string
-): Promise<IContent[]> => {
+): Promise<IProfilePageContentResponse> => {
   const response = await fetch(
     BASE_API_URL +
       `/user/${userId}/content?type=${contentType}&page=${page}&viewerId=${viewerId}`
@@ -22,9 +25,12 @@ export const fetchContent = async (
   return response.json();
 };
 
-export const fetchGroups = async (userId: string, page: number) => {
+export const fetchUserGroups = async (
+  userId: string,
+  page: number
+): Promise<IProfilePageGroupsResponse> => {
   const response = await fetch(
-    BASE_API_URL + `/user/${userId}/groups&page=${page}`
+    BASE_API_URL + `/user/${userId}/groups?page=${page}`
   );
 
   if (!response.ok) {
@@ -33,8 +39,73 @@ export const fetchGroups = async (userId: string, page: number) => {
   return response.json();
 };
 
+export const fetchAllGroups = async (
+  page: number,
+  viewerId: string,
+  sortBy: ESortByFilter
+) => {
+  const sortQuery = sortBy ? `&sortBy=${sortBy}` : '';
+
+  const response = await fetch(
+    BASE_API_URL +
+      `/groups?members=true&page=${page}&viewerId=${viewerId}${sortQuery}`
+  );
+
+  if (!response.ok) {
+    throw new Error('Something went wrong!');
+  }
+
+  return response.json();
+};
+
 export const fetchUsers = async (query: string) => {
   const response = await fetch(BASE_API_URL + `/user?q=${query}&limit=5`);
+
+  if (!response.ok) {
+    throw new Error('Something went wrong!');
+  }
+
+  return response.json();
+};
+
+export const fetchGroupContent = async (
+  id: string,
+  page: number,
+  type: EQueryType,
+  viewerId: string
+) => {
+  const response = await fetch(
+    BASE_API_URL +
+      `/groups/${id}/content?type=${type}&page=${page}&viewerId=${viewerId}`
+  );
+
+  if (!response.ok) {
+    throw new Error('Something went wrong!');
+  }
+
+  return response.json();
+};
+
+export const fetchGroupMembers = async (
+  id: string,
+  page: number,
+  role?: EUserRole
+) => {
+  const roleQuery = role ? `&role=${role.toLowerCase()}` : '';
+
+  const response = await fetch(
+    BASE_API_URL + `/groups/${id}/members?page=${page}&limit=5${roleQuery}`
+  );
+
+  if (!response.ok) {
+    throw new Error('Something went wrong!');
+  }
+
+  return response.json();
+};
+
+export const fetchGroupsAndContents = async (q: string, limit: number = 3) => {
+  const response = await fetch(BASE_API_URL + `/search?q=${q}`);
 
   if (!response.ok) {
     throw new Error('Something went wrong!');

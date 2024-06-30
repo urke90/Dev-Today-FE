@@ -1,61 +1,121 @@
 'use client';
 
-import GroupItemCard from './GroupItemCard';
 import LoadingSpinner from './LoadingSpinner';
+
+import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
+
+import { fetchUserContent, fetchUserGroups } from '@/api/queries';
+import { EContentGroupQueries } from '@/constants/react-query';
+import { useInfiniteScroll } from '@/hooks/use-infinite-scroll';
+import {
+  type IContent,
+  type IProfilePageContentResponse,
+} from '@/types/content';
+import type {
+  IProfilePageGroup,
+  IProfilePageGroupsResponse,
+} from '@/types/group';
+import { EQueryType } from '@/types/queries';
+import { typedFetch } from '@/utils/api';
+import toast from 'react-hot-toast';
+import GroupItemCard from './GroupItemCard';
 import MeetupItemCard from './MeetupItemCard';
 import PodcastItemCard from './PodcastItemCard';
 import PostItemCard from './PostItemCard';
 
-import { useQuery } from '@tanstack/react-query';
-import { memo, useCallback, useEffect, useState } from 'react';
-
-import { fetchContent, fetchGroups } from '@/api/queries';
-import { EContentGroupItemsQueries } from '@/constants/react-query';
-import { useInfiniteScroll } from '@/hooks/use-infinite-scroll';
-import { EQueryContentType, type IContent } from '@/types/content';
-import type { IGroup } from '@/types/group';
-import { typedFetch } from '@/utils/api';
-import toast from 'react-hot-toast';
-
 // ----------------------------------------------------------------
 
-const getShouldFetch = (items: IContent[] | IGroup[]) => {
+const getShouldFetch = (items: IContent[] | IProfilePageGroup[]) => {
   return items.length % 6 === 0 && items.length !== 0;
 };
 
-const updateContentQueryKey = (contentType: EQueryContentType) => {
-  if (contentType === EQueryContentType.GROUP) {
+const updateContentQueryKey = (contentType: EQueryType) => {
+  if (contentType === EQueryType.GROUP || contentType === EQueryType.MEMBERS) {
     return;
   }
   const FETCH_QUERIES = {
-    post: EContentGroupItemsQueries.FETCH_POSTS,
-    meetup: EContentGroupItemsQueries.FETCH_MEETUPS,
-    podcast: EContentGroupItemsQueries.FETCH_PODCASTS,
+    post: EContentGroupQueries.FETCH_POSTS,
+    meetup: EContentGroupQueries.FETCH_MEETUPS,
+    podcast: EContentGroupQueries.FETCH_PODCASTS,
+    // members: EContentGroupQueries.FETCH_MEMBERS,
   };
 
   return FETCH_QUERIES[contentType];
 };
 
 interface IContentListProps {
-  contentType: EQueryContentType;
-  contentItems: IContent[];
-  groupItems: IGroup[];
+  contentType: EQueryType;
+  contentData: IProfilePageContentResponse;
+  groupsData: IProfilePageGroupsResponse;
   userId: string;
   userName: string;
   viewerId: string;
 }
 
+// TODO figure out why without "groupsToRender[0] !== undefined &&" logic for rendering groups is not working
 const ContentList: React.FC<IContentListProps> = ({
   contentType,
-  contentItems,
-  groupItems,
+  contentData,
+  groupsData,
   userId,
   userName,
   viewerId,
 }) => {
-  const [content, setContent] = useState<IContent[]>(contentItems);
-  const [groups, setGroups] = useState<IGroup[]>(groupItems);
+  console.log('GROUPS DATA U CONTENT LIST', groupsData);
+  const queryClient = useQueryClient();
+  // const [groups, setGroups] = useState<IProfilePageGroup[]>(groupItems);
   const [page, setPage] = useState(1);
+  // const [content, setContent] = useState<IContent[]>(contentItems);
+
+  const {
+    isLoading: isLoadingContent,
+    data: content,
+    hasNextPage: hasNextContentPage,
+    fetchNextPage: fetchNextContentPage,
+  } = useInfiniteQuery({
+    queryKey: [updateContentQueryKey(contentType), contentType],
+    queryFn: ({ pageParam = 1 }) =>
+      fetchUserContent(userId, contentType, pageParam, viewerId),
+    initialPageParam: 1,
+    initialData: {
+      pages: [contentData],
+      pageParams: [1],
+    },
+    getNextPageParam: (lastPage, allPages) => {
+      return lastPage.hasNextPage ? allPages?.length + 1 : undefined;
+    },
+    enabled: contentType !== EQueryType.GROUP,
+  });
+
+  const {
+    isLoading: isLoadingGroups,
+    data: groups,
+    hasNextPage: hasNextGroupsPage,
+    fetchNextPage: fetchNextGroupsPage,
+  } = useInfiniteQuery({
+    queryKey: [EContentGroupQueries.FETCH_GROUPS, EQueryType.GROUP],
+    queryFn: ({ pageParam = 1 }) => fetchUserGroups(userId, pageParam),
+    initialPageParam: 1,
+    initialData: {
+      pages: [groupsData],
+      pageParams: [1],
+    },
+    getNextPageParam: (lastPage, allPages, firstPageParam) => {
+      return lastPage.hasNextPage ? allPages.length + 1 : undefined;
+    },
+    enabled: contentType === EQueryType.GROUP,
+  });
+
+  const lastListItemRef = useInfiniteScroll({
+    updatePage:
+      contentType === EQueryType.GROUP
+        ? fetchNextGroupsPage
+        : fetchNextContentPage,
+    isLoading: isLoadingContent || isLoadingGroups,
+    shouldFetch:
+      contentType === EQueryType.GROUP ? hasNextGroupsPage : hasNextContentPage,
+  });
 
   const likeOrDislikeContent = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -69,81 +129,165 @@ const ContentList: React.FC<IContentListProps> = ({
         method: 'POST',
         body: { contentId },
       });
-      setContent((prevContent) =>
-        prevContent.map((content) =>
-          content.id === contentId
-            ? { ...content, isLiked: !content.isLiked }
-            : content
-        )
+      queryClient.setQueryData(
+        [updateContentQueryKey(contentType), contentType],
+        {
+          ...content,
+          pages: content.pages.map((page) => ({
+            ...page,
+            contents: page.contents.map((content) =>
+              content.id === contentId
+                ? { ...content, isLiked: !content.isLiked }
+                : content
+            ),
+          })),
+        }
       );
     } catch (error) {
       toast.error('Ooops, something went wrong!');
     }
   };
 
-  const shouldFetch = getShouldFetch(
-    contentType === EQueryContentType.GROUP ? groups : content
-  );
-
-  const updatePage = useCallback(() => {
-    setPage((prevPage) => prevPage + 1);
-  }, []);
-
-  const {
-    isLoading: isLoadingContent,
-    error: contentError,
-    data: contentData,
-  } = useQuery<IContent[]>({
-    queryKey: [updateContentQueryKey(contentType), contentType, userId, page],
-    queryFn: () => fetchContent(userId, contentType, page, viewerId),
-    enabled:
-      shouldFetch && contentType !== EQueryContentType.GROUP && page !== 1,
-    retry: false,
-  });
-
-  const {
-    isLoading: isLoadingGroups,
-    error: groupsError,
-    data: groupsData,
-  } = useQuery<IGroup[]>({
-    queryKey: [EContentGroupItemsQueries.FETCH_GROUPS, userId, page],
-    queryFn: () => fetchGroups(userId, page),
-    enabled:
-      shouldFetch && contentType === EQueryContentType.GROUP && page !== 1,
-    retry: false,
-  });
-
-  const { lastListItemRef } = useInfiniteScroll({
-    updatePage,
-    isLoading: isLoadingContent || isLoadingGroups,
-    shouldFetch,
-  });
-
   useEffect(() => {
-    if (groupsData) {
-      setGroups((prevGroups) => [...prevGroups, ...groupsData]);
-    }
-  }, [groupsData]);
-
-  useEffect(() => {
-    if (contentData) {
-      setContent((prevContent) => [...prevContent, ...contentData]);
-    }
-  }, [contentData]);
-
-  useEffect(() => {
-    setPage(1);
-  }, [contentType]);
+    // queryClient.setQueryData(
+    //   [EContentGroupQueries.FETCH_GROUPS, EQueryType.GROUP, 1],
+    //   contentType === EQueryType.GROUP ? groupsData : contentData
+    // );
+    queryClient.setQueryData(
+      [EContentGroupQueries.FETCH_GROUPS, EQueryType.GROUP],
+      {
+        pages: contentType === EQueryType.GROUP ? [groupsData] : [contentData],
+        pageParams: [1],
+      }
+    );
+    // queryClient.setQueryData(
+    //   [EContentGroupQueries.FETCH_GROUPS, EQueryType.GROUP, 1],
+    //   contentType === EQueryType.GROUP ? groupsData : contentData
+    // );
+  }, [contentType, groupsData, contentData]);
 
   const renderContent = () => {
     let styles;
     let renderedContent;
 
+    const contentToRender = content?.pages?.flatMap((page) => page.contents);
+    const groupsToRender = groups?.pages?.flatMap((page) => page.groups);
+
     switch (contentType) {
-      case EQueryContentType.POST:
+      case EQueryType.POST:
         {
           styles = 'flex flex-col flex-wrap gap-5';
-          renderedContent = content?.map(
+          renderedContent =
+            contentToRender[0] !== undefined &&
+            contentToRender?.map(
+              ({
+                id,
+                title,
+                coverImage,
+                description,
+                tags,
+                createdAt,
+                viewsCount,
+                likesCount,
+                commentsCount,
+                isLiked,
+              }) => (
+                <PostItemCard
+                  key={id}
+                  id={id}
+                  coverImage={coverImage}
+                  title={title}
+                  description={description}
+                  tags={tags}
+                  createdAt={createdAt}
+                  author={userName}
+                  viewsCount={viewsCount}
+                  likesCount={likesCount}
+                  commentsCount={commentsCount}
+                  isLiked={isLiked}
+                  handleLikeContent={likeOrDislikeContent}
+                />
+              )
+            );
+        }
+        break;
+      case EQueryType.MEETUP:
+        {
+          styles = 'flex flex-col flax-wrap gap-5';
+          renderedContent =
+            contentToRender[0] !== undefined &&
+            contentToRender?.map(
+              ({ id, meetupDate, title, description, coverImage, tags }) => (
+                <MeetupItemCard
+                  key={id}
+                  id={id}
+                  coverImage={coverImage}
+                  title={title}
+                  description={description}
+                  tags={tags}
+                  location="Innovation Hub, Austin"
+                  meetupDate={meetupDate}
+                />
+              )
+            );
+        }
+        break;
+      case EQueryType.PODCAST:
+        {
+          styles = 'grid grid-cols-1 md:grid-cols-2 gap-5';
+          renderedContent =
+            contentToRender[0] !== undefined &&
+            contentToRender?.map(
+              ({
+                id,
+                coverImage,
+                title,
+                description,
+                tags,
+                createdAt,
+                isLiked,
+              }) => (
+                <PodcastItemCard
+                  key={id}
+                  id={id}
+                  coverImage={coverImage}
+                  title={title}
+                  description={description}
+                  tags={tags}
+                  author={userName}
+                  createdAt={createdAt}
+                  isLiked={isLiked}
+                  handleLikeContent={likeOrDislikeContent}
+                />
+              )
+            );
+        }
+        break;
+      case EQueryType.GROUP:
+        {
+          styles = 'grid grid-cols-1 md:grid-cols-2 gap-5';
+          renderedContent =
+            groupsToRender[0] !== undefined &&
+            groupsToRender?.map(
+              ({ id, bio, coverImage, members, name, _count }) => (
+                <GroupItemCard
+                  key={id}
+                  id={id}
+                  coverImage={coverImage}
+                  title={name}
+                  description={bio}
+                  members={members}
+                  totalMembers={_count?.members}
+                />
+              )
+            );
+        }
+        break;
+      default: {
+        styles = 'flex flex-col flax-wrap gap-5';
+        renderedContent =
+          contentToRender[0] !== undefined &&
+          contentToRender?.map(
             ({
               id,
               title,
@@ -173,105 +317,6 @@ const ContentList: React.FC<IContentListProps> = ({
               />
             )
           );
-        }
-        break;
-      case EQueryContentType.MEETUP:
-        {
-          styles = 'flex flex-col flax-wrap gap-5';
-          renderedContent = content?.map(
-            ({ id, meetupDate, title, description, coverImage, tags }) => (
-              <MeetupItemCard
-                key={id}
-                id={id}
-                coverImage={coverImage}
-                title={title}
-                description={description}
-                tags={tags}
-                location="Innovation Hub, Austin"
-                meetupDate={meetupDate}
-              />
-            )
-          );
-        }
-        break;
-      case EQueryContentType.PODCAST:
-        {
-          styles = 'grid grid-cols-1 md:grid-cols-2 gap-5';
-          renderedContent = content?.map(
-            ({
-              id,
-              coverImage,
-              title,
-              description,
-              tags,
-              createdAt,
-              isLiked,
-            }) => (
-              <PodcastItemCard
-                key={id}
-                id={id}
-                coverImage={coverImage}
-                title={title}
-                description={description}
-                tags={tags}
-                author={userName}
-                createdAt={createdAt}
-                isLiked={isLiked}
-                handleLikeContent={likeOrDislikeContent}
-              />
-            )
-          );
-        }
-        break;
-      case EQueryContentType.GROUP:
-        {
-          styles = 'grid grid-cols-1 md:grid-cols-2 gap-5';
-          renderedContent = groups?.map(
-            ({ id, bio, coverImage, members, name }) => (
-              <GroupItemCard
-                key={id}
-                id={id}
-                coverImage={coverImage}
-                title={name}
-                description={bio}
-                members={members}
-              />
-            )
-          );
-        }
-        break;
-      default: {
-        styles = 'flex flex-col flax-wrap gap-5';
-        renderedContent = content?.map(
-          ({
-            id,
-            title,
-            coverImage,
-            description,
-            tags,
-            createdAt,
-            viewsCount,
-            likesCount,
-            commentsCount,
-            isLiked,
-          }) => (
-            <PostItemCard
-              key={id}
-              id={id}
-              coverImage={coverImage}
-              title={title}
-              description={description}
-              tags={tags}
-              createdAt={createdAt}
-              author={userName}
-              viewsCount={viewsCount}
-              likesCount={likesCount}
-              commentsCount={commentsCount}
-              isLiked={isLiked}
-              handleLikeContent={likeOrDislikeContent}
-            />
-          )
-        );
       }
     }
 
@@ -284,16 +329,18 @@ const ContentList: React.FC<IContentListProps> = ({
   const { renderedContent, styles } = renderContent();
 
   return (
-    <ul className={styles}>
-      {renderedContent}
-      <li ref={lastListItemRef} />
-      {(isLoadingContent || isLoadingGroups) && (
-        <li>
-          <LoadingSpinner />
-        </li>
-      )}
-    </ul>
+    <>
+      <ul className={styles}>
+        {renderedContent}
+        {(isLoadingContent || isLoadingGroups) && (
+          <li>
+            <LoadingSpinner />
+          </li>
+        )}
+      </ul>
+      <div ref={lastListItemRef} />
+    </>
   );
 };
 
-export default memo(ContentList);
+export default ContentList;

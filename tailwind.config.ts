@@ -24,7 +24,7 @@ const config = {
       },
       colors: {
         primary: {
-          100: '#E8E1ff',
+          100: '#E8E1FF',
           500: '#825EF6',
         },
         black: {
@@ -39,10 +39,12 @@ const config = {
           300: '#C5D0E6',
           400: '#808191',
           500: '#55597D',
+          600: '#F0F1FE',
           border: '#C5D0E666',
         },
         error: {
           primary: '#F65E5E',
+          text: '#FF584D',
         },
         darkBorder: 'rgba(57, 62, 79, 0.4)',
         whiteBorder: 'rgba(197, 208, 230, 0.4)',
@@ -60,6 +62,7 @@ const config = {
           '0px 3px 80px 0px #0000004D, dark:0px 7px 80px 0px #0000001A',
         'search-dialog':
           '0px 0px 0px 1px #1212124D, dark:0px 0px 0px 1px #1212120D',
+        card: '0px 4px 30px 0px #0000001A',
       },
       keyframes: {
         'accordion-down': {
