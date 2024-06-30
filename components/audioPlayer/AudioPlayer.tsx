@@ -49,15 +49,19 @@ const AudioPlayer = ({
   }, []);
 
   useEffect(() => {
-    if (duration === currentTime && duration > 0) {
-      setIsPlaying(false);
-      setCurrentTime(0);
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current.currentTime = 0;
-      }
+    if (isPlaying) {
+      const interval = setInterval(() => {
+        if (
+          audioRef.current &&
+          audioRef.current.currentTime < audioRef.current.duration
+        ) {
+          setCurrentTime(audioRef.current.currentTime);
+        }
+      }, 1000);
+
+      return () => clearInterval(interval);
     }
-  }, [duration, currentTime]);
+  }, [isPlaying]);
 
   const formatTime = (time: number) => {
     const minutes = Math.floor(time / 60);
@@ -96,11 +100,11 @@ const AudioPlayer = ({
           <p className="p1-bold !text-[14px] !text-wrap !break-words !overflow-wrap overflow-hidden">
             {audioTitle}
           </p>
-          <div className="w-full flex items-center gap-1 md:gap-2 mt-4">
+          <div className="w-full flex justify-between items-center gap-1 md:gap-2 mt-4">
             <Progress.Root
               value={progress}
               max={100}
-              className="relative h-2 w-full bg-white-300/40 dark:bg-black-700 rounded-lg">
+              className="relative h-2 w-2/3 md:w-4/5 bg-white-300/40 dark:bg-black-700 rounded-lg">
               <Progress.Indicator
                 className={`h-full ${isPlaying && audioSrc ? 'bg-primary-500' : 'dark:bg-black-700'} rounded-lg`}
                 style={{ width: `${progress}%` }}
@@ -110,11 +114,11 @@ const AudioPlayer = ({
               ref={audioRef}
               src={audioSrc}
               className="absolute inset-0 opacity-0"></audio>
-            <span className="md:text-sm text-[8px] text-gray-600 dark:text-gray-400">
+            <span className="md:text-[14px] !text-[10px] text-gray-600 dark:text-gray-400">
               {formatTime(currentTime)}
             </span>
             <span className="text-white-400">|</span>
-            <span className="md:text-sm text-[8px] text-gray-600 dark:text-gray-400">
+            <span className="md:text-[14px] !text-[10px] text-gray-600 dark:text-gray-400">
               {formatTime(duration)}
             </span>
           </div>

@@ -117,7 +117,7 @@ const RCommentForm = ({
               className="!bg-black-900 md:h-20 "
               placeholder={isEdit ? 'Edit your comment' : 'Reply to comment'}
             />
-            <div className="w-1/5 ml-auto flex gap-4 justify-end">
+            <div className=" w-1/2 ml-auto flex justify-evenly">
               <Button
                 type="button"
                 onSelect={(e) => e.preventDefault()}
@@ -134,7 +134,7 @@ const RCommentForm = ({
               <span className="text-white-400">|</span>
               <Button
                 type="submit"
-                className="!text-primary-500 !text-[14px] capitalize cursor-pointer p3-medium">
+                className="!text-primary-500 !text-[14px]  capitalize cursor-pointer p3-medium">
                 {isEdit ? 'Save' : 'Reply'}
               </Button>
             </div>
