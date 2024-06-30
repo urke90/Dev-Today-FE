@@ -48,17 +48,6 @@ const AudioPlayer = ({
     }
   }, []);
 
-  useEffect(() => {
-    if (duration === currentTime && duration > 0) {
-      setIsPlaying(false);
-      setCurrentTime(0);
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current.currentTime = 0;
-      }
-    }
-  }, [duration, currentTime]);
-
   const formatTime = (time: number) => {
     const minutes = Math.floor(time / 60);
     const seconds = Math.floor(time % 60);
