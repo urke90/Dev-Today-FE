@@ -2,27 +2,27 @@ import PerformanceItem from './PerformanceItem';
 import ProfileSidebarInfo from './ProfileSidebarInfo';
 import SocialMediaLinks from './SocialMediaLinks';
 
-import ContentList from '../shared/ContentList';
-import ContentNavLinks from '../shared/ContentNavLinks';
-
 import Image from 'next/image';
 
-import { EQueryContentType, IContent } from '@/types/content';
-import type { IGroup } from '@/types/group';
+import type { IProfilePageContentResponse } from '@/types/content';
+import type { IProfilePageGroupsResponse } from '@/types/group';
+import { EQueryType } from '@/types/queries';
 import type { IProfileUser } from '@/types/user';
 import { calculateTimeAgo } from '@/utils/format';
 import BadgeItem from '../shared/BadgeItem';
-import SidebarContentCard from '../shared/SidebarContentCard';
+import ContentList from '../shared/ContentList';
+import ContentNavLinks from '../shared/ContentNavLinks';
+import SidebarContentCard from '../shared/RightSidebarItems/SidebarContentCard';
 
 // ----------------------------------------------------------------
 
 interface IProfileHomeProps {
   user: IProfileUser;
-  contentType: EQueryContentType;
+  contentType: EQueryType;
   isPersonalProfile?: boolean;
   isFollowing?: boolean;
-  contentItems: IContent[];
-  groupItems: IGroup[];
+  contentData: IProfilePageContentResponse;
+  groupsData: IProfilePageGroupsResponse;
   viewerId: string;
 }
 
@@ -31,8 +31,8 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
   user,
   contentType,
   isFollowing = false,
-  contentItems,
-  groupItems,
+  contentData,
+  groupsData,
   viewerId,
 }) => {
   return (
@@ -49,7 +49,7 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
         <div className="flex flex-col gap-y-6 px-5">
           <div className="relative z-10 -mt-20">
             <Image
-              src={user?.avatarImg || '/assets/images/no-image-1.svg'}
+              src={user?.avatarImg || '/assets/icons/image-preview.svg'}
               width={110}
               height={110}
               alt="profile"
@@ -104,8 +104,8 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
           <ContentNavLinks />
           <ContentList
             contentType={contentType}
-            contentItems={contentItems}
-            groupItems={groupItems}
+            contentData={contentData}
+            groupsData={groupsData}
             userId={user.id}
             userName={user.name}
             viewerId={viewerId}

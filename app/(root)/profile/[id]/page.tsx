@@ -1,7 +1,8 @@
 import { auth } from '@/app/api/auth/[...nextauth]/route';
 import ProfileHome from '@/components/profile/ProfileHome';
-import { EQueryContentType, type IContent } from '@/types/content';
-import type { IGroup } from '@/types/group';
+import type { IContent } from '@/types/content';
+import type { IProfilePageGroup } from '@/types/group';
+import { EQueryType } from '@/types/queries';
 import type { IProfileUserResponse } from '@/types/user';
 import { typedFetch } from '@/utils/api';
 import { parseSearchParams } from '@/utils/query';
@@ -24,9 +25,9 @@ const UserProfilePage: React.FC<IUserProfilePageProps> = async ({
 }) => {
   const id = params.id;
   const page = parseSearchParams(searchParams.page, '1');
-  const contentType = parseSearchParams<EQueryContentType>(
+  const contentType = parseSearchParams<EQueryType>(
     searchParams.type,
-    EQueryContentType.POST
+    EQueryType.POST
   );
 
   const session = await auth();
@@ -37,12 +38,14 @@ const UserProfilePage: React.FC<IUserProfilePageProps> = async ({
   });
 
   let content: IContent[] = [];
-  let groupContent: IGroup[] = [];
-  if (contentType === EQueryContentType.GROUP) {
-    groupContent = await typedFetch<IGroup[]>({ url: `/user/${id}/groups` });
+  let groupContent: IProfilePageGroup[] = [];
+  if (contentType === EQueryType.GROUP) {
+    groupContent = await typedFetch<IProfilePageGroup[]>({
+      url: `/user/${id}/groups`,
+    });
   } else {
     content = await typedFetch<IContent[]>({
-      url: `/user/${id}/content?type=${contentType}&page=${page}&viewerId=${session.user.id}`,
+      url: `/user/${id}/content?type=${contentType}&viewerId=${session.user.id}`,
     });
   }
 

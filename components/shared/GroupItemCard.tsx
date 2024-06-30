@@ -14,9 +14,10 @@ interface IGroupItemCardProps {
   title: string;
   description: string;
   members: {
-    id: string;
-    avatarImg?: string;
+    id?: string;
+    avatarImg: string | null;
   }[];
+  totalMembers: number | null;
 }
 
 const GroupItemCard: React.FC<IGroupItemCardProps> = ({
@@ -25,30 +26,30 @@ const GroupItemCard: React.FC<IGroupItemCardProps> = ({
   title,
   description,
   members,
+  totalMembers,
 }) => {
   return (
     <li>
       <Link
         href={'/groups/' + id}
-        className="bg-light100__dark800 flex-0 flex shrink-0 flex-col gap-3.5 rounded-2xl p-5"
+        className="bg-light100__dark800 flex-0 flex shrink-0 flex-col gap-3.5 rounded-2xl p-5 shadow-card"
       >
         <div className="relative h-[150px] w-full">
           <Image
-            src={coverImage || '/assets/images/no-image.svg'}
+            src={coverImage || '/assets/icons/image-preview.svg'}
             fill
-            // crop="fill"
             alt={title}
-            className="rounded-xl object-fill bg-primary-100 dark:bg-primary-500"
+            className="object-cover"
           />
         </div>
         <p className="p1-bold">{title}</p>
         <p className="p3-regular line-clamp-3">{description}</p>
         <div className="flex-between">
           <div className="ml-3 flex">
-            {members.slice(0, 4).map((member, index) => (
+            {members.map((member, index) => (
               <div
                 key={index}
-                className="flex-center -ml-3 size-[30px] rounded-full bg-[#F0F1FE]"
+                className="flex-center -ml-3 size-[30px] rounded-full bg-white-600"
               >
                 <Image
                   width={22}
@@ -62,8 +63,8 @@ const GroupItemCard: React.FC<IGroupItemCardProps> = ({
                 />
               </div>
             ))}
-            <div className="cap-8 flex-center text-black-700 dark:bg-black-700 dark:text-white-100 -ml-3 size-[30px] rounded-full bg-[#F0F1FE]">
-              {members.length > 120 ? '120+' : members.length}
+            <div className="cap-8 flex-center text-black-700 dark:bg-black-700 dark:text-white-100 -ml-3 size-[30px] rounded-full bg-white-600">
+              {totalMembers && totalMembers > 120 ? '120+' : totalMembers}
             </div>
           </div>
           <Button

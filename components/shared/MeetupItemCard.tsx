@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import BadgeItem from './BadgeItem';
 
+import type { ITag } from '@/types/content';
 import { parseDate } from '@/utils/format';
 
 // ----------------------------------------------------------------
@@ -15,7 +16,7 @@ interface IMeetupItemCardProps {
   location: string;
   meetupDate: Date | null;
   description: string;
-  tags: string[];
+  tags: ITag[];
 }
 
 const MeetupItemCard: React.FC<IMeetupItemCardProps> = ({
@@ -33,17 +34,16 @@ const MeetupItemCard: React.FC<IMeetupItemCardProps> = ({
   return (
     <li>
       <Link
-        href={'/meetups/' + id}
-        className="bg-light100__dark800 flex flex-col gap-2.5 rounded-[10px] px-3.5 py-5"
+        href={'/content/' + id}
+        className="bg-light100__dark800 flex flex-col gap-2.5 rounded-[10px] px-3.5 py-5 shadow-card"
       >
         <div className="flex-between flex">
           <div className="flex items-center gap-2 md:gap-4">
             <div className="relative size-[56px] shrink-0 md:size-[72px]">
               <Image
-                src={coverImage || '/assets/images/no-image.svg'}
+                src={coverImage || '/assets/icons/image-preview.svg'}
                 alt="meetup"
                 fill
-                className="bg-primary-100 dark:bg-primary-500 rounded-[6px]"
               />
             </div>
             <div>
@@ -61,10 +61,10 @@ const MeetupItemCard: React.FC<IMeetupItemCardProps> = ({
         <div>
           <p className="p4-regular md:p3-regular line-clamp-2">{description}</p>
         </div>
-        {tags.length > 0 ? (
-          <ul className="flex gap-2.5">
-            {tags.map((tag) => (
-              <BadgeItem key={tag} title={tag} />
+        {tags?.length > 0 ? (
+          <ul className="flex gap-2.5 flex-wrap">
+            {tags.map(({ id, title }) => (
+              <BadgeItem key={id} title={title} />
             ))}
           </ul>
         ) : null}

@@ -37,7 +37,11 @@ export interface IContent {
   type?: EContentType;
   createdAt: Date;
   updatedAt: Date;
-  author: IProfileUser;
+  author: {
+    userName: string;
+    avatarImg: string;
+  };
+  // author: IProfileUser;
   authorId: string;
   likedBy: IProfileUser[];
   likes: ILike[] | undefined;
@@ -45,16 +49,12 @@ export interface IContent {
   description: string;
   postGroups: string[];
   coverImage: string | null;
-  meetupLocation: string | null;
+  meetupLocationImage?: string | null;
+  meetupLocation?: string | null;
   meetupDate: Date | null;
-  podcastFile: string | null;
-  podcastTitle: string | null;
-  tags: [
-    {
-      id: string;
-      title: string;
-    },
-  ];
+  podcastFile?: string | null;
+  podcastTitle?: string | null;
+  tags: ITag[];
   comments: Comment[];
   contentGroups: [];
   viewsCount: number | null;
@@ -62,6 +62,12 @@ export interface IContent {
   commentsCount: number | null;
   groupId: string | null;
   isLiked: boolean;
+}
+
+export interface IProfilePageContentResponse {
+  contents: IContent[];
+  totalPages: number;
+  hasNextPage: boolean;
 }
 
 interface ILike {

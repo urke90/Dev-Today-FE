@@ -1,6 +1,6 @@
-import { EContentType } from '@/types/content';
 export const CLOUDINARY_URL =
   'https://res.cloudinary.com/dev-today/image/upload';
+import { EContentType } from '@/types/content';
 
 export const regWelcome = [
   {

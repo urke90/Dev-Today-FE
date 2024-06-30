@@ -96,9 +96,11 @@ const Register = () => {
               return (
                 <div
                   key={index + 1}
-                  className="bg-white-100 dark:bg-black-700 p-5 flex gap-5 items-center rounded-lg">
+                  className="bg-white-100 dark:bg-black-700 p-5 flex gap-5 items-center rounded-lg"
+                >
                   <div
-                    className={`dark:bg-black-800 ${colorsRegister[index]} h-[60px] p-5 rounded-md`}>
+                    className={`dark:bg-black-800 ${colorsRegister[index]} h-[60px] p-5 rounded-md`}
+                  >
                     <Image
                       src={
                         mode === 'dark'
@@ -120,7 +122,8 @@ const Register = () => {
       <div
         className="text-white-100 flex flex-col pt-10 lg:pt-44 lg:justify-start items-center 
         dark:bg-black-900 bg-white-200
-         px-4 md:px-10 xl:px-28  w-full lg:w-1/2">
+         px-4 md:px-10 xl:px-28  w-full lg:w-1/2"
+      >
         <div className="w-full lg:hidden">
           <Image
             src={`${
@@ -137,7 +140,8 @@ const Register = () => {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-5 w-full ">
+            className="space-y-5 w-full "
+          >
             <FormField
               control={form.control}
               name="userName"
@@ -192,12 +196,14 @@ const Register = () => {
             />
             <Button
               type="submit"
-              className="w-full h-11 bg-primary-500 text-[14px] p2-bold ">
+              className="w-full h-11 bg-primary-500 text-[14px] p2-bold "
+            >
               Next
             </Button>
             <Link
               href="/login"
-              className="text-white-500/70 block cursor-pointer text-center hover:underline">
+              className="text-white-500/70 block cursor-pointer text-center hover:underline"
+            >
               Already have an account?
               <span className="ml-1 text-[16px] text-primary-500">Sign in</span>
             </Link>
@@ -209,7 +215,8 @@ const Register = () => {
             <Button
               type="button"
               onClick={() => signIn('google', { callbackUrl: '/onboarding' })}
-              className="p3-medium h-11 flex w-full items-center gap-2 dark:bg-black-800 bg-white-100">
+              className="p3-medium h-11 flex w-full items-center gap-2 dark:bg-black-800 bg-white-100"
+            >
               <Image
                 src={'/assets/icons/google.svg'}
                 alt="google"
@@ -222,7 +229,8 @@ const Register = () => {
             <Button
               onClick={() => signIn('github', { callbackUrl: '/onboarding' })}
               type="button"
-              className="p3-medium h-11 flex w-full items-center gap-2 dark:bg-black-800 bg-white-100">
+              className="p3-medium h-11 flex w-full items-center gap-2 dark:bg-black-800 bg-white-100"
+            >
               <Image
                 src={'/assets/icons/github.svg'}
                 alt="github"
