@@ -98,6 +98,13 @@
   .bg-light200__dark800 {
     @apply bg-white-200 dark:bg-black-800;
   }
+  .bg-light200__dark700 {
+    @apply bg-white-200 dark:bg-black-700;
+  }
+
+  .hover-sidebar-items {
+    @apply hover:dark:bg-black-700 hover:bg-[#F8FAFC] transition-colors;
+  }
 
   .icon-light400__dark300 {
     @apply text-white-400 dark:text-white-300;

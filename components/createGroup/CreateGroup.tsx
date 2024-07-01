@@ -129,7 +129,8 @@ const CreateGroup = ({
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-8 w-full px-3 md:px-0">
+          className="space-y-8 w-full px-3 md:px-0"
+        >
           <RHFInput
             className="!placeholder:white-400 p3-medium dark:!placeholder-white-400"
             name="name"
@@ -144,7 +145,8 @@ const CreateGroup = ({
                 <FormControl>
                   <div className="w-full  !text-white-400 gap-3 rounded-lg flex items-center">
                     <div
-                      className={`bg-light100__dark800 ${watchProfileImage ? ' rounded-full' : 'rounded-full p-4'}`}>
+                      className={`bg-light100__dark800 ${watchProfileImage ? ' rounded-full' : 'rounded-full p-4'}`}
+                    >
                       <Image
                         src={
                           watchProfileImage || '/assets/icons/basic-image.svg'
@@ -171,7 +173,8 @@ const CreateGroup = ({
                           multiple: false,
                           cropping: true,
                           croppingShowDimensions: true,
-                        }}>
+                        }}
+                      >
                         {({ open }) => (
                           <Button
                             onClick={(e) => {
@@ -179,7 +182,8 @@ const CreateGroup = ({
                               open();
                             }}
                             type="button"
-                            className="flex items-center max-w-[200px] dark:bg-black-800 py-3 rounded-lg bg-white-100 gap-3 px-4">
+                            className="flex items-center max-w-[200px] dark:bg-black-800 py-3 rounded-lg bg-white-100 gap-3 px-4"
+                          >
                             <Image
                               src={'/assets/icons/upload-icon.svg'}
                               alt="upload"
@@ -220,7 +224,8 @@ const CreateGroup = ({
                       <Button
                         type="button"
                         onClick={() => form.setValue('coverImage', '')}
-                        className="absolute right-0 top-[-40px] hover:bg-black-700 text-white-400  border dark:border-gray-500 size-8 dark:text-white-100">
+                        className="absolute right-0 top-[-40px] hover:bg-black-700 text-white-400  border dark:border-gray-500 size-8 dark:text-white-100"
+                      >
                         X
                       </Button>
                     </div>
@@ -242,7 +247,8 @@ const CreateGroup = ({
                             multiple: false,
                             cropping: true,
                             croppingShowDimensions: true,
-                          }}>
+                          }}
+                        >
                           {({ open }) => (
                             <Button
                               onClick={(e) => {
@@ -250,7 +256,8 @@ const CreateGroup = ({
                                 open();
                               }}
                               type="button"
-                              className="flex items-center max-w-[200px] dark:bg-black-800 py-2 rounded-lg bg-white-100 gap-3 mb-3">
+                              className="flex items-center max-w-[200px] dark:bg-black-800 py-2 rounded-lg bg-white-100 gap-3 mb-3"
+                            >
                               <Image
                                 src={'/assets/icons/upload-icon.svg'}
                                 alt="upload"
@@ -347,7 +354,7 @@ const CreateGroup = ({
                             alt={option?.label}
                             width={16}
                             height={16}
-                            className="mr-2 dark:invert invert-0 rounded-full"
+                            className="mr-2  rounded-full"
                           />
                           {option.label}
                         </div>
@@ -444,13 +451,15 @@ const CreateGroup = ({
             <Button
               onClick={resetForm}
               type="button"
-              className="bg-light100__dark800 hover:!text-white-100 duration-200 hover:bg-primary-500 py-3 w-3/5">
+              className="bg-light100__dark800 hover:!text-white-100 duration-200 hover:bg-primary-500 py-3 w-3/5"
+            >
               Cancel
             </Button>
             <Button
               type="submit"
               className=" bg-light100__dark800 hover:!text-white-100 duration-200 hover:bg-primary-500 py-3 w-3/5"
-              disabled={form.formState.isSubmitting}>
+              disabled={form.formState.isSubmitting}
+            >
               {form.formState.isSubmitting
                 ? editGroup
                   ? 'Updating Group...'
