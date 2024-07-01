@@ -81,3 +81,9 @@ export interface ITag {
   id: string;
   title: string;
 }
+
+export interface IContentPagesResponse {
+  contents: IContent[];
+  totalPages: number;
+  hasNextPage: boolean;
+}

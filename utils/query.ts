@@ -1,3 +1,6 @@
+import { EContentGroupQueries } from '@/constants/react-query';
+import { EQueryType } from '@/types/queries';
+
 /**
  * @type {function} Function for parsing search query parameters and returning default values if queries are not specified.
  */
@@ -12,4 +15,17 @@ export const parseSearchParams = <T extends string = string>(
   }
 
   return defaultValue as T;
+};
+
+export const updateContentQueryKey = (contentType: EQueryType) => {
+  if (contentType === EQueryType.GROUP || contentType === EQueryType.MEMBERS) {
+    return;
+  }
+  const FETCH_QUERIES = {
+    post: EContentGroupQueries.FETCH_POSTS,
+    meetup: EContentGroupQueries.FETCH_MEETUPS,
+    podcast: EContentGroupQueries.FETCH_PODCASTS,
+  };
+
+  return FETCH_QUERIES[contentType];
 };

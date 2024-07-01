@@ -133,3 +133,24 @@ export const fetchTags = async (query: string) => {
 
   return result.json();
 };
+
+export const fetchAllContents = async (
+  contentType: EQueryType,
+  page: number,
+  viewerId: string,
+  limit: number,
+  sortBy?: ESortByFilter
+) => {
+  const sortByQuery = sortBy ? `&sortBy${sortBy}` : '';
+
+  const response = await fetch(
+    BASE_API_URL +
+      `/content?type=${contentType}&page=${page}&limit=${limit}&viewerId=${viewerId}${sortByQuery}`
+  );
+
+  if (!response.ok) {
+    throw new Error('Something went wrong!');
+  }
+
+  return response.json();
+};

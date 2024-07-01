@@ -36,9 +36,6 @@ const SidebarTagItem: React.FC<ISidebarTagItemProps> = ({
     return params.toString();
   };
 
-  console.log({ selectedTag });
-  console.log({ title });
-
   return (
     <li>
       <Link

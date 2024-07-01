@@ -38,15 +38,15 @@ const TAG_ITEMS = [
 
 interface IPostsHomeProps {
   selectedTag: string;
-  postsData: IContentPagesResponse;
+  podcastsData: IContentPagesResponse;
   viewerId: string;
   sortBy: ESortByFilter;
 }
 
-const PostsHome: React.FC<IPostsHomeProps> = ({
+const PodcastsHome: React.FC<IPostsHomeProps> = ({
   selectedTag,
   viewerId,
-  postsData,
+  podcastsData,
   sortBy,
 }) => {
   return (
@@ -68,18 +68,18 @@ const PostsHome: React.FC<IPostsHomeProps> = ({
       </aside>
       <main className="main-content">
         <ContentList
-          contentType={EQueryType.POST}
+          contentType={EQueryType.PODCAST}
           viewerId={viewerId}
-          contentData={postsData}
+          contentData={podcastsData}
           sortBy={sortBy}
         />
       </main>
       <aside className="right-sidebar">
         <SidebarContentCard title="Meetups" items={[]} />
-        <SidebarContentCard title="Podcasts" items={[]} />
+        <SidebarContentCard title="Posts" items={[]} />
       </aside>
     </div>
   );
 };
 
-export default PostsHome;
+export default PodcastsHome;

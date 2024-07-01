@@ -1,5 +1,5 @@
 import { auth } from '@/app/api/auth/[...nextauth]/route';
-import PodcastsHome from '@/components/content/PodcastsHome';
+import MeetupsHome from '@/components/content/MeetupsHome';
 import { IContentPagesResponse } from '@/types/content';
 import { ESortByFilter } from '@/types/queries';
 import { typedFetch } from '@/utils/api';
@@ -7,14 +7,14 @@ import { parseSearchParams } from '@/utils/query';
 
 // ----------------------------------------------------------------
 
-interface IPodcastsPageProps {
+interface IMeetupsPageProps {
   searchParams: {
     tag: string | string[] | undefined;
     sortBy: string | string[] | undefined;
   };
 }
 
-const PodcastsPage: React.FC<IPodcastsPageProps> = async ({ searchParams }) => {
+const MeetupsPage: React.FC<IMeetupsPageProps> = async ({ searchParams }) => {
   const tag = parseSearchParams(searchParams.tag, '').toLowerCase();
   const sortBy = parseSearchParams(searchParams.sortBy, '') as ESortByFilter;
 
@@ -23,18 +23,18 @@ const PodcastsPage: React.FC<IPodcastsPageProps> = async ({ searchParams }) => {
 
   const sortByQuery = sortBy ? `&sortBy=${sortBy}` : '';
 
-  const postsData = await typedFetch<IContentPagesResponse>({
-    url: `/content?type=podcast&viewerId=${session.user.id}${sortByQuery}`,
+  const meetupsData = await typedFetch<IContentPagesResponse>({
+    url: `/content?type=meetup&viewerId=${session.user.id}${sortByQuery}`,
   });
 
-  if (!postsData)
+  if (!meetupsData)
     throw new Error("Something went wrong, can't show posts at the moment!");
 
   return (
     <section className="px-3.5 lg:px-5">
-      <PodcastsHome
+      <MeetupsHome
         selectedTag={tag}
-        podcastsData={postsData}
+        meetupsData={meetupsData}
         viewerId={session.user.id}
         sortBy={sortBy}
       />
@@ -42,4 +42,4 @@ const PodcastsPage: React.FC<IPodcastsPageProps> = async ({ searchParams }) => {
   );
 };
 
-export default PodcastsPage;
+export default MeetupsPage;

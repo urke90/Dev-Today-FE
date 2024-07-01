@@ -12,10 +12,10 @@ export async function middleware(request: NextRequest) {
   const url = request.nextUrl.pathname;
 
   const protectedPages = [
-    '/create',
+    '/content',
     '/posts',
-    '/meetup',
-    '/podcast',
+    '/meetups',
+    '/podcasts',
     '/groups',
     '/createPage',
     '/profile',
@@ -26,11 +26,14 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL('/login', request.url));
     }
   } else {
-    if (url.startsWith('/register') && session.user.isOnboardingCompleted) {
-      return NextResponse.redirect(new URL('/', request.url));
-    }
-    if (url.startsWith('/login') && session.user.isOnboardingCompleted) {
-      return NextResponse.redirect(new URL('/', request.url));
+    if (url === '/')
+      return NextResponse.redirect(new URL('/posts', request.url));
+
+    if (
+      (url.startsWith('/register') || url.startsWith('/login')) &&
+      session.user.isOnboardingCompleted
+    ) {
+      return NextResponse.redirect(new URL('/posts', request.url));
     }
     if (
       protectedPages.some((page) => url.includes(page)) &&
