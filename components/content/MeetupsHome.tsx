@@ -5,6 +5,7 @@ import type {
   IContentPagesSidebarResponse,
 } from '@/types/content';
 import { EQueryType, ESortByFilter } from '@/types/queries';
+import SidebarGroupItem from '../shared/LeftSidebarItems/SidebarGroupItem';
 import SidebarItemWrapper from '../shared/LeftSidebarItems/SidebarItemWrapper';
 import SidebarTagItem from '../shared/LeftSidebarItems/SidebarTagItem';
 import SidebarContentCard from '../shared/RightSidebarItems/SidebarContentCard';
@@ -68,6 +69,20 @@ const MeetupsHome: React.FC<IMeetupsHomeProps> = ({
                 postCount={count}
                 title={title}
                 selectedTag={selectedTag}
+              />
+            )
+          )}
+        />
+        <SidebarItemWrapper
+          title="Top Ranked"
+          items={sidebarData.popularGroupsSorted?.map(
+            ({ id, profileImage, name, count }) => (
+              <SidebarGroupItem
+                key={id}
+                id={id}
+                profileImage={profileImage}
+                name={name}
+                totalItems={count}
               />
             )
           )}

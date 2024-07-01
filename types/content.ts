@@ -97,6 +97,7 @@ export interface IContentPagesSidebarResponse {
     id: string;
     name: string;
     count: number;
+    profileImage: string;
   }[];
   posts: IContent[];
   meetups: IContent[];
