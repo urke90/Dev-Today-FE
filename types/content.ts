@@ -34,7 +34,7 @@ export interface IContent {
     coverImage: string;
   };
   id: string;
-  type?: EContentType;
+  type: EContentType;
   createdAt: Date;
   updatedAt: Date;
   author: {
@@ -86,4 +86,19 @@ export interface IContentPagesResponse {
   contents: IContent[];
   totalPages: number;
   hasNextPage: boolean;
+}
+export interface IContentPagesSidebarResponse {
+  popularTagsSorted: {
+    id: string;
+    title: string;
+    count: number;
+  }[];
+  popularGroupsSorted: {
+    id: string;
+    name: string;
+    count: number;
+  }[];
+  posts: IContent[];
+  meetups: IContent[];
+  podcasts: IContent[];
 }

@@ -1,5 +1,6 @@
 'use client';
 
+import { fetchAllContents } from '@/api/queries';
 import type { IContentPagesResponse } from '@/types/content';
 import { EQueryType, ESortByFilter } from '@/types/queries';
 import { typedFetch } from '@/utils/api';
@@ -27,13 +28,12 @@ const ContentList: React.FC<IContentListProps> = ({
   viewerId,
   sortBy,
 }) => {
-  console.log('contentData', contentData);
   const queryClient = useQueryClient();
   const [page, setPage] = useState(1);
 
   const { isLoading, data } = useQuery<IContentPagesResponse>({
     queryKey: [updateContentQueryKey(contentType), contentType, page],
-    // queryFn: () => fetchAllContents(contentType, page, viewerId, 4, sortBy),
+    queryFn: () => fetchAllContents(contentType, page, viewerId, 4, sortBy),
     initialData: contentData,
   });
 
@@ -64,8 +64,6 @@ const ContentList: React.FC<IContentListProps> = ({
       toast.error('Ooops, something went wrong!');
     }
   };
-
-  console.log('data', data);
 
   const renderContent = () => {
     let styles;
