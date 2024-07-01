@@ -1,6 +1,9 @@
 import { auth } from '@/app/api/auth/[...nextauth]/route';
 import MeetupsHome from '@/components/content/MeetupsHome';
-import { IContentPagesResponse } from '@/types/content';
+import {
+  IContentPagesResponse,
+  IContentPagesSidebarResponse,
+} from '@/types/content';
 import { ESortByFilter } from '@/types/queries';
 import { typedFetch } from '@/utils/api';
 import { parseSearchParams } from '@/utils/query';
@@ -30,6 +33,13 @@ const MeetupsPage: React.FC<IMeetupsPageProps> = async ({ searchParams }) => {
   if (!meetupsData)
     throw new Error("Something went wrong, can't show posts at the moment!");
 
+  const sidebarData = await typedFetch<IContentPagesSidebarResponse>({
+    url: '/content/stats?posts=true&podcasts=true',
+  });
+
+  if (!sidebarData)
+    throw new Error("Something went wrong, can't show meetups at the moment!");
+
   return (
     <section className="px-3.5 lg:px-5">
       <MeetupsHome
@@ -37,6 +47,7 @@ const MeetupsPage: React.FC<IMeetupsPageProps> = async ({ searchParams }) => {
         meetupsData={meetupsData}
         viewerId={session.user.id}
         sortBy={sortBy}
+        sidebarData={sidebarData}
       />
     </section>
   );

@@ -1,6 +1,9 @@
 // ----------------------------------------------------------------
 
-import { IContentPagesResponse } from '@/types/content';
+import {
+  IContentPagesResponse,
+  IContentPagesSidebarResponse,
+} from '@/types/content';
 import { EQueryType, ESortByFilter } from '@/types/queries';
 import SidebarItemWrapper from '../shared/LeftSidebarItems/SidebarItemWrapper';
 import SidebarTagItem from '../shared/LeftSidebarItems/SidebarTagItem';
@@ -8,39 +11,12 @@ import SidebarContentCard from '../shared/RightSidebarItems/SidebarContentCard';
 import SortAndFilter from '../shared/SortAndFilter';
 import ContentList from './ContentList';
 
-const TAG_ITEMS = [
-  {
-    id: '1',
-    title: 'javascript',
-    postCount: 825,
-  },
-  {
-    id: '2',
-    title: 'nesto',
-    postCount: 825,
-  },
-  {
-    id: '3',
-    title: 'broj3',
-    postCount: 825,
-  },
-  {
-    id: '4',
-    title: '4',
-    postCount: 825,
-  },
-  {
-    id: '5',
-    title: '5',
-    postCount: 825,
-  },
-];
-
 interface IPostsHomeProps {
   selectedTag: string;
   podcastsData: IContentPagesResponse;
   viewerId: string;
   sortBy: ESortByFilter;
+  sidebarData: IContentPagesSidebarResponse;
 }
 
 const PodcastsHome: React.FC<IPostsHomeProps> = ({
@@ -48,6 +24,7 @@ const PodcastsHome: React.FC<IPostsHomeProps> = ({
   viewerId,
   podcastsData,
   sortBy,
+  sidebarData,
 }) => {
   return (
     <div className="content-wrapper">
@@ -55,15 +32,17 @@ const PodcastsHome: React.FC<IPostsHomeProps> = ({
         <SortAndFilter sortBy={sortBy} />
         <SidebarItemWrapper
           title="Popular Tags"
-          items={TAG_ITEMS.map(({ id, postCount, title }, index) => (
-            <SidebarTagItem
-              key={id}
-              index={index + 1}
-              postCount={postCount}
-              title={title}
-              selectedTag={selectedTag}
-            />
-          ))}
+          items={sidebarData.popularTagsSorted.map(
+            ({ id, count, title }, index) => (
+              <SidebarTagItem
+                key={id}
+                index={index + 1}
+                postCount={count}
+                title={title}
+                selectedTag={selectedTag}
+              />
+            )
+          )}
         />
       </aside>
       <main className="main-content">
@@ -75,8 +54,8 @@ const PodcastsHome: React.FC<IPostsHomeProps> = ({
         />
       </main>
       <aside className="right-sidebar">
-        <SidebarContentCard title="Meetups" items={[]} />
-        <SidebarContentCard title="Posts" items={[]} />
+        <SidebarContentCard title="Meetups" items={sidebarData.meetups} />
+        <SidebarContentCard title="Posts" items={sidebarData.posts} />
       </aside>
     </div>
   );

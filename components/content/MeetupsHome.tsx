@@ -1,6 +1,9 @@
 // ----------------------------------------------------------------
 
-import { IContentPagesResponse } from '@/types/content';
+import type {
+  IContentPagesResponse,
+  IContentPagesSidebarResponse,
+} from '@/types/content';
 import { EQueryType, ESortByFilter } from '@/types/queries';
 import SidebarItemWrapper from '../shared/LeftSidebarItems/SidebarItemWrapper';
 import SidebarTagItem from '../shared/LeftSidebarItems/SidebarTagItem';
@@ -41,6 +44,7 @@ interface IMeetupsHomeProps {
   meetupsData: IContentPagesResponse;
   viewerId: string;
   sortBy: ESortByFilter;
+  sidebarData: IContentPagesSidebarResponse;
 }
 
 const MeetupsHome: React.FC<IMeetupsHomeProps> = ({
@@ -48,6 +52,7 @@ const MeetupsHome: React.FC<IMeetupsHomeProps> = ({
   viewerId,
   meetupsData,
   sortBy,
+  sidebarData,
 }) => {
   return (
     <div className="content-wrapper">
@@ -55,15 +60,17 @@ const MeetupsHome: React.FC<IMeetupsHomeProps> = ({
         <SortAndFilter sortBy={sortBy} />
         <SidebarItemWrapper
           title="Popular Tags"
-          items={TAG_ITEMS.map(({ id, postCount, title }, index) => (
-            <SidebarTagItem
-              key={id}
-              index={index + 1}
-              postCount={postCount}
-              title={title}
-              selectedTag={selectedTag}
-            />
-          ))}
+          items={sidebarData.popularTagsSorted.map(
+            ({ id, count, title }, index) => (
+              <SidebarTagItem
+                key={id}
+                index={index + 1}
+                postCount={count}
+                title={title}
+                selectedTag={selectedTag}
+              />
+            )
+          )}
         />
       </aside>
       <main className="main-content">
@@ -75,8 +82,8 @@ const MeetupsHome: React.FC<IMeetupsHomeProps> = ({
         />
       </main>
       <aside className="right-sidebar">
-        <SidebarContentCard title="Posts" items={[]} />
-        <SidebarContentCard title="Podcasts" items={[]} />
+        <SidebarContentCard title="Posts" items={sidebarData.posts} />
+        <SidebarContentCard title="Podcasts" items={sidebarData.podcasts} />
       </aside>
     </div>
   );
