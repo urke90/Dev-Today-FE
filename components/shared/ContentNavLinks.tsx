@@ -45,7 +45,7 @@ const ContentNavLinks: React.FC<IContentNavLinksProps> = ({
         href={pathname + '?' + updateQueryParams(EQueryType.MEETUP)}
         className={`${linkStyles} ${
           type === EQueryType.MEETUP
-            ? 'bg-primary-500 text-white-100 dark:!text-white-100'
+            ? 'bg-primary-500 !text-white-100 dark:!text-white-100'
             : ''
         }`}
       >
@@ -55,7 +55,7 @@ const ContentNavLinks: React.FC<IContentNavLinksProps> = ({
         href={pathname + '?' + updateQueryParams(EQueryType.PODCAST)}
         className={`${linkStyles} ${
           type === EQueryType.PODCAST
-            ? 'bg-primary-500 text-white-100 dark:!text-white-100'
+            ? 'bg-primary-500 !text-white-100 dark:!text-white-100'
             : ''
         }`}
       >
@@ -66,7 +66,7 @@ const ContentNavLinks: React.FC<IContentNavLinksProps> = ({
           href={pathname + '?' + updateQueryParams(EQueryType.MEMBERS)}
           className={`${linkStyles} ${
             type === EQueryType.MEMBERS
-              ? 'bg-primary-500 text-white-100 dark:!text-white-100'
+              ? 'bg-primary-500 !text-white-100 dark:!text-white-100'
               : ''
           }`}
         >
@@ -77,7 +77,7 @@ const ContentNavLinks: React.FC<IContentNavLinksProps> = ({
           href={pathname + '?' + updateQueryParams(EQueryType.GROUP)}
           className={`${linkStyles} ${
             type === EQueryType.GROUP
-              ? 'bg-primary-500 text-white-100 dark:!text-white-100'
+              ? 'bg-primary-500 !text-white-100 dark:!text-white-100'
               : ''
           }`}
         >

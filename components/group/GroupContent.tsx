@@ -23,16 +23,6 @@ import MemberItemCard from './MemberItemCard';
 
 // ----------------------------------------------------------------
 
-// Loadamo stranicu
-// Loadamo 1. page contenta
-// Stavimo to kao initialData za useQuery
-// Odemo na page 2
-// useQuery loada page 2 contenta
-// Na clientu prikazujemo page 2
-// Ako likeamo
-// Saljemo request na BE
-// Nakon successa, update-amo lokalni state da to prikazuje
-
 const updateContentQueryKey = (contentType: EQueryType) => {
   if (contentType === EQueryType.GROUP) {
     return;
@@ -191,7 +181,7 @@ const GroupContent: React.FC<IGroupContentWrapperProps> = ({
       case EQueryType.MEETUP:
         {
           styles = 'flex flex-col flax-wrap gap-5';
-          renderedContent = groupContent.contents?.map(
+          renderedContent = content.contents?.map(
             ({ id, meetupDate, title, description, coverImage, tags }) => (
               <MeetupItemCard
                 key={id}
@@ -295,6 +285,9 @@ const GroupContent: React.FC<IGroupContentWrapperProps> = ({
   };
 
   const { renderedContent, styles } = renderContent();
+  const showPagination =
+    (contentType === EQueryType.MEMBERS && members?.members?.length > 0) ||
+    (contentType !== EQueryType.MEMBERS && content?.contents?.length > 0);
 
   return (
     <>
@@ -305,21 +298,23 @@ const GroupContent: React.FC<IGroupContentWrapperProps> = ({
           <LoadingSpinner />
         </div>
       )}
-      <Pagination
-        currentPage={page}
-        totalPages={
-          contentType === EQueryType.MEMBERS
-            ? members.totalPages
-            : content.totalPages
-        }
-        disablePrevBtn={page === 1}
-        disableNextBtn={
-          contentType === EQueryType.MEMBERS
-            ? !members.hasNextPage
-            : !content.hasNextPage
-        }
-        setPage={setPage}
-      />
+      {showPagination && (
+        <Pagination
+          currentPage={page}
+          totalPages={
+            contentType === EQueryType.MEMBERS
+              ? members.totalPages
+              : content.totalPages
+          }
+          disablePrevBtn={page === 1}
+          disableNextBtn={
+            contentType === EQueryType.MEMBERS
+              ? !members.hasNextPage
+              : !content.hasNextPage
+          }
+          setPage={setPage}
+        />
+      )}
     </>
   );
 };

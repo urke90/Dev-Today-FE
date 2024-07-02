@@ -6,7 +6,7 @@ import { revalidatePath } from 'next/cache';
 
 export const revalidateRoute = async (
   path: string,
-  type?: 'layout' | 'page'
+  type: 'page' | 'layout' | undefined = 'page'
 ) => {
-  revalidatePath(path, (type = 'page'));
+  revalidatePath(path, type);
 };

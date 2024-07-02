@@ -6,6 +6,7 @@ import { useState } from 'react';
 import toast from 'react-hot-toast';
 import LogoutSecondIcon from '../icons/LogoutSecond';
 import { Button } from '../ui/button';
+import GroupLeaveOrDeleteDialog from './GroupLeaveOrDeleteDialog';
 
 // ----------------------------------------------------------------
 
@@ -21,6 +22,8 @@ const JoinOrLeaveGroupButton: React.FC<IJoinOrLeaveGroupButtonProps> = ({
   userId,
 }) => {
   const [isMember, setIsMember] = useState(isGroupMemeber);
+  const [isOpen, setIsOpen] = useState(false);
+
   const { isPending: isPendingJoinGroup, mutateAsync: joinGroupAsync } =
     useMutation({
       mutationKey: ['JOIN_GROUP'],
@@ -30,6 +33,7 @@ const JoinOrLeaveGroupButton: React.FC<IJoinOrLeaveGroupButtonProps> = ({
       }: Pick<IJoinOrLeaveGroupButtonProps, 'groupId' | 'userId'>) =>
         joinGroup(groupId, userId),
     });
+
   const { isPending: isPendingLeaveGroup, mutateAsync: leaveGroupAsync } =
     useMutation({
       mutationKey: ['LEAVE_GROUP'],
@@ -40,41 +44,55 @@ const JoinOrLeaveGroupButton: React.FC<IJoinOrLeaveGroupButtonProps> = ({
         leaveGroup(groupId, userId),
     });
 
-  const handleJoinOrLeaveGroup = async () => {
+  const handleLeaveGroup = async () => {
     try {
-      if (isMember) {
-        await leaveGroupAsync({ groupId, userId });
-        setIsMember(false);
-        toast.success('Group left successfully!');
-      } else {
-        await joinGroupAsync({ groupId, userId });
-        setIsMember(true);
-        toast.success('Group joined successfully!');
-      }
+      await leaveGroupAsync({ groupId, userId });
+      setIsMember(false);
+      setIsOpen(false);
+      toast.success('Group left successfully!');
     } catch (error) {
-      console.log('Error join or leave group', error);
-      toast.error('Something went wrong!');
+      console.log('Error on group leave', error);
+      toast.error("Something went wrong. Couldn't leave group.");
+    }
+  };
+
+  const handleJoinGroup = async () => {
+    try {
+      await joinGroupAsync({ groupId, userId });
+      setIsMember(true);
+      setIsOpen(false);
+      toast.success('Group joined successfully!');
+    } catch (error) {
+      console.log('Error on join group', error);
+      toast.error("Something went wrong. Couldn't joing group.");
     }
   };
 
   return (
-    <Button
-      size="small"
-      className={`px-4 gap-1 icon-light400__dark300 ${isMember ? 'bg-white-200 dark:bg-black-700' : 'bg-primary-500'}`}
-      onClick={handleJoinOrLeaveGroup}
-      disabled={isPendingJoinGroup || isPendingLeaveGroup}
-    >
-      {isMember ? (
-        <>
-          <LogoutSecondIcon />
-          <span className="text-white-400 dark:text-white-300">
-            Leave Group
-          </span>
-        </>
-      ) : (
-        <span className="text-white-100">Join group</span>
-      )}
-    </Button>
+    <>
+      <GroupLeaveOrDeleteDialog
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        handleLeaveGroup={handleLeaveGroup}
+      />
+      <Button
+        size="small"
+        className={`px-4 gap-1 icon-light400__dark300 ${isMember ? 'bg-white-200 dark:bg-black-700' : 'bg-primary-500'}`}
+        onClick={isMember ? () => setIsOpen(true) : handleJoinGroup}
+        disabled={isPendingJoinGroup || isPendingLeaveGroup}
+      >
+        {isMember ? (
+          <>
+            <LogoutSecondIcon />
+            <span className="text-white-400 dark:text-white-300">
+              Leave Group
+            </span>
+          </>
+        ) : (
+          <span className="text-white-100">Join group</span>
+        )}
+      </Button>
+    </>
   );
 };
 

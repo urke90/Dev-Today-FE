@@ -10,11 +10,11 @@ import Image from 'next/image';
 import SidebarGroupItem from '../shared/LeftSidebarItems/SidebarGroupItem';
 import SidebarItemWrapper from '../shared/LeftSidebarItems/SidebarItemWrapper';
 import SidebarContentCard from '../shared/RightSidebarItems/SidebarContentCard';
-import AdminMembersDialog from './AdminMembersDialog';
+import GroupAdminsDialog from './GroupAdminsDialog';
 import GroupContent from './GroupContent';
 import GroupDropdownMenu from './GroupDropdownMenu';
+import GroupUsersDialog from './GroupUsersDialog';
 import JoinOrLeaveGroupButton from './JoinOrLeaveGroupButton';
-import UserMembersDialog from './UserMembersDialog';
 
 // ----------------------------------------------------------------
 
@@ -149,7 +149,11 @@ const GroupDetails: React.FC<IGroupDetailsProps> = ({
                   />
                 )}
               </div>
-              <GroupDropdownMenu groupId={group.id} />
+              <GroupDropdownMenu
+                groupId={group.id}
+                viewerId={viewerId}
+                isGroupOwner={isGroupOwner}
+              />
             </div>
           </div>
           <div className="md:hidden">
@@ -171,59 +175,69 @@ const GroupDetails: React.FC<IGroupDetailsProps> = ({
         />
       </main>
       <aside className="right-sidebar">
-        <SidebarContentCard title="Meetups" items={group.contents} />
+        {groupContent.contents.length > 0 && (
+          <SidebarContentCard title="Meetups" items={group.contents} />
+        )}
         <div className="right-sidebar-item">
           <div className="flex-between">
             <p className="p2-bold">Active Members</p>
-            <UserMembersDialog groupId={group.id} />
+            <GroupUsersDialog groupId={group.id} />
           </div>
           <ul className="flex flex-wrap gap-x-[21px] gap-y-3">
-            {group.members.map(({ avatarImg, id, userName }, index) => (
-              <li
-                key={id}
-                className="flex-center relative bg-white-600 size-10 rounded-full"
-              >
-                <Image
-                  src={avatarImg || '/assets/images/avatars/avatar-1.svg'}
-                  width={28}
-                  height={34}
-                  alt={userName}
-                  className="rounded-full"
-                />
-                {index === group.members.length - 1 && (
-                  <div className="absolute flex-center bg-[#0A182D] z-10 size-full opacity-70 inset-0 rounded-full">
-                    <span className="cap-10 cursor-default !text-white-100 !text-sm">
-                      {group._count.members}+
-                    </span>
-                  </div>
-                )}
-              </li>
-            ))}
+            {group.members.length > 0 ? (
+              group.members.map(({ avatarImg, id, userName }, index) => (
+                <li
+                  key={id}
+                  className="flex-center relative bg-white-600 size-10 rounded-full"
+                >
+                  <Image
+                    src={avatarImg || '/assets/images/avatars/avatar-1.svg'}
+                    width={28}
+                    height={34}
+                    alt={userName}
+                    className="rounded-full"
+                  />
+                  {index === group.members.length - 1 && (
+                    <div className="absolute flex-center bg-[#0A182D] z-10 size-full opacity-70 inset-0 rounded-full">
+                      <span className="cap-10 cursor-default !text-white-100 !text-sm">
+                        {group._count.members}+
+                      </span>
+                    </div>
+                  )}
+                </li>
+              ))
+            ) : (
+              <li className="flex-center">No members in the group yet</li>
+            )}
           </ul>
         </div>
         <div className="right-sidebar-item">
           <div className="flex-between">
             <p className="p2-bold">Group Admins</p>
-            <AdminMembersDialog groupId={group.id} />
+            <GroupAdminsDialog groupId={group.id} />
           </div>
           <ul className="flex flex-col gap-2.5">
-            {group.members?.map(({ avatarImg, id, role, userName }) =>
-              role === EUserRole.ADMIN ? (
-                <li key={id} className="flex items-center gap-1.5">
-                  <div className="flex-center bg-white-600 size-[30px] rounded-full shrink-0">
-                    <Image
-                      src={avatarImg || '/assets/images/avatars/avatar-1.svg'}
-                      width={22}
-                      height={28}
-                      alt={userName}
-                      className="rounded-full"
-                    />
-                  </div>
-                  <span className="p3-medium !text-black-700 dark:!text-white-300">
-                    {userName}
-                  </span>
-                </li>
-              ) : null
+            {membersCount.admins > 0 ? (
+              group.members?.map(({ avatarImg, id, role, userName }) =>
+                role === EUserRole.ADMIN ? (
+                  <li key={id} className="flex items-center gap-1.5">
+                    <div className="flex-center bg-white-600 size-[30px] rounded-full shrink-0">
+                      <Image
+                        src={avatarImg || '/assets/images/avatars/avatar-1.svg'}
+                        width={22}
+                        height={28}
+                        alt={userName}
+                        className="rounded-full"
+                      />
+                    </div>
+                    <span className="p3-medium !text-black-700 dark:!text-white-300">
+                      {userName}
+                    </span>
+                  </li>
+                ) : null
+              )
+            ) : (
+              <li>No admins in the group yet</li>
             )}
           </ul>
         </div>

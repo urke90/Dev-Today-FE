@@ -37,7 +37,9 @@ const MemberItemCard: React.FC<IMemberItemCardProps> = ({
             className="rounded-full"
           />
         </div>
-        <span className="p1-medium !text-white-200">{userName}</span>
+        <span className="p1-medium dark:!text-white-200 !text-black-800">
+          {userName}
+        </span>
       </div>
       {!isViewDialog && (
         <DropdownMenu>
@@ -68,7 +70,7 @@ const MemberItemCard: React.FC<IMemberItemCardProps> = ({
               </Item>
               <Item
                 onSelect={(e) => e.preventDefault()}
-                className="flex items-center gap-2.5 p3-medium !text-[#FF584D] cursor-pointer"
+                className="flex items-center gap-2.5 p3-medium !text-error-text cursor-pointer"
               >
                 Remove User
               </Item>
