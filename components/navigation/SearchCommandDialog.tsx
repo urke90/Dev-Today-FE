@@ -20,8 +20,6 @@ import { useDebounce } from 'use-debounce';
 import SearchDialogIcon from '../icons/SearchDialog';
 import LoadingSpinner from '../shared/LoadingSpinner';
 
-interface ISearchDialogProps {}
-
 // ----------------------------------------------------------------
 
 const renderItemIcon = (type: EContentType | null) => {
@@ -39,7 +37,7 @@ const renderItemIcon = (type: EContentType | null) => {
   }
 };
 
-const SearchCommandDialog: React.FC<ISearchDialogProps> = () => {
+const SearchCommandDialog: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [q] = useDebounce(query, 300);

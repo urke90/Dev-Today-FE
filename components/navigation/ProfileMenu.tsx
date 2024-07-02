@@ -37,7 +37,7 @@ const ProfileMenu: React.FC<IProfileMenuProps> = (props) => {
         <Button className="w-auto">
           <div className="relative size-[26px] lg:size-[34px]">
             <Image
-              src={profileImage || '/assets/images/preview-image.svg'}
+              src={profileImage || '/assets/icons/image-preview.svg'}
               alt="avatar"
               fill
               className="ring-primary-500 ring-offset-white-100 dark:ring-offset-black-800 rounded-lg ring-1 ring-offset-[3px] bg-primary-100 dark:bg-primary-500"

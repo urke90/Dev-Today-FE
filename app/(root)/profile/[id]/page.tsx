@@ -1,7 +1,7 @@
 import { auth } from '@/app/api/auth/[...nextauth]/route';
 import ProfileHome from '@/components/profile/ProfileHome';
-import type { IContent } from '@/types/content';
-import type { IProfilePageGroup } from '@/types/group';
+import type { IProfilePageContentResponse } from '@/types/content';
+import type { IProfilePageGroupsResponse } from '@/types/group';
 import { EQueryType } from '@/types/queries';
 import type { IProfileUserResponse } from '@/types/user';
 import { typedFetch } from '@/utils/api';
@@ -24,7 +24,7 @@ const UserProfilePage: React.FC<IUserProfilePageProps> = async ({
   searchParams,
 }) => {
   const id = params.id;
-  const page = parseSearchParams(searchParams.page, '1');
+
   const contentType = parseSearchParams<EQueryType>(
     searchParams.type,
     EQueryType.POST
@@ -33,30 +33,30 @@ const UserProfilePage: React.FC<IUserProfilePageProps> = async ({
   const session = await auth();
   if (!session?.user) throw new Error('User data not available!');
 
-  const userResult = await typedFetch<IProfileUserResponse>({
+  const userResponse = await typedFetch<IProfileUserResponse>({
     url: `/user/${id}`,
   });
 
-  let content: IContent[] = [];
-  let groupContent: IProfilePageGroup[] = [];
+  let content = {};
+  let groups = {};
   if (contentType === EQueryType.GROUP) {
-    groupContent = await typedFetch<IProfilePageGroup[]>({
-      url: `/user/${id}/groups`,
+    groups = await typedFetch<IProfilePageGroupsResponse>({
+      url: `/user/${session.user.id}/groups`,
     });
   } else {
-    content = await typedFetch<IContent[]>({
-      url: `/user/${id}/content?type=${contentType}&viewerId=${session.user.id}`,
+    content = await typedFetch<IProfilePageContentResponse>({
+      url: `/user/${session.user.id}/content?type=${contentType}&viewerId=${session.user.id}`,
     });
   }
 
   return (
     <section className="px-3.5 lg:px-5">
       <ProfileHome
-        user={userResult.user}
-        isFollowing={userResult.isFollowing}
+        user={userResponse.user}
         contentType={contentType}
-        contentItems={content}
-        groupItems={groupContent}
+        isFollowing={userResponse.isFollowing}
+        contentData={content as IProfilePageContentResponse}
+        groupsData={groups as IProfilePageGroupsResponse}
         viewerId={session.user.id}
       />
     </section>
