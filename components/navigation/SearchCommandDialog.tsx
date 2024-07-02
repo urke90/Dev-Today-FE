@@ -17,6 +17,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Command } from 'cmdk';
 import Link from 'next/link';
 import { useDebounce } from 'use-debounce';
+import SearchDialogIcon from '../icons/SearchDialog';
 import LoadingSpinner from '../shared/LoadingSpinner';
 
 interface ISearchDialogProps {}
@@ -43,12 +44,6 @@ const SearchCommandDialog: React.FC<ISearchDialogProps> = () => {
   const [query, setQuery] = useState('');
   const [q] = useDebounce(query, 300);
 
-  // useEffect(() => {
-  //   const fetchGroupsAndContents = async () => {
-  //     const response = await typedFetch({  })
-  //   }
-  // }, []);
-
   const { isLoading, data } = useQuery<IGlobalSearchItem[]>({
     queryKey: [EContentGroupQueries.FETCH_GROUPS_AND_CONTENTS, q],
     queryFn: () => fetchGroupsAndContents(q),
@@ -58,8 +53,12 @@ const SearchCommandDialog: React.FC<ISearchDialogProps> = () => {
   return (
     <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
       <Dialog.Trigger asChild>
-        <Button className="nav-btn-light200__dark700 ">
-          <SearchIcon className="icon-light400__dark300" />
+        <Button
+          className={`nav-btn-light200__dark700 ${isOpen ? '!bg-primary-500' : ''}`}
+        >
+          <SearchIcon
+            className={`icon-light400__dark300 ${isOpen ? '!text-[#F9F9FA]' : ''}`}
+          />
         </Button>
       </Dialog.Trigger>
       <Dialog.Portal>
@@ -68,7 +67,7 @@ const SearchCommandDialog: React.FC<ISearchDialogProps> = () => {
           <Command className="shadow-search-dialog border-white-border dark:border-white-border ">
             <div className="bg-white-100 dark:bg-black-800 flex items-center justify-between gap-3 px-3.5 py-4 lg:px-6">
               <div className="flex items-center gap-3">
-                <SearchIcon className="icon-light400__dark300" />
+                <SearchDialogIcon className="icon-light400__dark300" />
                 <Command.Input
                   onValueChange={(value) => setQuery(value)}
                   placeholder="Start typing to search..."
@@ -86,7 +85,7 @@ const SearchCommandDialog: React.FC<ISearchDialogProps> = () => {
                 </Command.Loading>
               )}
               {!isLoading && (
-                <Command.Empty className="p3-regular hover:bg-black-700 flex gap-3 p-2.5 hover:rounded lg:px-4 lg:py-2.5 transition-colors">
+                <Command.Empty className="p3-regular hover:bg-white-100 hover:dark:bg-black-700 flex gap-3 p-2.5 hover:rounded lg:px-4 lg:py-2.5 transition-colors">
                   {q.length > 0
                     ? 'No results found.'
                     : 'Enter at least one character to start searching.'}
@@ -101,7 +100,7 @@ const SearchCommandDialog: React.FC<ISearchDialogProps> = () => {
                 >
                   <Link
                     href={type === null ? `/groups/${id}` : `/content/${id}`}
-                    className="p3-regular hover:bg-black-700 flex gap-3 p-2.5 hover:rounded lg:px-4 lg:py-2.5 line-clamp-1"
+                    className="p3-regular hover:bg-white-100 hover:dark:bg-black-700 flex gap-3 p-2.5 hover:rounded lg:px-4 lg:py-2.5 line-clamp-1"
                   >
                     {renderItemIcon(type)}
                     {title}

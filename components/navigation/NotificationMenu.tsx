@@ -5,35 +5,36 @@ import CheckmarkIcon from '../icons/Checkmark';
 import NotificationIcon from '../icons/Notification';
 import { Button } from '../ui/button';
 
-import {
-  Content,
-  DropdownMenu,
-  Item,
-  Portal,
-  Trigger,
-} from '@radix-ui/react-dropdown-menu';
+import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import Image from 'next/image';
+import { useState } from 'react';
 
 interface INotificationMenuProps {}
 
 // ----------------------------------------------------------------
 
 const NotificationMenu: React.FC<INotificationMenuProps> = (props) => {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
-    <DropdownMenu>
-      <Trigger asChild>
-        <Button className="nav-btn-light200__dark700 ">
-          <NotificationIcon className="icon-light400__dark300" />
+    <DropdownMenu.Root open={isOpen} onOpenChange={setIsOpen}>
+      <DropdownMenu.Trigger asChild>
+        <Button
+          className={`nav-btn-light200__dark700 ${isOpen ? '!bg-primary-500' : ''}`}
+        >
+          <NotificationIcon
+            className={`icon-light400__dark300 ${isOpen ? '!text-[#F9F9FA]' : ''}`}
+          />
         </Button>
-      </Trigger>
-      <Portal>
-        <Content
+      </DropdownMenu.Trigger>
+      <DropdownMenu.Portal>
+        <DropdownMenu.Content
           avoidCollisions
           collisionPadding={15}
           onCloseAutoFocus={(e) => e.preventDefault()}
           className="bg-light100__dark800 shadow-header-menu border-white-border data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade dark:border-black-700 z-20 mt-7 flex w-[346px] flex-col gap-5 rounded-[14px] border p-5 max-lg:mt-6 lg:w-96"
         >
-          <Item
+          <DropdownMenu.Item
             onSelect={(e) => e.preventDefault()}
             className="p4-medium flex-between"
           >
@@ -45,7 +46,7 @@ const NotificationMenu: React.FC<INotificationMenuProps> = (props) => {
               <CheckmarkIcon />
               Mark All Read
             </button>
-          </Item>
+          </DropdownMenu.Item>
           <NotificationItem
             imgUrl="/assets/images/no-image.svg"
             likedBy="Christopher Soltis"
@@ -53,7 +54,7 @@ const NotificationMenu: React.FC<INotificationMenuProps> = (props) => {
             message="Liked your Post What is the ideal Tech stack to build..."
           />
 
-          <Item
+          <DropdownMenu.Item
             onSelect={(e) => e.preventDefault()}
             className="p4-medium lg:hidden"
           >
@@ -64,10 +65,10 @@ const NotificationMenu: React.FC<INotificationMenuProps> = (props) => {
               <CheckmarkIcon />
               Mark All Read
             </button>
-          </Item>
-        </Content>
-      </Portal>
-    </DropdownMenu>
+          </DropdownMenu.Item>
+        </DropdownMenu.Content>
+      </DropdownMenu.Portal>
+    </DropdownMenu.Root>
   );
 };
 
@@ -85,7 +86,7 @@ const NotificationItem: React.FC<INotificationItemProps> = ({
   timeAgo,
 }) => {
   return (
-    <Item
+    <DropdownMenu.Item
       onSelect={(e) => e.preventDefault()}
       className="flex items-center gap-2.5"
     >
@@ -108,7 +109,7 @@ const NotificationItem: React.FC<INotificationItemProps> = ({
         </div>
         <p className="p4-regular line-clamp-1">{message}</p>
       </div>
-    </Item>
+    </DropdownMenu.Item>
   );
 };
 
