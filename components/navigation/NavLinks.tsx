@@ -11,54 +11,62 @@ import { usePathname } from 'next/navigation';
 
 // ----------------------------------------------------------------
 
+enum EPage {
+  CONTENT = 'content',
+  POSTS = 'posts',
+  MEETUPS = 'meetups',
+  PODCASTS = 'podcasts',
+  GROUPS = 'groups',
+  CREATE = 'create',
+}
+
+const verifyRoute = (page: EPage, pathname: string) => {
+  switch (page) {
+    case EPage.CONTENT:
+      return (
+        (pathname.includes('/content') || pathname.includes('/posts')) &&
+        !pathname.includes('/create')
+      );
+    case EPage.MEETUPS:
+      return pathname.includes('/meetups') && !pathname.includes('/create');
+    case EPage.PODCASTS:
+      return pathname.includes('/podcasts') && !pathname.includes('/create');
+    case EPage.GROUPS:
+      return pathname.includes('/groups') && !pathname.includes('/create');
+    case EPage.CREATE:
+      return pathname.includes('/create');
+    default:
+      return false;
+  }
+};
+
+const PAGES = [
+  { href: '/posts', icon: FrameIcon, page: EPage.CONTENT },
+  { href: '/meetups', icon: CalendarIcon, page: EPage.MEETUPS },
+  { href: '/podcasts', icon: PodcastIcon, page: EPage.PODCASTS },
+  { href: '/groups', icon: GroupsIcon, page: EPage.GROUPS },
+  { href: '/content/create', icon: PlusIcon, page: EPage.CREATE },
+];
+
 const NavLinks: React.FC = () => {
   const pathname = usePathname();
 
-  const contentPageClass =
-    (pathname.includes('/content') || pathname.includes('/posts')) &&
-    !pathname.includes('/create')
-      ? 'bg-primary-500'
-      : '';
-  const meetupsPageClass =
-    pathname.includes('/meetups') && !pathname.includes('/create')
-      ? 'bg-primary-500'
-      : '';
-  const podcastsPageClass =
-    pathname.includes('/podcasts') && !pathname.includes('/create')
-      ? 'bg-primary-500'
-      : '';
-  const groupsPageClass =
-    pathname.includes('/groups') && !pathname.includes('/create')
-      ? 'bg-primary-500'
-      : '';
-  // const postsPageClass =  && !pathname.includes('/create') ? 'bg-primary-500' : '';
-
   return (
     <nav className="flex gap-5">
-      <Link href="/posts" className={`p-2.5 rounded-[7px] ${contentPageClass}`}>
-        <FrameIcon className="icon-light400__dark300" />
-      </Link>
-      <Link
-        href="/meetups"
-        className={`p-2.5 rounded-[7px] ${meetupsPageClass}`}
-      >
-        <CalendarIcon className="icon-light400__dark300" />
-      </Link>
-      <Link
-        href="/podcasts"
-        className={`p-2.5 rounded-[7px] ${podcastsPageClass}`}
-      >
-        <PodcastIcon className="icon-light400__dark300" />
-      </Link>
-      <Link href="/groups" className={`p-2.5 rounded-[7px] ${groupsPageClass}`}>
-        <GroupsIcon className="icon-light400__dark300" />
-      </Link>
-      <Link
-        href="#"
-        className={`p-2.5 rounded-[7px] ${pathname.includes('/create') ? 'bg-primary-500' : ''}`}
-      >
-        <PlusIcon className="icon-light400__dark300" />
-      </Link>
+      {PAGES.map(({ href, icon: Icon, page }) => {
+        const isActive = verifyRoute(page, pathname);
+        return (
+          <Link
+            key={page}
+            href={href}
+            className={`p-2.5 rounded-[7px] ${isActive ? 'bg-primary-500' : ''}`}
+          >
+            <Icon
+              className={`icon-light400__dark300 ${isActive ? '!text-white-100 dark:!text-white-100' : ''}`}
+            />
+          </Link>
+        );
+      })}
     </nav>
   );
 };

@@ -1,7 +1,7 @@
 'use client';
 import ArrowRightIcon from '@/components/icons/ArrowRight';
 import { Button } from '@/components/ui/button';
-import { revalidate } from '@/lib/actions/revalidate';
+import { revalidateRoute } from '@/lib/actions/revalidate';
 import { IContent } from '@/types/content';
 import { IProfileUser } from '@/types/user';
 import { typedFetch } from '@/utils/api';
@@ -33,7 +33,7 @@ const RightSideBar = ({
           userId: commentAuthorId,
         },
       });
-      revalidate(`/user/${contentDetails.authorId}`);
+      revalidateRoute(`/user/${contentDetails.authorId}`);
     } catch (error) {
       console.error(error);
       throw new Error('Failed to follow user');
@@ -102,26 +102,6 @@ const RightSideBar = ({
               </div>
               <ArrowRightIcon className="text-white-400 shrink-0 self-start" />
             </Link>
-            // <Link
-            //   key={content.id}
-            //   href={`/${content.id}`}
-            //   className="flex w-full gap-3 hover:bg-white-300/30 shrink-0 hover:dark:bg-black-700 p-4 rounded-lg">
-            //   <Image
-            //     src={content.coverImage || '/assets/images/no-image.svg'}
-            //     alt="post"
-            //     width={58}
-            //     height={58}
-            //     className="rounded bg-primary-100 dark:bg-primary-500 "
-            //   />
-            //   <div className="w-3/5 overflow-hidden space-y-2">
-            //     <h4 className="p4-medium capitalize">{content.title}...</h4>
-            //     <p className="subtitle-normal">
-            //       <span>by </span>
-            //       {content.author.userName}
-            //     </p>
-            //   </div>
-            //   <ArrowRight size={20} className="ml-auto" />
-            // </Link>
           ))}
         </div>
       </div>

@@ -1,5 +1,4 @@
 import ArrowRightIcon from '@/components/icons/ArrowRight';
-import { EContentType } from '@/types/content';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -9,21 +8,19 @@ export interface ISidebarPodcastItemProps {
   title: string;
   coverImage: string | null;
   id: string;
-  type: EContentType;
   author: string;
 }
 
 const SidebarPodcastItem: React.FC<ISidebarPodcastItemProps> = ({
   id,
   title,
-  type,
   coverImage,
   author,
 }) => {
   return (
     <li>
       <Link
-        href={type + '/' + id}
+        href={'/content/' + id}
         className="flex-between items-center gap-3.5">
         <div className="flex items-center gap-3.5">
           <Image

@@ -1,6 +1,6 @@
 'use client';
 
-import LoadingSpinner from './LoadingSpinner';
+import LoadingSpinner from '../shared/LoadingSpinner';
 
 import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
@@ -19,10 +19,11 @@ import type {
 import { EQueryType } from '@/types/queries';
 import { typedFetch } from '@/utils/api';
 import toast from 'react-hot-toast';
-import GroupItemCard from './GroupItemCard';
-import MeetupItemCard from './MeetupItemCard';
-import PodcastItemCard from './PodcastItemCard';
-import PostItemCard from './PostItemCard';
+
+import GroupItemCard from '../shared/GroupItemCard';
+import MeetupItemCard from '../shared/MeetupItemCard';
+import PodcastItemCard from '../shared/PodcastItemCard';
+import PostItemCard from '../shared/PostItemCard';
 
 // ----------------------------------------------------------------
 
@@ -62,7 +63,6 @@ const ContentList: React.FC<IContentListProps> = ({
   userName,
   viewerId,
 }) => {
-  console.log('GROUPS DATA U CONTENT LIST', groupsData);
   const queryClient = useQueryClient();
   // const [groups, setGroups] = useState<IProfilePageGroup[]>(groupItems);
   const [page, setPage] = useState(1);

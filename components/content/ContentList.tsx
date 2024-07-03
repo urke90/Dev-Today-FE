@@ -6,8 +6,9 @@ import { EQueryType, ESortByFilter } from '@/types/queries';
 import { typedFetch } from '@/utils/api';
 import { updateContentQueryKey } from '@/utils/query';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import LoadingSpinner from '../shared/LoadingSpinner';
 import MeetupItemCard from '../shared/MeetupItemCard';
 import Pagination from '../shared/Pagination';
 import PodcastItemCard from '../shared/PodcastItemCard';
@@ -64,6 +65,13 @@ const ContentList: React.FC<IContentListProps> = ({
       toast.error('Ooops, something went wrong!');
     }
   };
+
+  useEffect(() => {
+    queryClient.setQueryData(
+      [updateContentQueryKey(contentType), contentType, 1],
+      contentData
+    );
+  }, [sortBy]);
 
   const renderContent = () => {
     let styles;
@@ -202,13 +210,22 @@ const ContentList: React.FC<IContentListProps> = ({
   return (
     <>
       <ul className={`mb-5 md:mb-10 ${styles}`}>{renderedContent}</ul>
-      <Pagination
-        currentPage={page}
-        disableNextBtn={!data.hasNextPage}
-        disablePrevBtn={page === 1}
-        totalPages={data.totalPages}
-        setPage={setPage}
-      />
+      {isLoading && (
+        <div className="p-0.5">
+          <LoadingSpinner />
+        </div>
+      )}
+      {data.contents.length > 0 ? (
+        <Pagination
+          currentPage={page}
+          disableNextBtn={!data.hasNextPage}
+          disablePrevBtn={page === 1}
+          totalPages={data.totalPages}
+          setPage={setPage}
+        />
+      ) : (
+        <h2 className="h2-medium">There is no content to show at the moment</h2>
+      )}
     </>
   );
 };

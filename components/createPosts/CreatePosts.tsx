@@ -54,7 +54,7 @@ import { useDebounce } from 'use-debounce';
 import Preview from '../preview/Preview';
 import { Input } from '../ui/input';
 
-import { revalidate } from '@/lib/actions/revalidate';
+import { revalidateRoute } from '@/lib/actions/revalidate';
 
 type SelectItemProps = {
   value: string;
@@ -224,7 +224,7 @@ const CreatePosts = ({ authorId, editPost, viewerId }: ContentProps) => {
         } else {
           setIsLoading(true);
           await mutateAsync(commonData);
-          revalidate('/content');
+          revalidateRoute('/content');
           resetForm();
 
           toast.success('Post created successfully!');
@@ -299,7 +299,7 @@ const CreatePosts = ({ authorId, editPost, viewerId }: ContentProps) => {
       }
     }
     if (editPost) {
-      revalidate(`/content/${editPost.id}`);
+      revalidateRoute(`/content/${editPost.id}`);
       router.push(`/content/${editPost.id}`);
     } else {
     }

@@ -1,5 +1,5 @@
 import { Form } from '@/components/ui/form';
-import { revalidate } from '@/lib/actions/revalidate';
+import { revalidateRoute } from '@/lib/actions/revalidate';
 import { IComment, editAndReplyCommentSchema } from '@/lib/validation';
 import { typedFetch } from '@/utils/api';
 import { formatDate } from '@/utils/format';
@@ -51,7 +51,7 @@ const RCommentForm = ({
         });
 
         setOpenReply(false);
-        revalidate('/content/comment');
+        revalidateRoute('/content/comment');
       } catch (error) {
         console.error(error);
         throw new Error('Failed to reply to comment');
@@ -69,7 +69,7 @@ const RCommentForm = ({
           },
         });
         setOpenEdit(false);
-        revalidate('/content/comment');
+        revalidateRoute('/content/comment');
       } catch (error) {
         console.error(error);
         throw new Error('Failed to update comment');
