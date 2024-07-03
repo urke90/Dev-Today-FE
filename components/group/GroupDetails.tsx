@@ -175,7 +175,7 @@ const GroupDetails: React.FC<IGroupDetailsProps> = ({
         />
       </main>
       <aside className="right-sidebar">
-        {groupContent.contents.length > 0 && (
+        {groupContent?.contents?.length > 0 && (
           <SidebarContentCard title="Meetups" items={group.contents} />
         )}
         <div className="right-sidebar-item">
@@ -207,7 +207,7 @@ const GroupDetails: React.FC<IGroupDetailsProps> = ({
                 </li>
               ))
             ) : (
-              <li className="flex-center">No members in the group yet</li>
+              <li className="p3-medium">No members in the group yet</li>
             )}
           </ul>
         </div>
@@ -237,7 +237,7 @@ const GroupDetails: React.FC<IGroupDetailsProps> = ({
                 ) : null
               )
             ) : (
-              <li>No admins in the group yet</li>
+              <li className="p3-medium">No admins in the group yet</li>
             )}
           </ul>
         </div>

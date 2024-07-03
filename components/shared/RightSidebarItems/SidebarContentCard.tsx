@@ -35,7 +35,6 @@ const SidebarContentCard: React.FC<ISidebarContentCardProps> = ({
                         coverImage={coverImage}
                         title={title}
                         author={author.userName}
-                        type={type}
                       />
                     );
                   }
@@ -47,7 +46,6 @@ const SidebarContentCard: React.FC<ISidebarContentCardProps> = ({
                         location="LOCATION IS HARDCODED FOR NOW"
                         title={title}
                         tags={tags}
-                        type={type}
                         meetupDate={meetupDate}
                       />
                     );
@@ -60,7 +58,6 @@ const SidebarContentCard: React.FC<ISidebarContentCardProps> = ({
                         author={author.userName}
                         coverImage={coverImage}
                         title={title}
-                        type={type}
                       />
                     );
                   }

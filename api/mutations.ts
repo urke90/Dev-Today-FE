@@ -33,3 +33,24 @@ export const leaveGroup = async (groupId: string, userId: string) => {
 
   return response.json();
 };
+
+export const removeMemberFromGroup = async (
+  groupId: string,
+  viewerId: string,
+  userId: string
+) => {
+  const response = await fetch(BASE_API_URL + `/groups/${groupId}/user`, {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      viewerId,
+      userId,
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error('Something went wrong!');
+  }
+
+  return response.json();
+};

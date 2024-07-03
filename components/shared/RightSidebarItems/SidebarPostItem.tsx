@@ -1,5 +1,4 @@
 import ArrowRightIcon from '@/components/icons/ArrowRight';
-import { EContentType } from '@/types/content';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -10,7 +9,6 @@ export interface ISidebarPostItemProps {
   title: string;
   author: string;
   id: string;
-  type: EContentType;
 }
 
 const SidebarPostItem: React.FC<ISidebarPostItemProps> = ({
@@ -18,7 +16,6 @@ const SidebarPostItem: React.FC<ISidebarPostItemProps> = ({
   coverImage,
   title,
   author,
-  type,
 }) => {
   return (
     <li>

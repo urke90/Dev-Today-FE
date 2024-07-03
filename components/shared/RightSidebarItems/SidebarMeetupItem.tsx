@@ -1,4 +1,4 @@
-import { EContentType, type ITag } from '@/types/content';
+import { type ITag } from '@/types/content';
 import { parseDate } from '@/utils/format';
 import Link from 'next/link';
 import BadgeItem from '../BadgeItem';
@@ -11,7 +11,6 @@ export interface ISidebarMeetupItemProps {
   location: string;
   id: string;
   tags: ITag[];
-  type: EContentType;
 }
 
 const SidebarMeetupItem: React.FC<ISidebarMeetupItemProps> = ({
@@ -20,7 +19,6 @@ const SidebarMeetupItem: React.FC<ISidebarMeetupItemProps> = ({
   meetupDate,
   tags,
   title,
-  type,
 }) => {
   const shortenedDate = meetupDate ? parseDate(meetupDate) : 'TBD';
   const [month, day] = shortenedDate.split(' ');

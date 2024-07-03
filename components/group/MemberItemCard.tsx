@@ -9,6 +9,7 @@ import {
 } from '@radix-ui/react-dropdown-menu';
 import Image from 'next/image';
 
+import toast from 'react-hot-toast';
 import { Button } from '../ui/button';
 
 interface IMemberItemCardProps {
@@ -16,6 +17,7 @@ interface IMemberItemCardProps {
   userName: string;
   avatarImg: string | null;
   isViewDialog?: boolean;
+  removeMember: () => Promise<{ message: string }>;
 }
 
 // ----------------------------------------------------------------
@@ -24,7 +26,18 @@ const MemberItemCard: React.FC<IMemberItemCardProps> = ({
   userName,
   avatarImg,
   isViewDialog = false,
+  removeMember,
 }) => {
+  const handleRemoveMember = async () => {
+    try {
+      const response = await removeMember();
+
+      toast.success(response.message);
+    } catch (error) {
+      toast.error("Something went wrong. Couldn't remove user.");
+    }
+  };
+
   return (
     <li className="flex-between bg-light100__dark800 rounded-xl p-5 shadow-card">
       <div className="flex items-center gap-1.5">
@@ -69,7 +82,7 @@ const MemberItemCard: React.FC<IMemberItemCardProps> = ({
                 Assign Admin Role
               </Item>
               <Item
-                onSelect={(e) => e.preventDefault()}
+                onSelect={handleRemoveMember}
                 className="flex items-center gap-2.5 p3-medium !text-error-text cursor-pointer"
               >
                 Remove User

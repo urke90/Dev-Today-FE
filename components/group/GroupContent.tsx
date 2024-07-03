@@ -2,6 +2,7 @@
 
 // ----------------------------------------------------------------
 
+import { removeMemberFromGroup } from '@/api/mutations';
 import { fetchGroupContent, fetchGroupMembers } from '@/api/queries';
 import { EContentGroupQueries } from '@/constants/react-query';
 import type {
@@ -10,7 +11,7 @@ import type {
 } from '@/types/group';
 import { EQueryType } from '@/types/queries';
 import { typedFetch } from '@/utils/api';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import ContentNavLinks from '../shared/ContentNavLinks';
@@ -52,15 +53,13 @@ const GroupContent: React.FC<IGroupContentWrapperProps> = ({
   viewerId,
   groupId,
 }) => {
-  // const [content, setContent] = useState<IGroupContentResponse>(groupContent);
-  // const [members, setMembers] = useState<IGroupMembersResponse>(groupMembers);
   const queryClient = useQueryClient();
   const [page, setPage] = useState(1);
 
   const {
     isLoading: isPendingContent,
     error: contentError,
-    data: content,
+    data: contentData,
   } = useQuery<IGroupContentResponse>({
     initialData: groupContent,
     queryKey: [updateContentQueryKey(contentType), contentType, page],
@@ -71,12 +70,42 @@ const GroupContent: React.FC<IGroupContentWrapperProps> = ({
   const {
     isLoading: isPendingMembers,
     error: membersError,
-    data: members,
+    data: membersData,
   } = useQuery<IGroupMembersResponse>({
     initialData: groupMembers,
     queryKey: [EContentGroupQueries.FETCH_MEMBERS, EQueryType.MEMBERS, page],
     queryFn: () => fetchGroupMembers(groupId, page),
     enabled: contentType === EQueryType.MEMBERS && page !== 1,
+  });
+
+  const { isPending, mutateAsync: removeMemberAsync } = useMutation({
+    mutationKey: [EContentGroupQueries.DELETE_MEMBER],
+    mutationFn: ({
+      groupId,
+      viewerId,
+      userId,
+    }: {
+      groupId: string;
+      viewerId: string;
+      userId: string;
+    }) => removeMemberFromGroup(groupId, viewerId, userId),
+    onSuccess: (_, { userId }) => {
+      queryClient.invalidateQueries({
+        queryKey: [
+          EContentGroupQueries.FETCH_MEMBERS,
+          EQueryType.MEMBERS,
+          page,
+        ],
+      });
+
+      queryClient.setQueryData(
+        [EContentGroupQueries.FETCH_MEMBERS, EQueryType.MEMBERS, page],
+        {
+          ...membersData,
+          members: membersData.members.filter((member) => member.id !== userId),
+        }
+      );
+    },
   });
 
   const likeOrDislikeContent = async (
@@ -94,22 +123,14 @@ const GroupContent: React.FC<IGroupContentWrapperProps> = ({
       queryClient.setQueryData(
         [updateContentQueryKey(contentType), contentType, page],
         {
-          ...content,
-          contents: content.contents.map((content) =>
+          ...contentData,
+          contents: contentData.contents.map((content) =>
             content.id === contentId
               ? { ...content, isLiked: !content.isLiked }
               : content
           ),
         }
       );
-      // setContent((prevContent) => ({
-      //   ...prevContent,
-      //   contents: prevContent.contents.map((content) =>
-      //     content.id === contentId
-      //       ? { ...content, isLiked: !content.isLiked }
-      //       : content
-      //   ),
-      // }));
     } catch (error) {
       toast.error('Ooops, something went wrong!');
     }
@@ -145,7 +166,7 @@ const GroupContent: React.FC<IGroupContentWrapperProps> = ({
       case EQueryType.POST:
         {
           styles = 'flex flex-col flex-wrap gap-5';
-          renderedContent = content.contents?.map(
+          renderedContent = contentData.contents?.map(
             ({
               id,
               title,
@@ -181,7 +202,7 @@ const GroupContent: React.FC<IGroupContentWrapperProps> = ({
       case EQueryType.MEETUP:
         {
           styles = 'flex flex-col flax-wrap gap-5';
-          renderedContent = content.contents?.map(
+          renderedContent = contentData.contents?.map(
             ({ id, meetupDate, title, description, coverImage, tags }) => (
               <MeetupItemCard
                 key={id}
@@ -200,7 +221,7 @@ const GroupContent: React.FC<IGroupContentWrapperProps> = ({
       case EQueryType.PODCAST:
         {
           styles = 'grid grid-cols-1 md:grid-cols-2 gap-5';
-          renderedContent = content.contents?.map(
+          renderedContent = contentData.contents?.map(
             ({
               id,
               coverImage,
@@ -230,13 +251,16 @@ const GroupContent: React.FC<IGroupContentWrapperProps> = ({
       case EQueryType.MEMBERS:
         {
           styles = 'grid grid-cols-2 md:grid-cols-2 gap-5';
-          renderedContent = members.members?.map(
+          renderedContent = membersData.members?.map(
             ({ id, avatarImg, userName }) => (
               <MemberItemCard
                 key={id}
                 id={id}
                 avatarImg={avatarImg}
                 userName={userName}
+                removeMember={() =>
+                  removeMemberAsync({ groupId, viewerId, userId: id })
+                }
               />
             )
           );
@@ -244,7 +268,7 @@ const GroupContent: React.FC<IGroupContentWrapperProps> = ({
         break;
       default: {
         styles = 'flex flex-col flax-wrap gap-5';
-        renderedContent = content.contents?.map(
+        renderedContent = contentData.contents?.map(
           ({
             id,
             title,
@@ -286,8 +310,8 @@ const GroupContent: React.FC<IGroupContentWrapperProps> = ({
 
   const { renderedContent, styles } = renderContent();
   const showPagination =
-    (contentType === EQueryType.MEMBERS && members?.members?.length > 0) ||
-    (contentType !== EQueryType.MEMBERS && content?.contents?.length > 0);
+    (contentType === EQueryType.MEMBERS && membersData?.members?.length > 0) ||
+    (contentType !== EQueryType.MEMBERS && contentData?.contents?.length > 0);
 
   return (
     <>
@@ -303,14 +327,14 @@ const GroupContent: React.FC<IGroupContentWrapperProps> = ({
           currentPage={page}
           totalPages={
             contentType === EQueryType.MEMBERS
-              ? members.totalPages
-              : content.totalPages
+              ? membersData.totalPages
+              : contentData.totalPages
           }
           disablePrevBtn={page === 1}
           disableNextBtn={
             contentType === EQueryType.MEMBERS
-              ? !members.hasNextPage
-              : !content.hasNextPage
+              ? !membersData.hasNextPage
+              : !contentData.hasNextPage
           }
           setPage={setPage}
         />
