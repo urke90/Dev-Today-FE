@@ -9,6 +9,7 @@ import {
 } from '@radix-ui/react-dropdown-menu';
 import Image from 'next/image';
 
+import { EUserRole } from '@/types/user';
 import toast from 'react-hot-toast';
 import { Button } from '../ui/button';
 
@@ -17,7 +18,10 @@ interface IMemberItemCardProps {
   userName: string;
   avatarImg: string | null;
   isViewDialog?: boolean;
+  role: EUserRole;
   removeMember: () => Promise<{ message: string }>;
+  assignAdminRole: () => Promise<{ message: string }>;
+  removeAdminRole: () => Promise<{ message: string }>;
 }
 
 // ----------------------------------------------------------------
@@ -27,10 +31,33 @@ const MemberItemCard: React.FC<IMemberItemCardProps> = ({
   avatarImg,
   isViewDialog = false,
   removeMember,
+  role,
+  assignAdminRole,
+  removeAdminRole,
 }) => {
   const handleRemoveMember = async () => {
     try {
       const response = await removeMember();
+
+      toast.success(response.message);
+    } catch (error) {
+      toast.error("Something went wrong. Couldn't remove user.");
+    }
+  };
+
+  const handleAssignAdminRole = async () => {
+    try {
+      const response = await assignAdminRole();
+
+      toast.success(response.message);
+    } catch (error) {
+      toast.error("Something went wrong. Couldn't remove user.");
+    }
+  };
+
+  const handleRemoveAdminRole = async () => {
+    try {
+      const response = await removeAdminRole();
 
       toast.success(response.message);
     } catch (error) {
@@ -73,13 +100,19 @@ const MemberItemCard: React.FC<IMemberItemCardProps> = ({
               sideOffset={8}
               align="end"
               onCloseAutoFocus={(e) => e.preventDefault()}
-              className="bg-light200__dark700 shadow-header-menu data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade z-20 mb-4 flex w-40 flex-col gap-2.5 rounded-[10px] py-4 px-5 "
+              className="bg-light200__dark700 shadow-header-menu data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade z-20 mb-4 flex w-42 flex-col gap-2.5 rounded-[10px] py-4 px-5 "
             >
               <Item
-                onSelect={() => {}}
+                onSelect={
+                  role === EUserRole.ADMIN
+                    ? handleRemoveAdminRole
+                    : handleAssignAdminRole
+                }
                 className="flex items-center gap-2.5 p3-medium cursor-pointer"
               >
-                Assign Admin Role
+                {role === EUserRole.ADMIN
+                  ? 'Remove Admin Role'
+                  : 'Assign Admin Role'}
               </Item>
               <Item
                 onSelect={handleRemoveMember}

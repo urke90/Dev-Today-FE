@@ -2,9 +2,14 @@
 
 // ----------------------------------------------------------------
 
-import { removeMemberFromGroup } from '@/api/mutations';
+import {
+  assignAdminRole,
+  removeAdminRole,
+  removeMemberFromGroup,
+} from '@/api/mutations';
 import { fetchGroupContent, fetchGroupMembers } from '@/api/queries';
 import { EContentGroupQueries } from '@/constants/react-query';
+import { revalidateRoute } from '@/lib/actions/revalidate';
 import type {
   IGroupContentResponse,
   IGroupMembersResponse,
@@ -46,6 +51,7 @@ interface IGroupContentWrapperProps {
   groupId: string;
 }
 
+// TODO: There are a lot of requests in this file, ask Brandon to discuse this, how to handle revalidation of data.
 const GroupContent: React.FC<IGroupContentWrapperProps> = ({
   contentType,
   groupContent,
@@ -105,7 +111,34 @@ const GroupContent: React.FC<IGroupContentWrapperProps> = ({
           members: membersData.members.filter((member) => member.id !== userId),
         }
       );
+      revalidateRoute('groups/[id]', 'page');
     },
+  });
+
+  const { mutateAsync: assignAdminRoleAsync } = useMutation({
+    mutationKey: [EContentGroupQueries.ASSIGN_ADMIN_ROLE],
+    mutationFn: ({
+      groupId,
+      viewerId,
+      userId,
+    }: {
+      groupId: string;
+      viewerId: string;
+      userId: string;
+    }) => assignAdminRole(groupId, viewerId, userId),
+  });
+
+  const { mutateAsync: removeAdminRoleAsync } = useMutation({
+    mutationKey: [EContentGroupQueries.REMOVE_ADMIN_ROLE],
+    mutationFn: ({
+      groupId,
+      viewerId,
+      userId,
+    }: {
+      groupId: string;
+      viewerId: string;
+      userId: string;
+    }) => removeAdminRole(groupId, viewerId, userId),
   });
 
   const likeOrDislikeContent = async (
@@ -143,20 +176,6 @@ const GroupContent: React.FC<IGroupContentWrapperProps> = ({
       contentType === EQueryType.MEMBERS ? groupMembers : groupContent
     );
   }, [contentType]);
-
-  // //&& contentType !== EQueryType.MEMBERS
-  // useEffect(() => {
-  //   if (contentData) {
-  //     setContent((prevContent) => ({ ...prevContent, ...contentData }));
-  //   }
-  // }, [contentData]);
-
-  // useEffect(() => {
-  //   //&& contentType === EQueryType.MEMBERS
-  //   if (membersData) {
-  //     setMembers((prevMembers) => ({ ...prevMembers, ...membersData }));
-  //   }
-  // }, [membersData]);
 
   const renderContent = () => {
     let styles;
@@ -252,14 +271,21 @@ const GroupContent: React.FC<IGroupContentWrapperProps> = ({
         {
           styles = 'grid grid-cols-2 md:grid-cols-2 gap-5';
           renderedContent = membersData.members?.map(
-            ({ id, avatarImg, userName }) => (
+            ({ id, avatarImg, userName, role }) => (
               <MemberItemCard
                 key={id}
                 id={id}
                 avatarImg={avatarImg}
                 userName={userName}
+                role={role}
                 removeMember={() =>
                   removeMemberAsync({ groupId, viewerId, userId: id })
+                }
+                assignAdminRole={() =>
+                  assignAdminRoleAsync({ groupId, viewerId, userId: id })
+                }
+                removeAdminRole={() =>
+                  removeAdminRoleAsync({ groupId, viewerId, userId: id })
                 }
               />
             )
