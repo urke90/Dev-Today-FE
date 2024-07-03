@@ -68,8 +68,8 @@ type ContentProps = {
   allGroups?: ISelectGroup[];
   allTags?: ITags[];
   editType?: string;
-  editPost: IContentDTO;
-  viewerId: string;
+  editPost?: IContentDTO;
+  viewerId?: string;
 };
 
 const CreatePosts = ({ authorId, editPost, viewerId }: ContentProps) => {
@@ -87,7 +87,11 @@ const CreatePosts = ({ authorId, editPost, viewerId }: ContentProps) => {
   const router = useRouter();
 
   const resetForm = () => {
-    if (editPost) router.push(`/content/${editPost.id}`);
+    if (editPost) {
+      router.push(`/content/${editPost.id}`);
+    } else {
+      router.push('/posts');
+    }
     form.reset();
     form.setValue('groupId', {
       value: '',
@@ -134,7 +138,7 @@ const CreatePosts = ({ authorId, editPost, viewerId }: ContentProps) => {
 
   const { mutateAsync: updateMeetupMutation } = useMutation({
     mutationFn: async (data: IPutMeetupDTO) => {
-      await updateMeetupContent(editPost.id, data, viewerId);
+      await updateMeetupContent(editPost?.id, data, viewerId);
     },
   });
 
@@ -146,7 +150,7 @@ const CreatePosts = ({ authorId, editPost, viewerId }: ContentProps) => {
 
   const { mutateAsync: updatePodcastMutation } = useMutation({
     mutationFn: async (data: IPutPodcastDTO) => {
-      await updatePodcastContent(editPost.id, data, viewerId);
+      await updatePodcastContent(editPost?.id, data, viewerId);
     },
   });
 
@@ -189,8 +193,6 @@ const CreatePosts = ({ authorId, editPost, viewerId }: ContentProps) => {
 
   const watchPostType = form.watch('type');
   const watchCoverImage = form.watch('coverImage');
-
-  console.log(form.formState.errors);
 
   const onSubmit = async () => {
     const commonData: IPutPostDTO = {
@@ -301,6 +303,8 @@ const CreatePosts = ({ authorId, editPost, viewerId }: ContentProps) => {
       router.push(`/content/${editPost.id}`);
     } else {
     }
+
+    router.push('/posts');
   };
 
   const handlePreview = () => {
@@ -321,8 +325,7 @@ const CreatePosts = ({ authorId, editPost, viewerId }: ContentProps) => {
               placeholder="Write a title of the post"
             />
             <div
-              className={`flex flex-col md:flex-row ${form.formState.errors && 'items-center'}  items-center gap-3`}
-            >
+              className={`flex flex-col md:flex-row ${form.formState.errors && 'items-center'}  items-center gap-3`}>
               <FormField
                 control={form.control}
                 defaultValue={EContentType.POST}
@@ -330,23 +333,22 @@ const CreatePosts = ({ authorId, editPost, viewerId }: ContentProps) => {
                 render={({ field }) => (
                   <Select.Root
                     value={field.value}
-                    onValueChange={field.onChange}
-                  >
+                    onValueChange={field.onChange}>
                     <Select.Trigger
                       disabled={editPost && true}
                       {...field}
                       className={`flex w-full md:w-1/4 ${form.formState.errors.groupId ? '!mt-2' : '!mt-6'} capitalize border dark:border-black-700/50 rounded-md px-2 items-center h-12 bg-white-100 dark:bg-black-800 md:justify-center outline-none`}
-                      aria-label="Food"
-                    >
-                      <p className=" p3-regular dark:!text-white-400">Create</p>
-                      <span className="mx-1 dark:text-white-100/70 text-black-800/60 ">
+                      aria-label="Food">
+                      <p className="w-1/6 md:w-1/2 p3-regular dark:!text-white-400">
+                        Create
+                      </p>
+                      <span className="mr-1 dark:text-white-100/70 text-black-800/60 ">
                         -
                       </span>
                       <p
                         className={`${
                           watchPostType !== EContentType.POST ? 'hidden' : ''
-                        } p3-regular !font-bold`}
-                      ></p>
+                        } p3-regular !font-bold`}></p>
                       <div className="flex w-full items-center p3-regular justify-between !text-black-800 dark:!text-white-100 !font-bold ">
                         <Select.Value placeholder="Post" />
                         <Image
@@ -361,16 +363,14 @@ const CreatePosts = ({ authorId, editPost, viewerId }: ContentProps) => {
                     <Select.Portal>
                       <Select.Content
                         position="popper"
-                        className="overflow-hidden bg-white"
-                      >
+                        className="overflow-hidden bg-white">
                         <Select.Viewport className="w-60 mt-3 rounded-md  p-3 bg-light100__dark800">
                           <Select.Group className="flex items-center p-2 rounded-md group duration-200 justify-start">
                             <div className="flex flex-col space-y-3 w-full">
                               {postTypes.map((type, idx) => (
                                 <div
                                   key={idx}
-                                  className="flex  dark:hover:bg-black-700 px-3 py-1 rounded-md"
-                                >
+                                  className="flex hover:bg-white-300/30 cursor-pointer dark:hover:bg-black-700 px-3 py-1 rounded-md">
                                   <Image
                                     src={type.image}
                                     alt={type.title}
@@ -383,8 +383,7 @@ const CreatePosts = ({ authorId, editPost, viewerId }: ContentProps) => {
                                     onValueChange={(value) => {
                                       field.onChange(value);
                                     }}
-                                    className="p-2 p3-medium capitalize !text-[14px] hover:!text-primary-500"
-                                  >
+                                    className="p-2 p3-medium capitalize !text-[14px] hover:!text-primary-500">
                                     {type.title}
                                   </SelectItem>
                                 </div>
@@ -428,10 +427,10 @@ const CreatePosts = ({ authorId, editPost, viewerId }: ContentProps) => {
                             dropdownIndicator: () =>
                               '!text-white-400 !w-10 !h-10',
                             option: () =>
-                              '!bg-white-100  !py-[18px]  dark:!bg-black-800  dark:!text-white-100 !text-black-800',
+                              '!bg-white-100 hover:!bg-white-300/30 hover:dark:!bg-white-300/20 rounded-md dark:!bg-black-800  dark:!text-white-100 !text-black-800',
                             singleValue: () => 'dark:!text-white-100',
                             menu: () =>
-                              'bg-white-100 dark:bg-black-800 !shadow-sm ',
+                              'bg-white-100 dark:bg-black-800 !shadow-sm  p-2 rounded-md',
                           }}
                           className="w-full h-full !mt-0 rounded-md dark:!bg-black-800 border dark:border-black-700/50 "
                           isLoading={isLoading}
@@ -477,8 +476,7 @@ const CreatePosts = ({ authorId, editPost, viewerId }: ContentProps) => {
                         <Button
                           type="button"
                           onClick={() => form.setValue('coverImage', '')}
-                          className="absolute right-0 top-[-40px] hover:bg-black-700 text-white-400  border dark:border-gray-500 size-8 dark:text-white-100"
-                        >
+                          className="absolute right-0 top-[-40px] hover:bg-black-700 text-white-400  border dark:border-gray-500 size-8 dark:text-white-100">
                           X
                         </Button>
                       </div>
@@ -500,8 +498,7 @@ const CreatePosts = ({ authorId, editPost, viewerId }: ContentProps) => {
                               multiple: false,
                               cropping: true,
                               croppingShowDimensions: true,
-                            }}
-                          >
+                            }}>
                             {({ open }) => (
                               <Button
                                 onClick={(e) => {
@@ -509,15 +506,14 @@ const CreatePosts = ({ authorId, editPost, viewerId }: ContentProps) => {
                                   open();
                                 }}
                                 type="button"
-                                className="flex items-center max-w-[200px] dark:bg-black-800 py-2 rounded-lg bg-white-100 gap-3 mb-3"
-                              >
+                                className="flex items-center max-w-[200px] hover:bg-white-300/30 hover:dark:bg-black-700 dark:bg-black-800 py-2 rounded-lg bg-white-100 gap-3 mb-3">
                                 <Image
                                   src={'/assets/icons/upload-icon.svg'}
                                   alt="upload"
                                   width={16}
                                   height={16}
                                 />
-                                <p className="p3-regular !text-white-300">
+                                <p className="p3-regular  !text-white-300">
                                   Upload a cover image
                                 </p>
                               </Button>
@@ -553,8 +549,7 @@ const CreatePosts = ({ authorId, editPost, viewerId }: ContentProps) => {
                           className={cn(
                             'justify-start p3-regular font-bold  bg-light100__dark800 border dark:border-black-700/50 px-4 h-11 !mt-2',
                             !field.value && 'text-muted-foreground'
-                          )}
-                        >
+                          )}>
                           <Image
                             src="/assets/icons/calendar-create.svg"
                             alt="calendar"
@@ -624,8 +619,7 @@ const CreatePosts = ({ authorId, editPost, viewerId }: ContentProps) => {
                             } else {
                               field.onChange(res.info);
                             }
-                          }}
-                        >
+                          }}>
                           {({ open }) => (
                             <Button
                               onClick={(e) => {
@@ -633,8 +627,7 @@ const CreatePosts = ({ authorId, editPost, viewerId }: ContentProps) => {
                                 open();
                               }}
                               type="button"
-                              className="w-full flex !mt-2 justify-start focus-visible:outline-none dark:placeholder:text-[#ADB3CC] placeholder:text-white-400 placeholder:font-normal placeholder:text-sm dark:text-white-100 text-black-900 text-sm font-medium px-3 border border-white-border dark:border-[#393E4F66] rounded-lg py-3 md:px-5 bg-white-100 dark:bg-black-800"
-                            >
+                              className="w-full flex !mt-2 justify-start focus-visible:outline-none dark:placeholder:text-[#ADB3CC] placeholder:text-white-400 placeholder:font-normal placeholder:text-sm dark:text-white-100 text-black-900 text-sm font-medium px-3 border border-white-border dark:border-[#393E4F66] rounded-lg py-3 md:px-5 bg-white-100 dark:bg-black-800">
                               <Image
                                 src="/assets/icons/microphone.svg"
                                 alt="upload"
@@ -675,21 +668,32 @@ const CreatePosts = ({ authorId, editPost, viewerId }: ContentProps) => {
                       value={field.value}
                       onEditorChange={(content) => field.onChange(content)}
                       init={{
-                        skin: 'oxide-dark',
+                        skin: mode === 'dark' ? 'oxide-dark' : 'oxide',
                         icons: 'thin',
                         toolbar_location: 'top',
                         content_css: 'dark',
-                        content_style: `
-                   body { font-family: Roboto, sans-serif; font-size: 14px; color: #808191;  ${
-                     mode === 'dark'
-                       ? 'background-color: #262935;'
-                       : 'background-color: #ffff;'
-                   } }
-                   }} body::-webkit-scrollbar   
-                      tox-editor-header { background-color: #f8f8f8; } {display: none; }pre, code { font-family: "Roboto Mono", monospace; background-color: transparent !important;  padding: 5px; } body::before { color: #808191 !important; } h2 {color: #ffff!important}
-                   h2 {color: #ffff!important}
-                  }
-                   `,
+                        content_style: `body {
+                           font-family: Roboto, sans-serif;
+                           font-size: 14px;
+                           color: #808191;
+                           ${mode === 'dark' ? 'background-color: #262935;' : 'background-color: #ffff;'}!important;
+                          }
+                           color: #808191 !important;}
+                                              
+                         body::-webkit-scrollbar {
+                           display: none;
+                         }
+                         pre, code {
+                           font-family: "Roboto Mono", monospace;
+                           background-color: transparent !important;
+                           padding: 5px;
+                         }
+                         body::before {
+                           color: #808191 !important;
+                         }
+                         h2 {
+                           color: ${mode === 'dark' ? '#fff' : '#000'} !important;
+                         }`,
                         menubar: false,
                         plugins: 'code codesample link preview image',
                         toolbar:
@@ -794,15 +798,13 @@ const CreatePosts = ({ authorId, editPost, viewerId }: ContentProps) => {
               <Button
                 onClick={resetForm}
                 type="button"
-                className="bg-light100__dark800 hover:!text-white-100 duration-200 hover:bg-primary-500 py-3 w-3/5"
-              >
+                className="bg-light100__dark800 hover:!text-white-100 duration-200 hover:bg-primary-500 py-3 w-3/5">
                 Cancel
               </Button>
               <Button
                 type="button"
                 onClick={() => onSubmit()}
-                className="bg-light100__dark800 hover:!text-white-100 duration-200 hover:bg-primary-500 py-3 w-3/5"
-              >
+                className="bg-light100__dark800 hover:!text-white-100 duration-200 hover:bg-primary-500 py-3 w-3/5">
                 {isLoading
                   ? editPost
                     ? 'Updating Post...'
@@ -830,14 +832,15 @@ export default CreatePosts;
 const Option = (props: any) => {
   return (
     <components.Option {...props}>
-      <div className="flex items-center">
+      <div className="flex items-center gap-2 cursor-pointer">
         <Image
           src={props.data.profileImage || '/assets/icons/bootstrap.svg'}
           alt="frame"
           width={34}
           height={34}
+          className="rounded-md"
         />
-        <div className="flex flex-col ml-2">
+        <div className="flex flex-col ml-2 ">
           <p className="p4-medium">{props.data.label}</p>
           <p className="text-[11px] text-white-400">
             {props.data.bio || 'No bio available'}
@@ -859,8 +862,7 @@ export const SelectItem = React.forwardRef<HTMLDivElement, SelectItemProps>(
           className
         )}
         {...props}
-        ref={forwardedRef}
-      >
+        ref={forwardedRef}>
         <Select.ItemText>{children}</Select.ItemText>
         <Select.ItemIndicator className="absolute left-0 w-[25px] inline-flex items-center justify-center"></Select.ItemIndicator>
       </Select.Item>

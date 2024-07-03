@@ -26,7 +26,7 @@ type TagProps = {
 type ContentDetailsProps = {
   content: IContent;
   commentAuthorId: string;
-  contentId: string;
+  contentId: IContent;
   allComments: IComment[];
   getAuthorDetails: {
     isFollowing: boolean;
@@ -42,6 +42,7 @@ const ContentDetails = ({
   allComments,
 }: ContentDetailsProps) => {
   const router = useRouter();
+
   return (
     <div className="main-content p1-bold w-full mx-auto md:mx-0  space-y-5">
       {content?.type === EContentType.PODCAST && (
@@ -107,16 +108,16 @@ const ContentDetails = ({
                 sideOffset={8}
                 align="end"
                 onCloseAutoFocus={(e) => e.preventDefault()}
-                className="bg-light200__dark800 !w-48 px-5 shadow-header-menu data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade z-20 mb-4 flex  flex-col gap-2.5 rounded-[10px] py-4 ">
+                className="bg-light100__dark800 px-2 !w-48 shadow-header-menu data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade z-20 mb-4 flex  flex-col gap-2.5 rounded-[10px] py-4 ">
                 <Item
                   onSelect={() => router.push(`/content/${content?.id}/edit`)}
-                  className="flex items-center  gap-2.5 p3-medium cursor-pointer">
+                  className="flex items-center gap-2.5 focus-visible:outline-none p3-medium cursor-pointer px-3 py-1 rounded-md hover:bg-white-300/30">
                   <EditIcon />
                   <p>Edit Post</p>
                 </Item>
                 <Item
                   onSelect={(e) => e.preventDefault()}
-                  className="flex items-center  gap-2.5 p3-medium !text-[#FF584D] cursor-pointer">
+                  className="flex items-center focus-visible:outline-none  gap-2.5 p3-medium px-3 py-1.5 !text-[#FF584D] hover:bg-white-300/30 rounded-md cursor-pointer">
                   <Image
                     src="/assets/icons/trash.svg"
                     width={20}
@@ -177,7 +178,7 @@ const ContentDetails = ({
         </>
       )}
       <Comments
-        contentId={contentId}
+        contentId={contentId.id}
         commentAuthorId={commentAuthorId}
         allComments={allComments}
       />

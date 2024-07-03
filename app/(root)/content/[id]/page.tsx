@@ -48,12 +48,12 @@ const Content = async (props: ParamsProps) => {
   });
 
   return (
-    <div className="content-wrapper px-4 !bg-white-100 dark:!bg-black-900 min-h-screen">
+    <div className="content-wrapper px-4 !bg-white-200 dark:!bg-black-900 min-h-screen">
       <div className="left-sidebar !hidden lg:!flex !p-0">
         <LeftSideBar content={contentDetails} authorName={authorName} />
       </div>
       <ContentDetails
-        contentId={contentDetails.id}
+        contentId={contentDetails}
         commentAuthorId={commentAuthorId}
         allComments={allComments}
         getAuthorDetails={getAuthorDetails}

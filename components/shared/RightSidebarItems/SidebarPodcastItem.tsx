@@ -21,8 +21,7 @@ const SidebarPodcastItem: React.FC<ISidebarPodcastItemProps> = ({
     <li>
       <Link
         href={'/content/' + id}
-        className="flex-between items-center gap-3.5"
-      >
+        className="flex-between items-center gap-3.5">
         <div className="flex items-center gap-3.5">
           <Image
             src={coverImage || '/assets/icons/image-preview.svg'}
