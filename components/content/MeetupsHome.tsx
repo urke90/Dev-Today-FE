@@ -30,7 +30,10 @@ const MeetupsHome: React.FC<IMeetupsHomeProps> = ({
   return (
     <div className="content-wrapper">
       <aside className="left-sidebar">
-        <SortAndFilter sortBy={sortBy} />
+        <SortAndFilter
+          sortBy={sortBy}
+          followingCount={sidebarData.followingUsersCount}
+        />
         <SidebarItemWrapper
           title="Popular Tags"
           items={sidebarData.popularTagsSorted.map(
