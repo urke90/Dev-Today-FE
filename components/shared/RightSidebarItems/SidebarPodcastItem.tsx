@@ -23,7 +23,7 @@ const SidebarPodcastItem: React.FC<ISidebarPodcastItemProps> = ({
   return (
     <li>
       <Link
-        href={type + '/' + id}
+        href={'/content/' + id}
         className="flex-between items-center gap-3.5"
       >
         <div className="flex items-center gap-3.5">

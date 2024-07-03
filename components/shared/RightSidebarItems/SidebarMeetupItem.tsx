@@ -27,7 +27,7 @@ const SidebarMeetupItem: React.FC<ISidebarMeetupItemProps> = ({
 
   return (
     <li>
-      <Link href={type + '/' + id} className="flex items-center gap-3.5">
+      <Link href={'/content/' + id} className="flex items-center gap-3.5">
         <div className="flex-center bg-light200__dark700 shrink-0 flex-col rounded-[6px] px-2.5 py-[5px] h-[66px] w-[42px] ">
           <span className="subtitle-normal md:p4-regular text-black-800 dark:text-white-200 uppercase break-keep">
             {month}
