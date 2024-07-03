@@ -54,7 +54,7 @@ import { useDebounce } from 'use-debounce';
 import Preview from '../preview/Preview';
 import { Input } from '../ui/input';
 
-import { revalidate } from '@/lib/actions/revalidate';
+import { revalidateRoute } from '@/lib/actions/revalidate';
 
 type SelectItemProps = {
   value: string;
@@ -222,7 +222,7 @@ const CreatePosts = ({ authorId, editPost, viewerId }: ContentProps) => {
         } else {
           setIsLoading(true);
           await mutateAsync(commonData);
-          revalidate('/content');
+          revalidateRoute('/content');
           resetForm();
 
           toast.success('Post created successfully!');
@@ -297,7 +297,7 @@ const CreatePosts = ({ authorId, editPost, viewerId }: ContentProps) => {
       }
     }
     if (editPost) {
-      revalidate(`/content/${editPost.id}`);
+      revalidateRoute(`/content/${editPost.id}`);
       router.push(`/content/${editPost.id}`);
     } else {
     }
@@ -321,7 +321,8 @@ const CreatePosts = ({ authorId, editPost, viewerId }: ContentProps) => {
               placeholder="Write a title of the post"
             />
             <div
-              className={`flex flex-col md:flex-row ${form.formState.errors && 'items-center'}  items-center gap-3`}>
+              className={`flex flex-col md:flex-row ${form.formState.errors && 'items-center'}  items-center gap-3`}
+            >
               <FormField
                 control={form.control}
                 defaultValue={EContentType.POST}
@@ -329,12 +330,14 @@ const CreatePosts = ({ authorId, editPost, viewerId }: ContentProps) => {
                 render={({ field }) => (
                   <Select.Root
                     value={field.value}
-                    onValueChange={field.onChange}>
+                    onValueChange={field.onChange}
+                  >
                     <Select.Trigger
                       disabled={editPost && true}
                       {...field}
                       className={`flex w-full md:w-1/4 ${form.formState.errors.groupId ? '!mt-2' : '!mt-6'} capitalize border dark:border-black-700/50 rounded-md px-2 items-center h-12 bg-white-100 dark:bg-black-800 md:justify-center outline-none`}
-                      aria-label="Food">
+                      aria-label="Food"
+                    >
                       <p className=" p3-regular dark:!text-white-400">Create</p>
                       <span className="mx-1 dark:text-white-100/70 text-black-800/60 ">
                         -
@@ -342,7 +345,8 @@ const CreatePosts = ({ authorId, editPost, viewerId }: ContentProps) => {
                       <p
                         className={`${
                           watchPostType !== EContentType.POST ? 'hidden' : ''
-                        } p3-regular !font-bold`}></p>
+                        } p3-regular !font-bold`}
+                      ></p>
                       <div className="flex w-full items-center p3-regular justify-between !text-black-800 dark:!text-white-100 !font-bold ">
                         <Select.Value placeholder="Post" />
                         <Image
@@ -357,14 +361,16 @@ const CreatePosts = ({ authorId, editPost, viewerId }: ContentProps) => {
                     <Select.Portal>
                       <Select.Content
                         position="popper"
-                        className="overflow-hidden bg-white">
+                        className="overflow-hidden bg-white"
+                      >
                         <Select.Viewport className="w-60 mt-3 rounded-md  p-3 bg-light100__dark800">
                           <Select.Group className="flex items-center p-2 rounded-md group duration-200 justify-start">
                             <div className="flex flex-col space-y-3 w-full">
                               {postTypes.map((type, idx) => (
                                 <div
                                   key={idx}
-                                  className="flex  dark:hover:bg-black-700 px-3 py-1 rounded-md">
+                                  className="flex  dark:hover:bg-black-700 px-3 py-1 rounded-md"
+                                >
                                   <Image
                                     src={type.image}
                                     alt={type.title}
@@ -377,7 +383,8 @@ const CreatePosts = ({ authorId, editPost, viewerId }: ContentProps) => {
                                     onValueChange={(value) => {
                                       field.onChange(value);
                                     }}
-                                    className="p-2 p3-medium capitalize !text-[14px] hover:!text-primary-500">
+                                    className="p-2 p3-medium capitalize !text-[14px] hover:!text-primary-500"
+                                  >
                                     {type.title}
                                   </SelectItem>
                                 </div>
@@ -470,7 +477,8 @@ const CreatePosts = ({ authorId, editPost, viewerId }: ContentProps) => {
                         <Button
                           type="button"
                           onClick={() => form.setValue('coverImage', '')}
-                          className="absolute right-0 top-[-40px] hover:bg-black-700 text-white-400  border dark:border-gray-500 size-8 dark:text-white-100">
+                          className="absolute right-0 top-[-40px] hover:bg-black-700 text-white-400  border dark:border-gray-500 size-8 dark:text-white-100"
+                        >
                           X
                         </Button>
                       </div>
@@ -492,7 +500,8 @@ const CreatePosts = ({ authorId, editPost, viewerId }: ContentProps) => {
                               multiple: false,
                               cropping: true,
                               croppingShowDimensions: true,
-                            }}>
+                            }}
+                          >
                             {({ open }) => (
                               <Button
                                 onClick={(e) => {
@@ -500,7 +509,8 @@ const CreatePosts = ({ authorId, editPost, viewerId }: ContentProps) => {
                                   open();
                                 }}
                                 type="button"
-                                className="flex items-center max-w-[200px] dark:bg-black-800 py-2 rounded-lg bg-white-100 gap-3 mb-3">
+                                className="flex items-center max-w-[200px] dark:bg-black-800 py-2 rounded-lg bg-white-100 gap-3 mb-3"
+                              >
                                 <Image
                                   src={'/assets/icons/upload-icon.svg'}
                                   alt="upload"
@@ -543,7 +553,8 @@ const CreatePosts = ({ authorId, editPost, viewerId }: ContentProps) => {
                           className={cn(
                             'justify-start p3-regular font-bold  bg-light100__dark800 border dark:border-black-700/50 px-4 h-11 !mt-2',
                             !field.value && 'text-muted-foreground'
-                          )}>
+                          )}
+                        >
                           <Image
                             src="/assets/icons/calendar-create.svg"
                             alt="calendar"
@@ -613,7 +624,8 @@ const CreatePosts = ({ authorId, editPost, viewerId }: ContentProps) => {
                             } else {
                               field.onChange(res.info);
                             }
-                          }}>
+                          }}
+                        >
                           {({ open }) => (
                             <Button
                               onClick={(e) => {
@@ -621,7 +633,8 @@ const CreatePosts = ({ authorId, editPost, viewerId }: ContentProps) => {
                                 open();
                               }}
                               type="button"
-                              className="w-full flex !mt-2 justify-start focus-visible:outline-none dark:placeholder:text-[#ADB3CC] placeholder:text-white-400 placeholder:font-normal placeholder:text-sm dark:text-white-100 text-black-900 text-sm font-medium px-3 border border-white-border dark:border-[#393E4F66] rounded-lg py-3 md:px-5 bg-white-100 dark:bg-black-800">
+                              className="w-full flex !mt-2 justify-start focus-visible:outline-none dark:placeholder:text-[#ADB3CC] placeholder:text-white-400 placeholder:font-normal placeholder:text-sm dark:text-white-100 text-black-900 text-sm font-medium px-3 border border-white-border dark:border-[#393E4F66] rounded-lg py-3 md:px-5 bg-white-100 dark:bg-black-800"
+                            >
                               <Image
                                 src="/assets/icons/microphone.svg"
                                 alt="upload"
@@ -781,13 +794,15 @@ const CreatePosts = ({ authorId, editPost, viewerId }: ContentProps) => {
               <Button
                 onClick={resetForm}
                 type="button"
-                className="bg-light100__dark800 hover:!text-white-100 duration-200 hover:bg-primary-500 py-3 w-3/5">
+                className="bg-light100__dark800 hover:!text-white-100 duration-200 hover:bg-primary-500 py-3 w-3/5"
+              >
                 Cancel
               </Button>
               <Button
                 type="button"
                 onClick={() => onSubmit()}
-                className="bg-light100__dark800 hover:!text-white-100 duration-200 hover:bg-primary-500 py-3 w-3/5">
+                className="bg-light100__dark800 hover:!text-white-100 duration-200 hover:bg-primary-500 py-3 w-3/5"
+              >
                 {isLoading
                   ? editPost
                     ? 'Updating Post...'
@@ -844,7 +859,8 @@ export const SelectItem = React.forwardRef<HTMLDivElement, SelectItemProps>(
           className
         )}
         {...props}
-        ref={forwardedRef}>
+        ref={forwardedRef}
+      >
         <Select.ItemText>{children}</Select.ItemText>
         <Select.ItemIndicator className="absolute left-0 w-[25px] inline-flex items-center justify-center"></Select.ItemIndicator>
       </Select.Item>

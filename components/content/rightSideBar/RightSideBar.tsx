@@ -1,6 +1,6 @@
 'use client';
 import { Button } from '@/components/ui/button';
-import { revalidate } from '@/lib/actions/revalidate';
+import { revalidateRoute } from '@/lib/actions/revalidate';
 import { IContent } from '@/types/content';
 import { IProfileUser } from '@/types/user';
 import { typedFetch } from '@/utils/api';
@@ -34,7 +34,7 @@ const RightSideBar = ({
           userId: commentAuthorId,
         },
       });
-      revalidate(`/user/${contentDetails.authorId}`);
+      revalidateRoute(`/user/${contentDetails.authorId}`);
     } catch (error) {
       console.error(error);
       throw new Error('Failed to follow user');
@@ -61,13 +61,15 @@ const RightSideBar = ({
         {commentAuthorId !== contentDetails.authorId && (
           <Button
             onClick={handleFollow}
-            className="dark:bg-black-900 bg-white-100 hover:bg-white-300/30 hover:dark:bg-black-700 text-purple-500 py-[10px] rounded ">
+            className="dark:bg-black-900 bg-white-100 hover:bg-white-300/30 hover:dark:bg-black-700 text-purple-500 py-[10px] rounded "
+          >
             {getAuthorDetails?.isFollowing ? 'Fallowing' : 'Follow'}
           </Button>
         )}
         <Link
           href={`/profile/${getAuthorDetails.user?.id}`}
-          className="dark:bg-black-900 bg-white-100 hover:bg-white-300/30 hover:dark:bg-black-700 text-purple-500 p3-bold py-[10px] rounded  w-full text-center">
+          className="dark:bg-black-900 bg-white-100 hover:bg-white-300/30 hover:dark:bg-black-700 text-purple-500 p3-bold py-[10px] rounded  w-full text-center"
+        >
           Visit Profile
         </Link>
         <p className="p2-regular">
@@ -84,7 +86,8 @@ const RightSideBar = ({
             <Link
               key={content.id}
               href={`${content.id}`}
-              className="flex w-full gap-3">
+              className="flex w-full gap-3"
+            >
               <Image
                 src={content.coverImage || '/assets/images/no-image.svg'}
                 alt="post"

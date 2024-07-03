@@ -6,9 +6,7 @@ import SearchCommandDialog from './SearchCommandDialog';
 
 // ----------------------------------------------------------------
 
-interface INavMenuProps {}
-
-const NavMenu: React.FC<INavMenuProps> = () => {
+const NavMenu: React.FC = () => {
   return (
     <div className="relative z-50 flex items-center gap-[18px]">
       <SearchCommandDialog />

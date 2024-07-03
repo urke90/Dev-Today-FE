@@ -34,7 +34,7 @@ const MeetupsPage: React.FC<IMeetupsPageProps> = async ({ searchParams }) => {
     throw new Error("Something went wrong, can't show posts at the moment!");
 
   const sidebarData = await typedFetch<IContentPagesSidebarResponse>({
-    url: '/content/stats?posts=true&podcasts=true',
+    url: `/content/stats?posts=true&podcasts=true&viewerId=${session.user.id}`,
   });
 
   if (!sidebarData)

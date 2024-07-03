@@ -48,10 +48,12 @@ const GroupDetailsPage: React.FC<IGroupDetailsPage> = async ({
   if (contentType !== EQueryType.MEMBERS) {
     groupContent = await typedFetch<IGroupContentResponse>({
       url: `/groups/${id}/content?type=${contentType}&viewerId=${session.user.id}`,
+      cache: 'no-cache',
     });
   } else if (contentType === EQueryType.MEMBERS) {
     groupMembers = await typedFetch<IGroupMembersResponse>({
       url: `/groups/${id}/members`,
+      cache: 'no-cache',
     });
   }
 

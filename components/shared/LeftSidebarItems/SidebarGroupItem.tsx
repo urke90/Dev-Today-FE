@@ -18,7 +18,10 @@ const SidebarGroupItem: React.FC<ISidebarGroupItemProps> = ({
 }) => {
   return (
     <li>
-      <Link href={'/groups/' + id} className="flex gap-2.5">
+      <Link
+        href={'/groups/' + id}
+        className="flex gap-2.5 hover-sidebar-items rounded-md"
+      >
         <Image
           src={profileImage || '/assets/icons/image-preview.svg'}
           width={32}

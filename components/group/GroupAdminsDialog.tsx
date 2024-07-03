@@ -15,11 +15,11 @@ import MemberItemCard from './MemberItemCard';
 
 // ----------------------------------------------------------------
 
-interface IAdminDialogProps {
+interface IGroupAdminsDialogProps {
   groupId: string;
 }
 
-const AdminMembersDialog: React.FC<IAdminDialogProps> = ({ groupId }) => {
+const GroupAdminsDialog: React.FC<IGroupAdminsDialogProps> = ({ groupId }) => {
   const [admins, setAdmins] = useState<IGroupMember[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [page, setPage] = useState(1);
@@ -90,4 +90,4 @@ const AdminMembersDialog: React.FC<IAdminDialogProps> = ({ groupId }) => {
   );
 };
 
-export default AdminMembersDialog;
+export default GroupAdminsDialog;

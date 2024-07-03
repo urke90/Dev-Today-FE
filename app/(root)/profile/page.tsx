@@ -28,12 +28,12 @@ const MyProfilePage: React.FC<IMyProfilePageProps> = async ({
   const session = await auth();
   if (!session?.user) throw new Error('User data not available!');
 
-  const userResult = await typedFetch<IProfileUserResponse>({
+  const userResponse = await typedFetch<IProfileUserResponse>({
     url: `/user/${session?.user.id}`,
     cache: 'no-store',
   });
 
-  if (!userResult.user) throw new Error('User data not available!');
+  if (!userResponse) throw new Error('User data not available!');
 
   let content = {};
   let groups = {};
@@ -51,8 +51,7 @@ const MyProfilePage: React.FC<IMyProfilePageProps> = async ({
     <section className="px-3.5 lg:px-5">
       <ProfileHome
         isPersonalProfile
-        user={userResult.user}
-        isFollowing={userResult.isFollowing}
+        user={userResponse.user}
         contentType={contentType}
         contentData={content as IProfilePageContentResponse}
         groupsData={groups as IProfilePageGroupsResponse}

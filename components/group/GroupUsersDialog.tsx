@@ -15,11 +15,11 @@ import MemberItemCard from './MemberItemCard';
 
 // ----------------------------------------------------------------
 
-interface IUserMembersDialogProps {
+interface IGroupUsersDialogProps {
   groupId: string;
 }
 
-const UserMembersDialog: React.FC<IUserMembersDialogProps> = ({ groupId }) => {
+const GroupUsersDialog: React.FC<IGroupUsersDialogProps> = ({ groupId }) => {
   const [users, setUsers] = useState<IGroupMember[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [page, setPage] = useState(1);
@@ -89,4 +89,4 @@ const UserMembersDialog: React.FC<IUserMembersDialogProps> = ({ groupId }) => {
   );
 };
 
-export default UserMembersDialog;
+export default GroupUsersDialog;

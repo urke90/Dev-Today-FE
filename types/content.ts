@@ -102,4 +102,5 @@ export interface IContentPagesSidebarResponse {
   posts: IContent[];
   meetups: IContent[];
   podcasts: IContent[];
+  followingUsersCount: number;
 }

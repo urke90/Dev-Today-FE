@@ -10,9 +10,9 @@ import { EQueryType } from '@/types/queries';
 import type { IProfileUser } from '@/types/user';
 import { calculateTimeAgo } from '@/utils/format';
 import BadgeItem from '../shared/BadgeItem';
-import ContentList from '../shared/ContentList';
 import ContentNavLinks from '../shared/ContentNavLinks';
 import SidebarContentCard from '../shared/RightSidebarItems/SidebarContentCard';
+import ContentList from './ContentList';
 
 // ----------------------------------------------------------------
 
@@ -66,10 +66,10 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
           />
           <div className="flex justify-center gap-[7px] gap-y-0 sm:flex-col">
             <p className="p3-medium text-white-400 dark:text-white-300">
-              {user?._count.followers} Followers
+              {user?._count?.followers} Followers
             </p>
             <p className="p3-medium text-white-400 dark:text-white-300">
-              {user?._count.following} Following
+              {user?._count?.following} Following
             </p>
           </div>
           {user?.preferredSkills.length > 0 && (
