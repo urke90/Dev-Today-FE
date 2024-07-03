@@ -166,7 +166,7 @@ const Comments = ({
                         <h4 className="p3-bold tracking-wide !text-[12px] sm:!text-[14px] !font-semibold md:font-bold md:mb-2">
                           {comment.author.userName}
                         </h4>
-                        <div className="text-[8px] sm:text-[10px] lg:text-[14px]">
+                        <div className="text-[8px] sm:text-[10px] lg:text-[12px]">
                           <span className="relative bottom-1 text-white-400">
                             {formatDate(comment.createdAt)}
                           </span>
@@ -178,7 +178,7 @@ const Comments = ({
                       </div>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2 md:gap-4 lg:mt-4 sm:mt-0">
+                  <div className="flex items-center gap-2 md:gap-4  sm:mt-0">
                     <div
                       className="flex gap-1 items-center cursor-pointer"
                       onClick={() => setReplyingComment(comment.id)}>

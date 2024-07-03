@@ -62,9 +62,9 @@ export const createContent = async (data: IPutPostDTO) => {
 };
 
 export const updateContent = async (
-  postId: string,
+  postId: string | undefined,
   data: IPutPostDTO,
-  viewerId: string
+  viewerId: string | undefined
 ) => {
   const response = await fetch(
     BASE_API_URL + `/content/post/${postId}?viewerId=${viewerId}`,
@@ -101,9 +101,9 @@ export const createMeetupContent = async (data: IPutMeetupDTO) => {
 };
 
 export const updateMeetupContent = async (
-  postId: string,
+  postId: string | undefined,
   data: IPutMeetupDTO,
-  viewerId: string
+  viewerId: string | undefined
 ) => {
   const response = await fetch(
     BASE_API_URL + `/content/meetup/${postId}?viewerId=${viewerId}`,
@@ -140,9 +140,9 @@ export const createPodcastContent = async (data: IPutPodcastDTO) => {
 };
 
 export const updatePodcastContent = async (
-  postId: string,
+  postId: string | undefined,
   data: IPutPodcastDTO,
-  viewerId: string
+  viewerId: string | undefined
 ) => {
   const response = await fetch(
     BASE_API_URL + `/content/podcast/${postId}?viewerId=${viewerId}`,

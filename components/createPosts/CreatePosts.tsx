@@ -68,8 +68,8 @@ type ContentProps = {
   allGroups?: ISelectGroup[];
   allTags?: ITags[];
   editType?: string;
-  editPost: IContentDTO;
-  viewerId: string;
+  editPost?: IContentDTO;
+  viewerId?: string;
 };
 
 const CreatePosts = ({ authorId, editPost, viewerId }: ContentProps) => {
@@ -87,7 +87,11 @@ const CreatePosts = ({ authorId, editPost, viewerId }: ContentProps) => {
   const router = useRouter();
 
   const resetForm = () => {
-    if (editPost) router.push(`/content/${editPost.id}`);
+    if (editPost) {
+      router.push(`/content/${editPost.id}`);
+    } else {
+      router.push('/posts');
+    }
     form.reset();
     form.setValue('groupId', {
       value: '',
@@ -134,7 +138,7 @@ const CreatePosts = ({ authorId, editPost, viewerId }: ContentProps) => {
 
   const { mutateAsync: updateMeetupMutation } = useMutation({
     mutationFn: async (data: IPutMeetupDTO) => {
-      await updateMeetupContent(editPost.id, data, viewerId);
+      await updateMeetupContent(editPost?.id, data, viewerId);
     },
   });
 
@@ -146,7 +150,7 @@ const CreatePosts = ({ authorId, editPost, viewerId }: ContentProps) => {
 
   const { mutateAsync: updatePodcastMutation } = useMutation({
     mutationFn: async (data: IPutPodcastDTO) => {
-      await updatePodcastContent(editPost.id, data, viewerId);
+      await updatePodcastContent(editPost?.id, data, viewerId);
     },
   });
 
@@ -189,8 +193,6 @@ const CreatePosts = ({ authorId, editPost, viewerId }: ContentProps) => {
 
   const watchPostType = form.watch('type');
   const watchCoverImage = form.watch('coverImage');
-
-  console.log(form.formState.errors);
 
   const onSubmit = async () => {
     const commonData: IPutPostDTO = {
@@ -301,6 +303,8 @@ const CreatePosts = ({ authorId, editPost, viewerId }: ContentProps) => {
       router.push(`/content/${editPost.id}`);
     } else {
     }
+
+    router.push('/posts');
   };
 
   const handlePreview = () => {
@@ -335,8 +339,10 @@ const CreatePosts = ({ authorId, editPost, viewerId }: ContentProps) => {
                       {...field}
                       className={`flex w-full md:w-1/4 ${form.formState.errors.groupId ? '!mt-2' : '!mt-6'} capitalize border dark:border-black-700/50 rounded-md px-2 items-center h-12 bg-white-100 dark:bg-black-800 md:justify-center outline-none`}
                       aria-label="Food">
-                      <p className=" p3-regular dark:!text-white-400">Create</p>
-                      <span className="mx-1 dark:text-white-100/70 text-black-800/60 ">
+                      <p className="w-1/6 md:w-1/2 p3-regular dark:!text-white-400">
+                        Create
+                      </p>
+                      <span className="mr-1 dark:text-white-100/70 text-black-800/60 ">
                         -
                       </span>
                       <p
@@ -364,7 +370,7 @@ const CreatePosts = ({ authorId, editPost, viewerId }: ContentProps) => {
                               {postTypes.map((type, idx) => (
                                 <div
                                   key={idx}
-                                  className="flex  dark:hover:bg-black-700 px-3 py-1 rounded-md">
+                                  className="flex hover:bg-white-300/30 cursor-pointer dark:hover:bg-black-700 px-3 py-1 rounded-md">
                                   <Image
                                     src={type.image}
                                     alt={type.title}
@@ -421,10 +427,10 @@ const CreatePosts = ({ authorId, editPost, viewerId }: ContentProps) => {
                             dropdownIndicator: () =>
                               '!text-white-400 !w-10 !h-10',
                             option: () =>
-                              '!bg-white-100  !py-[18px]  dark:!bg-black-800  dark:!text-white-100 !text-black-800',
+                              '!bg-white-100 hover:!bg-white-300/30 hover:dark:!bg-white-300/20 rounded-md dark:!bg-black-800  dark:!text-white-100 !text-black-800',
                             singleValue: () => 'dark:!text-white-100',
                             menu: () =>
-                              'bg-white-100 dark:bg-black-800 !shadow-sm ',
+                              'bg-white-100 dark:bg-black-800 !shadow-sm  p-2 rounded-md',
                           }}
                           className="w-full h-full !mt-0 rounded-md dark:!bg-black-800 border dark:border-black-700/50 "
                           isLoading={isLoading}
@@ -500,14 +506,14 @@ const CreatePosts = ({ authorId, editPost, viewerId }: ContentProps) => {
                                   open();
                                 }}
                                 type="button"
-                                className="flex items-center max-w-[200px] dark:bg-black-800 py-2 rounded-lg bg-white-100 gap-3 mb-3">
+                                className="flex items-center max-w-[200px] hover:bg-white-300/30 hover:dark:bg-black-700 dark:bg-black-800 py-2 rounded-lg bg-white-100 gap-3 mb-3">
                                 <Image
                                   src={'/assets/icons/upload-icon.svg'}
                                   alt="upload"
                                   width={16}
                                   height={16}
                                 />
-                                <p className="p3-regular !text-white-300">
+                                <p className="p3-regular  !text-white-300">
                                   Upload a cover image
                                 </p>
                               </Button>
@@ -662,21 +668,32 @@ const CreatePosts = ({ authorId, editPost, viewerId }: ContentProps) => {
                       value={field.value}
                       onEditorChange={(content) => field.onChange(content)}
                       init={{
-                        skin: 'oxide-dark',
+                        skin: mode === 'dark' ? 'oxide-dark' : 'oxide',
                         icons: 'thin',
                         toolbar_location: 'top',
                         content_css: 'dark',
-                        content_style: `
-                   body { font-family: Roboto, sans-serif; font-size: 14px; color: #808191;  ${
-                     mode === 'dark'
-                       ? 'background-color: #262935;'
-                       : 'background-color: #ffff;'
-                   } }
-                   }} body::-webkit-scrollbar   
-                      tox-editor-header { background-color: #f8f8f8; } {display: none; }pre, code { font-family: "Roboto Mono", monospace; background-color: transparent !important;  padding: 5px; } body::before { color: #808191 !important; } h2 {color: #ffff!important}
-                   h2 {color: #ffff!important}
-                  }
-                   `,
+                        content_style: `body {
+                           font-family: Roboto, sans-serif;
+                           font-size: 14px;
+                           color: #808191;
+                           ${mode === 'dark' ? 'background-color: #262935;' : 'background-color: #ffff;'}!important;
+                          }
+                           color: #808191 !important;}
+                                              
+                         body::-webkit-scrollbar {
+                           display: none;
+                         }
+                         pre, code {
+                           font-family: "Roboto Mono", monospace;
+                           background-color: transparent !important;
+                           padding: 5px;
+                         }
+                         body::before {
+                           color: #808191 !important;
+                         }
+                         h2 {
+                           color: ${mode === 'dark' ? '#fff' : '#000'} !important;
+                         }`,
                         menubar: false,
                         plugins: 'code codesample link preview image',
                         toolbar:
@@ -815,14 +832,15 @@ export default CreatePosts;
 const Option = (props: any) => {
   return (
     <components.Option {...props}>
-      <div className="flex items-center">
+      <div className="flex items-center gap-2 cursor-pointer">
         <Image
           src={props.data.profileImage || '/assets/icons/bootstrap.svg'}
           alt="frame"
           width={34}
           height={34}
+          className="rounded-md"
         />
-        <div className="flex flex-col ml-2">
+        <div className="flex flex-col ml-2 ">
           <p className="p4-medium">{props.data.label}</p>
           <p className="text-[11px] text-white-400">
             {props.data.bio || 'No bio available'}
