@@ -10,9 +10,9 @@ import { EQueryType } from '@/types/queries';
 import type { IProfileUser } from '@/types/user';
 import { calculateTimeAgo } from '@/utils/format';
 import BadgeItem from '../shared/BadgeItem';
-import ContentList from '../shared/ContentList';
 import ContentNavLinks from '../shared/ContentNavLinks';
 import SidebarContentCard from '../shared/RightSidebarItems/SidebarContentCard';
+import ContentList from './ContentList';
 
 // ----------------------------------------------------------------
 

@@ -12,34 +12,6 @@ import SidebarContentCard from '../shared/RightSidebarItems/SidebarContentCard';
 import SortAndFilter from '../shared/SortAndFilter';
 import ContentList from './ContentList';
 
-const TAG_ITEMS = [
-  {
-    id: '1',
-    title: 'javascript',
-    postCount: 825,
-  },
-  {
-    id: '2',
-    title: 'nesto',
-    postCount: 825,
-  },
-  {
-    id: '3',
-    title: 'broj3',
-    postCount: 825,
-  },
-  {
-    id: '4',
-    title: '4',
-    postCount: 825,
-  },
-  {
-    id: '5',
-    title: '5',
-    postCount: 825,
-  },
-];
-
 interface IMeetupsHomeProps {
   selectedTag: string;
   meetupsData: IContentPagesResponse;

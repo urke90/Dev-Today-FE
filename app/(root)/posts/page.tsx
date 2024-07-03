@@ -33,9 +33,12 @@ const PostsPage: React.FC<IPostsPageProps> = async ({ searchParams }) => {
   if (!postsData)
     throw new Error("Something went wrong, can't show posts at the moment!");
 
+  console.log('postsData', postsData);
+
   const sidebarData = await typedFetch<IContentPagesSidebarResponse>({
-    url: '/content/stats?meetups=true&podcasts=true',
+    url: `/content/stats?meetups=true&podcasts=true&viewerId=${session.user.id}`,
   });
+
   if (!sidebarData)
     throw new Error("Something went wrong, can't show posts at the moment!");
 

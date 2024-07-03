@@ -7,7 +7,7 @@ import type {
   IHomePageGroupsResponse,
 } from '@/types/group';
 import { ESortByFilter } from '@/types/queries';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import GroupItemCard from '../shared/GroupItemCard';
@@ -33,6 +33,7 @@ const GroupsHome: React.FC<IGroupsHomeProps> = ({
   viewerId,
   sortBy,
 }) => {
+  const queryClient = useQueryClient();
   const [page, setPage] = useState(1);
 
   const { data } = useQuery<IHomePageGroupsResponse>({
@@ -44,6 +45,11 @@ const GroupsHome: React.FC<IGroupsHomeProps> = ({
 
   useEffect(() => {
     setPage(1);
+
+    queryClient.setQueryData(
+      [EContentGroupQueries.FETCH_GROUPS, 1],
+      groupsData
+    );
   }, [sortBy]);
 
   return (
