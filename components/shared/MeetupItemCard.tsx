@@ -6,6 +6,7 @@ import BadgeItem from './BadgeItem';
 
 import type { ITag } from '@/types/content';
 import { parseDate } from '@/utils/format';
+import parse from 'html-react-parser';
 
 // ----------------------------------------------------------------
 
@@ -58,8 +59,8 @@ const MeetupItemCard: React.FC<IMeetupItemCardProps> = ({
             <span className="p2-bold md:d2-bold !text-primary-500">{day}</span>
           </div>
         </div>
-        <div>
-          <p className="p4-regular md:p3-regular line-clamp-2">{description}</p>
+        <div className="p4-regular md:p3-regular line-clamp-2">
+          {parse(description)}
         </div>
         {tags?.length > 0 ? (
           <ul className="flex gap-2.5 flex-wrap">

@@ -7,6 +7,7 @@ import { Button } from '../ui/button';
 
 import type { ITag } from '@/types/content';
 import { calculateTimeAgo } from '@/utils/format';
+import parse from 'html-react-parser';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -65,9 +66,9 @@ const PodcastItemCard: React.FC<IPodcastItemCardProps> = ({
             />
           </Button>
         </div>
-        <p className="p4-regular lg:p3-regular line-clamp-3 lg:line-clamp-4">
-          {description}
-        </p>
+        <div className="p4-regular lg:p3-regular line-clamp-3 lg:line-clamp-4">
+          {parse(description)}
+        </div>
         {tags?.length > 0 ? (
           <ul className="flex gap-2.5 flex-wrap">
             {tags.map(({ id, title }) => (

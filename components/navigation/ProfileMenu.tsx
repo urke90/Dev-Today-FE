@@ -14,6 +14,7 @@ import Image from 'next/image';
 
 import { CLOUDINARY_URL } from '@/constants';
 import { useTheme } from '@/context/ThemeProvider';
+import Link from 'next/link';
 
 interface IProfileMenuProps {}
 
@@ -40,7 +41,7 @@ const ProfileMenu: React.FC<IProfileMenuProps> = (props) => {
               src={profileImage || '/assets/icons/image-preview.svg'}
               alt="avatar"
               fill
-              className="ring-primary-500 ring-offset-white-100 dark:ring-offset-black-800 rounded-lg ring-1 ring-offset-[3px] bg-primary-100 dark:bg-primary-500"
+              className="ring-primary-500 ring-offset-white-100 dark:ring-offset-black-800 rounded-lg ring-1 ring-offset-[3px]"
             />
           </div>
           <span className="p2-medium max-md:hidden">{session?.user.name}</span>
@@ -54,10 +55,10 @@ const ProfileMenu: React.FC<IProfileMenuProps> = (props) => {
           className="bg-light100__dark800 shadow-header-menu border-white-border data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade dark:border-black-700 z-20 mt-7 flex min-w-44 flex-col gap-5 rounded-[14px] border p-5 max-lg:mt-6"
         >
           <DropdownMenu.Item className="p3-medium">
-            <Button className="justify-start gap-2.5">
+            <Link href="/profile" className="flex items-center gap-2.5">
               <ProfileIcon />
               Profile
-            </Button>
+            </Link>
           </DropdownMenu.Item>
           <DropdownMenu.Item className="p3-medium gap-2.5">
             <Button
