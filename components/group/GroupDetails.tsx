@@ -102,8 +102,7 @@ const GroupDetails: React.FC<IGroupDetailsProps> = ({
       <main className="main-content gap-5  mx-auto">
         <div className="flex flex-col gap-2.5 bg-light100__dark800 py-4 px-2.5 md:py-2.5 rounded-2xl shadow-card">
           <div
-            className={`relative w-full h-24 md:h-44 ${!group.coverImage ? 'flex-center bg-primary-100 dark:bg-black-700 rounded-[10px]' : ''}`}
-          >
+            className={`relative w-full h-24 md:h-44 ${!group.coverImage ? 'flex-center bg-primary-100 dark:bg-black-700 rounded-[10px]' : ''}`}>
             {group.coverImage ? (
               <Image
                 fill
@@ -188,8 +187,7 @@ const GroupDetails: React.FC<IGroupDetailsProps> = ({
               group.members.map(({ avatarImg, id, userName }, index) => (
                 <li
                   key={id}
-                  className="flex-center relative bg-white-600 size-10 rounded-full"
-                >
+                  className="flex-center relative bg-white-600 size-10 rounded-full">
                   <Image
                     src={avatarImg || '/assets/images/avatars/avatar-1.svg'}
                     width={28}

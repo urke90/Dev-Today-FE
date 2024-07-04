@@ -45,8 +45,7 @@ const SortAndFilter: React.FC<ISortAndFilterProps> = ({
       <div className="flex md:flex-col gap-2.5">
         <Link
           href={pathname + '?' + handleUpdateFilter(ESortByFilter.RECENT)}
-          className={`flex items-center gap-2.5 rounded-md py-1 px-[5px] md:py-1.5 hover-sidebar-items cursor-pointer ${sortBy === ESortByFilter.RECENT ? activeClassName : ''}`}
-        >
+          className={`flex items-center gap-2.5 rounded-md py-1 px-[5px] md:py-1.5 hover-sidebar-items cursor-pointer ${sortBy === ESortByFilter.RECENT ? activeClassName : ''}`}>
           <NewIcon className="text-white-200 dark:text-black-700" />
           <p className="p4-medium">
             Newest <span className="max-md:hidden">and Recent</span>
@@ -54,24 +53,21 @@ const SortAndFilter: React.FC<ISortAndFilterProps> = ({
         </Link>
         <Link
           href={pathname + '?' + handleUpdateFilter(ESortByFilter.POPULAR)}
-          className={`flex items-center gap-2.5 rounded-md py-1 px-[5px] md:py-1.5 hover-sidebar-items cursor-pointer ${sortBy === ESortByFilter.POPULAR ? activeClassName : ''}`}
-        >
+          className={`flex items-center gap-2.5 rounded-md py-1 px-[5px] md:py-1.5 hover-sidebar-items cursor-pointer ${sortBy === ESortByFilter.POPULAR ? activeClassName : ''}`}>
           <PopularIcon className="text-white-200 dark:text-black-700" />
           <p className="p4-medium">Popular</p>
         </Link>
         {isGroupPage ? (
           <Link
             href={pathname + '?' + handleUpdateFilter(ESortByFilter.JOINED)}
-            className={`flex items-center gap-2.5 rounded-md py-1 px-[5px] md:py-1.5 hover-sidebar-items cursor-pointer ${sortBy === ESortByFilter.JOINED ? activeClassName : ''}`}
-          >
+            className={`flex items-center gap-2.5 rounded-md py-1 px-[5px] md:py-1.5 hover-sidebar-items cursor-pointer ${sortBy === ESortByFilter.JOINED ? activeClassName : ''}`}>
             <FollowIcon className="text-white-200 dark:text-black-700" />
             <p className="p4-medium">Joined groups</p>
           </Link>
         ) : (
           <Link
             href={pathname + '?' + handleUpdateFilter(ESortByFilter.FOLLOWING)}
-            className={`flex-between rounded-md py-1 px-[5px] md:py-1.5 hover:dark:bg-black-700 hover:bg-[#F8FAFC] transition-colors cursor-pointer ${sortBy === ESortByFilter.FOLLOWING ? activeClassName : ''}`}
-          >
+            className={`flex-between rounded-md py-1 px-[5px] md:py-1.5 hover:dark:bg-black-700 hover:bg-[#F8FAFC] transition-colors cursor-pointer ${sortBy === ESortByFilter.FOLLOWING ? activeClassName : ''}`}>
             <div className="flex items-center gap-2.5">
               <FollowIcon className="text-white-200 dark:text-black-700" />
               <p className="p4-medium">Following</p>
