@@ -72,11 +72,9 @@ const SortAndFilter: React.FC<ISortAndFilterProps> = ({
               <FollowIcon className="text-white-200 dark:text-black-700" />
               <p className="p4-medium">Following</p>
             </div>
-            {followingCount && (
-              <div className="bg-primary-500 rounded py-[3px] px-1.5 text-white-100 font-semibold text-[9px] flex-center max-md:hidden">
-                {followingCount}
-              </div>
-            )}
+            <div className="bg-primary-500 rounded py-[3px] px-1.5 text-white-100 font-semibold text-[9px] flex-center max-md:hidden">
+              {followingCount}
+            </div>
           </Link>
         )}
       </div>

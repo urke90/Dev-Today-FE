@@ -11,6 +11,8 @@ import Link from 'next/link';
 import type { ITag } from '@/types/content';
 import { calculateTimeAgo, formatNumberWithCommas } from '@/utils/format';
 
+import parse from 'html-react-parser';
+
 // ----------------------------------------------------------------
 
 interface IPostItemCardProps {
@@ -21,9 +23,9 @@ interface IPostItemCardProps {
   tags: ITag[];
   createdAt: Date;
   author: string;
-  viewsCount?: number | null;
-  likesCount?: number | null;
-  commentsCount?: number | null;
+  viewsCount: number | null;
+  likesCount: number | null;
+  commentsCount: number | null;
   isLiked: boolean;
   handleLikeContent: (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -71,7 +73,9 @@ const PostItemCard: React.FC<IPostItemCardProps> = ({
               />
               <div>
                 <p className="p1-bold mb-2">{title}</p>
-                <p className="p3-regular line-clamp-1">{description}</p>
+                <div className="p3-regular line-clamp-1">
+                  {parse(description)}
+                </div>
               </div>
             </div>
             <Button

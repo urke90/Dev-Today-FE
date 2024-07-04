@@ -5,6 +5,7 @@ import { Button } from '../ui/button';
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useState } from 'react';
 import toast from 'react-hot-toast';
 
 // ----------------------------------------------------------------
@@ -23,6 +24,7 @@ const ProfileSidebarInfo: React.FC<IProfileSidebarInfoProps> = ({
   viewerId,
 }) => {
   const pathname = usePathname();
+  const [isFollowingUser, setIsFollowingUser] = useState(isFollowing);
 
   const handleFollowUser = async () => {
     try {
@@ -33,7 +35,13 @@ const ProfileSidebarInfo: React.FC<IProfileSidebarInfoProps> = ({
           userId: viewerId,
         },
       });
-      console.log('response', response);
+      toast.success(
+        isFollowingUser
+          ? 'User unfollowed successfully.'
+          : 'User followed successfully.'
+      );
+
+      setIsFollowingUser((prevFollowing) => !prevFollowing);
     } catch (error) {
       console.log('Error following/unfollowing user', error);
       toast.error('Ooops, something went wrong!');
@@ -51,7 +59,7 @@ const ProfileSidebarInfo: React.FC<IProfileSidebarInfoProps> = ({
         </Link>
       ) : (
         <Button variant="primary" onClick={handleFollowUser}>
-          {isFollowing ? 'Following' : 'Follow'}
+          {isFollowingUser ? 'Following' : 'Follow'}
         </Button>
       )}
     </>
