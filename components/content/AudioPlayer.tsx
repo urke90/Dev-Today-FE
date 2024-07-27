@@ -1,25 +1,28 @@
 import * as Progress from '@radix-ui/react-progress';
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
+import PauseIcon from '../icons/Pause';
 import { Button } from '../ui/button';
 
-type AudioPlayerProps = {
+// ----------------------------------------------------------------
+
+interface IAudioPlayerProps {
   audioSrc: string;
   coverImage?: string;
   title?: string;
   audioTitle?: string;
-};
+}
 
-const AudioPlayer = ({
+const AudioPlayer: React.FC<IAudioPlayerProps> = ({
   audioSrc,
   coverImage,
   title,
   audioTitle,
-}: AudioPlayerProps) => {
+}) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [duration, setDuration] = useState(audioSrc ? 0 : 1);
   const [currentTime, setCurrentTime] = useState(0);
-  const audioRef = useRef<HTMLAudioElement>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const togglePlay = () => {
     if (audioRef.current) {
@@ -28,7 +31,7 @@ const AudioPlayer = ({
       } else {
         audioRef.current.play();
       }
-      setIsPlaying(!isPlaying);
+      setIsPlaying((prevIsPlaying) => !prevIsPlaying);
     }
   };
 
@@ -60,7 +63,8 @@ const AudioPlayer = ({
     <div className="flex flex-row sm:py-10 gap-6 md:gap-12 items-start md:items-center p-4 bg-white-200 dark:bg-black-800 rounded-lg shadow-md">
       <div className="flex justify-start xs:ml-5 md:ml-0 relative space-x-4 w-2/5">
         <div
-          className={`z-10 rounded-lg relative top-2 md:top-0 size-12 xs:size-16 sm:size-20 md:size-28 lg:size-36 ${isPlaying && audioSrc && 'animate-bounce'}`}>
+          className={`z-10 rounded-lg relative top-2 md:top-0 size-12 xs:size-16 sm:size-20 md:size-28 lg:size-36 ${isPlaying && audioSrc && 'animate-bounce'}`}
+        >
           <Image
             src={coverImage || '/assets/images/post-example.svg'}
             alt="avatar"
@@ -89,7 +93,8 @@ const AudioPlayer = ({
             <Progress.Root
               value={progress}
               max={100}
-              className="relative h-2 w-2/3 md:w-4/5 bg-white-300/40 dark:bg-black-700 rounded-lg">
+              className="relative h-2 w-2/3 md:w-4/5 bg-white-300/40 dark:bg-black-700 rounded-lg"
+            >
               <Progress.Indicator
                 className={`h-full ${isPlaying && audioSrc ? 'bg-primary-500' : 'dark:bg-black-700'} rounded-lg`}
                 style={{ width: `${progress}%` }}
@@ -98,30 +103,26 @@ const AudioPlayer = ({
             <audio
               ref={audioRef}
               src={audioSrc}
-              className="absolute inset-0 opacity-0"></audio>
-            <span className="md:text-[14px] !text-[10px] text-gray-600 dark:text-gray-400">
+              className="absolute inset-0 opacity-0"
+            ></audio>
+            <span className="md:text-sm !text-[10px] text-gray-600 dark:text-gray-400">
               {formatTime(currentTime)}
             </span>
             <span className="text-white-400">|</span>
-            <span className="md:text-[14px] !text-[10px] text-gray-600 dark:text-gray-400">
+            <span className="md:text-sm !text-[10px] text-gray-600 dark:text-gray-400">
               {formatTime(duration)}
             </span>
           </div>
           <Button
             type="button"
             onClick={togglePlay}
-            className="flex !w-full mt-4 md:!w-28 bg-primary-500 !text-[14px] !text-white-100 hover:bg-purple-600 duration-300 text-white py-2 px-4 rounded-lg">
+            className="flex w-full mt-4 md:!w-28 bg-primary-500 text-sm !text-white-100 hover:bg-purple-600 duration-300 text-white py-2 px-4 rounded-lg"
+          >
             {isPlaying ? (
-              <Image
-                src={'/assets/icons/pause.svg'}
-                alt="pause"
-                width={14}
-                height={14}
-                className="!transform !rotate-180 invert"
-              />
+              <PauseIcon />
             ) : (
               <Image
-                src={'/assets/icons/play.svg'}
+                src="/assets/icons/play.svg"
                 alt="play"
                 width={14}
                 height={14}

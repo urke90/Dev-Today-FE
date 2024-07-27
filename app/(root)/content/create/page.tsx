@@ -1,18 +1,18 @@
 import { auth } from '@/app/api/auth/[...nextauth]/route';
-import CreatePosts from '@/components/createPosts/CreatePosts';
+import CreateContent from '@/components/content/CreateContent';
 
-const Create = async () => {
+// ----------------------------------------------------------------
+
+const CreateContentPage = async () => {
   const session = await auth();
 
-  if (!session) throw new Error(' User data not available!');
-
-  const authorId = session.user.id;
+  if (!session) throw new Error('User data not available!');
 
   return (
-    <div className="content-wrapper max-w-[900px]">
-      <CreatePosts authorId={authorId} />
+    <div className="create-page-wrapper pb-10">
+      <CreateContent authorId={session.user.id} />
     </div>
   );
 };
 
-export default Create;
+export default CreateContentPage;

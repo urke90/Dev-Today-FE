@@ -2,13 +2,11 @@
 import CloseIcon from '@/components/icons/CloseIcon';
 import { style } from '@/styles';
 import * as Dialog from '@radix-ui/react-dialog';
-import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { ShareSocial } from 'react-share-social';
+import ShareIcon from '../icons/Share';
 
-type Props = {};
-
-const SharePost = (props: Props) => {
+const ShareContent = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [url, setUrl] = useState('');
 
@@ -20,14 +18,8 @@ const SharePost = (props: Props) => {
   return (
     <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
       <Dialog.Trigger asChild>
-        <div className="flex items-center dark:bg-black-800 hover:dark:bg-black-700 bg-white-100 hover:bg-white-300/30 py-2 rounded justify-center gap-1 cursor-pointer">
-          <Image
-            src="/assets/icons/share.svg"
-            width={25}
-            height={25}
-            alt="share post"
-            className="relative p-1 invert dark:invert-0"
-          />
+        <div className="flex-center shadow-card transition-colors dark:bg-black-800 hover:dark:bg-black-700 bg-white-100 hover:bg-white-400/30 py-2 rounded gap-2 cursor-pointer">
+          <ShareIcon className="dark:text-white-300 text-black-700" />
           <p className="p3-medium">Share with</p>
         </div>
       </Dialog.Trigger>
@@ -51,4 +43,4 @@ const SharePost = (props: Props) => {
   );
 };
 
-export default SharePost;
+export default ShareContent;

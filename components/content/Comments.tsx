@@ -23,17 +23,19 @@ import { EditIcon } from 'lucide-react';
 import { useState } from 'react';
 import RCommentForm from '../RHFInputs/RCommentForm';
 
-type AllCommentProps = {
-  allComments: IComment[];
+// ----------------------------------------------------------------
+
+interface ICommentsProps {
+  comments: IComment[];
   commentAuthorId: string;
   contentId: string;
-};
+}
 
-const Comments = ({
-  allComments,
+const Comments: React.FC<ICommentsProps> = ({
+  comments,
   commentAuthorId,
   contentId,
-}: AllCommentProps) => {
+}) => {
   const [editComment, setEditComment] = useState<string | null>(null);
   const [replyingComment, setReplyingComment] = useState<string | null>(null);
 
@@ -134,7 +136,7 @@ const Comments = ({
         </Form>
       </div>
 
-      {allComments.map((comment) => (
+      {comments.map((comment) => (
         <>
           {editComment === comment.id ? (
             <RCommentForm

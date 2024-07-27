@@ -1,43 +1,33 @@
 import { auth } from '@/app/api/auth/[...nextauth]/route';
-import CreatePosts from '@/components/createPosts/CreatePosts';
-import { IContentDTO } from '@/lib/validation';
-import { ISelectGroup } from '@/types/group';
+import CreateContent from '@/components/content/CreateContent';
+import type { IContentDTO } from '@/lib/validation';
 import { typedFetch } from '@/utils/api';
 
-type Props = {
+// ----------------------------------------------------------------
+
+interface IEditPostPageProps {
   params: {
     id: string;
   };
-};
+}
 
-const EditPost = async ({ params }: Props) => {
+const EditPostPage: React.FC<IEditPostPageProps> = async ({ params }) => {
   const session = await auth();
 
   if (!session) throw new Error(' User data not available!');
 
-  const contentId = params.id;
-
-  const allGroups = await typedFetch<ISelectGroup[]>({
-    url: `/groups`,
-    cache: 'no-cache',
-  });
-  if (!allGroups) throw new Error('Groups not available!');
-  const editPost = await typedFetch<IContentDTO>({
-    url: `/content/${contentId}`,
+  const content = await typedFetch<IContentDTO>({
+    url: `/content/${params.id}`,
     cache: 'no-cache',
   });
 
-  if (!editPost) throw new Error('Post not available!');
+  if (!content) throw new Error('Post not available!');
 
   return (
-    <div className="content-wrapper max-w-[900px]">
-      <CreatePosts
-        editPost={editPost}
-        viewerId={session.user.id}
-        allGroups={allGroups}
-      />
+    <div className="create-page-wrapper pb-10">
+      <CreateContent content={content} viewerId={session.user.id} />
     </div>
   );
 };
 
-export default EditPost;
+export default EditPostPage;

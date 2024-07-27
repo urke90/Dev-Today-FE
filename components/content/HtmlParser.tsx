@@ -26,14 +26,19 @@ import 'prismjs/components/prism-typescript';
 import 'prismjs/plugins/line-numbers/prism-line-numbers.css';
 import 'prismjs/plugins/line-numbers/prism-line-numbers.js';
 
-type Props = {
+// ----------------------------------------------------------------
+
+interface IHtmlParserProps {
   data: string;
-};
-const ParseHtml = ({ data }: Props) => {
+}
+
+const HtmlParser: React.FC<IHtmlParserProps> = ({ data }) => {
   useEffect(() => {
     Prism.highlightAll();
   }, []);
+
   const stringData = typeof data === 'string' ? data : String(data);
+
   return (
     <div className={'markdown w-full min-w-full dark:text-white-200'}>
       {parse(stringData)}
@@ -41,4 +46,4 @@ const ParseHtml = ({ data }: Props) => {
   );
 };
 
-export default ParseHtml;
+export default HtmlParser;

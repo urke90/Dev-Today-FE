@@ -1,5 +1,10 @@
 import { EContentType } from '@/types/content';
-import * as z from 'zod';
+import z from 'zod';
+
+// ----------------------------------------------------------------
+
+/******************************************************** USER, ONBOARDING, ETC *******************************************************/
+
 export const signInSchema = z.object({
   userName: z.string().min(3).max(20),
   email: z.string().email(),
@@ -42,60 +47,6 @@ export const profileSchema = z.object({
   following: z.number().optional(),
 });
 
-export const postSchema = z.object({
-  id: z.string(),
-  authorId: z.string(),
-  title: z.string().min(3).max(100),
-  type: z.nativeEnum(EContentType),
-  groupId: z.object({
-    value: z.string().min(1),
-    label: z.string().min(1),
-  }),
-  coverImage: z.string().optional(),
-  description: z.string().min(30),
-  tags: z
-    .array(
-      z.object({
-        label: z.string().min(1).max(20, ' Tag must be max 20 characters long'),
-        value: z.string().min(1),
-      })
-    )
-    .max(5),
-  group: z.object({
-    id: z.string(),
-    bio: z.string(),
-    name: z.string(),
-    coverImage: z.string(),
-  }),
-});
-
-export type IPost = z.infer<typeof postSchema>;
-
-export type IMeetup = z.infer<typeof meetupSchema>;
-
-export const meetupSchema = postSchema.extend({
-  meetupLocation: z.string().min(3),
-  meetupDate: z.coerce.date(),
-});
-
-export type IPodcast = z.infer<typeof podcastSchema>;
-
-export const podcastSchema = postSchema.extend({
-  podcastFile: z.string().min(3),
-  podcastTitle: z.string().min(3),
-});
-
-export const updateContentDTO = postSchema.omit({
-  authorId: true,
-  type: true,
-  groupId: true,
-});
-
-export const updateMeetupDTO = updateContentDTO.merge(meetupSchema);
-export const updatePodcastDTO = updateContentDTO.merge(podcastSchema);
-
-export type IUpdateContentDTO = z.infer<typeof updateContentDTO>;
-
 const preferredSkillsSchema = z.object({
   value: z.string().trim().min(1, 'Tag must be at least 2 characters long!'),
   label: z.string().trim().min(1, 'Tag must be at least 2 characters long!'),
@@ -123,6 +74,68 @@ export const updateProfileSchema = z.object({
   twitterName: z.string().optional(),
   twitterLink: z.string().url().optional().or(z.literal('')),
 });
+
+/******************************************************** USER, ONBOARDING, ETC *******************************************************/
+
+/************************************************************* CONTENT *****************************************************************/
+
+export const baseContentSchema = z.object({
+  id: z.string(),
+  authorId: z.string(),
+  title: z.string().min(3).max(100),
+  type: z.nativeEnum(EContentType),
+  groupId: z.object({
+    value: z.string().min(1),
+    label: z.string().min(1),
+  }),
+  coverImage: z.string().url().nullable(),
+  description: z.string().min(30),
+  tags: z
+    .array(
+      z.object({
+        label: z.string().min(1).max(20, 'Tag must be max 20 characters long'),
+        value: z.string().min(1),
+      })
+    )
+    .max(5),
+  group: z.object({
+    id: z.string(),
+    bio: z.string(),
+    name: z.string(),
+    coverImage: z.string(),
+  }),
+});
+
+export const postSchema = baseContentSchema.extend({});
+
+export type IPost = z.infer<typeof postSchema>;
+
+export const meetupSchema = baseContentSchema.extend({
+  meetupLocation: z.string().min(3),
+  meetupDate: z.coerce.date(),
+});
+
+export type IMeetup = z.infer<typeof meetupSchema>;
+
+export const podcastSchema = baseContentSchema.extend({
+  podcastFile: z.string().min(3),
+  podcastTitle: z.string().min(3),
+});
+
+export type IPodcast = z.infer<typeof podcastSchema>;
+
+export type IContent = IPost & IMeetup & IPodcast;
+
+export const updateContentDTO = postSchema.omit({
+  authorId: true,
+  type: true,
+  groupId: true,
+});
+
+export const updateMeetupSchemaDTO = updateContentDTO.merge(meetupSchema);
+export const updatePodcastSchemaDTO = updateContentDTO.merge(podcastSchema);
+
+export type IUpdateContentDTO = z.infer<typeof updateContentDTO>;
 
 export const createGroupSchema = z.object({
   authorId: z.string(),
@@ -159,7 +172,6 @@ export const updateGroupSchema = z.object({
   updatedAt: z.date(),
 });
 
-export type IContent = IPost & IMeetup & IPodcast;
 export type IContentDTO = Omit<IContent, 'tags' | 'groupId'> & {
   groupId: string;
   tags: {
@@ -242,3 +254,5 @@ export const editAndReplyCommentSchema = z.object({
 });
 
 export type IComment = z.infer<typeof baseCommentSchema>;
+
+/************************************************************* CONTENT *****************************************************************/
