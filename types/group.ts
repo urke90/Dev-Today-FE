@@ -11,7 +11,7 @@ export enum EGroupContentTypes {
 export interface IGroup {
   id: string;
   name: string;
-  // type: EContentType;
+
   coverImage: string;
   profileImage: string;
   contents: IContent[];
@@ -19,15 +19,6 @@ export interface IGroup {
   bio: string;
   createdAt: string | null;
   updatedAt: string | null;
-  // TODO: ostaviti grupu cistu datu bez nestovanih tabela i posle samo extend Interfaces ili Types
-  // _count: {
-  //   members?: number;
-  //   contents?: number;
-  // };
-  // members: {
-  //   id: string;
-  //   avatarImg?: string;
-  // }[];
 }
 
 export interface IGroupWithCount extends IGroup {
@@ -61,7 +52,6 @@ export interface IHomePageGroupsResponse {
   groups: IGroupsHomePageGroup[];
   totalPages: number;
   hasNextPage: boolean;
-  hasPrevPage: boolean;
 }
 
 export interface IProfilePageGroupsResponse {
@@ -115,6 +105,12 @@ export interface IGroupMember {
   id: string;
   avatarImg: string;
   userName: string;
+}
+
+export interface IGroupsResponse {
+  groups: IGroup[];
+  hasNextPage: boolean;
+  totalPages: number;
 }
 
 export interface ISelectGroup {

@@ -1,30 +1,33 @@
 'use client';
 
+import type { IContent } from '@/lib/validation';
 import { EContentType } from '@/types/content';
 import Image from 'next/image';
-import ParseHtml from '../ParseHtml/ParseHtml';
-import AudioPlayer from '../audioPlayer/AudioPlayer';
+import ArrowLeftIcon from '../icons/ArrowLeft';
+import AudioPlayer from './AudioPlayer';
+import HtmlParser from './HtmlParser';
 
-type PreviewProps = {
-  setIsPreview: (value: boolean) => void;
+// ----------------------------------------------------------------
+
+interface IPreviewContentProps {
+  setIsPreviewMode: (value: boolean) => void;
   type: string;
-  data: any;
-};
+  data: IContent;
+}
+
 type TagProps = {
   label: string;
 };
 
-const Preview = ({ setIsPreview, type, data }: PreviewProps) => {
+const PreviewContent: React.FC<IPreviewContentProps> = ({
+  setIsPreviewMode,
+  type,
+  data,
+}) => {
   return (
     <section className="space-y-5 w-full px-2">
-      <div className="flex gap-2" onClick={() => setIsPreview(false)}>
-        <Image
-          src="/assets/icons/arrow-left.svg"
-          alt="Preview"
-          width={20}
-          height={20}
-          className="dark:invert-0 invert"
-        />
+      <div className="flex gap-2" onClick={() => setIsPreviewMode(false)}>
+        <ArrowLeftIcon className="text-black-800 dark:text-white-200" />
         <Image
           src="/assets/icons/view.svg"
           alt="Preview"
@@ -35,15 +38,15 @@ const Preview = ({ setIsPreview, type, data }: PreviewProps) => {
       </div>
       {type === EContentType.PODCAST && (
         <AudioPlayer
-          audioSrc={data?.podcastFile || ''}
-          coverImage={data?.coverImage || ''}
-          title={data?.title || ''}
-          audioTitle={data?.podcastTitle || ''}
+          audioSrc={data.podcastFile}
+          coverImage={data.coverImage}
+          title={data.title}
+          audioTitle={data.podcastTitle}
         />
       )}
       {type !== EContentType.PODCAST && (
         <Image
-          src={data?.coverImage || '/assets/images/post-example.svg'}
+          src={data?.coverImage || '/assets/icons/image-preview.svg'}
           alt="Preview"
           width={785}
           height={270}
@@ -53,28 +56,29 @@ const Preview = ({ setIsPreview, type, data }: PreviewProps) => {
       <div className="flex gap-2 max-w-3xl">
         {type === EContentType.MEETUP && (
           <Image
-            src={data?.profileImage || '/assets/images/post-example.svg'}
+            src={data?.coverImage || '/assets/images/post-example.svg'}
             alt="avatar"
             width={72}
             height={72}
             className="rounded-md"
           />
         )}
-        <h2 className="d2-bold">{data?.title || 'Title'}</h2>
+        <h2 className="d2-bold">{data.title}</h2>
       </div>
       <div>
         <ul className="flex gap-2">
           {data?.tags?.map((tag: TagProps) => (
             <li
               key={tag.label}
-              className="dark:bg-black-700 bg-gray-100 rounded-full px-2 py-1 cap-10 uppercase">
+              className="dark:bg-black-700 bg-gray-100 rounded-full px-2 py-1 cap-10 uppercase"
+            >
               {tag.label}
             </li>
           ))}
         </ul>
       </div>
       <div className="break-words">
-        <ParseHtml data={data?.description} />
+        <HtmlParser data={data?.description} />
       </div>
 
       {type === EContentType.MEETUP && (
@@ -110,4 +114,4 @@ const Preview = ({ setIsPreview, type, data }: PreviewProps) => {
   );
 };
 
-export default Preview;
+export default PreviewContent;

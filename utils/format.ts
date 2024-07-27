@@ -100,7 +100,7 @@ export const parseDate = (date: Date | string) => {
 //   return "just now";
 // }
 
-export const getFirstName = (authorName: string): string => {
+export const getFirstName = (authorName: string) => {
   if (authorName.includes(' ')) {
     return authorName.split(' ')[0];
   } else {
