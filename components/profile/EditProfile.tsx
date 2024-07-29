@@ -32,15 +32,14 @@ const EditProfile: React.FC<IEditProfileProps> = ({ user }) => {
     label: skill,
   }));
 
-  let transformedAvatarImg = user.avatarImg;
-  if (user.avatarImg.startsWith(CLOUDINARY_URL)) {
-    transformedAvatarImg = getCldImageUrl({
-      width: 60,
-      height: 60,
-      src: user.avatarImg,
-      crop: 'fill',
-    });
-  }
+  let transformedAvatarImg = user.avatarImg.startsWith(CLOUDINARY_URL)
+    ? getCldImageUrl({
+        width: 60,
+        height: 60,
+        src: user.avatarImg,
+        crop: 'fill',
+      })
+    : user.avatarImg;
 
   const form = useForm({
     resolver: zodResolver(updateProfileSchema),
