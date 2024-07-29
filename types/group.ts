@@ -11,7 +11,6 @@ export enum EGroupContentTypes {
 export interface IGroup {
   id: string;
   name: string;
-
   coverImage: string;
   profileImage: string;
   contents: IContent[];
@@ -62,10 +61,10 @@ export interface IProfilePageGroupsResponse {
 
 export interface IGroupDetailsResponse {
   group: IDetailsPageGroup;
-  topRankedGroups?: IGroupWithCount[];
   isGroupOwner: boolean;
   isGroupAdmin: boolean;
   isGroupUser: boolean;
+  topRankedGroups?: IGroupWithCount[];
 }
 
 export interface IDetailsPageGroup extends IGroup {
@@ -112,24 +111,6 @@ export interface IGroupsResponse {
   hasNextPage: boolean;
   totalPages: number;
 }
-
-export interface ISelectGroup {
-  groups: {
-    id: string;
-    profileImage: string;
-    bio: string;
-    name: string;
-    coverImg: string;
-    updatedAt: Date;
-    _count: {
-      members: number;
-    };
-    members: {
-      id: string;
-      avatarImg?: string | undefined;
-    };
-  }[];
-}
 export interface ITags {
   id: string;
   title: string;
@@ -139,13 +120,4 @@ export interface IGlobalSearchItem {
   id: string;
   title: string;
   type: EContentType | null;
-}
-export interface IGroupUpdate {
-  id: string;
-  name: string;
-  profileImage: string;
-  coverImage: string;
-  bio: string;
-  createdAt: Date;
-  updatedAt: Date;
 }

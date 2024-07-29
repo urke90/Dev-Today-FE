@@ -1,18 +1,17 @@
-import {
+import type {
+  IBaseGroupSchema,
   IPutMeetupDTO,
   IPutPodcastDTO,
   IPutPostDTO,
-  createGroupSchema,
-  updateGroupSchema,
+  IUpdateGroupSchema,
 } from '@/lib/validation';
 import { EUserRole } from '@/types/user';
-import { z } from 'zod';
 
 // ----------------------------------------------------------------
 const BASE_API_URL = 'http://localhost:8080/api';
 
 export const createGroup = async (
-  data: z.infer<typeof createGroupSchema>,
+  data: IBaseGroupSchema,
   members: { userId: string; role: EUserRole }[]
 ) => {
   const response = await fetch(BASE_API_URL + '/groups', {
@@ -28,10 +27,7 @@ export const createGroup = async (
   return response.json();
 };
 
-export const updateGroup = async (
-  id: string,
-  data: z.infer<typeof updateGroupSchema>
-) => {
+export const updateGroup = async (id: string, data: IUpdateGroupSchema) => {
   const response = await fetch(BASE_API_URL + `/groups/${id}`, {
     method: 'PATCH',
     headers: {
@@ -39,6 +35,9 @@ export const updateGroup = async (
     },
     body: JSON.stringify(data),
   });
+
+  console.log('RESPONSE U UPDATE GROUP', response);
+
   if (!response.ok) {
     throw new Error('Something went wrong!');
   }

@@ -5,13 +5,13 @@ import { typedFetch } from '@/utils/api';
 
 // ----------------------------------------------------------------
 
-interface IEditPostPageProps {
+interface IEditContentPageProps {
   params: {
     id: string;
   };
 }
 
-const EditPostPage: React.FC<IEditPostPageProps> = async ({ params }) => {
+const EditContentPage: React.FC<IEditContentPageProps> = async ({ params }) => {
   const session = await auth();
 
   if (!session) throw new Error(' User data not available!');
@@ -30,4 +30,4 @@ const EditPostPage: React.FC<IEditPostPageProps> = async ({ params }) => {
   );
 };
 
-export default EditPostPage;
+export default EditContentPage;

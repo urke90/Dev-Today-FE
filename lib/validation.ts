@@ -126,7 +126,7 @@ export type IPodcast = z.infer<typeof podcastSchema>;
 
 export type IContent = IPost & IMeetup & IPodcast;
 
-export const updateContentDTO = postSchema.omit({
+export const updateContentDTO = baseContentSchema.omit({
   authorId: true,
   type: true,
   groupId: true,
@@ -136,41 +136,6 @@ export const updateMeetupSchemaDTO = updateContentDTO.merge(meetupSchema);
 export const updatePodcastSchemaDTO = updateContentDTO.merge(podcastSchema);
 
 export type IUpdateContentDTO = z.infer<typeof updateContentDTO>;
-
-export const createGroupSchema = z.object({
-  authorId: z.string(),
-  name: z.string().min(1).max(50, 'Group name must be max 50 characters long'),
-  profileImage: z.string().optional(),
-  coverImage: z.string().optional(),
-  bio: z.string().min(1).max(1000, 'Bio must be max 1000 characters long'),
-  admins: z
-    .array(
-      z.object({
-        value: z.string(),
-        label: z.string(),
-      })
-    )
-    .max(5),
-  members: z
-    .array(
-      z.object({
-        value: z.string(),
-        label: z.string(),
-      })
-    )
-    .max(5),
-});
-
-export const updateGroupSchema = z.object({
-  id: z.string(),
-  name: z.string().min(1).max(50, 'Group name must be max 50 characters long'),
-  profileImage: z.string().optional(),
-  coverImage: z.string().optional(),
-  bio: z.string().min(1).max(1000, 'Bio must be max 1000 characters long'),
-  authorId: z.string(),
-  createdAt: z.date(),
-  updatedAt: z.date(),
-});
 
 export type IContentDTO = Omit<IContent, 'tags' | 'groupId'> & {
   groupId: string;
@@ -205,7 +170,6 @@ export const commentFormSchema = z.object({
   editMessage: z.string().optional(),
   authorId: z.string(),
   contentId: z.string(),
-
   replyingTo: z
     .object({
       text: z.string(),
@@ -256,3 +220,47 @@ export const editAndReplyCommentSchema = z.object({
 export type IComment = z.infer<typeof baseCommentSchema>;
 
 /************************************************************* CONTENT *****************************************************************/
+
+/************************************************************* GROUP *******************************************************************/
+
+export const baseGroupSchema = z.object({
+  authorId: z.string(),
+  name: z.string().min(1),
+  profileImage: z.string().url().nullable(),
+  coverImage: z.string().url('Please provide correct image URL').nullable(),
+  bio: z.string().min(1),
+  admins: z.array(
+    z.object({
+      value: z.string(),
+      label: z.string(),
+    })
+  ),
+  members: z.array(
+    z.object({
+      value: z.string(),
+      label: z.string(),
+    })
+  ),
+});
+
+export type IBaseGroupSchema = z.infer<typeof baseGroupSchema>;
+
+export const updateGroupSchema = baseGroupSchema.omit({
+  admins: true,
+  members: true,
+});
+
+export type IUpdateGroupSchema = z.infer<typeof updateGroupSchema>;
+
+// export const updateGroupSchema = z.object({
+//   id: z.string(),
+//   name: z.string().min(1).max(50, 'Group name must be max 50 characters long'),
+//   profileImage: z.string().optional(),
+//   coverImage: z.string().optional(),
+//   bio: z.string().min(1).max(1000, 'Bio must be max 1000 characters long'),
+//   authorId: z.string(),
+//   createdAt: z.date(),
+//   updatedAt: z.date(),
+// });
+
+/************************************************************* GROUP *******************************************************************/
