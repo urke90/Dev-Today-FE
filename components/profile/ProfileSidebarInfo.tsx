@@ -28,23 +28,36 @@ const ProfileSidebarInfo: React.FC<IProfileSidebarInfoProps> = ({
 
   const handleFollowUser = async () => {
     try {
-      const response = await typedFetch({
+      await typedFetch({
         url: `/user/${userProfileId}/follow`,
         method: 'POST',
         body: {
           userId: viewerId,
         },
       });
-      toast.success(
-        isFollowingUser
-          ? 'User unfollowed successfully.'
-          : 'User followed successfully.'
-      );
+      toast.success('User followed successfully.');
 
-      setIsFollowingUser((prevFollowing) => !prevFollowing);
+      setIsFollowingUser(true);
     } catch (error) {
       console.log('Error following/unfollowing user', error);
       toast.error('Ooops, something went wrong!');
+    }
+  };
+
+  const handleUnfollowUser = async () => {
+    try {
+      await typedFetch({
+        url: `/user/${userProfileId}/unfollow`,
+        method: 'DELETE',
+        body: {
+          userId: viewerId,
+        },
+      });
+      toast.success('User unfollowed successfully.');
+
+      setIsFollowingUser(false);
+    } catch (error) {
+      console.log('Error unfollowing user', error);
     }
   };
 
@@ -58,7 +71,10 @@ const ProfileSidebarInfo: React.FC<IProfileSidebarInfoProps> = ({
           Edit Profile
         </Link>
       ) : (
-        <Button variant="primary" onClick={handleFollowUser}>
+        <Button
+          variant="primary"
+          onClick={isFollowingUser ? handleUnfollowUser : handleFollowUser}
+        >
           {isFollowingUser ? 'Following' : 'Follow'}
         </Button>
       )}

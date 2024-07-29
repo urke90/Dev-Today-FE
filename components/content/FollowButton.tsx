@@ -2,6 +2,7 @@
 
 import { typedFetch } from '@/utils/api';
 import { useState } from 'react';
+import toast from 'react-hot-toast';
 import { Button } from '../ui/button';
 
 // ----------------------------------------------------------------
@@ -17,7 +18,7 @@ const FollowButton: React.FC<IFollowButtonProps> = ({
   viewerId,
   authorId,
 }) => {
-  const [isFollowing, setIsFollowing] = useState(isFollowingInit);
+  const [isFollowingUser, setIsFollowingUser] = useState(isFollowingInit);
 
   const handleFollow = async () => {
     try {
@@ -28,21 +29,36 @@ const FollowButton: React.FC<IFollowButtonProps> = ({
           userId: viewerId,
         },
       });
-      setIsFollowing((prevIsFollowing) => !prevIsFollowing);
+      setIsFollowingUser(true);
+      toast.success('User followed successfully.');
       // revalidateRoute(`/user/${authorId}`);
     } catch (error) {
-      console.error(error);
-      throw new Error('Failed to follow user');
+      console.error('Error following user', error);
     }
+  };
+
+  const handleUnfollowUser = async () => {
+    try {
+      await typedFetch({
+        url: `/user/${authorId}/unfollow`,
+        method: 'DELETE',
+        body: {
+          userId: viewerId,
+        },
+      });
+      toast.success('User unfollowed successfully.');
+
+      setIsFollowingUser(false);
+    } catch (error) {}
   };
 
   return (
     <Button
       size="small"
-      onClick={handleFollow}
+      onClick={isFollowingUser ? handleUnfollowUser : handleFollow}
       className="dark:bg-black-900 bg-white-300 transition-colors hover:bg-white-400 hover:text-white-100 hover:dark:bg-black-700 text-purple-500  rounded border border-transparent"
     >
-      {isFollowing ? 'Fallowing' : 'Follow'}
+      {isFollowingUser ? 'Fallowing' : 'Follow'}
     </Button>
   );
 };
