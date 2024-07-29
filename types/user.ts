@@ -28,6 +28,12 @@ export interface IProfileUser {
   contents: IContent[];
 }
 
+export interface IGroupDropdownUser {
+  id: string;
+  userName: string;
+  avatarImg: string | null;
+}
+
 export interface IProfileUserResponse {
   user: IProfileUser;
   isFollowing: boolean;

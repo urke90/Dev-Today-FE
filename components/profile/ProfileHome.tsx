@@ -4,11 +4,13 @@ import SocialMediaLinks from './SocialMediaLinks';
 
 import Image from 'next/image';
 
+import { CLOUDINARY_URL } from '@/constants';
 import type { IProfilePageContentResponse } from '@/types/content';
 import type { IProfilePageGroupsResponse } from '@/types/group';
 import { EQueryType } from '@/types/queries';
 import type { IProfileUser } from '@/types/user';
 import { calculateTimeAgo } from '@/utils/format';
+import { getCldImageUrl } from 'next-cloudinary';
 import BadgeItem from '../shared/BadgeItem';
 import ContentNavLinks from '../shared/ContentNavLinks';
 import SidebarContentCard from '../shared/RightSidebarItems/SidebarContentCard';
@@ -35,6 +37,17 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
   groupsData,
   viewerId,
 }) => {
+  let profileImage = user.avatarImg;
+
+  if (profileImage.startsWith(CLOUDINARY_URL)) {
+    profileImage = getCldImageUrl({
+      width: 110,
+      height: 110,
+      crop: 'fill',
+      src: profileImage,
+    });
+  }
+
   return (
     <div className="content-wrapper">
       <aside className="left-sidebar bg-light100__dark800 rounded-2xl !p-0 !pb-10 text-center">
@@ -49,7 +62,7 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
         <div className="flex flex-col gap-y-6 px-5">
           <div className="relative z-10 -mt-20">
             <Image
-              src={user?.avatarImg || '/assets/icons/image-preview.svg'}
+              src={profileImage || '/assets/icons/image-preview.svg'}
               width={110}
               height={110}
               alt="profile"

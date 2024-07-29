@@ -1,14 +1,8 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  CldUploadWidget,
-  getCldImageUrl,
-  type CloudinaryUploadWidgetResults,
-} from 'next-cloudinary';
-import Image from 'next/image';
+import { getCldImageUrl } from 'next-cloudinary';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import z from 'zod';
@@ -22,8 +16,7 @@ import { CLOUDINARY_URL } from '@/constants';
 import { updateProfileSchema } from '@/lib/validation';
 import type { IProfileUser } from '@/types/user';
 import { typedFetch } from '@/utils/api';
-import ImagePreviewIcon from '../icons/ImagePreview';
-import ImageUploadIcon from '../icons/ImageUpload';
+import RHFProfileImageUpload from '../RHFInputs/RHFProfileImageUpload';
 
 // ----------------------------------------------------------------
 
@@ -66,25 +59,6 @@ const EditProfile: React.FC<IEditProfileProps> = ({ user }) => {
     },
   });
 
-  const { setValue } = form;
-
-  const [previewImg, setPreveiwImg] = useState('');
-
-  const handleUploadImage = (result: CloudinaryUploadWidgetResults) => {
-    if (!result.info || typeof result.info === 'string')
-      return toast.error('Image upload failed!');
-
-    const transformedAvatarImg = getCldImageUrl({
-      width: 60,
-      height: 60,
-      src: result.info.secure_url,
-      crop: 'fill',
-    });
-
-    setPreveiwImg(transformedAvatarImg);
-    setValue('avatarImg', result.info.secure_url);
-  };
-
   const onSubmit = async (data: z.infer<typeof updateProfileSchema>) => {
     const mappedSkills = data.preferredSkills.map((skill) => skill.value);
 
@@ -114,43 +88,10 @@ const EditProfile: React.FC<IEditProfileProps> = ({ user }) => {
         onSubmit={form.handleSubmit(onSubmit)}
         onKeyDown={(e: React.KeyboardEvent<HTMLFormElement>) => {
           if (e.key === 'Enter') e.preventDefault();
-        }}>
+        }}
+      >
         <div className="create-page-wrapper">
-          <div className="flex items-center gap-2.5">
-            <div className="flex-center bg-white-100 dark:bg-black-800 size-[60px] shrink-0 rounded-full">
-              {previewImg ? (
-                <Image
-                  src={previewImg}
-                  width={60}
-                  height={60}
-                  className="size-[60px] rounded-full"
-                  alt="profile preview"
-                />
-              ) : (
-                <ImagePreviewIcon className="icon-light400__dark300" />
-              )}
-            </div>
-            <CldUploadWidget
-              uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_PRESEST_NAME}
-              onSuccess={handleUploadImage}
-              options={{
-                multiple: false,
-                cropping: true,
-                croppingShowDimensions: true,
-              }}>
-              {({ open }) => {
-                return (
-                  <Button
-                    onClick={() => open()}
-                    type="button"
-                    className="bg-white-100 dark:bg-black-800 flex h-11 items-center gap-2.5 rounded-[5px] px-5 py-3 w-auto">
-                    <ImageUploadIcon className="icon-light400__dark300" />
-                    <span className="p3-regular">Set a profile photo</span>
-                  </Button>
-                );
-              }}
-            </CldUploadWidget>
-          </div>
+          <RHFProfileImageUpload name="avatarImg" />
           <RHFInput name="name" label="Name" placeholder="Name" />
           <RHFInput name="userName" label="Username" placeholder="Username" />
           <RHFTextarea

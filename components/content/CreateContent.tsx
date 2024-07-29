@@ -29,11 +29,11 @@ import { useTheme } from '@/context/ThemeProvider';
 import { cn } from '@/lib/utils';
 import {
   baseContentSchema,
-  IContent,
-  IContentDTO,
-  IPutMeetupDTO,
-  IPutPodcastDTO,
-  IPutPostDTO,
+  type IContent,
+  type IContentDTO,
+  type IPutMeetupDTO,
+  type IPutPodcastDTO,
+  type IPutPostDTO,
 } from '@/lib/validation';
 import { EContentType, type ITag } from '@/types/content';
 import type { IGroupsResponse } from '@/types/group';
@@ -475,7 +475,7 @@ const CreateContent: React.FC<ICreateContentProps> = ({
                       </Button>
                     </div>
                   ) : (
-                    <div className="w-full h-64 dashedBorder !text-white-400 rounded-lg flex items-center justify-center">
+                    <div className="w-full h-64 dashed-border !text-white-400 rounded-lg flex items-center justify-center">
                       <div className="flex flex-col items-center">
                         <CldUploadWidget
                           uploadPreset={

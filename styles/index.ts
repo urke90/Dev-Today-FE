@@ -22,7 +22,7 @@ export const style = {
   },
   copyUrl: {
     whiteSpace: 'nowrap',
-    overflow: 'hidden',
+    // overflow: 'hidden',
     textOverflow: 'ellipsis',
     color: '#808191',
   },

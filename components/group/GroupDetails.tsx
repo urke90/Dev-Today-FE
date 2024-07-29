@@ -1,3 +1,4 @@
+import { CLOUDINARY_URL } from '@/constants';
 import type {
   IDetailsPageGroup,
   IGroupContentResponse,
@@ -6,6 +7,7 @@ import type {
 } from '@/types/group';
 import { EQueryType } from '@/types/queries';
 import { EUserRole } from '@/types/user';
+import { getCldImageUrl } from 'next-cloudinary';
 import Image from 'next/image';
 import SidebarGroupItem from '../shared/LeftSidebarItems/SidebarGroupItem';
 import SidebarItemWrapper from '../shared/LeftSidebarItems/SidebarItemWrapper';
@@ -49,6 +51,15 @@ const GroupDetails: React.FC<IGroupDetailsProps> = ({
       ? membersCount.users++
       : membersCount.admins++
   );
+
+  let groupProfileImage = group.profileImage.startsWith(CLOUDINARY_URL)
+    ? getCldImageUrl({
+        width: 56,
+        height: 56,
+        crop: 'fill',
+        src: group.profileImage,
+      })
+    : group.profileImage;
 
   return (
     <div className="content-wrapper">
@@ -102,7 +113,8 @@ const GroupDetails: React.FC<IGroupDetailsProps> = ({
       <main className="main-content gap-5  mx-auto">
         <div className="flex flex-col gap-2.5 bg-light100__dark800 py-4 px-2.5 md:py-2.5 rounded-2xl shadow-card">
           <div
-            className={`relative w-full h-24 md:h-44 ${!group.coverImage ? 'flex-center bg-primary-100 dark:bg-black-700 rounded-[10px]' : ''}`}>
+            className={`relative w-full h-24 md:h-44 ${!group.coverImage ? 'flex-center bg-primary-100 dark:bg-black-700 rounded-[10px]' : ''}`}
+          >
             {group.coverImage ? (
               <Image
                 fill
@@ -112,9 +124,9 @@ const GroupDetails: React.FC<IGroupDetailsProps> = ({
               />
             ) : (
               <Image
+                src="/assets/icons/image-preview.svg"
                 width={40}
                 height={40}
-                src="/assets/icons/image-preview.svg"
                 alt={group.name}
                 className="rounded-[10px]"
               />
@@ -125,7 +137,7 @@ const GroupDetails: React.FC<IGroupDetailsProps> = ({
               <div className="relative size-14 md:size-[70px]">
                 <Image
                   fill
-                  src={group.profileImage || '/assets/icons/image-preview.svg'}
+                  src={groupProfileImage || '/assets/icons/image-preview.svg'}
                   alt={group.name}
                   className="rounded-full"
                 />
@@ -187,7 +199,8 @@ const GroupDetails: React.FC<IGroupDetailsProps> = ({
               group.members.map(({ avatarImg, id, userName }, index) => (
                 <li
                   key={id}
-                  className="flex-center relative bg-white-600 size-10 rounded-full">
+                  className="flex-center relative bg-white-600 size-10 rounded-full"
+                >
                   <Image
                     src={avatarImg || '/assets/images/avatars/avatar-1.svg'}
                     width={28}

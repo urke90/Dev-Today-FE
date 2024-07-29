@@ -37,6 +37,7 @@ const GroupDetailsPage: React.FC<IGroupDetailsPage> = async ({
     url: `/groups/${id}?topRankedGroups=true&stats=true&members=true&meetups=true&viewerId=${session.user.id}`,
     cache: 'no-cache',
   });
+
   if (!groupDetails)
     throw new Error(
       'Internal server error. Group details not available at the moment.'
