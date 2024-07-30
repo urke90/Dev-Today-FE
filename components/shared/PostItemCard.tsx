@@ -31,6 +31,10 @@ interface IPostItemCardProps {
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     contentId: string
   ) => Promise<void>;
+  handleDislikeContent: (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    contentId: string
+  ) => Promise<void>;
 }
 
 const PostItemCard: React.FC<IPostItemCardProps> = ({
@@ -45,6 +49,7 @@ const PostItemCard: React.FC<IPostItemCardProps> = ({
   createdAt,
   isLiked,
   handleLikeContent,
+  handleDislikeContent,
   author,
 }) => {
   return (
@@ -81,7 +86,9 @@ const PostItemCard: React.FC<IPostItemCardProps> = ({
             <Button
               type="button"
               className="flex-center bg-white-200 dark:bg-black-700 size-[30px] shrink-0 rounded-full"
-              onClick={(e) => handleLikeContent(e, id)}
+              onClick={(e) =>
+                isLiked ? handleDislikeContent(e, id) : handleLikeContent(e, id)
+              }
             >
               <HeartIcon
                 className={isLiked ? 'text-primary-500' : 'text-white-300'}

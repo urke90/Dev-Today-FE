@@ -141,7 +141,7 @@ const GroupContent: React.FC<IGroupContentWrapperProps> = ({
     }) => removeAdminRole(groupId, viewerId, userId),
   });
 
-  const likeOrDislikeContent = async (
+  const handleLikeContent = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     contentId: string
   ) => {
@@ -149,7 +149,7 @@ const GroupContent: React.FC<IGroupContentWrapperProps> = ({
     e.stopPropagation();
     try {
       await typedFetch({
-        url: `/user/content/${viewerId}/like`,
+        url: `/content/${viewerId}/like`,
         method: 'POST',
         body: { contentId },
       });
@@ -158,9 +158,33 @@ const GroupContent: React.FC<IGroupContentWrapperProps> = ({
         {
           ...contentData,
           contents: contentData.contents.map((content) =>
-            content.id === contentId
-              ? { ...content, isLiked: !content.isLiked }
-              : content
+            content.id === contentId ? { ...content, isLiked: true } : content
+          ),
+        }
+      );
+    } catch (error) {
+      toast.error('Ooops, something went wrong!');
+    }
+  };
+
+  const handleDislikeContent = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    contentId: string
+  ) => {
+    e.preventDefault();
+    e.stopPropagation();
+    try {
+      await typedFetch({
+        url: `/content/${viewerId}/dislike`,
+        method: 'DELETE',
+        body: { contentId },
+      });
+      queryClient.setQueryData(
+        [updateContentQueryKey(contentType), contentType, page],
+        {
+          ...contentData,
+          contents: contentData.contents.map((content) =>
+            content.id === contentId ? { ...content, isLiked: false } : content
           ),
         }
       );
@@ -212,7 +236,8 @@ const GroupContent: React.FC<IGroupContentWrapperProps> = ({
                 likesCount={likesCount}
                 commentsCount={commentsCount}
                 isLiked={isLiked}
-                handleLikeContent={likeOrDislikeContent}
+                handleLikeContent={handleLikeContent}
+                handleDislikeContent={handleDislikeContent}
               />
             )
           );
@@ -261,7 +286,8 @@ const GroupContent: React.FC<IGroupContentWrapperProps> = ({
                 author={author.userName}
                 createdAt={createdAt}
                 isLiked={isLiked}
-                handleLikeContent={likeOrDislikeContent}
+                handleLikeContent={handleLikeContent}
+                handleDislikeContent={handleDislikeContent}
               />
             )
           );
@@ -321,7 +347,8 @@ const GroupContent: React.FC<IGroupContentWrapperProps> = ({
               likesCount={likesCount}
               commentsCount={commentsCount}
               isLiked={isLiked}
-              handleLikeContent={likeOrDislikeContent}
+              handleLikeContent={handleLikeContent}
+              handleDislikeContent={handleDislikeContent}
             />
           )
         );

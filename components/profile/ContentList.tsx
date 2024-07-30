@@ -117,7 +117,7 @@ const ContentList: React.FC<IContentListProps> = ({
       contentType === EQueryType.GROUP ? hasNextGroupsPage : hasNextContentPage,
   });
 
-  const likeOrDislikeContent = async (
+  const handleLikeContent = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     contentId: string
   ) => {
@@ -125,7 +125,7 @@ const ContentList: React.FC<IContentListProps> = ({
     e.stopPropagation();
     try {
       await typedFetch({
-        url: `/user/content/${userId}/like`,
+        url: `/content/${userId}/like`,
         method: 'POST',
         body: { contentId },
       });
@@ -136,8 +136,37 @@ const ContentList: React.FC<IContentListProps> = ({
           pages: content.pages.map((page) => ({
             ...page,
             contents: page.contents.map((content) =>
+              content.id === contentId ? { ...content, isLiked: true } : content
+            ),
+          })),
+        }
+      );
+    } catch (error) {
+      toast.error('Ooops, something went wrong!');
+    }
+  };
+
+  const handleDislikeContent = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    contentId: string
+  ) => {
+    e.preventDefault();
+    e.stopPropagation();
+    try {
+      await typedFetch({
+        url: `/content/${userId}/dislike`,
+        method: 'DELETE',
+        body: { contentId },
+      });
+      queryClient.setQueryData(
+        [updateContentQueryKey(contentType), contentType],
+        {
+          ...content,
+          pages: content.pages.map((page) => ({
+            ...page,
+            contents: page.contents.map((content) =>
               content.id === contentId
-                ? { ...content, isLiked: !content.isLiked }
+                ? { ...content, isLiked: false }
                 : content
             ),
           })),
@@ -205,7 +234,8 @@ const ContentList: React.FC<IContentListProps> = ({
                   likesCount={likesCount}
                   commentsCount={commentsCount}
                   isLiked={isLiked}
-                  handleLikeContent={likeOrDislikeContent}
+                  handleLikeContent={handleLikeContent}
+                  handleDislikeContent={handleDislikeContent}
                 />
               )
             );
@@ -257,7 +287,8 @@ const ContentList: React.FC<IContentListProps> = ({
                   author={userName}
                   createdAt={createdAt}
                   isLiked={isLiked}
-                  handleLikeContent={likeOrDislikeContent}
+                  handleLikeContent={handleLikeContent}
+                  handleDislikeContent={handleDislikeContent}
                 />
               )
             );
@@ -313,7 +344,8 @@ const ContentList: React.FC<IContentListProps> = ({
                 likesCount={likesCount}
                 commentsCount={commentsCount}
                 isLiked={isLiked}
-                handleLikeContent={likeOrDislikeContent}
+                handleLikeContent={handleLikeContent}
+                handleDislikeContent={handleDislikeContent}
               />
             )
           );

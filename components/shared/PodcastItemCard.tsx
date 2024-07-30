@@ -26,6 +26,10 @@ interface IPodcastItemCardProps {
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     contentId: string
   ) => Promise<void>;
+  handleDislikeContent: (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    contentId: string
+  ) => Promise<void>;
 }
 
 const PodcastItemCard: React.FC<IPodcastItemCardProps> = ({
@@ -38,6 +42,7 @@ const PodcastItemCard: React.FC<IPodcastItemCardProps> = ({
   createdAt,
   isLiked,
   handleLikeContent,
+  handleDislikeContent,
 }) => {
   return (
     <li>
@@ -59,7 +64,9 @@ const PodcastItemCard: React.FC<IPodcastItemCardProps> = ({
             type="button"
             variant="icon"
             className="bg-white-200 dark:bg-black-700 size-[30px] shrink-0 rounded-full"
-            onClick={(e) => handleLikeContent(e, id)}
+            onClick={(e) =>
+              isLiked ? handleLikeContent(e, id) : handleDislikeContent(e, id)
+            }
           >
             <HeartIcon
               className={isLiked ? 'text-primary-500' : 'text-white-300'}

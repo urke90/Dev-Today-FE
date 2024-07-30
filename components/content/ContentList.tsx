@@ -38,7 +38,7 @@ const ContentList: React.FC<IContentListProps> = ({
     initialData: contentData,
   });
 
-  const likeOrDislikeContent = async (
+  const handleLikeContent = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     contentId: string
   ) => {
@@ -46,7 +46,7 @@ const ContentList: React.FC<IContentListProps> = ({
     e.stopPropagation();
     try {
       await typedFetch({
-        url: `/user/content/${viewerId}/like`,
+        url: `/content/${viewerId}/like`,
         method: 'POST',
         body: { contentId },
       });
@@ -55,9 +55,33 @@ const ContentList: React.FC<IContentListProps> = ({
         {
           ...data,
           contents: data?.contents.map((content) =>
-            content.id === contentId
-              ? { ...content, isLiked: !content.isLiked }
-              : content
+            content.id === contentId ? { ...content, isLiked: true } : content
+          ),
+        }
+      );
+    } catch (error) {
+      toast.error('Ooops, something went wrong!');
+    }
+  };
+
+  const handleDislikeContent = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    contentId: string
+  ) => {
+    e.preventDefault();
+    e.stopPropagation();
+    try {
+      await typedFetch({
+        url: `/content/${viewerId}/dislike`,
+        method: 'DELETE',
+        body: { contentId },
+      });
+      queryClient.setQueryData(
+        [updateContentQueryKey(contentType), contentType, page],
+        {
+          ...data,
+          contents: data?.contents.map((content) =>
+            content.id === contentId ? { ...content, isLiked: false } : content
           ),
         }
       );
@@ -75,26 +99,26 @@ const ContentList: React.FC<IContentListProps> = ({
 
   const renderContent = () => {
     let styles;
-    let renderedContent;
 
-    switch (contentType) {
-      case EQueryType.POST:
-        {
-          styles = 'flex flex-col flex-wrap gap-5';
-          renderedContent = data?.contents?.map(
-            ({
-              id,
-              title,
-              coverImage,
-              description,
-              tags,
-              createdAt,
-              viewsCount,
-              likesCount,
-              commentsCount,
-              isLiked,
-              author,
-            }) => (
+    const renderedContent = data.contents.map(
+      ({
+        id,
+        coverImage,
+        title,
+        description,
+        tags,
+        createdAt,
+        author,
+        viewsCount,
+        likesCount,
+        commentsCount,
+        isLiked,
+        meetupDate,
+      }) => {
+        switch (contentType) {
+          case EQueryType.POST: {
+            styles = 'flex flex-col flex-wrap gap-5';
+            return (
               <PostItemCard
                 key={id}
                 id={id}
@@ -108,17 +132,14 @@ const ContentList: React.FC<IContentListProps> = ({
                 likesCount={likesCount}
                 commentsCount={commentsCount}
                 isLiked={isLiked}
-                handleLikeContent={likeOrDislikeContent}
+                handleLikeContent={handleLikeContent}
+                handleDislikeContent={handleDislikeContent}
               />
-            )
-          );
-        }
-        break;
-      case EQueryType.MEETUP:
-        {
-          styles = 'flex flex-col flax-wrap gap-5';
-          renderedContent = data?.contents?.map(
-            ({ id, meetupDate, title, description, coverImage, tags }) => (
+            );
+          }
+          case EQueryType.MEETUP: {
+            styles = 'flex flex-col flax-wrap gap-5';
+            return (
               <MeetupItemCard
                 key={id}
                 id={id}
@@ -129,24 +150,11 @@ const ContentList: React.FC<IContentListProps> = ({
                 location="Innovation Hub, Austin"
                 meetupDate={meetupDate}
               />
-            )
-          );
-        }
-        break;
-      case EQueryType.PODCAST:
-        {
-          styles = 'grid grid-cols-1 md:grid-cols-2 gap-5';
-          renderedContent = data?.contents?.map(
-            ({
-              id,
-              coverImage,
-              title,
-              description,
-              tags,
-              createdAt,
-              isLiked,
-              author,
-            }) => (
+            );
+          }
+          case EQueryType.PODCAST: {
+            styles = 'grid grid-cols-1 md:grid-cols-2 gap-5';
+            return (
               <PodcastItemCard
                 key={id}
                 id={id}
@@ -157,47 +165,18 @@ const ContentList: React.FC<IContentListProps> = ({
                 author={author.userName}
                 createdAt={createdAt}
                 isLiked={isLiked}
-                handleLikeContent={likeOrDislikeContent}
+                handleLikeContent={handleLikeContent}
+                handleDislikeContent={handleDislikeContent}
               />
-            )
-          );
+            );
+          }
+
+          default: {
+            return <li className="h2-bold">Invalid Type</li>;
+          }
         }
-        break;
-      default: {
-        styles = 'flex flex-col flax-wrap gap-5';
-        renderedContent = data?.contents?.map(
-          ({
-            id,
-            title,
-            coverImage,
-            description,
-            tags,
-            createdAt,
-            viewsCount,
-            likesCount,
-            commentsCount,
-            isLiked,
-            author,
-          }) => (
-            <PostItemCard
-              key={id}
-              id={id}
-              coverImage={coverImage}
-              title={title}
-              description={description}
-              tags={tags}
-              createdAt={createdAt}
-              author={author.userName}
-              viewsCount={viewsCount}
-              likesCount={likesCount}
-              commentsCount={commentsCount}
-              isLiked={isLiked}
-              handleLikeContent={likeOrDislikeContent}
-            />
-          )
-        );
       }
-    }
+    );
 
     return {
       styles,
