@@ -225,22 +225,31 @@ const CreateGroup: React.FC<ICreateGroup> = ({ viewerId, group }) => {
                       className="border rounded-md dark:border-black-700/50"
                       {...field}
                       classNames={{
-                        input: () =>
-                          '!text-[16px] dark:!text-white-100 text-black-800',
                         control: () =>
-                          '!border-none !shadow-none  dark:bg-black-800 dark:!border-[#393E4F66] px-3 h-auto min-h-[44px]',
-                        indicatorSeparator: () => '!hidden',
+                          // TODO Add different hover and focus effect since we will probably add the same to the Inputs
+                          'bg-white-100 dark:bg-black-800 border !border-white-border dark:!border-[#393E4F66] px-3 min-h-[46px] !shadow-none',
+                        clearIndicator: () => '!hidden',
                         dropdownIndicator: () => '!hidden',
-                        multiValue: () =>
-                          '!bg-white-200 !px-2 !py-1 dark:!bg-black-700 !text-white-100 !rounded-full',
-                        multiValueLabel: () => 'dark:!text-white-200 !cap-10',
+                        indicatorSeparator: () => '!hidden',
+                        placeholder: () =>
+                          '!text-white-300 !text-sm !font-normal',
+                        input: () => '!p3-regular ',
+                        option: (state) =>
+                          `bg-black-700 dark:text-white-300 ${
+                            state.isFocused
+                              ? 'dark:!bg-black-700 !bg-white-300'
+                              : ''
+                          }`,
+                        menuList: () =>
+                          `bg-white-100 dark:bg-black-800 ${
+                            false ? 'hidden' : ''
+                          }`,
+                        multiValueLabel: () =>
+                          'dark:text-white-300 text-black-700',
                         multiValueRemove: () =>
-                          '!bg-white-200 !text-white-400 !ml-1 size-[20px] !rounded-3xl items-center self-center',
-                        option: () =>
-                          '!bg-white-100  !py-[18px]  dark:!bg-black-800  dark:!text-white-100 !text-black-800',
-                        singleValue: () => 'dark:!text-white-100',
-                        menu: () =>
-                          'bg-white-100 dark:bg-black-800 !shadow-sm ',
+                          'dark:!text-white-300 !text-black-700 hover:!bg-inherit',
+                        multiValue: () =>
+                          '!py-1 !bg-white-200 dark:!bg-black-700 !px-1.5 !text-white-400 dark:!text-white-100 !cap-8 md:!cap-10 !rounded-[20px] uppercase',
                       }}
                       isMulti
                       onInputChange={(value) => setQ(value)}
@@ -301,21 +310,30 @@ const CreateGroup: React.FC<ICreateGroup> = ({ viewerId, group }) => {
                     className="border rounded-md dark:border-black-700/50"
                     {...field}
                     classNames={{
-                      input: () =>
-                        '!text-[16px] dark:!text-white-100 text-black-800',
                       control: () =>
-                        '!border-none !shadow-none  dark:bg-black-800 dark:!border-[#393E4F66] px-3 h-auto min-h-[44px]',
-                      indicatorSeparator: () => '!hidden',
+                        // TODO Add different hover and focus effect since we will probably add the same to the Inputs
+                        'bg-white-100 dark:bg-black-800 border !border-white-border dark:!border-[#393E4F66] px-3 min-h-[46px] !shadow-none',
+
+                      clearIndicator: () => '!hidden',
                       dropdownIndicator: () => '!hidden',
-                      multiValue: () =>
-                        '!bg-white-200 !px-2 !py-1 dark:!bg-black-700 !text-white-100 !rounded-full',
-                      multiValueLabel: () => 'dark:!text-white-200 !cap-10',
+                      indicatorSeparator: () => '!hidden',
+                      placeholder: () =>
+                        '!text-white-300 !text-sm !font-normal',
+                      input: () =>
+                        '!p3-regular hover:outline-none hover:rind-0 hover:border-0 hover:border-none',
+                      option: (state) =>
+                        `bg-black-700 dark:text-white-300 ${
+                          state.isFocused
+                            ? 'dark:!bg-black-700 !bg-white-300'
+                            : ''
+                        }`,
+                      menuList: () => `bg-white-100 dark:bg-black-800`,
+                      multiValueLabel: () =>
+                        'dark:text-white-300 text-black-700',
                       multiValueRemove: () =>
-                        '!bg-white-200 !text-white-400 !ml-1 size-[20px] !rounded-3xl items-center self-center',
-                      option: () =>
-                        '!bg-white-100  !py-[18px]  dark:!bg-black-800  dark:!text-white-100 !text-black-800',
-                      singleValue: () => 'dark:!text-white-100',
-                      menu: () => 'bg-white-100 dark:bg-black-800 !shadow-sm',
+                        'dark:!text-white-300 !text-black-700 hover:!bg-inherit',
+                      multiValue: () =>
+                        '!py-1 !bg-white-200 dark:!bg-black-700 !px-1.5 !text-white-400 dark:!text-white-100 !cap-8 md:!cap-10 !rounded-[20px] uppercase',
                     }}
                     isMulti
                     onInputChange={(value) => setQ(value)}
@@ -368,7 +386,6 @@ const CreateGroup: React.FC<ICreateGroup> = ({ viewerId, group }) => {
               type="button"
               variant="cancel"
               size="large"
-              className="hover:!bg-primary-500 transition-colors"
             >
               Cancel
             </Button>
@@ -394,58 +411,3 @@ const CreateGroup: React.FC<ICreateGroup> = ({ viewerId, group }) => {
 };
 
 export default CreateGroup;
-
-{
-  /* <div className="w-full  !text-white-400 gap-3 rounded-lg flex items-center">
-                    <div
-                      className={`bg-light100__dark800 ${profileImage ? 'rounded-full' : 'rounded-full p-4'}`}
-                    >
-                      <Image
-                        src={profileImage || '/assets/icons/basic-image.svg'}
-                        alt="upload"
-                        width={profileImage ? 32 : 24}
-                        height={profileImage ? 32 : 24}
-                        className={`${profileImage ? 'object-cover w-11 invert-0 h-11 rounded-full' : ''}`}
-                      />
-                    </div>
-                    <div className="flex flex-col items-center">
-                      <CldUploadWidget
-                        uploadPreset={
-                          process.env.NEXT_PUBLIC_CLOUDINARY_PRESEST_NAME
-                        }
-                        onSuccess={(res) => {
-                          if (res.info && typeof res.info === 'object') {
-                            field.onChange(res.info.secure_url);
-                          } else {
-                            field.onChange(res.info);
-                          }
-                        }}
-                        options={{
-                          multiple: false,
-                          cropping: true,
-                          croppingShowDimensions: true,
-                        }}
-                      >
-                        {({ open }) => (
-                          <Button
-                            onClick={(e) => {
-                              e.preventDefault();
-                              open();
-                            }}
-                            type="button"
-                            className="flex items-center max-w-[200px] dark:bg-black-800 py-3 rounded-lg bg-white-100 gap-3 px-4"
-                          >
-                            <Image
-                              src={'/assets/icons/upload-icon.svg'}
-                              alt="upload"
-                              width={16}
-                              height={16}
-                              className="invert dark:invert-0"
-                            />
-                            <p className="p3-regular">Set a profile photo</p>
-                          </Button>
-                        )}
-                      </CldUploadWidget>
-                    </div>
-                  </div> */
-}

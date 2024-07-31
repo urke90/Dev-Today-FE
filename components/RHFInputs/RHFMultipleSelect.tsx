@@ -68,12 +68,13 @@ const RHFMultipleSelect: React.FC<IRHFMultipleSelectProps> = ({
               classNames={{
                 control: () =>
                   // TODO Add different hover and focus effect since we will probably add the same to the Inputs
-                  'bg-white-100 dark:bg-black-800 border !border-white-border dark:!border-[#393E4F66] px-3 min-h-[46px]',
+                  'bg-white-100 dark:bg-black-800 border !border-white-border dark:!border-[#393E4F66] px-3 min-h-[46px] !shadow-none',
                 clearIndicator: () => '!hidden',
                 dropdownIndicator: () => '!hidden',
                 indicatorSeparator: () => '!hidden',
                 placeholder: () => '!text-white-300 !text-sm !font-normal',
-                input: () => '!p3-regular ',
+                input: () =>
+                  '!p3-regular hover:outline-none hover:rind-0 hover:border-0 hover:border-none',
                 option: (state) =>
                   `bg-black-700 dark:text-white-300 ${
                     state.isFocused ? 'dark:!bg-black-700 !bg-white-300' : ''

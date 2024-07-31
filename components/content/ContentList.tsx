@@ -170,7 +170,6 @@ const ContentList: React.FC<IContentListProps> = ({
               />
             );
           }
-
           default: {
             return <li className="h2-bold">Invalid Type</li>;
           }

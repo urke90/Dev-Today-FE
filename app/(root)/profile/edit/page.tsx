@@ -6,7 +6,6 @@ import { typedFetch } from '@/utils/api';
 // ----------------------------------------------------------------
 
 const EditProfilePage: React.FC = async () => {
-  console.log('EditProfilePage');
   const session = await auth();
   if (!session?.user) throw new Error('User data not available!');
 

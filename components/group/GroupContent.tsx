@@ -50,8 +50,6 @@ interface IGroupContentWrapperProps {
   viewerId: string;
   groupId: string;
 }
-
-// TODO: There are a lot of requests in this file, ask Brandon to discuse this, how to handle revalidation of data.
 const GroupContent: React.FC<IGroupContentWrapperProps> = ({
   contentType,
   groupContent,

@@ -63,13 +63,15 @@ const GroupAdminsDialog: React.FC<IGroupAdminsDialogProps> = ({ groupId }) => {
           </div>
           <ul className="flex flex-col gap-2.5  max-h-[400px] overflow-scroll no-scrollbar">
             {admins?.length > 0 ? (
-              admins?.map(({ id, avatarImg, userName }) => (
+              admins?.map(({ id, avatarImg, userName, role }) => (
                 <MemberItemCard
                   key={id}
                   id={id}
                   avatarImg={avatarImg}
                   userName={userName}
                   isViewDialog
+                  role={role}
+                  assignAdminRole={() => {}}
                 />
               ))
             ) : (
