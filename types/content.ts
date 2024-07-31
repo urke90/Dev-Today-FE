@@ -12,20 +12,6 @@ export enum EQueryContentType {
   PODCAST = 'podcast',
   GROUP = 'group',
 }
-export interface CommonData {
-  authorId?: string;
-  title: string;
-  type: EContentType;
-  groupId?: string;
-  coverImage: string | undefined;
-  description: string;
-  tags: string[];
-  meetupLocation?: string;
-  meetupDate?: Date;
-  podcastFile?: string;
-  podcastTitle?: string;
-}
-
 export interface IContent {
   group: {
     id: string;

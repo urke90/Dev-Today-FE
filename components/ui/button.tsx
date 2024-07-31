@@ -13,7 +13,7 @@ const buttonVariants = cva(
         primary:
           'border-primary-500 bg-primary-500 text-white-100 border py-3 transition-colors',
         cancel:
-          'bg-white-300 text-black-700 dark:bg-black-800 dark:text-white-100 gap-2.5 py-3 shadow-[0px_3px_20px_0px_rgba(0,0,0,0.04)] dark:shadow-none',
+          'bg-white-300 text-black-700 dark:bg-black-800 dark:text-white-100 gap-2.5 py-3 shadow-[0px_3px_20px_0px_rgba(0,0,0,0.04)] dark:shadow-none hover:!bg-primary-500 hover:!text-white-100 transition-colors',
         icon: 'w-auto p-0',
         warning: 'bg-error-primary text-white-100',
       },

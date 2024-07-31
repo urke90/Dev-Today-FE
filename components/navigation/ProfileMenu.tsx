@@ -15,25 +15,26 @@ import Image from 'next/image';
 import { CLOUDINARY_URL } from '@/constants';
 import { useTheme } from '@/context/ThemeProvider';
 import Link from 'next/link';
+import { useState } from 'react';
 
-interface IProfileMenuProps {}
+// ----------------------------------------------------------------
 
-const ProfileMenu: React.FC<IProfileMenuProps> = (props) => {
+const ProfileMenu: React.FC = () => {
+  const [isOpen, setIsOpen] = useState(false);
   const { setMode } = useTheme();
   const { data: session } = useSession();
-  let profileImage = session?.user.image;
 
-  if (profileImage?.startsWith(CLOUDINARY_URL)) {
-    profileImage = getCldImageUrl({
-      width: 60,
-      height: 60,
-      src: profileImage,
-      crop: 'fill',
-    });
-  }
+  const profileImage = session?.user.image?.startsWith(CLOUDINARY_URL)
+    ? getCldImageUrl({
+        width: 60,
+        height: 60,
+        src: session?.user.image,
+        crop: 'fill',
+      })
+    : session?.user.image;
 
   return (
-    <DropdownMenu.Root>
+    <DropdownMenu.Root open={isOpen} onOpenChange={setIsOpen}>
       <DropdownMenu.Trigger className="flex items-center gap-2" asChild>
         <Button className="w-auto">
           <div className="relative size-[26px] lg:size-[34px]">
@@ -55,7 +56,11 @@ const ProfileMenu: React.FC<IProfileMenuProps> = (props) => {
           className="bg-light100__dark800 shadow-header-menu border-white-border data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade dark:border-black-700 z-20 mt-7 flex min-w-44 flex-col gap-5 rounded-[14px] border p-5 max-lg:mt-6"
         >
           <DropdownMenu.Item className="p3-medium">
-            <Link href="/profile" className="flex items-center gap-2.5">
+            <Link
+              href="/profile"
+              className="flex items-center gap-2.5"
+              onClick={() => setIsOpen(false)}
+            >
               <ProfileIcon />
               Profile
             </Link>

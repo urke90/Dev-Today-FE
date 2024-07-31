@@ -10,6 +10,7 @@ import {
 import Image from 'next/image';
 
 import { EUserRole } from '@/types/user';
+import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { Button } from '../ui/button';
 
@@ -19,9 +20,9 @@ interface IMemberItemCardProps {
   avatarImg: string | null;
   isViewDialog?: boolean;
   role: EUserRole;
-  removeMember: () => Promise<{ message: string }>;
-  assignAdminRole: () => Promise<{ message: string }>;
-  removeAdminRole: () => Promise<{ message: string }>;
+  removeMember?: () => void;
+  assignAdminRole?: () => void;
+  removeAdminRole?: () => void;
 }
 
 // ----------------------------------------------------------------
@@ -31,15 +32,17 @@ const MemberItemCard: React.FC<IMemberItemCardProps> = ({
   avatarImg,
   isViewDialog = false,
   removeMember,
-  role,
+  role: initRole,
   assignAdminRole,
   removeAdminRole,
 }) => {
+  const [role, setRole] = useState(initRole);
+
   const handleRemoveMember = async () => {
     try {
-      const response = await removeMember();
+      removeMember && (await removeMember());
 
-      toast.success(response.message);
+      toast.success('User removed successfully.');
     } catch (error) {
       toast.error("Something went wrong. Couldn't remove user.");
     }
@@ -47,21 +50,23 @@ const MemberItemCard: React.FC<IMemberItemCardProps> = ({
 
   const handleAssignAdminRole = async () => {
     try {
-      const response = await assignAdminRole();
+      assignAdminRole && (await assignAdminRole());
 
-      toast.success(response.message);
+      setRole(EUserRole.ADMIN);
+      toast.success('Assigned Admin role successfully.');
     } catch (error) {
-      toast.error("Something went wrong. Couldn't remove user.");
+      toast.error("Something went wrong. Couldn't assign Admin role.");
     }
   };
 
   const handleRemoveAdminRole = async () => {
     try {
-      const response = await removeAdminRole();
+      removeAdminRole && (await removeAdminRole());
 
-      toast.success(response.message);
+      setRole(EUserRole.USER);
+      toast.success('Removed Admin role successfully.');
     } catch (error) {
-      toast.error("Something went wrong. Couldn't remove user.");
+      toast.error("Something went wrong. Couldn't remove Admin role.");
     }
   };
 
@@ -108,6 +113,11 @@ const MemberItemCard: React.FC<IMemberItemCardProps> = ({
                     ? handleRemoveAdminRole
                     : handleAssignAdminRole
                 }
+                // onClick={
+                //   role === EUserRole.ADMIN
+                //     ? handleRemoveAdminRole
+                //     : handleAssignAdminRole
+                // }
                 className="flex items-center gap-2.5 p3-medium cursor-pointer"
               >
                 {role === EUserRole.ADMIN

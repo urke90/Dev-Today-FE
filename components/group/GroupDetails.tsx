@@ -134,7 +134,7 @@ const GroupDetails: React.FC<IGroupDetailsProps> = ({
           </div>
           <div className="flex-between gap-2.5 md:px-2.5">
             <div className="flex items-center gap-3.5 md:gap-5">
-              <div className="relative size-14 md:size-[70px]">
+              <div className="relative size-14 md:size-[70px] shrink-0">
                 <Image
                   fill
                   src={groupProfileImage || '/assets/icons/image-preview.svg'}
@@ -206,7 +206,7 @@ const GroupDetails: React.FC<IGroupDetailsProps> = ({
                     width={28}
                     height={34}
                     alt={userName}
-                    className="rounded-full"
+                    className="rounded-full shrink-0"
                   />
                   {index === group.members.length - 1 && (
                     <div className="absolute flex-center bg-[#0A182D] z-10 size-full opacity-70 inset-0 rounded-full">

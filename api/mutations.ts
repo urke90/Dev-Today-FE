@@ -219,6 +219,7 @@ export const assignAdminRole = async (
   viewerId: string,
   userId: string
 ) => {
+  console.log('ASSIGNE ADMIN ROLE');
   const response = await fetch(BASE_API_URL + `/groups/${groupId}/admin`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -240,6 +241,7 @@ export const removeAdminRole = async (
   viewerId: string,
   userId: string
 ) => {
+  console.log('REMOVE ADMIN ROLE');
   const response = await fetch(BASE_API_URL + `/groups/${groupId}/admin`, {
     method: 'DELETE',
     headers: { 'Content-Type': 'application/json' },

@@ -62,13 +62,14 @@ const GroupUsersDialog: React.FC<IGroupUsersDialogProps> = ({ groupId }) => {
           </div>
           <ul className="flex flex-col gap-2.5  max-h-[400px] overflow-scroll no-scrollbar">
             {users?.length > 0 ? (
-              users?.map(({ id, avatarImg, userName }) => (
+              users?.map(({ id, avatarImg, userName, role }) => (
                 <MemberItemCard
                   key={id}
                   id={id}
                   avatarImg={avatarImg}
                   userName={userName}
                   isViewDialog
+                  role={role}
                 />
               ))
             ) : (
