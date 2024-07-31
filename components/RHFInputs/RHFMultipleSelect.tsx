@@ -73,8 +73,7 @@ const RHFMultipleSelect: React.FC<IRHFMultipleSelectProps> = ({
                 dropdownIndicator: () => '!hidden',
                 indicatorSeparator: () => '!hidden',
                 placeholder: () => '!text-white-300 !text-sm !font-normal',
-                input: () =>
-                  '!p3-regular hover:outline-none hover:rind-0 hover:border-0 hover:border-none',
+                input: () => '!p3-regular hover:outline-none',
                 option: (state) =>
                   `bg-black-700 dark:text-white-300 ${
                     state.isFocused ? 'dark:!bg-black-700 !bg-white-300' : ''
