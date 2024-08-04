@@ -46,7 +46,7 @@ import { CldUploadWidget } from 'next-cloudinary';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { useRef, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 import ReactSelect, { components } from 'react-select';
 import CreatableSelect from 'react-select/creatable';
@@ -56,7 +56,9 @@ import { Input } from '../ui/input';
 import PreviewContent from './PreviewContent';
 
 import { revalidateRoute } from '@/lib/actions/revalidate';
+import { APIProvider } from '@vis.gl/react-google-maps';
 import LoadingSpinner from '../shared/LoadingSpinner';
+import GoogleMapsAutocomplete from './GoogleMapsAutocomplete';
 
 // ----------------------------------------------------------------
 
@@ -178,7 +180,11 @@ const CreateContent: React.FC<ICreateContentProps> = ({
           }
         : undefined,
       coverImage: content?.coverImage || null,
-      meetupLocation: content?.meetupLocation || '',
+      meetupLocation: {
+        address: content?.meetupLocation.address || '',
+        lat: content?.meetupLocation.lat || 0,
+        lng: content?.meetupLocation.lng || 0,
+      },
       meetupDate: content?.meetupDate || undefined,
       podcastFile: content?.podcastFile || undefined,
       podcastTitle: content?.podcastTitle || '',
@@ -216,9 +222,14 @@ const CreateContent: React.FC<ICreateContentProps> = ({
       try {
         if (isEditPage) {
           await updateContentAsync(commonData);
+          toast.success('Updated successfully.');
+          revalidateRoute(`/content/${content.id}`);
+          router.push(`/content/${content.id}`);
         } else {
           await createContentAsync(commonData);
+          toast.success('Created successfully.');
           revalidateRoute('/posts');
+          router.push('/posts');
         }
       } catch (error) {
         console.error(error);
@@ -237,12 +248,17 @@ const CreateContent: React.FC<ICreateContentProps> = ({
             meetupLocation: form.getValues('meetupLocation'),
             meetupDate: form.getValues('meetupDate'),
           });
+          toast.success('Updated successfully.');
+          revalidateRoute(`/content/${content.id}`);
+          router.push(`/content/${content.id}`);
         } else {
           await createMeetupAsync({
             ...commonData,
             meetupLocation: form.getValues('meetupLocation'),
             meetupDate: form.getValues('meetupDate'),
           });
+
+          toast.success('Created successfully.');
           revalidateRoute('/meetups');
           router.push('/meetups');
         }
@@ -263,6 +279,8 @@ const CreateContent: React.FC<ICreateContentProps> = ({
             podcastFile: form.getValues('podcastFile'),
             podcastTitle: form.getValues('podcastTitle'),
           });
+          toast.success('Updated successfully.');
+          revalidateRoute(`/content/${content.id}`);
           router.push(`/content/${content.id}`);
         } else {
           await createPodcastAsync({
@@ -270,21 +288,14 @@ const CreateContent: React.FC<ICreateContentProps> = ({
             podcastFile: form.getValues('podcastFile'),
             podcastTitle: form.getValues('podcastTitle'),
           });
+          toast.success('Created successfully.');
           revalidateRoute('/podcasts');
+          router.push('/podcasts');
         }
       } catch (error) {
         console.error(error);
         toast.error('Failed to create podcast');
       }
-    }
-
-    if (isEditPage) {
-      toast.success('Updated successfully.');
-      revalidateRoute(`/content/${content.id}`);
-      router.push(`/content/${content.id}`);
-    } else {
-      toast.success('Crated successfully.');
-      resetForm();
     }
   };
 
@@ -319,7 +330,7 @@ const CreateContent: React.FC<ICreateContentProps> = ({
           >
             <FormField
               control={form.control}
-              defaultValue={EContentType.POST}
+              defaultValue={EContentType.MEETUP}
               name="type"
               render={({ field }) => (
                 <Select.Root value={field.value} onValueChange={field.onChange}>
@@ -528,66 +539,81 @@ const CreateContent: React.FC<ICreateContentProps> = ({
           />
           {contentType === EContentType.MEETUP && (
             <>
-              <RHFInput
-                className="!placeholder:white-400 p3-medium dark:!placeholder-white-400"
-                name="meetupLocation"
-                label="Meetup location"
-                placeholder="Write the location of the meetup"
-              />
-              <Controller
+              <div className="w-full">
+                <APIProvider
+                  apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ''}
+                >
+                  <FormField
+                    name="meetupLocation"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Podcast Audio File</FormLabel>
+                        <FormControl>
+                          <GoogleMapsAutocomplete onChange={field.onChange} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </APIProvider>
+              </div>
+
+              <FormField
                 control={form.control}
                 name="meetupDate"
                 render={({ field }) => (
-                  <Popover>
-                    <h3 className="p3-medium"> Meetup date</h3>
-                    <PopoverTrigger asChild>
-                      <Button
-                        className={cn(
-                          'justify-start p3-regular font-bold  bg-light100__dark800 border dark:border-black-700/50 px-4 h-11 !mt-2',
-                          !field.value && 'text-muted-foreground'
-                        )}
-                      >
-                        <Image
-                          src="/assets/icons/calendar-create.svg"
-                          alt="calendar"
-                          width={18}
-                          height={18}
+                  <FormItem>
+                    <Popover>
+                      <h3 className="p3-medium"> Meetup date</h3>
+                      <PopoverTrigger asChild>
+                        <Button
+                          className={cn(
+                            'justify-start p3-regular font-bold  bg-light100__dark800 border dark:border-black-700/50 px-4 h-11 !mt-2',
+                            !field.value && 'text-muted-foreground'
+                          )}
+                        >
+                          <Image
+                            src="/assets/icons/calendar-create.svg"
+                            alt="calendar"
+                            width={18}
+                            height={18}
+                          />
+                          {field.value ? (
+                            format(field.value, 'MMMM dd, yyyy hh:mm a')
+                          ) : (
+                            <span className="text-white-400">
+                              Pick a date of the meetup
+                            </span>
+                          )}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0 px-2 bg-white-100 dark:bg-black-800 pb-5  rounded-none space-y-3 border-white-400">
+                        <Calendar
+                          className="bg-white-100 dark:bg-black-800 p4-regular"
+                          mode="single"
+                          selected={field.value}
+                          onSelect={field.onChange}
+                          initialFocus
                         />
-                        {field.value ? (
-                          format(field.value, 'MMMM dd, yyyy hh:mm a')
-                        ) : (
-                          <span className="text-white-400">
-                            Pick a date of the meetup
-                          </span>
-                        )}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0 px-2 bg-white-100 dark:bg-black-800 pb-5  rounded-none space-y-3 border-white-400">
-                      <Calendar
-                        className="bg-white-100 dark:bg-black-800 p4-regular "
-                        mode="single"
-                        selected={field.value}
-                        onSelect={field.onChange}
-                        initialFocus
-                      />
-                      <Input
-                        type="time"
-                        defaultValue="09:00"
-                        min="09:00"
-                        max="18:00"
-                        onChange={(event) => {
-                          const currentDate = new Date(field.value);
-                          const newDate = new Date(
-                            currentDate.toDateString() +
-                              ' ' +
-                              event.target.value
-                          );
+                        <Input
+                          type="time"
+                          defaultValue="09:00"
+                          min="09:00"
+                          max="18:00"
+                          onChange={(event) => {
+                            const currentDate = new Date(field.value);
+                            const newDate = new Date(
+                              currentDate.toDateString() +
+                                ' ' +
+                                event.target.value
+                            );
 
-                          field.onChange(newDate);
-                        }}
-                      />
-                    </PopoverContent>
-                  </Popover>
+                            field.onChange(newDate);
+                          }}
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </FormItem>
                 )}
               />
               {form.formState.errors.meetupDate?.message && (
@@ -794,16 +820,15 @@ const CreateContent: React.FC<ICreateContentProps> = ({
             <Button
               onClick={resetForm}
               type="button"
-              size="large"
               className="bg-light100__dark800 hover:!text-white-100 duration-200 hover:bg-primary-500"
             >
               Cancel
             </Button>
             <Button
               type="button"
-              size="large"
+              variant="primary"
               onClick={() => onSubmit()}
-              className="bg-light100__dark800 hover:!text-white-100 duration-200 hover:bg-primary-500"
+              // className="bg-light100__dark800 hover:!text-white-100 duration-200 hover:bg-primary-500"
               disabled={form.formState.isSubmitting}
             >
               {form.formState.isSubmitting

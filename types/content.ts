@@ -35,8 +35,11 @@ export interface IContent {
   description: string;
   postGroups: string[];
   coverImage: string | null;
-  meetupLocationImage?: string | null;
-  meetupLocation?: string | null;
+  meetupLocation?: {
+    address: string;
+    lat: number;
+    lng: number;
+  };
   meetupDate: Date | null;
   podcastFile?: string | null;
   podcastTitle?: string | null;

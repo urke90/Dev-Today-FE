@@ -25,7 +25,16 @@ const SidebarContentCard: React.FC<ISidebarContentCardProps> = ({
       <ul className="flex flex-col gap-5">
         {items?.length > 0
           ? items.map(
-              ({ id, author, coverImage, meetupDate, tags, title, type }) => {
+              ({
+                id,
+                author,
+                coverImage,
+                meetupDate,
+                tags,
+                title,
+                type,
+                meetupLocation,
+              }) => {
                 switch (type) {
                   case EContentType.POST: {
                     return (
@@ -43,7 +52,7 @@ const SidebarContentCard: React.FC<ISidebarContentCardProps> = ({
                       <SidebarMeetupItem
                         key={id}
                         id={id}
-                        location="LOCATION IS HARDCODED FOR NOW"
+                        address={meetupLocation?.address}
                         title={title}
                         tags={tags}
                         meetupDate={meetupDate}

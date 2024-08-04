@@ -26,7 +26,7 @@ const SidebarPostItem: React.FC<ISidebarPostItemProps> = ({
             alt="post"
             width={58}
             height={58}
-            className="rounded"
+            className="rounded shrink-0"
           />
           <div className="flex flex-col gap-[6px]">
             <p className="p4-medium">{title}</p>

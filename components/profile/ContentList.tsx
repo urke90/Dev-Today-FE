@@ -247,7 +247,15 @@ const ContentList: React.FC<IContentListProps> = ({
           renderedContent =
             contentToRender[0] !== undefined &&
             contentToRender?.map(
-              ({ id, meetupDate, title, description, coverImage, tags }) => (
+              ({
+                id,
+                meetupDate,
+                title,
+                description,
+                coverImage,
+                tags,
+                meetupLocation,
+              }) => (
                 <MeetupItemCard
                   key={id}
                   id={id}
@@ -255,7 +263,7 @@ const ContentList: React.FC<IContentListProps> = ({
                   title={title}
                   description={description}
                   tags={tags}
-                  location="Innovation Hub, Austin"
+                  address={meetupLocation?.address}
                   meetupDate={meetupDate}
                 />
               )
