@@ -171,7 +171,7 @@ const ContentDetails: React.FC<IContentDetailsProps> = ({
               width={20}
               height={20}
             />
-            <p className="p3-medium">{content?.meetupLocation}</p>
+            <p className="p3-medium">{content?.meetupLocation?.address}</p>
           </div>
         </>
       )}

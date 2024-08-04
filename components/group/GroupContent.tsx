@@ -245,7 +245,15 @@ const GroupContent: React.FC<IGroupContentWrapperProps> = ({
         {
           styles = 'flex flex-col flax-wrap gap-5';
           renderedContent = contentData.contents?.map(
-            ({ id, meetupDate, title, description, coverImage, tags }) => (
+            ({
+              id,
+              meetupDate,
+              title,
+              description,
+              coverImage,
+              tags,
+              meetupLocation,
+            }) => (
               <MeetupItemCard
                 key={id}
                 id={id}
@@ -253,7 +261,7 @@ const GroupContent: React.FC<IGroupContentWrapperProps> = ({
                 title={title}
                 description={description}
                 tags={tags}
-                location="Innovation Hub, Austin"
+                address={meetupLocation?.address}
                 meetupDate={meetupDate}
               />
             )

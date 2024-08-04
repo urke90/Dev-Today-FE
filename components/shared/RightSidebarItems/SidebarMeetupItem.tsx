@@ -8,14 +8,14 @@ import BadgeItem from '../BadgeItem';
 export interface ISidebarMeetupItemProps {
   title: string;
   meetupDate: Date | null;
-  location: string;
+  address: string | undefined;
   id: string;
   tags: ITag[];
 }
 
 const SidebarMeetupItem: React.FC<ISidebarMeetupItemProps> = ({
   id,
-  location,
+  address,
   meetupDate,
   tags,
   title,
@@ -36,7 +36,7 @@ const SidebarMeetupItem: React.FC<ISidebarMeetupItemProps> = ({
         </div>
         <div className="flex flex-col gap-1.5">
           <p className="p3-medium line-clamp-1">{title}</p>
-          <p className="subtitle-normal">{location}</p>
+          <p className="subtitle-normal">{address}</p>
           {tags?.length > 0 ? (
             <ul className="flex gap-2.5 flex-wrap ">
               {tags.slice(0, 3).map(({ id, title }) => (

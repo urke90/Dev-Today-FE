@@ -114,6 +114,7 @@ const ContentList: React.FC<IContentListProps> = ({
         commentsCount,
         isLiked,
         meetupDate,
+        meetupLocation,
       }) => {
         switch (contentType) {
           case EQueryType.POST: {
@@ -147,7 +148,7 @@ const ContentList: React.FC<IContentListProps> = ({
                 title={title}
                 description={description}
                 tags={tags}
-                location="Innovation Hub, Austin"
+                address={meetupLocation?.address}
                 meetupDate={meetupDate}
               />
             );

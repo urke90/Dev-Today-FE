@@ -111,7 +111,14 @@ export const postSchema = baseContentSchema.extend({});
 export type IPost = z.infer<typeof postSchema>;
 
 export const meetupSchema = baseContentSchema.extend({
-  meetupLocation: z.string().min(3),
+  meetupLocation: z.object({
+    address: z
+      .string()
+      .trim()
+      .min(1, 'Address must be at least 1 character long'),
+    lat: z.number(),
+    lng: z.number(),
+  }),
   meetupDate: z.coerce.date(),
 });
 

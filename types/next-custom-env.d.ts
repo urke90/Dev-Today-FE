@@ -12,5 +12,7 @@ declare namespace NodeJS {
 
     NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME: string;
     NEXT_PUBLIC_CLOUDINARY_PRESEST_NAME: string;
+
+    NEXT_PUBLIC_GOOGLE_MAPS_API_KEY?: string;
   }
 }

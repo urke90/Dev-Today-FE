@@ -14,7 +14,7 @@ interface IMeetupItemCardProps {
   id: string;
   title: string;
   coverImage: string | null;
-  location: string;
+  address: string | undefined;
   meetupDate: Date | null;
   description: string;
   tags: ITag[];
@@ -23,7 +23,7 @@ interface IMeetupItemCardProps {
 const MeetupItemCard: React.FC<IMeetupItemCardProps> = ({
   id,
   coverImage,
-  location,
+  address,
   title,
   meetupDate,
   description,
@@ -49,7 +49,7 @@ const MeetupItemCard: React.FC<IMeetupItemCardProps> = ({
             </div>
             <div>
               <p className="lg:p1-bold p3-bold">{title}</p>
-              <p className="lg:p3-regular subtitle-normal">{location}</p>
+              <p className="lg:p3-regular subtitle-normal">{address}</p>
             </div>
           </div>
           <div className="flex-center bg-light200__dark700 h-[56px] w-[38px] shrink-0 flex-col rounded-[6px] px-2.5 py-[5px] md:h-[58px] md:w-[54px]">
