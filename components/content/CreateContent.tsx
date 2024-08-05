@@ -24,7 +24,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { postTypes } from '@/constants';
+import { CONTENT_TYPES } from '@/constants';
 import { useTheme } from '@/context/ThemeProvider';
 import { cn } from '@/lib/utils';
 import {
@@ -54,9 +54,15 @@ import { Editor as TinyMCEEditor } from 'tinymce';
 import { useDebounce } from 'use-debounce';
 import { Input } from '../ui/input';
 import PreviewContent from './PreviewContent';
+z;
 
 import { revalidateRoute } from '@/lib/actions/revalidate';
 import { APIProvider } from '@vis.gl/react-google-maps';
+import { z } from 'zod';
+import CalendarIcon from '../icons/Calendar';
+import FrameIcon from '../icons/Frame';
+import PodcastIcon from '../icons/Podcast';
+import { generateSelectStyles } from '../RHFInputs/RHFMultipleSelect';
 import LoadingSpinner from '../shared/LoadingSpinner';
 import GoogleMapsAutocomplete from './GoogleMapsAutocomplete';
 
@@ -195,6 +201,8 @@ const CreateContent: React.FC<ICreateContentProps> = ({
     },
   });
 
+  const type = form.watch('type');
+
   const contentType = form.watch('type');
   const coverImage = form.watch('coverImage');
 
@@ -318,7 +326,7 @@ const CreateContent: React.FC<ICreateContentProps> = ({
   return (
     <div className="w-full">
       <Form {...form}>
-        <form className="space-y-8 w-full ">
+        <form className="space-y-8">
           <RHFInput
             className="p3-medium"
             name="title"
@@ -326,7 +334,7 @@ const CreateContent: React.FC<ICreateContentProps> = ({
             placeholder="Write a title of the post"
           />
           <div
-            className={`flex flex-col md:flex-row ${form.formState.errors && 'items-center'}  items-center gap-3`}
+            className={`flex flex-col sm:flex-row ${form.formState.errors && 'items-center'}  items-center gap-3`}
           >
             <FormField
               control={form.control}
@@ -337,22 +345,10 @@ const CreateContent: React.FC<ICreateContentProps> = ({
                   <Select.Trigger
                     disabled={isEditPage}
                     {...field}
-                    className={`flex w-full md:w-1/4 ${form.formState.errors.groupId ? '!mt-2' : '!mt-6'} capitalize border dark:border-black-700/50 rounded-md px-2 items-center h-12 bg-white-100 dark:bg-black-800 md:justify-center outline-none`}
-                    aria-label="Food"
+                    className={`flex w-full sm:w-[140px] flex-center ${form.formState.errors.groupId ? '!mt-2' : '!mt-6'} capitalize border !border-white-border dark:!border-[#393E4F66] rounded-md px-2 items-center min-h-[46px] bg-white-100 dark:bg-black-800 outline-none pl-6`}
                   >
-                    <p className="w-1/6 md:w-1/2 p3-regular dark:!text-white-400">
-                      Create
-                    </p>
-                    <span className="mr-1 dark:text-white-100/70 text-black-800/60 ">
-                      -
-                    </span>
-                    <p
-                      className={`${
-                        contentType !== EContentType.POST ? 'hidden' : ''
-                      } p3-regular !font-bold`}
-                    ></p>
                     <div className="flex w-full items-center p3-regular justify-between !text-black-800 dark:!text-white-100 !font-bold ">
-                      <Select.Value placeholder="Post" />
+                      <Select.Value />
                       <Image
                         src="/assets/icons/arrow-down-slim.svg"
                         alt="arrow-down"
@@ -363,37 +359,27 @@ const CreateContent: React.FC<ICreateContentProps> = ({
                     </div>
                   </Select.Trigger>
                   <Select.Portal>
-                    <Select.Content
-                      position="popper"
-                      className="overflow-hidden bg-white"
-                    >
-                      <Select.Viewport className="w-60 mt-3 rounded-md  p-3 bg-light100__dark800">
-                        <Select.Group className="flex items-center p-2 rounded-md group duration-200 justify-start">
-                          <div className="flex flex-col space-y-3 w-full">
-                            {postTypes.map((type, idx) => (
-                              <div
-                                key={idx}
-                                className="flex hover:bg-white-300/30 cursor-pointer dark:hover:bg-black-700 px-3 py-1 rounded-md"
+                    <Select.Content position="popper">
+                      <Select.Viewport className="w-40 mt-3 flex-flex-col gap-2 rounded-md bg-light100__dark800 shadow-card">
+                        <Select.Group>
+                          {CONTENT_TYPES.map(({ value, title }) => {
+                            return (
+                              <Select.Item
+                                onSelect={(e) => e.preventDefault()}
+                                value={value}
+                                className="flex gap-3 dark:hover:bg-black-700 dark:text-white-100 hover:bg-white-200 text-white-400 p-2 pl-3 items-center hover:text-primary-500 hover:dark:text-primary-500 cursor-pointer"
                               >
-                                <Image
-                                  src={type.image}
-                                  alt={type.title}
-                                  width={24}
-                                  height={24}
-                                  className="invert dark:invert-0"
-                                />
-                                <SelectItem
-                                  value={type.value}
-                                  onValueChange={(value) => {
-                                    field.onChange(value);
-                                  }}
-                                  className="p-2 p3-medium capitalize !text-[14px] hover:!text-primary-500"
-                                >
-                                  {type.title}
-                                </SelectItem>
-                              </div>
-                            ))}
-                          </div>
+                                {value === EContentType.POST && <FrameIcon />}
+                                {value === EContentType.MEETUP && (
+                                  <CalendarIcon />
+                                )}
+                                {value === EContentType.PODCAST && (
+                                  <PodcastIcon />
+                                )}
+                                <Select.ItemText>{title}</Select.ItemText>
+                              </Select.Item>
+                            );
+                          })}
                         </Select.Group>
                       </Select.Viewport>
                     </Select.Content>
@@ -416,28 +402,7 @@ const CreateContent: React.FC<ICreateContentProps> = ({
                         defaultValue={field.value}
                         value={form.watch('groupId')}
                         onInputChange={(value) => setQ(value)}
-                        styles={{
-                          control: (base) => ({
-                            ...base,
-                            boxShadow: 'none',
-                          }),
-                        }}
-                        classNames={{
-                          input: () =>
-                            '!text-[16px] dark:!text-white-100 text-black-800',
-
-                          control: () =>
-                            '!border-none dark:bg-black-800 dark:!border-[#393E4F66] md:px-3 h-11',
-                          indicatorSeparator: () => '!hidden',
-                          dropdownIndicator: () =>
-                            '!text-white-400 !w-10 !h-10',
-                          option: () =>
-                            '!bg-white-100 hover:!bg-white-300/30 hover:dark:!bg-white-300/20 rounded-md dark:!bg-black-800  dark:!text-white-100 !text-black-800',
-                          singleValue: () => 'dark:!text-white-100',
-                          menu: () =>
-                            'bg-white-100 dark:bg-black-800 !shadow-sm  p-2 rounded-md',
-                        }}
-                        className="w-full h-full !mt-0 rounded-md dark:!bg-black-800 border dark:border-black-700/50 "
+                        classNames={generateSelectStyles()}
                         isLoading={isLoadingGroups}
                         isDisabled={isEditPage}
                         isClearable
@@ -754,28 +719,9 @@ const CreateContent: React.FC<ICreateContentProps> = ({
               render={({ field }) => (
                 <CreatableSelect
                   instanceId={field.name}
-                  className="border rounded-md dark:border-black-700/50"
                   {...field}
                   onInputChange={(value) => setTitle(value)}
-                  classNames={{
-                    input: () =>
-                      'md:!text-[16px] dark:!text-white-100 text-black-800',
-                    control: () =>
-                      '!border-none !shadow-none relative  dark:bg-black-800 dark:!border-[#393E4F66] md:px-3 h-auto min-h-[44px]',
-                    indicatorSeparator: () => '!hidden',
-                    dropdownIndicator: () => '!hidden',
-                    indicatorsContainer: () => 'cursor-pointer',
-                    multiValue: () =>
-                      '!bg-white-200 !px-2 !py-1 dark:!bg-black-700 !text-white-100 !rounded-full',
-                    multiValueLabel: () =>
-                      '!uppercase dark:!text-white-200 !cap-10',
-                    multiValueRemove: () =>
-                      '!text-white-400 !rounded-3xl !text-white-100 hover:!bg-white-100',
-                    option: () =>
-                      '!bg-white-100 !py-[18px]  dark:!bg-black-800  dark:!text-white-100 !text-black-800 cursor-pointer',
-                    singleValue: () => 'dark:!text-white-100',
-                    menu: () => 'bg-white-100 dark:bg-black-800 !shadow-sm',
-                  }}
+                  classNames={generateSelectStyles()}
                   isMulti
                   isOptionDisabled={() => field.value.length >= 5}
                   options={selectTagsOptions
@@ -828,7 +774,6 @@ const CreateContent: React.FC<ICreateContentProps> = ({
               type="button"
               variant="primary"
               onClick={() => onSubmit()}
-              // className="bg-light100__dark800 hover:!text-white-100 duration-200 hover:bg-primary-500"
               disabled={form.formState.isSubmitting}
             >
               {form.formState.isSubmitting
@@ -873,26 +818,32 @@ const Option = (props: any) => {
 
 interface ISelectItemProps {
   value: string;
-  children: React.ReactNode;
+  // children: React.ReactNode;
   className?: string;
   onValueChange: (value: string) => void;
+  text: string;
+  icon: React.ReactNode;
 }
 
 export const SelectItem = React.forwardRef<HTMLDivElement, ISelectItemProps>(
-  ({ children, onValueChange, value, className, ...props }, forwardedRef) => {
+  ({ onValueChange, value, className, text, icon, ...rest }, forwardedRef) => {
     return (
       <Select.Item
         value={value}
         onSelect={() => onValueChange(value)}
         className={cn(
-          'text-[13px] leading-none text-violet11 rounded-[3px] flex items-center h-[25px] pr-[35px] pl-[25px] relative select-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:outline-none data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1',
+          'text-sm flex items-center relative select-none data-[highlighted]:outline-none',
           className
         )}
-        {...props}
+        {...rest}
         ref={forwardedRef}
       >
-        <Select.ItemText>{children}</Select.ItemText>
-        <Select.ItemIndicator className="absolute left-0 w-[25px] inline-flex items-center justify-center"></Select.ItemIndicator>
+        <Select.ItemText>{text}</Select.ItemText>
+        <Select.ItemIndicator className="absolute left-0 w-[25px] flex items-center ">
+          {value === EContentType.POST && <FrameIcon />}
+          {value === EContentType.MEETUP && <CalendarIcon />}
+          {value === EContentType.PODCAST && <PodcastIcon />}
+        </Select.ItemIndicator>
       </Select.Item>
     );
   }

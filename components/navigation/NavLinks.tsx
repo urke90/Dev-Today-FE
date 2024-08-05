@@ -25,7 +25,8 @@ const verifyRoute = (page: EPage, pathname: string) => {
     case EPage.CONTENT:
       return (
         (pathname.includes('/content') || pathname.includes('/posts')) &&
-        !pathname.includes('/create')
+        !pathname.includes('/create') &&
+        !pathname.includes('/edit')
       );
     case EPage.MEETUPS:
       return pathname.includes('/meetups') && !pathname.includes('/create');
@@ -34,7 +35,7 @@ const verifyRoute = (page: EPage, pathname: string) => {
     case EPage.GROUPS:
       return pathname.includes('/groups') && !pathname.includes('/create');
     case EPage.CREATE:
-      return pathname.includes('/create');
+      return pathname.includes('/create') || pathname.includes('/edit');
     default:
       return false;
   }
@@ -59,10 +60,10 @@ const NavLinks: React.FC = () => {
           <Link
             key={page}
             href={href}
-            className={`p-2.5 rounded-[7px] ${isActive ? 'bg-primary-500' : ''}`}
+            className={`group p-2.5 rounded-[7px] ${isActive ? 'bg-primary-500' : ''} hover:bg-white-300 dark:hover:bg-white-400 transition-colors`}
           >
             <Icon
-              className={`icon-light400__dark300 ${isActive ? '!text-white-100 dark:!text-white-100' : ''}`}
+              className={`icon-light400__dark300 ${isActive ? '!text-white-100 dark:!text-white-100' : ''} group-hover:dark:text-white-100 transition-colors`}
             />
           </Link>
         );

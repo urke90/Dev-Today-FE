@@ -68,7 +68,7 @@ const RHFMultipleSelect: React.FC<IRHFMultipleSelectProps> = ({
               classNames={{
                 control: () =>
                   // TODO Add different hover and focus effect since we will probably add the same to the Inputs
-                  'bg-white-100 dark:bg-black-800 border !border-white-border dark:!border-[#393E4F66] px-3 min-h-[46px] !shadow-none',
+                  'bg-white-100 dark:bg-black-800 border !border-white-border dark:!border-[#393E4F66] px-3 !min-h-[46px] !shadow-none',
                 clearIndicator: () => '!hidden',
                 dropdownIndicator: () => '!hidden',
                 indicatorSeparator: () => '!hidden',
@@ -77,11 +77,8 @@ const RHFMultipleSelect: React.FC<IRHFMultipleSelectProps> = ({
                 option: (state) =>
                   `bg-black-700 dark:text-white-300 ${
                     state.isFocused ? 'dark:!bg-black-700 !bg-white-300' : ''
-                  }`,
-                menuList: () =>
-                  `bg-white-100 dark:bg-black-800 ${
-                    hideDropDown ? 'hidden' : ''
-                  }`,
+                  } !cursor-pointer`,
+                menuList: () => `bg-white-100 dark:bg-black-800`,
                 multiValueLabel: () => 'dark:text-white-300 text-black-700',
                 multiValueRemove: () =>
                   'dark:!text-white-300 !text-black-700 hover:!bg-inherit',
@@ -96,6 +93,31 @@ const RHFMultipleSelect: React.FC<IRHFMultipleSelectProps> = ({
       )}
     />
   );
+};
+
+// TODO added this as temporary solution until i refactor MultipleSelect to be used in all components.
+export const generateSelectStyles = () => {
+  return {
+    control: () =>
+      // TODO Add different hover and focus effect since we will probably add the same to the Inputs
+      'bg-white-100 dark:bg-black-800 border !border-white-border dark:!border-[#393E4F66] px-3 !min-h-[46px] !shadow-none',
+    clearIndicator: () => '!hidden',
+    dropdownIndicator: () => '!hidden',
+    indicatorSeparator: () => '!hidden',
+    placeholder: () =>
+      'dark:placeholder:text-white-400 placeholder:text-white-400 !text-sm !font-medium',
+    input: () => '!p3-regular hover:outline-none',
+    option: (state: any) =>
+      `bg-black-700 dark:text-white-300 ${
+        state.isFocused ? 'dark:!bg-black-700 !bg-white-300' : ''
+      } !cursor-pointer`,
+    menuList: () => `bg-white-100 dark:bg-black-800`,
+    multiValueLabel: () => 'dark:text-white-300 text-black-700',
+    multiValueRemove: () =>
+      'dark:!text-white-300 !text-black-700 hover:!bg-inherit',
+    multiValue: () =>
+      '!py-1 !bg-white-200 dark:!bg-black-700 !px-1.5 !text-white-400 dark:!text-white-100 !cap-8 md:!cap-10 !rounded-[20px] uppercase',
+  };
 };
 
 export default RHFMultipleSelect;

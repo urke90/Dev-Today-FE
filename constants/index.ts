@@ -89,19 +89,19 @@ export const preferSkills = [
   { title: 'Tailwind CSS' },
 ];
 
-export const postTypes = [
+export const CONTENT_TYPES = [
   {
-    title: 'post',
+    title: 'Post',
     value: EContentType.POST,
     image: '/assets/icons/frame-white.svg',
   },
   {
-    title: 'meetup',
+    title: 'Meetup',
     value: EContentType.MEETUP,
     image: '/assets/icons/calendar-white.svg',
   },
   {
-    title: 'podcast',
+    title: 'Podcast',
     value: EContentType.PODCAST,
     image: '/assets/icons/podcast.svg',
   },
