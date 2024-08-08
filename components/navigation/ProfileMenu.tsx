@@ -13,7 +13,7 @@ import { signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
 
 import { CLOUDINARY_URL } from '@/constants';
-import { useTheme } from '@/context/ThemeProvider';
+import { useTheme } from 'next-themes';
 import Link from 'next/link';
 import { useState } from 'react';
 
@@ -21,7 +21,7 @@ import { useState } from 'react';
 
 const ProfileMenu: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { setMode } = useTheme();
+  const { setTheme } = useTheme();
   const { data: session } = useSession();
 
   const profileImage = session?.user.image?.startsWith(CLOUDINARY_URL)
@@ -75,18 +75,19 @@ const ProfileMenu: React.FC = () => {
             </Button>
           </DropdownMenu.Item>
           <DropdownMenu.Separator className="bg-white-border h-px" />
+
           <DropdownMenu.Item className="bg-primary-200 text-black-800 dark:bg-black-800 dark:text-white-200 flex gap-5 rounded-[15px] p-[3px] text-base font-semibold">
             Interface
             <div className="flex gap-2.5">
               <Button
                 className="bg-primary-100 dark:bg-black-800 size-[24px] rounded-full"
-                onClick={() => setMode('light')}
+                onClick={() => setTheme('light')}
               >
                 <SunIcon className="text-black-700" />
               </Button>
               <Button
                 className="bg-white-200 dark:bg-black-700 size-[24px] rounded-full"
-                onClick={() => setMode('dark')}
+                onClick={() => setTheme('dark')}
               >
                 <MoonIcon className="dark:text-dark-700 text-white-300" />
               </Button>

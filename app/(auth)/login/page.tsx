@@ -19,12 +19,12 @@ import {
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { loginWelcome } from '@/constants';
-import { useTheme } from '@/context/ThemeProvider';
 import { loginSchema } from '@/lib/validation';
 import { colorsLogIn } from '@/styles/index';
+import { useTheme } from 'next-themes';
 
 const Login = () => {
-  const { mode, setMode } = useTheme();
+  const { theme, setTheme } = useTheme();
   const router = useRouter();
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -33,6 +33,8 @@ const Login = () => {
       password: '',
     },
   });
+
+  console.log('theme', theme);
 
   async function onSubmit(values: z.infer<typeof loginSchema>) {
     const result = await signIn('credentials', {
@@ -53,11 +55,8 @@ const Login = () => {
       <div className="hidden flex-col items-center p-16 lg:flex lg:w-1/2">
         <div className="w-full">
           <Image
-            onClick={() =>
-              setMode && setMode(mode === 'dark' ? 'light' : 'dark')
-            }
             src={`${
-              mode === 'dark'
+              theme === 'dark'
                 ? '/assets/icons/logo-dark.svg'
                 : 'assets/icons/logo-light.svg'
             }`}
@@ -73,9 +72,11 @@ const Login = () => {
             {loginWelcome.map((item, index) => (
               <div
                 key={index + 1}
-                className="flex items-center gap-5 rounded-lg bg-white-100 p-5 dark:bg-black-700">
+                className="flex items-center gap-5 rounded-lg bg-white-100 p-5 dark:bg-black-700"
+              >
                 <div
-                  className={`dark:bg-black-800 ${colorsLogIn[index]} h-[60px] rounded-md p-5`}>
+                  className={`dark:bg-black-800 ${colorsLogIn[index]} h-[60px] rounded-md p-5`}
+                >
                   <Image
                     src={item.image}
                     alt={item.alt}
@@ -92,11 +93,12 @@ const Login = () => {
       <div
         className="flex w-full flex-col items-center bg-white-200 px-4 pt-10 
         text-white-100 dark:bg-black-900
-         md:px-10 lg:w-1/2 lg:justify-start  lg:pt-44 xl:px-28">
+         md:px-10 lg:w-1/2 lg:justify-start  lg:pt-44 xl:px-28"
+      >
         <div className="w-full lg:hidden">
           <Image
             src={
-              mode === 'dark'
+              theme === 'dark'
                 ? '/assets/icons/logo-dark.svg'
                 : '/assets/icons/logo-light.svg'
             }
@@ -109,7 +111,8 @@ const Login = () => {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="w-full space-y-5 ">
+            className="w-full space-y-5 "
+          >
             <FormField
               control={form.control}
               name="email"
@@ -147,12 +150,14 @@ const Login = () => {
             />
             <Button
               type="submit"
-              className="w-full bg-primary-500 text-[14px] h-11 p2-bold ">
+              className="w-full bg-primary-500 text-[14px] h-11 p2-bold "
+            >
               Next
             </Button>
             <Link
               href="/register"
-              className="text-white-300 block cursor-pointer text-center hover:underline">
+              className="text-white-300 block cursor-pointer text-center hover:underline"
+            >
               Don’t have an account yet?
               <span className="ml-1 text-[16px] text-primary-500">
                 Join the community
@@ -166,7 +171,8 @@ const Login = () => {
             <Button
               type="button"
               onClick={() => signIn('google', { callbackUrl: '/' })}
-              className="p3-medium h-11 flex w-full items-center gap-2 dark:bg-black-800 bg-white-100">
+              className="p3-medium h-11 flex w-full items-center gap-2 dark:bg-black-800 bg-white-100"
+            >
               <Image
                 src={'/assets/icons/google.svg'}
                 alt="google"
@@ -179,7 +185,8 @@ const Login = () => {
             <Button
               onClick={() => signIn('github', { callbackUrl: '/home' })}
               type="button"
-              className="p3-medium h-11 flex w-full items-center gap-2 dark:bg-black-800 bg-white-100">
+              className="p3-medium h-11 flex w-full items-center gap-2 dark:bg-black-800 bg-white-100"
+            >
               <Image
                 src={'/assets/icons/github.svg'}
                 alt="github"

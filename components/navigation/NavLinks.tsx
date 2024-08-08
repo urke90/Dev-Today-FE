@@ -29,11 +29,23 @@ const verifyRoute = (page: EPage, pathname: string) => {
         !pathname.includes('/edit')
       );
     case EPage.MEETUPS:
-      return pathname.includes('/meetups') && !pathname.includes('/create');
+      return (
+        pathname.includes('/meetups') &&
+        !pathname.includes('/create') &&
+        !pathname.includes('/edit')
+      );
     case EPage.PODCASTS:
-      return pathname.includes('/podcasts') && !pathname.includes('/create');
+      return (
+        pathname.includes('/podcasts') &&
+        !pathname.includes('/create') &&
+        !pathname.includes('/edit')
+      );
     case EPage.GROUPS:
-      return pathname.includes('/groups') && !pathname.includes('/create');
+      return (
+        pathname.includes('/groups') &&
+        !pathname.includes('/create') &&
+        !pathname.includes('/edit')
+      );
     case EPage.CREATE:
       return pathname.includes('/create') || pathname.includes('/edit');
     default:
