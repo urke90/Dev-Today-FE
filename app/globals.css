@@ -33,6 +33,12 @@ body::-webkit-scrollbar {
   }
 }
 
+@layer components {
+  [data-highlighted] {
+    @apply outline-none ring-0 border-0;
+  }
+}
+
 @layer utilities {
   /* TYPOGRAPHY  */
   .d1-bold {
