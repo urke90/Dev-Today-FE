@@ -9,10 +9,12 @@ import SunIcon from '../icons/Sun';
 import { Button } from '../ui/button';
 
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
-import { signOut, useSession } from 'next-auth/react';
+import { signOut } from 'next-auth/react';
+
 import Image from 'next/image';
 
 import { CLOUDINARY_URL } from '@/constants';
+import { useUser } from '@clerk/nextjs';
 import { useTheme } from 'next-themes';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -22,16 +24,18 @@ import { useState } from 'react';
 const ProfileMenu: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { setTheme } = useTheme();
-  const { data: session } = useSession();
+  const { user } = useUser();
 
-  const profileImage = session?.user.image?.startsWith(CLOUDINARY_URL)
+  console.log('user', user);
+
+  const profileImage = user?.imageUrl.startsWith(CLOUDINARY_URL)
     ? getCldImageUrl({
         width: 60,
         height: 60,
-        src: session?.user.image,
+        src: user.imageUrl,
         crop: 'fill',
       })
-    : session?.user.image;
+    : user?.imageUrl;
 
   return (
     <DropdownMenu.Root open={isOpen} onOpenChange={setIsOpen}>
@@ -45,7 +49,7 @@ const ProfileMenu: React.FC = () => {
               className="ring-primary-500 ring-offset-white-100 dark:ring-offset-black-800 rounded-lg ring-1 ring-offset-[3px]"
             />
           </div>
-          <span className="p2-medium max-md:hidden">{session?.user.name}</span>
+          <span className="p2-medium max-md:hidden">{user?.username}</span>
           <ArrowDownIcon className="icon-light400__dark300 max-md:hidden" />
         </Button>
       </DropdownMenu.Trigger>

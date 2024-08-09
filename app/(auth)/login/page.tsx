@@ -18,7 +18,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
-import { loginWelcome } from '@/constants';
+import { SIGN_IN_SIDEBAR_DATA } from '@/constants';
 import { loginSchema } from '@/lib/validation';
 import { colorsLogIn } from '@/styles/index';
 import { useTheme } from 'next-themes';
@@ -69,7 +69,7 @@ const Login = () => {
         <div className="max-w-md">
           <h2 className="d1-bold mb-10">Sign in to DevToday.</h2>
           <article className="flex flex-col gap-5">
-            {loginWelcome.map((item, index) => (
+            {SIGN_IN_SIDEBAR_DATA.listItems.map((item, index) => (
               <div
                 key={index + 1}
                 className="flex items-center gap-5 rounded-lg bg-white-100 p-5 dark:bg-black-700"

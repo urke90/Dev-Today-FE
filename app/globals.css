@@ -107,6 +107,9 @@ body::-webkit-scrollbar {
   .bg-light100__dark800 {
     @apply bg-white-100 dark:bg-black-800;
   }
+  .bg-light200__dark900 {
+    @apply bg-white-200 dark:bg-black-900;
+  }
   .bg-light200__dark800 {
     @apply bg-white-200 dark:bg-black-800;
   }

@@ -1,40 +1,50 @@
-export const CLOUDINARY_URL =
-  'https://res.cloudinary.com/dev-today/image/upload';
 import { EContentType } from '@/types/content';
 
-export const regWelcome = [
+// ----------------------------------------------------------------
+
+export const CLOUDINARY_URL =
+  'https://res.cloudinary.com/dev-today/image/upload';
+
+export interface IAuthOnboardingSidebarData {
+  imgUrl: string;
+  alt: string;
+  label: string;
+  bgColor?: string;
+}
+
+export const SIGN_UP_SIDEBAR_DATA: IAuthOnboardingSidebarData[] = [
   {
-    image: '/assets/icons/business-dark.svg',
+    imgUrl: '/assets/auth-onboarding/icons/business.svg',
     alt: 'business',
     label:
       'Discover the latest trends, tools, and insights shaping the developer world.',
   },
-
   {
-    image: '/assets/icons/chat-dark.svg',
-    alt: 'chat',
+    imgUrl: '/assets/icons/auth-onboarding/chat-orange.svg',
+    alt: 'Chat',
     label: 'Forge connections, collaborate on projects, and grow together.',
   },
   {
-    image: '/assets/icons/inbox-dark.svg',
+    imgUrl: '/assets/icons/auth-onboarding/inbox-blue.svg',
     alt: 'inbox',
     label:
       'Elevate your coding with exclusive content for professional growth.',
   },
 ];
 
-export const loginWelcome = [
+export const SIGN_IN_SIDEBAR_DATA: IAuthOnboardingSidebarData[] = [
   {
-    image: '/assets/icons/inbox-green.svg',
+    imgUrl: '/assets/icons/auth-onboarding/inbox-green.svg',
     alt: 'inbox',
     label:
       'Get in the code zone quickly! Swift sign-in for instant access to your hub.',
+    bgColor: '#E7FAF4',
   },
   {
-    image: '/assets/icons/tunder.svg',
+    imgUrl: '/assets/icons/auth-onboarding/thunder.svg',
     alt: 'tunder',
-    label:
-      'Get in the code zone quickly! Swift sign-in for instant access to your hub.',
+    label: 'Trouble logging in? Reset your password.',
+    bgColor: '#FDF4EA',
   },
 ];
 

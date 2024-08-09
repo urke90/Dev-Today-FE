@@ -10,20 +10,6 @@ import { useEffect, useState } from 'react';
 
 // ----------------------------------------------------------------
 
-const generateLogoSrc = (theme: string | undefined) => {
-  switch (theme) {
-    case 'dark': {
-      return;
-    }
-    case 'light': {
-      return;
-    }
-    default: {
-      return 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
-    }
-  }
-};
-
 const Header: React.FC = () => {
   const [isMounted, setIsMounted] = useState(false);
   const { resolvedTheme } = useTheme();
