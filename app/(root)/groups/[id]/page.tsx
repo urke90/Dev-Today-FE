@@ -1,5 +1,5 @@
-import { auth } from '@/app/api/auth/[...nextauth]/route';
 import GroupDetails from '@/components/group/GroupDetails';
+import { auth } from '@/lib/auth';
 import type {
   IGroupContentResponse,
   IGroupDetailsResponse,

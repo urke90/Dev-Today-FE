@@ -6,24 +6,38 @@ import NavMenu from '../navigation/NavMenu';
 
 import { useTheme } from 'next-themes';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 // ----------------------------------------------------------------
 
 const Header: React.FC = () => {
-  const { theme } = useTheme();
+  const { resolvedTheme } = useTheme();
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   return (
     <header className="bg-light100__dark800 flex-between fixed left-0 top-0 z-50 w-full gap-5 px-3.5 py-4 lg:px-8 lg:py-5">
       <Link href="/" className="w-[147px] h-[30px] relative">
-        <Image
-          src={
-            theme === 'dark'
-              ? '/assets/images/logo-dark.svg'
-              : '/assets/images/logo-light.svg'
-          }
-          fill
-          alt="Logo"
-        />
+        {!isMounted ? (
+          <Image
+            src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+            fill
+            alt="Logo"
+          />
+        ) : (
+          <Image
+            src={
+              resolvedTheme === 'dark'
+                ? '/assets/images/logo-dark.svg'
+                : '/assets/images/logo-light.svg'
+            }
+            fill
+            alt="Logo"
+          />
+        )}
       </Link>
       <div className="max-sm:hidden">
         <NavLinks />

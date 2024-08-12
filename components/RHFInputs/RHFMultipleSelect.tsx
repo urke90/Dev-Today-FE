@@ -105,7 +105,7 @@ export const generateSelectStyles = () => {
     dropdownIndicator: () => '!hidden',
     indicatorSeparator: () => '!hidden',
     placeholder: () =>
-      'dark:placeholder:text-white-400 placeholder:text-white-400 !text-sm !font-medium',
+      'dark:placeholder:!text-white-400 placeholder:!text-white-400 !text-sm !font-medium',
     input: () => '!p3-regular hover:outline-none',
     option: (state: any) =>
       `bg-black-700 dark:text-white-300 ${
@@ -117,6 +117,7 @@ export const generateSelectStyles = () => {
       'dark:!text-white-300 !text-black-700 hover:!bg-inherit',
     multiValue: () =>
       '!py-1 !bg-white-200 dark:!bg-black-700 !px-1.5 !text-white-400 dark:!text-white-100 !cap-8 md:!cap-10 !rounded-[20px] uppercase',
+    singleValue: () => 'text-white-400 dark:text-white-100',
   };
 };
 

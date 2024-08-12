@@ -1,5 +1,5 @@
-import { auth } from '@/app/api/auth/[...nextauth]/route';
 import CreateGroup from '@/components/group/CreateGroup';
+import { auth } from '@/lib/auth';
 
 const CreateGroups = async () => {
   const session = await auth();

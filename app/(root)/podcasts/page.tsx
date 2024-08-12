@@ -1,5 +1,5 @@
-import { auth } from '@/app/api/auth/[...nextauth]/route';
 import PodcastsHome from '@/components/content/PodcastsHome';
+import { auth } from '@/lib/auth';
 import {
   IContentPagesResponse,
   IContentPagesSidebarResponse,
