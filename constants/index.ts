@@ -6,60 +6,75 @@ export const CLOUDINARY_URL =
   'https://res.cloudinary.com/dev-today/image/upload';
 
 export interface IAuthOnboardingSidebarData {
-  imgUrl: string;
-  alt: string;
-  label: string;
-  bgColor?: string;
+  title: string;
+  listItems: {
+    imgUrl: string;
+    alt: string;
+    label: string;
+    bgColor?: string;
+  }[];
 }
 
-export const SIGN_UP_SIDEBAR_DATA: IAuthOnboardingSidebarData[] = [
-  {
-    imgUrl: '/assets/auth-onboarding/icons/business.svg',
-    alt: 'business',
-    label:
-      'Discover the latest trends, tools, and insights shaping the developer world.',
-  },
-  {
-    imgUrl: '/assets/icons/auth-onboarding/chat-orange.svg',
-    alt: 'Chat',
-    label: 'Forge connections, collaborate on projects, and grow together.',
-  },
-  {
-    imgUrl: '/assets/icons/auth-onboarding/inbox-blue.svg',
-    alt: 'inbox',
-    label:
-      'Elevate your coding with exclusive content for professional growth.',
-  },
-];
+export const SIGN_UP_SIDEBAR_DATA: IAuthOnboardingSidebarData = {
+  title:
+    'Join our developer community! Sign up now and be part of the conversation. ',
+  listItems: [
+    {
+      imgUrl: '/assets/icons/auth-onboarding/business.svg',
+      alt: 'business',
+      label:
+        'Discover the latest trends, tools, and insights shaping the developer world.',
+    },
+    {
+      imgUrl: '/assets/icons/auth-onboarding/chat-orange.svg',
+      alt: 'Chat',
+      label: 'Forge connections, collaborate on projects, and grow together.',
+    },
+    {
+      imgUrl: '/assets/icons/auth-onboarding/inbox-blue.svg',
+      alt: 'inbox',
+      label:
+        'Elevate your coding with exclusive content for professional growth.',
+    },
+  ],
+};
 
-export const SIGN_IN_SIDEBAR_DATA: IAuthOnboardingSidebarData[] = [
-  {
-    imgUrl: '/assets/icons/auth-onboarding/inbox-green.svg',
-    alt: 'inbox',
-    label:
-      'Get in the code zone quickly! Swift sign-in for instant access to your hub.',
-    bgColor: '#E7FAF4',
-  },
-  {
-    imgUrl: '/assets/icons/auth-onboarding/thunder.svg',
-    alt: 'tunder',
-    label: 'Trouble logging in? Reset your password.',
-    bgColor: '#FDF4EA',
-  },
-];
+export const SIGN_IN_SIDEBAR_DATA: IAuthOnboardingSidebarData = {
+  title: 'Sign in to DevToday.',
+  listItems: [
+    {
+      imgUrl: '/assets/icons/auth-onboarding/inbox-green.svg',
+      alt: 'inbox',
+      label:
+        'Get in the code zone quickly! Swift sign-in for instant access to your hub.',
+      bgColor: '#E7FAF4',
+    },
+    {
+      imgUrl: '/assets/icons/auth-onboarding/thunder.svg',
+      alt: 'tunder',
+      label: 'Trouble logging in? Reset your password.',
+      bgColor: '#FDF4EA',
+    },
+  ],
+};
 
-export const onboardingWelcome = [
-  {
-    image: '/assets/icons/rocket.svg',
-    alt: 'rocket',
-    label: 'Highlight your skills and projects for the community.',
-  },
-  {
-    image: '/assets/icons/chat-dark.svg',
-    alt: 'chat',
-    label: 'Explore learning opportunities and connect with mentors',
-  },
-];
+export const ONBOARDING_DATA: IAuthOnboardingSidebarData = {
+  title: 'Tell us a little about yourself!',
+  listItems: [
+    {
+      imgUrl: '/assets/icons/rocket.svg',
+      alt: 'Rocket',
+      label: 'Highlight your skills and projects for the community.',
+      bgColor: '#FFECE6',
+    },
+    {
+      imgUrl: '/assets/icons/chat-orange.svg',
+      alt: 'Chat',
+      label: 'Explore learning opportunities and connect with mentors.',
+      bgColor: '#FDF4EA',
+    },
+  ],
+};
 
 export const currentKnowledge = [
   { title: 'Seasoned Pro - Coding veteran', value: 'pro' },

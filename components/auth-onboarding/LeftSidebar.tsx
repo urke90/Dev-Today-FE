@@ -7,16 +7,18 @@ import { useEffect, useState } from 'react';
 // ----------------------------------------------------------------
 
 interface ILeftSidebarProps {
-  title: string;
-  listItems: {
-    imgUrl: string;
-    alt: string;
-    label: string;
-    bgColor?: string;
-  }[];
+  data: {
+    title: string;
+    listItems: {
+      imgUrl: string;
+      alt: string;
+      label: string;
+      bgColor?: string;
+    }[];
+  };
 }
 
-const LeftSidebar: React.FC<ILeftSidebarProps> = ({ title, listItems }) => {
+const LeftSidebar: React.FC<ILeftSidebarProps> = ({ data }) => {
   const { resolvedTheme } = useTheme();
   const [isMounted, setIsMounted] = useState(false);
 
@@ -25,7 +27,7 @@ const LeftSidebar: React.FC<ILeftSidebarProps> = ({ title, listItems }) => {
   }, []);
 
   return (
-    <div className="flex flex-col flex-1 bg-light100__dark800 min-h-screen max-md:hidden px-5">
+    <div className="flex flex-col flex-1 bg-light100__dark800 min-h-screen max-md:hidden px-5 shrink-0">
       <div className="mb-12 mt-9 md:ml-6 md:mb-20 max-md:mx-auto">
         {!isMounted ? (
           <Image
@@ -52,9 +54,9 @@ const LeftSidebar: React.FC<ILeftSidebarProps> = ({ title, listItems }) => {
       </div>
       <div className="flex flex-col items-center justify-center">
         <div className="max-w-md max-md:hidden flex flex-col gap-10">
-          <h2 className="d1-bold">{title}</h2>
+          <h2 className="d1-bold">{data.title}</h2>
           <ul className="flex flex-col gap-5">
-            {listItems.map((item, index) => (
+            {data.listItems.map((item, index) => (
               <li
                 key={index}
                 className="flex items-center gap-5 rounded-lg bg-white-100 p-5 dark:bg-black-700 p1-medium"

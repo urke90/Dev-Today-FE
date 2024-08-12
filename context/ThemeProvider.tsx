@@ -10,7 +10,7 @@ interface IThemeProvider {
 
 const ThemeProvider: React.FC<IThemeProvider> = ({ children }) => {
   return (
-    <NextThemesProvider attribute="class" defaultTheme="system" enableSystem>
+    <NextThemesProvider attribute="class" defaultTheme="dark">
       {children}
     </NextThemesProvider>
   );

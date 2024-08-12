@@ -1,4 +1,4 @@
-import { ClerkProvider } from '@clerk/nextjs';
+import SessionProvider from '@/context/SessionProvider';
 import ThemeProvider from '../context/ThemeProvider';
 
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
@@ -28,7 +28,7 @@ const RootLayout = ({
   children: React.ReactNode;
 }>) => {
   return (
-    <ClerkProvider>
+    <SessionProvider>
       <QueryProvider>
         <html lang="en" suppressHydrationWarning>
           <body
@@ -36,12 +36,12 @@ const RootLayout = ({
           >
             <ThemeProvider>
               <main className="mx-auto max-w-screen-xxl">{children}</main>
-              <ReactQueryDevtools />
+              {process.env.NODE_ENV === 'development' && <ReactQueryDevtools />}
             </ThemeProvider>
           </body>
         </html>
       </QueryProvider>
-    </ClerkProvider>
+    </SessionProvider>
   );
 };
 
