@@ -1,9 +1,9 @@
 import CreateGroup from '@/components/group/CreateGroup';
 import { auth } from '@/lib/auth';
 
-const CreateGroups = async () => {
+const CreateGroupPage = async () => {
   const session = await auth();
-  if (!session) throw new Error(' User data not available!');
+  if (!session) throw new Error('User data not available!');
 
   return (
     <div className="create-page-wrapper">
@@ -12,4 +12,4 @@ const CreateGroups = async () => {
   );
 };
 
-export default CreateGroups;
+export default CreateGroupPage;
