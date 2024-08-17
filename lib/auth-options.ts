@@ -107,7 +107,6 @@ export const authOptions: AuthOptions = {
       }
       return token;
     },
-
     async session({ session, token }) {
       try {
         if (token.id) {
