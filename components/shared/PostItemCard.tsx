@@ -85,7 +85,7 @@ const PostItemCard: React.FC<IPostItemCardProps> = ({
             </div>
             <Button
               type="button"
-              className="flex-center bg-white-200 dark:bg-black-700 size-[30px] shrink-0 rounded-full"
+              className="flex-center bg-white-200 dark:bg-black-700 size-[30px] shrink-0 rounded-full like-btn-scale-hover"
               onClick={(e) =>
                 isLiked ? handleDislikeContent(e, id) : handleLikeContent(e, id)
               }

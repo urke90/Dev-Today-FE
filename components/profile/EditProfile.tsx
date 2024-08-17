@@ -5,7 +5,6 @@ import { getCldImageUrl } from 'next-cloudinary';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import z from 'zod';
 import RHFMultipleSelect from '../RHFInputs/RHFMultipleSelect';
 import RHFTextarea from '../RHFInputs/RHFTextarea';
 import { Button } from '../ui/button';
@@ -13,7 +12,7 @@ import { Button } from '../ui/button';
 import RHFInput from '@/components/RHFInputs/RHFInput';
 import { Form } from '@/components/ui/form';
 import { CLOUDINARY_URL } from '@/constants';
-import { updateProfileSchema } from '@/lib/validation';
+import { IUpdateProfileSchema, updateProfileSchema } from '@/lib/validation';
 import type { IProfileUser } from '@/types/user';
 import { typedFetch } from '@/utils/api';
 import RHFProfileImageUpload from '../RHFInputs/RHFProfileImageUpload';
@@ -58,7 +57,7 @@ const EditProfile: React.FC<IEditProfileProps> = ({ user }) => {
     },
   });
 
-  const onSubmit = async (data: z.infer<typeof updateProfileSchema>) => {
+  const onSubmit = async (data: IUpdateProfileSchema) => {
     const mappedSkills = data.preferredSkills.map((skill) => skill.value);
 
     try {

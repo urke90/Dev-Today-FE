@@ -1,5 +1,5 @@
-import { auth } from '@/app/api/auth/[...nextauth]/route';
 import GroupsHome from '@/components/group/GroupsHome';
+import { auth } from '@/lib/auth';
 import type {
   IAllGroupsSidebarDetails,
   IHomePageGroupsResponse,

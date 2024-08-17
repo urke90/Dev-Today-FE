@@ -1,5 +1,5 @@
-import { auth } from '@/app/api/auth/[...nextauth]/route';
 import EditProfile from '@/components/profile/EditProfile';
+import { auth } from '@/lib/auth';
 import { IProfileUserResponse } from '@/types/user';
 import { typedFetch } from '@/utils/api';
 

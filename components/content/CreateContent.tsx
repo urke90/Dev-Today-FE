@@ -25,7 +25,6 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { CONTENT_TYPES } from '@/constants';
-import { useTheme } from '@/context/ThemeProvider';
 import { cn } from '@/lib/utils';
 import {
   baseContentSchema,
@@ -43,6 +42,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { Editor } from '@tinymce/tinymce-react';
 import { format } from 'date-fns';
 import { CldUploadWidget } from 'next-cloudinary';
+import { useTheme } from 'next-themes';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { useRef, useState } from 'react';
@@ -54,11 +54,9 @@ import { Editor as TinyMCEEditor } from 'tinymce';
 import { useDebounce } from 'use-debounce';
 import { Input } from '../ui/input';
 import PreviewContent from './PreviewContent';
-z;
 
 import { revalidateRoute } from '@/lib/actions/revalidate';
 import { APIProvider } from '@vis.gl/react-google-maps';
-import { z } from 'zod';
 import CalendarIcon from '../icons/Calendar';
 import FrameIcon from '../icons/Frame';
 import PodcastIcon from '../icons/Podcast';
@@ -83,7 +81,7 @@ const CreateContent: React.FC<ICreateContentProps> = ({
 
   const [q, setQ] = useState('');
   const [title, setTitle] = useState('');
-  const { mode } = useTheme();
+  const { theme } = useTheme();
 
   const [debouncedQ] = useDebounce(q, 500);
   const [debouncedTitle] = useDebounce(title, 500);
@@ -323,6 +321,10 @@ const CreateContent: React.FC<ICreateContentProps> = ({
     );
   }
 
+  const cleanupBodyOverflow = () => {
+    document.body.style.overflow = '';
+  };
+
   return (
     <div className="w-full">
       <Form {...form}>
@@ -463,6 +465,7 @@ const CreateContent: React.FC<ICreateContentProps> = ({
                             } else {
                               field.onChange(res.info);
                             }
+                            cleanupBodyOverflow();
                           }}
                           options={{
                             multiple: false,
@@ -658,17 +661,17 @@ const CreateContent: React.FC<ICreateContentProps> = ({
                     value={field.value}
                     onEditorChange={(content) => field.onChange(content)}
                     init={{
-                      skin: mode === 'dark' ? 'oxide-dark' : 'oxide',
+                      skin: theme === 'dark' ? 'oxide-dark' : 'oxide',
                       icons: 'thin',
                       toolbar_location: 'top',
                       content_css: 'dark',
                       content_style: `body {
                            font-family: Roboto, sans-serif;
                            font-size: 14px;
-                           color: #808191;
-                           ${mode === 'dark' ? 'background-color: #262935;' : 'background-color: #ffffff;'}!important;
+                           color: #FFFFFF !important;
+                           ${theme === 'dark' ? 'background-color: #262935;' : 'background-color: #ffffff;'}!important;
                           }
-                           color: #808191 !important;}
+                           color: #FFFFFF !important;}
                                               
                          body::-webkit-scrollbar {
                            display: none;
@@ -679,16 +682,15 @@ const CreateContent: React.FC<ICreateContentProps> = ({
                            padding: 5px;
                          }
                          body::before {
-                           color: #808191 !important;
+                           color: #FFFFFF !important;
                          }
                          h2 {
-                           color: ${mode === 'dark' ? '#fff' : '#000'} !important;
+                           color: ${theme === 'dark' ? '#FFFFFF' : '#000000'} !important;
                          }`,
                       menubar: false,
                       plugins: 'code codesample link preview image',
                       toolbar:
                         'customImageButton customPreview | H2 bold italic underline link strikethrough alignleft aligncenter alignright image ',
-
                       setup: function (editor) {
                         editor.ui.registry.addButton('customImageButton', {
                           text: 'Write',
@@ -747,7 +749,7 @@ const CreateContent: React.FC<ICreateContentProps> = ({
                           className="dark:invert "
                         />
                         <div className="flex flex-col ml-2">
-                          <p className="p4-medium uppercase">{option.label}</p>
+                          <p className="p4-medium">{option.label}</p>
                         </div>
                       </div>
                     );

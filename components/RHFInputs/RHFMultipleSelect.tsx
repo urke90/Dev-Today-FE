@@ -1,4 +1,6 @@
+import Image from 'next/image';
 import { useFormContext } from 'react-hook-form';
+import type { FormatOptionLabelContext } from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 
 import {
@@ -105,7 +107,7 @@ export const generateSelectStyles = () => {
     dropdownIndicator: () => '!hidden',
     indicatorSeparator: () => '!hidden',
     placeholder: () =>
-      'dark:placeholder:text-white-400 placeholder:text-white-400 !text-sm !font-medium',
+      'dark:placeholder:!text-white-400 placeholder:!text-white-400 !text-sm !font-medium',
     input: () => '!p3-regular hover:outline-none',
     option: (state: any) =>
       `bg-black-700 dark:text-white-300 ${
@@ -117,7 +119,34 @@ export const generateSelectStyles = () => {
       'dark:!text-white-300 !text-black-700 hover:!bg-inherit',
     multiValue: () =>
       '!py-1 !bg-white-200 dark:!bg-black-700 !px-1.5 !text-white-400 dark:!text-white-100 !cap-8 md:!cap-10 !rounded-[20px] uppercase',
+    singleValue: () => 'text-white-400 dark:text-white-100',
   };
+};
+
+export const MemberAdminFormatedOption = (
+  option: { value: string; label: string },
+  { context }: { context: FormatOptionLabelContext }
+) => {
+  if (context === 'value') {
+    return (
+      <div className="flex items-center gap-1">
+        <div className="flex-center size-[20px] bg-white-100 rounded-full">
+          <Image
+            src={'/assets/images/avatars/avatar-2.svg'}
+            alt={option.label}
+            width={16}
+            height={16}
+          />
+        </div>
+        {option.label}
+      </div>
+    );
+  }
+  return (
+    <div className="flex items-center">
+      <p className="p4-medium">{option.label}</p>
+    </div>
+  );
 };
 
 export default RHFMultipleSelect;

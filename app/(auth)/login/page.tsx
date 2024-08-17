@@ -1,32 +1,28 @@
 'use client';
+
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signIn } from 'next-auth/react';
-import Image from 'next/image';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 
-import { Button } from '@/components/ui/button';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Separator } from '@/components/ui/separator';
-import { loginWelcome } from '@/constants';
-import { loginSchema } from '@/lib/validation';
-import { colorsLogIn } from '@/styles/index';
+import LeftSidebar from '@/components/auth-onboarding/LeftSidebar';
+import ProvidersButtons from '@/components/auth-onboarding/ProvidersButtons';
+import RHFInput from '@/components/RHFInputs/RHFInput';
+import ThemeLogo from '@/components/shared/ThemeLogo';
+import { Form } from '@/components/ui/form';
+import { SIGN_IN_SIDEBAR_DATA } from '@/constants';
+import { type ILoginSchema, loginSchema } from '@/lib/validation';
 import { useTheme } from 'next-themes';
+import { useEffect, useState } from 'react';
 
-const Login = () => {
-  const { theme, setTheme } = useTheme();
+// ----------------------------------------------------------------
+
+const LoginPage = () => {
+  const { resolvedTheme } = useTheme();
+  const [isMounted, setIsMounted] = useState(false);
   const router = useRouter();
-  const form = useForm<z.infer<typeof loginSchema>>({
+
+  const form = useForm<ILoginSchema>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
       email: '',
@@ -34,168 +30,53 @@ const Login = () => {
     },
   });
 
-  console.log('theme', theme);
-
-  async function onSubmit(values: z.infer<typeof loginSchema>) {
-    const result = await signIn('credentials', {
+  const onSubmit = async (values: ILoginSchema) => {
+    const response = await signIn('credentials', {
       redirect: false,
       email: values.email,
       password: values.password,
     });
 
-    if (result?.ok) {
-      router.push('/');
+    if (response?.ok) {
+      router.push('/posts');
     } else {
       throw new Error('Error while logging in');
     }
-  }
+  };
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   return (
-    <div className="flex min-h-screen bg-white-100 dark:bg-black-800">
-      <div className="hidden flex-col items-center p-16 lg:flex lg:w-1/2">
-        <div className="w-full">
-          <Image
-            src={`${
-              theme === 'dark'
-                ? '/assets/icons/logo-dark.svg'
-                : 'assets/icons/logo-light.svg'
-            }`}
-            alt="logo"
-            width={147}
-            height={30}
-            className="mb-24"
-          />
-        </div>
-        <div className="max-w-md">
-          <h2 className="d1-bold mb-10">Sign in to DevToday.</h2>
-          <article className="flex flex-col gap-5">
-            {loginWelcome.map((item, index) => (
-              <div
-                key={index + 1}
-                className="flex items-center gap-5 rounded-lg bg-white-100 p-5 dark:bg-black-700"
-              >
-                <div
-                  className={`dark:bg-black-800 ${colorsLogIn[index]} h-[60px] rounded-md p-5`}
-                >
-                  <Image
-                    src={item.image}
-                    alt={item.alt}
-                    width={30}
-                    height={20}
-                  />
-                </div>
-                <p className="p1-medium">{item.label}</p>
-              </div>
-            ))}
-          </article>
-        </div>
-      </div>
-      <div
-        className="flex w-full flex-col items-center bg-white-200 px-4 pt-10 
-        text-white-100 dark:bg-black-900
-         md:px-10 lg:w-1/2 lg:justify-start  lg:pt-44 xl:px-28"
-      >
-        <div className="w-full lg:hidden">
-          <Image
-            src={
-              theme === 'dark'
-                ? '/assets/icons/logo-dark.svg'
-                : '/assets/icons/logo-light.svg'
-            }
-            alt="logo"
-            width={147}
-            height={30}
-            className="mx-auto mb-14"
-          />
+    <div className="auth-onboarding-page-wrapper">
+      <LeftSidebar
+        title={SIGN_IN_SIDEBAR_DATA.title}
+        listItems={SIGN_IN_SIDEBAR_DATA.listItems}
+        isMounted={isMounted}
+        theme={resolvedTheme}
+      />
+      <div className="auth-onboarding-right-sidebar ">
+        <div className="md:hidden mb-14 mx-auto">
+          <ThemeLogo isMounted={isMounted} theme={resolvedTheme} />
         </div>
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="w-full space-y-5 "
+            className="space-y-5 max-w-md w-full"
           >
-            <FormField
-              control={form.control}
+            <RHFInput
               name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="p3-medium">Email</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Enter your email address"
-                      className="placeholder:text-bla p3-medium h-11 rounded border border-gray-300/40 bg-white-100 placeholder:!font-normal focus:ring-offset-0   focus-visible:ring-0 focus-visible:ring-offset-0 dark:border-none dark:bg-black-800 "
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+              label="Email"
+              placeholder="Enter your email address"
             />
-            <FormField
-              control={form.control}
+            <RHFInput
               name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="p3-medium">Password</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Enter your password"
-                      type="password"
-                      className="p3-medium h-11 rounded border border-gray-300/40 bg-white-100 placeholder:font-normal focus:ring-offset-0  focus-visible:ring-0 focus-visible:ring-offset-0 dark:border-none dark:bg-black-800 "
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+              type="password"
+              label="Password"
+              placeholder="Enter your password"
             />
-            <Button
-              type="submit"
-              className="w-full bg-primary-500 text-[14px] h-11 p2-bold "
-            >
-              Next
-            </Button>
-            <Link
-              href="/register"
-              className="text-white-300 block cursor-pointer text-center hover:underline"
-            >
-              Don’t have an account yet?
-              <span className="ml-1 text-[16px] text-primary-500">
-                Join the community
-              </span>
-            </Link>
-            <div className="flex items-center justify-between">
-              <Separator className="w-2/5  bg-black-700/10 dark:bg-black-800" />
-              <p className="p4-regular">or</p>
-              <Separator className="w-2/5 bg-black-700/10 dark:bg-black-800" />
-            </div>
-            <Button
-              type="button"
-              onClick={() => signIn('google', { callbackUrl: '/' })}
-              className="p3-medium h-11 flex w-full items-center gap-2 dark:bg-black-800 bg-white-100"
-            >
-              <Image
-                src={'/assets/icons/google.svg'}
-                alt="google"
-                width={20}
-                height={20}
-                className="invert dark:invert-0"
-              />
-              <p className="p3-medium ">Continue with Google</p>
-            </Button>
-            <Button
-              onClick={() => signIn('github', { callbackUrl: '/home' })}
-              type="button"
-              className="p3-medium h-11 flex w-full items-center gap-2 dark:bg-black-800 bg-white-100"
-            >
-              <Image
-                src={'/assets/icons/github.svg'}
-                alt="github"
-                width={20}
-                height={20}
-                className="invert dark:invert-0"
-              />
-              <p className="p3-medium ">Continue with Github</p>
-            </Button>
+            <ProvidersButtons isLoginPage />
           </form>
         </Form>
       </div>
@@ -203,4 +84,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default LoginPage;

@@ -1,8 +1,12 @@
+import { BASE_API_URL } from '@/api/queries';
+import type { AuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GitHubProvider from 'next-auth/providers/github';
 import GoogleProvider from 'next-auth/providers/google';
 
-export const authOptions = {
+// ----------------------------------------------------------------
+
+export const authOptions: AuthOptions = {
   providers: [
     GitHubProvider({
       clientId: process.env.GITHUB_ID ?? '',
@@ -22,7 +26,8 @@ export const authOptions = {
       async authorize(credentials) {
         try {
           if (!credentials) return null;
-          const result = await fetch('http://localhost:8080/api/user/login', {
+
+          const response = await fetch(BASE_API_URL + '/user/login', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -33,12 +38,12 @@ export const authOptions = {
             }),
           });
 
-          const data = await result.json();
-
-          if (!result.ok) {
-            console.error('Error response from server', data);
+          if (!response.ok) {
+            console.error('Error response from server', response);
             throw new Error('Server responded with an error');
           }
+
+          const data = await response.json();
 
           if (!data?.user) return null;
 
@@ -51,39 +56,38 @@ export const authOptions = {
     }),
   ],
   callbacks: {
-    async signIn({ profile, account }: any) {
+    async signIn({ user, account }) {
       if (account?.provider === 'google' || account?.provider === 'github') {
         try {
-          const result = await fetch(
-            'http://localhost:8080/api/user/login-provider',
-            {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                email: profile.email,
-                name: profile.name,
-                avatarImg: profile.picture,
-              }),
-            }
-          );
+          const response = await fetch(BASE_API_URL + '/user/login-provider', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              email: user?.email,
+              name: user?.name,
+              avatarImg: user?.image,
+            }),
+          });
 
-          const user = await result.json();
+          const createdUser = await response.json();
+          if (!createdUser) return false;
 
-          if (!user) return null;
-          return user;
+          return true;
         } catch (error) {
           console.log(error);
           throw new Error('Error while authorizing');
         }
       }
+
       return true;
     },
-    async session({ session, token }: any) {
+    async jwt({ token }) {
+      if (!token.email) return token;
       try {
-        const result = await fetch(
-          `http://localhost:8080/api/user/email/${session.user.email}`,
+        const response = await fetch(
+          BASE_API_URL + `/user/email/${token.email}`,
           {
             method: 'GET',
             headers: {
@@ -91,12 +95,25 @@ export const authOptions = {
             },
           }
         );
-        const resultObject = await result.json();
-        if (!resultObject) return null;
-        // console.log('resultObject', resultObject);
-        session.user.isOnboardingCompleted =
-          resultObject.user.isOnboardingCompleted;
-        session.user.id = resultObject.user.id;
+        const data = await response.json();
+
+        if (data) {
+          token.id = data.user.id;
+          token.isOnboardingCompleted = data.user.isOnboardingCompleted;
+          token.name = data.user.userName;
+        }
+      } catch (error) {
+        console.log('Error inside jwt callback', error);
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      try {
+        if (token.id) {
+          session.user.id = token.id;
+          session.user.name = token.name;
+          session.user.isOnboardingCompleted = token.isOnboardingCompleted;
+        }
       } catch (error) {
         console.error('signIn error: ', error);
         throw new Error('Error while signing in');

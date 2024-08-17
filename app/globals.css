@@ -42,7 +42,7 @@ body::-webkit-scrollbar {
 @layer utilities {
   /* TYPOGRAPHY  */
   .d1-bold {
-    @apply text-[21px] sm:text-[27px] md:text-[31px] md:leading-[40px] font-bold text-black-800 dark:text-white-100;
+    @apply max-md:text-[27px] text-[31px] md:leading-[40px] font-bold text-black-800 dark:text-white-100;
   }
   .d2-bold {
     @apply text-2xl font-bold text-black-800 dark:text-white-100;
@@ -107,6 +107,9 @@ body::-webkit-scrollbar {
   .bg-light100__dark800 {
     @apply bg-white-100 dark:bg-black-800;
   }
+  .bg-light200__dark900 {
+    @apply bg-white-200 dark:bg-black-900;
+  }
   .bg-light200__dark800 {
     @apply bg-white-200 dark:bg-black-800;
   }
@@ -157,6 +160,18 @@ body::-webkit-scrollbar {
   .right-sidebar-item {
     @apply flex flex-col p-5 rounded-2xl bg-white-100 dark:bg-black-800 gap-5 shadow-card;
   }
+  .sidebar-item-card-hover {
+    @apply hover:-translate-y-1 transition-transform;
+  }
+  .auth-onboarding-page-wrapper {
+    @apply flex flex-col md:flex-row min-h-screen;
+  }
+  .auth-onboarding-left-sidebar {
+    @apply flex flex-col flex-1 bg-light100__dark800  shrink-0 max-md:hidden relative px-5 md:px-8;
+  }
+  .auth-onboarding-right-sidebar {
+    @apply flex flex-col flex-1 bg-light200__dark900  shrink-0 items-center my-12 md:my-36 px-5 md:px-8;
+  }
 
   /* LAYOUT */
 
@@ -193,6 +208,12 @@ body::-webkit-scrollbar {
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
   }
+
+  /* EFFECTS */
+  .like-btn-scale-hover {
+    @apply hover:scale-[1.2] hover:transition-transform;
+  }
+  /* EFFECTS */
 }
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
@@ -284,7 +305,7 @@ input:-webkit-autofill:active {
 }
 
 .markdown p {
-  color: #808191;
+  color: #ffffff !important;
   font-size: 18px;
   margin-bottom: 10px !important;
   font-weight: 400;
@@ -329,5 +350,5 @@ input[type='time']::-webkit-calendar-picker-indicator {
 }
 .css-ja5taz-MuiTooltip-tooltip {
   background-color: rgba(90, 90, 120, 0.4) !important;
-  color: #fff !important;
+  color: #ffffff !important;
 }

@@ -1,5 +1,5 @@
-import { auth } from '@/app/api/auth/[...nextauth]/route';
 import CreateContent from '@/components/content/CreateContent';
+import { auth } from '@/lib/auth';
 
 // ----------------------------------------------------------------
 

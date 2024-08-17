@@ -29,6 +29,10 @@ import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import CreatableSelect from 'react-select/creatable';
 import { useDebounce } from 'use-debounce';
+import {
+  generateSelectStyles,
+  MemberAdminFormatedOption,
+} from '../RHFInputs/RHFMultipleSelect';
 import RHFProfileImageUpload from '../RHFInputs/RHFProfileImageUpload';
 import RHFTextarea from '../RHFInputs/RHFTextarea';
 
@@ -82,7 +86,7 @@ const CreateGroup: React.FC<ICreateGroup> = ({ viewerId, group }) => {
   const form = useForm<IBaseGroupSchema>({
     resolver: zodResolver(baseGroupSchema),
     defaultValues: {
-      authorId: group?.authorId || viewerId,
+      authorId: group ? group?.authorId : viewerId,
       name: group?.name || '',
       profileImage: group?.profileImage || null,
       coverImage: group?.coverImage || null,
@@ -222,35 +226,8 @@ const CreateGroup: React.FC<ICreateGroup> = ({ viewerId, group }) => {
                   <FormControl>
                     <CreatableSelect
                       instanceId={field.name}
-                      className="border rounded-md dark:border-black-700/50"
                       {...field}
-                      classNames={{
-                        control: () =>
-                          // TODO Add different hover and focus effect since we will probably add the same to the Inputs
-                          'bg-white-100 dark:bg-black-800 border !border-white-border dark:!border-[#393E4F66] px-3 min-h-[46px] !shadow-none',
-                        clearIndicator: () => '!hidden',
-                        dropdownIndicator: () => '!hidden',
-                        indicatorSeparator: () => '!hidden',
-                        placeholder: () =>
-                          '!text-white-300 !text-sm !font-normal',
-                        input: () => '!p3-regular ',
-                        option: (state) =>
-                          `bg-black-700 dark:text-white-300 ${
-                            state.isFocused
-                              ? 'dark:!bg-black-700 !bg-white-300'
-                              : ''
-                          }`,
-                        menuList: () =>
-                          `bg-white-100 dark:bg-black-800 ${
-                            false ? 'hidden' : ''
-                          }`,
-                        multiValueLabel: () =>
-                          'dark:text-white-300 text-black-700',
-                        multiValueRemove: () =>
-                          'dark:!text-white-300 !text-black-700 hover:!bg-inherit',
-                        multiValue: () =>
-                          '!py-1 !bg-white-200 dark:!bg-black-700 !px-1.5 !text-white-400 dark:!text-white-100 !cap-8 md:!cap-10 !rounded-[20px] uppercase',
-                      }}
+                      classNames={generateSelectStyles()}
                       isMulti
                       onInputChange={(value) => setQ(value)}
                       isOptionDisabled={(option) => {
@@ -269,28 +246,7 @@ const CreateGroup: React.FC<ICreateGroup> = ({ viewerId, group }) => {
                         return false;
                       }}
                       options={userOptions}
-                      formatOptionLabel={(option, { context }) => {
-                        if (context === 'value') {
-                          return (
-                            <div className="flex items-center gap-1">
-                              <div className="flex-center size-[20px] bg-white-100 rounded-full">
-                                <Image
-                                  src={'/assets/images/avatars/avatar-2.svg'}
-                                  alt={option?.label}
-                                  width={16}
-                                  height={16}
-                                />
-                              </div>
-                              {option.label}
-                            </div>
-                          );
-                        }
-                        return (
-                          <div className="flex items-center">
-                            <p className="p4-medium">{option.label}</p>
-                          </div>
-                        );
-                      }}
+                      formatOptionLabel={MemberAdminFormatedOption}
                     />
                   </FormControl>
                   <FormMessage />
@@ -307,34 +263,9 @@ const CreateGroup: React.FC<ICreateGroup> = ({ viewerId, group }) => {
                   <FormLabel>Add members</FormLabel>
                   <CreatableSelect
                     instanceId={field.name}
-                    className="border rounded-md dark:border-black-700/50"
+                    // className="border rounded-md dark:border-black-700/50"
                     {...field}
-                    classNames={{
-                      control: () =>
-                        // TODO Add different hover and focus effect since we will probably add the same to the Inputs
-                        'bg-white-100 dark:bg-black-800 border !border-white-border dark:!border-[#393E4F66] px-3 min-h-[46px] !shadow-none',
-
-                      clearIndicator: () => '!hidden',
-                      dropdownIndicator: () => '!hidden',
-                      indicatorSeparator: () => '!hidden',
-                      placeholder: () =>
-                        '!text-white-300 !text-sm !font-normal',
-                      input: () =>
-                        '!p3-regular hover:outline-none hover:rind-0 hover:border-0 hover:border-none',
-                      option: (state) =>
-                        `bg-black-700 dark:text-white-300 ${
-                          state.isFocused
-                            ? 'dark:!bg-black-700 !bg-white-300'
-                            : ''
-                        }`,
-                      menuList: () => `bg-white-100 dark:bg-black-800`,
-                      multiValueLabel: () =>
-                        'dark:text-white-300 text-black-700',
-                      multiValueRemove: () =>
-                        'dark:!text-white-300 !text-black-700 hover:!bg-inherit',
-                      multiValue: () =>
-                        '!py-1 !bg-white-200 dark:!bg-black-700 !px-1.5 !text-white-400 dark:!text-white-100 !cap-8 md:!cap-10 !rounded-[20px] uppercase',
-                    }}
+                    classNames={generateSelectStyles()}
                     isMulti
                     onInputChange={(value) => setQ(value)}
                     isOptionDisabled={(option) => {
@@ -353,28 +284,7 @@ const CreateGroup: React.FC<ICreateGroup> = ({ viewerId, group }) => {
                       return false;
                     }}
                     options={userOptions}
-                    formatOptionLabel={(option, { context }) => {
-                      if (context === 'value') {
-                        return (
-                          <div className="flex items-center gap-1">
-                            <div className="flex-center size-[20px] bg-white-100 rounded-full">
-                              <Image
-                                src={'/assets/images/avatars/avatar-2.svg'}
-                                alt={option.label}
-                                width={16}
-                                height={16}
-                              />
-                            </div>
-                            {option.label}
-                          </div>
-                        );
-                      }
-                      return (
-                        <div className="flex items-center">
-                          <p className="p4-medium ml-2">{option.label}</p>
-                        </div>
-                      );
-                    }}
+                    formatOptionLabel={MemberAdminFormatedOption}
                   />
                 </FormItem>
               )}

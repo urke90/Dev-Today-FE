@@ -5,10 +5,13 @@ import z from 'zod';
 
 /******************************************************** USER, ONBOARDING, ETC *******************************************************/
 
-export const signInSchema = z.object({
-  userName: z.string().min(3).max(20),
-  email: z.string().email(),
-  password: z.string().min(6),
+export const registerSchema = z.object({
+  userName: z
+    .string()
+    .min(3, 'Name must be at least 3 characters long')
+    .max(20, 'Name must be at most 20 characters long'),
+  email: z.string().email('Please provide valid email address'),
+  password: z.string().min(6, 'Password must be at least 6 characters long'),
 });
 
 export const loginSchema = z.object({
@@ -47,11 +50,6 @@ export const profileSchema = z.object({
   following: z.number().optional(),
 });
 
-const preferredSkillsSchema = z.object({
-  value: z.string().trim().min(1, 'Tag must be at least 2 characters long!'),
-  label: z.string().trim().min(1, 'Tag must be at least 2 characters long!'),
-});
-
 export const updateProfileSchema = z.object({
   userName: z
     .string()
@@ -63,7 +61,18 @@ export const updateProfileSchema = z.object({
     .min(2, 'User name must be at least 2 character long')
     .optional(),
   preferredSkills: z
-    .array(preferredSkillsSchema)
+    .array(
+      z.object({
+        value: z
+          .string()
+          .trim()
+          .min(1, 'Tag must be at least 2 characters long!'),
+        label: z
+          .string()
+          .trim()
+          .min(1, 'Tag must be at least 2 characters long!'),
+      })
+    )
     .min(1, 'Please add at least one skill to your profile.'),
   bio: z.string().optional(),
   avatarImg: z.string().optional(),
@@ -74,6 +83,11 @@ export const updateProfileSchema = z.object({
   twitterName: z.string().optional(),
   twitterLink: z.string().url().optional().or(z.literal('')),
 });
+
+export type ILoginSchema = z.infer<typeof loginSchema>;
+export type IRegisterSchema = z.infer<typeof registerSchema>;
+export type IOnboardingSchema = z.infer<typeof onboardingSchema>;
+export type IUpdateProfileSchema = z.infer<typeof updateProfileSchema>;
 
 /******************************************************** USER, ONBOARDING, ETC *******************************************************/
 
@@ -258,16 +272,5 @@ export const updateGroupSchema = baseGroupSchema.omit({
 });
 
 export type IUpdateGroupSchema = z.infer<typeof updateGroupSchema>;
-
-// export const updateGroupSchema = z.object({
-//   id: z.string(),
-//   name: z.string().min(1).max(50, 'Group name must be max 50 characters long'),
-//   profileImage: z.string().optional(),
-//   coverImage: z.string().optional(),
-//   bio: z.string().min(1).max(1000, 'Bio must be max 1000 characters long'),
-//   authorId: z.string(),
-//   createdAt: z.date(),
-//   updatedAt: z.date(),
-// });
 
 /************************************************************* GROUP *******************************************************************/

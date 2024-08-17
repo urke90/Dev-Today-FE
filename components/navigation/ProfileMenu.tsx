@@ -10,9 +10,11 @@ import { Button } from '../ui/button';
 
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { signOut, useSession } from 'next-auth/react';
+
 import Image from 'next/image';
 
 import { CLOUDINARY_URL } from '@/constants';
+
 import { useTheme } from 'next-themes';
 import Link from 'next/link';
 import { useState } from 'react';

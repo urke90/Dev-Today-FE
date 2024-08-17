@@ -1,5 +1,5 @@
-import { auth } from '@/app/api/auth/[...nextauth]/route';
 import PostsHome from '@/components/content/PostsHome';
+import { auth } from '@/lib/auth';
 import {
   IContentPagesResponse,
   IContentPagesSidebarResponse,

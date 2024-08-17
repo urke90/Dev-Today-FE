@@ -1,34 +1,30 @@
 'use client';
+
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signIn } from 'next-auth/react';
-import Image from 'next/image';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 
-import { Button } from '@/components/ui/button';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Separator } from '@/components/ui/separator';
-import { regWelcome } from '@/constants';
-import { useTheme } from '@/context/ThemeProvider';
-import { signInSchema } from '@/lib/validation';
-import { colorsRegister } from '@/styles/index';
+import LeftSidebar from '@/components/auth-onboarding/LeftSidebar';
+import ProvidersButtons from '@/components/auth-onboarding/ProvidersButtons';
+import RHFInput from '@/components/RHFInputs/RHFInput';
+import ThemeLogo from '@/components/shared/ThemeLogo';
+import { Form } from '@/components/ui/form';
+import { SIGN_UP_SIDEBAR_DATA } from '@/constants';
+import { type IRegisterSchema, registerSchema } from '@/lib/validation';
+import { useTheme } from 'next-themes';
+import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 
-const Register = () => {
-  const { setMode, mode } = useTheme();
+// ----------------------------------------------------------------
+
+const RegisterPage = () => {
+  const { resolvedTheme } = useTheme();
+  const [isMounted, setIsMounted] = useState(false);
   const router = useRouter();
 
-  const form = useForm<z.infer<typeof signInSchema>>({
-    resolver: zodResolver(signInSchema),
+  const form = useForm<IRegisterSchema>({
+    resolver: zodResolver(registerSchema),
     defaultValues: {
       userName: '',
       email: '',
@@ -36,210 +32,87 @@ const Register = () => {
     },
   });
 
-  async function onSubmit(values: z.infer<typeof signInSchema>) {
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  const onSubmit = async (data: IRegisterSchema) => {
     try {
-      await fetch('http://localhost:8080/api/user/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          userName: values.userName,
-          email: values.email,
-          password: values.password,
-        }),
+      const registerResponse = await fetch(
+        'http://localhost:8080/api/user/register',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            userName: data.userName,
+            email: data.email,
+            password: data.password,
+          }),
+        }
+      );
+
+      if (!registerResponse.ok) {
+        if (registerResponse.status === 409) {
+          return toast.error('User with provided email already exists');
+        }
+        return toast.error("Something went wrong. Couldn't create new user.");
+      }
+
+      const signInResponse = await signIn('credentials', {
+        redirect: false,
+        email: data.email,
+        password: data.password,
       });
+
+      if (signInResponse?.ok) {
+        toast.success('You have registered successfully');
+        router.push('/onboarding');
+      } else {
+        toast.error('Internal server error');
+      }
     } catch (error) {
-      console.error(error);
-      throw new Error('Error while registering');
+      console.error('Error creating new user', error);
+      toast.error("Something went wrong. Couldn't register new user");
     }
-
-    const result = await signIn('credentials', {
-      redirect: false,
-      email: values.email,
-      password: values.password,
-    });
-
-    if (result?.ok) {
-      router.push('/onboarding');
-    } else {
-      throw new Error('Error while logging in');
-    }
-  }
+  };
 
   return (
-    <div className="flex min-h-screen bg-white-100 dark:bg-black-800">
-      <div className="hidden flex-col items-center p-16 lg:flex lg:w-1/2">
-        <div className="w-full">
-          <Image
-            onClick={() =>
-              setMode && setMode(mode === 'dark' ? 'light' : 'dark')
-            }
-            src={`${
-              mode === 'dark'
-                ? '/assets/icons/logo-dark.svg'
-                : 'assets/icons/logo-light.svg'
-            }`}
-            alt="logo"
-            width={147}
-            height={30}
-            className="mb-24"
-          />
-        </div>
-        <div className="max-w-md">
-          <h2 className="d1-bold mb-10">
-            Join our developer community! Sign up now and be part of the
-            conversation.
-          </h2>
-          <article className="flex flex-col gap-5">
-            {regWelcome.map((item, index) => {
-              return (
-                <div
-                  key={index + 1}
-                  className="bg-white-100 dark:bg-black-700 p-5 flex gap-5 items-center rounded-lg"
-                >
-                  <div
-                    className={`dark:bg-black-800 ${colorsRegister[index]} h-[60px] p-5 rounded-md`}
-                  >
-                    <Image
-                      src={
-                        mode === 'dark'
-                          ? item.image
-                          : item.image.replace('dark', 'light')
-                      }
-                      alt={item.alt}
-                      width={30}
-                      height={20}
-                    />
-                  </div>
-                  <p className="p1-medium">{item.label}</p>
-                </div>
-              );
-            })}
-          </article>
-        </div>
-      </div>
-      <div
-        className="text-white-100 flex flex-col pt-10 lg:pt-44 lg:justify-start items-center 
-        dark:bg-black-900 bg-white-200
-         px-4 md:px-10 xl:px-28  w-full lg:w-1/2"
-      >
-        <div className="w-full lg:hidden">
-          <Image
-            src={`${
-              mode === 'dark'
-                ? '/assets/icons/logo-dark.svg'
-                : 'assets/icons/logo-light.svg'
-            }`}
-            alt="logo"
-            width={147}
-            height={30}
-            className="mx-auto mb-14"
-          />
+    <div className="auth-onboarding-page-wrapper">
+      <LeftSidebar
+        title={SIGN_UP_SIDEBAR_DATA.title}
+        listItems={SIGN_UP_SIDEBAR_DATA.listItems}
+        isMounted={isMounted}
+        theme={resolvedTheme}
+      />
+      <div className="auth-onboarding-right-sidebar">
+        <div className="md:hidden mb-14 mx-auto">
+          <ThemeLogo isMounted={isMounted} theme={resolvedTheme} />
         </div>
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-5 w-full "
+            className="space-y-5 max-w-md w-full"
           >
-            <FormField
-              control={form.control}
+            <RHFInput
               name="userName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="p3-medium">Full Name</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Full Name"
-                      className="p3-medium h-11 rounded border border-gray-300/40 bg-white-100 placeholder:font-normal focus:ring-offset-0  focus-visible:ring-0 focus-visible:ring-offset-0 dark:border-none dark:bg-black-800 "
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+              label="Full Name"
+              placeholder="Full Name"
             />
-            <FormField
-              control={form.control}
+            <RHFInput
               name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="p3-medium">Email</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Enter your email address"
-                      className="p3-medium h-11 rounded border border-gray-300/40 bg-white-100 placeholder:font-normal focus:ring-offset-0  focus-visible:ring-0 focus-visible:ring-offset-0 dark:border-none dark:bg-black-800 "
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+              label="Email"
+              type="email"
+              placeholder="Enter your email address"
             />
-            <FormField
-              control={form.control}
+            <RHFInput
               name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="p3-medium">Password</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Enter your password"
-                      type="password"
-                      className="p3-medium h-11 rounded border border-gray-300/40 bg-white-100 placeholder:font-normal focus:ring-offset-0  focus-visible:ring-0 focus-visible:ring-offset-0 dark:border-none dark:bg-black-800 "
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+              label="Password"
+              type="password"
+              placeholder="Enter your password"
             />
-            <Button
-              type="submit"
-              className="w-full h-11 bg-primary-500 text-[14px] p2-bold "
-            >
-              Next
-            </Button>
-            <Link
-              href="/login"
-              className="text-white-500/70 block cursor-pointer text-center hover:underline"
-            >
-              Already have an account?
-              <span className="ml-1 text-[16px] text-primary-500">Sign in</span>
-            </Link>
-            <div className="flex items-center justify-between">
-              <Separator className="w-2/5  bg-black-700/10 dark:bg-black-800" />
-              <p className="p4-regular">or</p>
-              <Separator className="w-2/5 bg-black-700/10 dark:bg-black-800" />
-            </div>
-            <Button
-              type="button"
-              onClick={() => signIn('google', { callbackUrl: '/onboarding' })}
-              className="p3-medium h-11 flex w-full items-center gap-2 dark:bg-black-800 bg-white-100"
-            >
-              <Image
-                src={'/assets/icons/google.svg'}
-                alt="google"
-                width={20}
-                height={20}
-                className="invert dark:invert-0"
-              />
-              <p className="p3-medium ">Continue with Google</p>
-            </Button>
-            <Button
-              onClick={() => signIn('github', { callbackUrl: '/onboarding' })}
-              type="button"
-              className="p3-medium h-11 flex w-full items-center gap-2 dark:bg-black-800 bg-white-100"
-            >
-              <Image
-                src={'/assets/icons/github.svg'}
-                alt="github"
-                width={20}
-                height={20}
-                className="invert dark:invert-0"
-              />
-              <p className="p3-medium ">Continue with Github</p>
-            </Button>
+            <ProvidersButtons />
           </form>
         </Form>
       </div>
@@ -247,4 +120,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default RegisterPage;

@@ -1,8 +1,8 @@
-import { auth } from '@/app/api/auth/[...nextauth]/route';
 import ContentDetails from '@/components/content/ContentDetails';
 import FollowButton from '@/components/content/FollowButton';
 import ShareContent from '@/components/content/ShareContent';
 import SidebarContentCard from '@/components/shared/RightSidebarItems/SidebarContentCard';
+import { auth } from '@/lib/auth';
 import type { IComment } from '@/lib/validation';
 import type { IContent } from '@/types/content';
 import type { IProfileUserResponse } from '@/types/user';
