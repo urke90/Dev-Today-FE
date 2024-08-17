@@ -1,4 +1,5 @@
-import { AuthOptions } from 'next-auth';
+import { BASE_API_URL } from '@/api/queries';
+import type { AuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GitHubProvider from 'next-auth/providers/github';
 import GoogleProvider from 'next-auth/providers/google';
@@ -26,7 +27,7 @@ export const authOptions: AuthOptions = {
         try {
           if (!credentials) return null;
 
-          const response = await fetch('http://localhost:8080/api/user/login', {
+          const response = await fetch(BASE_API_URL + '/user/login', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -58,25 +59,22 @@ export const authOptions: AuthOptions = {
     async signIn({ user, account }) {
       if (account?.provider === 'google' || account?.provider === 'github') {
         try {
-          const response = await fetch(
-            'http://localhost:8080/api/user/login-provider',
-            {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                email: user?.email,
-                name: user?.name,
-                avatarImg: user?.image,
-              }),
-            }
-          );
+          const response = await fetch(BASE_API_URL + '/user/login-provider', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              email: user?.email,
+              name: user?.name,
+              avatarImg: user?.image,
+            }),
+          });
 
           const createdUser = await response.json();
-          if (!createdUser) return null;
+          if (!createdUser) return false;
 
-          return createdUser;
+          return true;
         } catch (error) {
           console.log(error);
           throw new Error('Error while authorizing');
@@ -85,10 +83,11 @@ export const authOptions: AuthOptions = {
 
       return true;
     },
-    async session({ session }) {
+    async jwt({ token }) {
+      if (!token.email) return token;
       try {
         const response = await fetch(
-          `http://localhost:8080/api/user/email/${session.user.email}`,
+          BASE_API_URL + `/user/email/${token.email}`,
           {
             method: 'GET',
             headers: {
@@ -97,10 +96,25 @@ export const authOptions: AuthOptions = {
           }
         );
         const data = await response.json();
-        if (!data) return session;
 
-        session.user.isOnboardingCompleted = data.user.isOnboardingCompleted;
-        session.user.id = data.user.id;
+        if (data) {
+          token.id = data.user.id;
+          token.isOnboardingCompleted = data.user.isOnboardingCompleted;
+          token.name = data.user.userName;
+        }
+      } catch (error) {
+        console.log('Error inside jwt callback', error);
+      }
+      return token;
+    },
+
+    async session({ session, token }) {
+      try {
+        if (token.id) {
+          session.user.id = token.id;
+          session.user.name = token.name;
+          session.user.isOnboardingCompleted = token.isOnboardingCompleted;
+        }
       } catch (error) {
         console.error('signIn error: ', error);
         throw new Error('Error while signing in');

@@ -63,7 +63,7 @@ const PodcastItemCard: React.FC<IPodcastItemCardProps> = ({
           <Button
             type="button"
             variant="icon"
-            className="bg-white-200 dark:bg-black-700 size-[30px] shrink-0 rounded-full"
+            className="bg-white-200 dark:bg-black-700 size-[30px] shrink-0 rounded-full like-btn-scale-hover"
             onClick={(e) =>
               isLiked ? handleLikeContent(e, id) : handleDislikeContent(e, id)
             }

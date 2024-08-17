@@ -6,9 +6,9 @@ import type {
   IUpdateGroupSchema,
 } from '@/lib/validation';
 import { EUserRole } from '@/types/user';
+import { BASE_API_URL } from './queries';
 
 // ----------------------------------------------------------------
-const BASE_API_URL = 'http://localhost:8080/api';
 
 export const createGroup = async (
   data: IBaseGroupSchema,

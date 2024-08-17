@@ -24,17 +24,20 @@ export const SIGN_UP_SIDEBAR_DATA: IAuthOnboardingSidebarData = {
       alt: 'business',
       label:
         'Discover the latest trends, tools, and insights shaping the developer world.',
+      bgColor: '#FFECE6',
     },
     {
       imgUrl: '/assets/icons/auth-onboarding/chat-orange.svg',
       alt: 'Chat',
       label: 'Forge connections, collaborate on projects, and grow together.',
+      bgColor: '#FDF4EA',
     },
     {
       imgUrl: '/assets/icons/auth-onboarding/inbox-blue.svg',
       alt: 'inbox',
       label:
         'Elevate your coding with exclusive content for professional growth.',
+      bgColor: '#EBF2FC',
     },
   ],
 };
@@ -47,7 +50,7 @@ export const SIGN_IN_SIDEBAR_DATA: IAuthOnboardingSidebarData = {
       alt: 'inbox',
       label:
         'Get in the code zone quickly! Swift sign-in for instant access to your hub.',
-      bgColor: '#E7FAF4',
+      bgColor: '#FFECE6 ',
     },
     {
       imgUrl: '/assets/icons/auth-onboarding/thunder.svg',
@@ -58,17 +61,17 @@ export const SIGN_IN_SIDEBAR_DATA: IAuthOnboardingSidebarData = {
   ],
 };
 
-export const ONBOARDING_DATA: IAuthOnboardingSidebarData = {
+export const ONBOARDING_STEP_1_DATA: IAuthOnboardingSidebarData = {
   title: 'Tell us a little about yourself!',
   listItems: [
     {
-      imgUrl: '/assets/icons/rocket.svg',
+      imgUrl: '/assets/icons/auth-onboarding/rocket.svg',
       alt: 'Rocket',
       label: 'Highlight your skills and projects for the community.',
       bgColor: '#FFECE6',
     },
     {
-      imgUrl: '/assets/icons/chat-orange.svg',
+      imgUrl: '/assets/icons/auth-onboarding/chat-orange.svg',
       alt: 'Chat',
       label: 'Explore learning opportunities and connect with mentors.',
       bgColor: '#FDF4EA',
@@ -76,7 +79,58 @@ export const ONBOARDING_DATA: IAuthOnboardingSidebarData = {
   ],
 };
 
-export const currentKnowledge = [
+export const ONBOARDING_STEP_2_DATA: IAuthOnboardingSidebarData = {
+  title: 'Tell us a little about yourself!',
+  listItems: [
+    {
+      imgUrl: '/assets/icons/auth-onboarding/rocket.svg',
+      alt: 'Rocket',
+      label:
+        'Outline your coding journey by setting ambitious and achievable goals.',
+      bgColor: '#FFECE6',
+    },
+    {
+      imgUrl: '/assets/icons/auth-onboarding/chat-orange.svg',
+      alt: 'Chat',
+      label: 'Share your coding triumphs and achievements with the community.',
+      bgColor: '#FDF4EA',
+    },
+  ],
+};
+
+export const ONBOARDING_STEP_3_DATA: IAuthOnboardingSidebarData = {
+  title: 'Tell us a little about yourself!',
+  listItems: [
+    {
+      imgUrl: '/assets/icons/auth-onboarding/rocket.svg',
+      alt: 'Rocket',
+      label:
+        'Paint your coding canvas by selecting your favorite languages & frameworks.',
+      bgColor: '#FFECE6',
+    },
+    {
+      imgUrl: '/assets/icons/auth-onboarding/chat-orange.svg',
+      alt: 'Chat',
+      label: 'Share your coding triumphs and achievements with the community.',
+      bgColor: '#FDF4EA',
+    },
+  ],
+};
+
+export const generateOnboardingStepData = (step: number) => {
+  switch (step) {
+    case 1:
+      return ONBOARDING_STEP_1_DATA;
+    case 2:
+      return ONBOARDING_STEP_2_DATA;
+    case 3:
+      return ONBOARDING_STEP_3_DATA;
+    default:
+      return ONBOARDING_STEP_1_DATA;
+  }
+};
+
+export const CURRENT_KNOWLEDGE = [
   { title: 'Seasoned Pro - Coding veteran', value: 'pro' },
   {
     title: 'Learning Enthusiast - Continuous learner',
@@ -89,7 +143,8 @@ export const currentKnowledge = [
     value: 'tech-explorer',
   },
 ];
-export const codingAmbitions = [
+
+export const CODING_AMBITIONS = [
   { title: 'Build Portfolio - Showcase projects', value: 'portfolio' },
   { title: 'Open Source Contributor - Make your mark', value: 'contributor' },
   { title: 'Master New Language - Learn and conquer', value: 'language' },
@@ -97,7 +152,7 @@ export const codingAmbitions = [
   { title: 'Attend Coding Events - Network and learn', value: 'events' },
 ];
 
-export const preferSkills = [
+export const PREFERRED_SKILLS = [
   { title: 'HTML5' },
   { title: 'JavaScript(ES6)' },
   { title: 'React.js' },

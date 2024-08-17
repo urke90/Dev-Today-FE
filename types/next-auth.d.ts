@@ -1,4 +1,4 @@
-import NextAuth, { DefaultSession } from 'next-auth';
+import { DefaultSession } from 'next-auth';
 
 declare module 'next-auth' {
   /**
@@ -11,5 +11,17 @@ declare module 'next-auth' {
       /** Has user finished onboarding steps. */
       isOnboardingCompleted: boolean;
     } & DefaultSession['user'];
+  }
+}
+
+declare module 'next-auth/jwt' {
+  /** Returned by the `jwt` callback and `getToken`, when using JWT sessions */
+  interface JWT {
+    /** OpenID ID Token */
+    id?: string;
+    /** OCurrent step of user onboarding process. If value is 5 then onboarding is finished */
+    isOnboardingCompleted: boolean;
+    /** Fetched image from DB */
+    // avatarImg: string;
   }
 }

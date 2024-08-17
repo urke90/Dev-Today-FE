@@ -26,8 +26,13 @@ export const middleware = async (request: NextRequest) => {
       return NextResponse.redirect(new URL('/login', request.url));
     }
   } else {
-    if (url === '/')
+    if (url === '/') {
       return NextResponse.redirect(new URL('/posts', request.url));
+    }
+
+    if (url.startsWith('/onboarding') && session.user.isOnboardingCompleted) {
+      return NextResponse.redirect(new URL('/posts', request.url));
+    }
 
     if (
       (url.startsWith('/register') || url.startsWith('/login')) &&

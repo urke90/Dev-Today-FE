@@ -1,19 +1,15 @@
 'use client';
 
-import { useTheme } from 'next-themes';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
 
 // ----------------------------------------------------------------
 
-const LoadedAppThemeLogo = () => {
-  const [isMounted, setIsMounted] = useState(false);
-  const { resolvedTheme } = useTheme();
+interface IThemeLogoProps {
+  isMounted: boolean;
+  theme: string | undefined;
+}
 
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
+const ThemeLogo: React.FC<IThemeLogoProps> = ({ isMounted, theme }) => {
   return (
     <div className="w-[147px] h-[30px]">
       {!isMounted ? (
@@ -29,7 +25,7 @@ const LoadedAppThemeLogo = () => {
       ) : (
         <Image
           src={`${
-            resolvedTheme === 'dark'
+            theme === 'dark'
               ? '/assets/icons/logo-dark.svg'
               : '/assets/icons/logo-light.svg'
           }`}
@@ -42,4 +38,4 @@ const LoadedAppThemeLogo = () => {
   );
 };
 
-export default LoadedAppThemeLogo;
+export default ThemeLogo;
