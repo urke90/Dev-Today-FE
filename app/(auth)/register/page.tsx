@@ -18,6 +18,8 @@ import toast from 'react-hot-toast';
 
 // ----------------------------------------------------------------
 
+const BASE_API_URL = process.env.NEXT_API_BASE_URL ?? '';
+
 const RegisterPage = () => {
   const { resolvedTheme } = useTheme();
   const [isMounted, setIsMounted] = useState(false);
@@ -38,20 +40,17 @@ const RegisterPage = () => {
 
   const onSubmit = async (data: IRegisterSchema) => {
     try {
-      const registerResponse = await fetch(
-        'http://localhost:8080/api/user/register',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            userName: data.userName,
-            email: data.email,
-            password: data.password,
-          }),
-        }
-      );
+      const registerResponse = await fetch(BASE_API_URL + '/user/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userName: data.userName,
+          email: data.email,
+          password: data.password,
+        }),
+      });
 
       if (!registerResponse.ok) {
         if (registerResponse.status === 409) {

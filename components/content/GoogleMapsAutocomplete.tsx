@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { useTheme } from '@/context/ThemeProvider';
+
 import {
   AdvancedMarker,
   ControlPosition,
@@ -12,6 +12,7 @@ import {
   useMapsLibrary,
 } from '@vis.gl/react-google-maps';
 import { CalendarIcon } from 'lucide-react';
+import { useTheme } from 'next-themes';
 import { useCallback, useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 

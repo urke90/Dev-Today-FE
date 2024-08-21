@@ -65,6 +65,7 @@ const MeetupsHome: React.FC<IMeetupsHomeProps> = ({
       </aside>
       <main className="main-content">
         <ContentList
+          selectedTag={selectedTag}
           contentType={EQueryType.MEETUP}
           viewerId={viewerId}
           contentData={meetupsData}

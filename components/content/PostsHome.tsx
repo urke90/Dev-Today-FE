@@ -69,6 +69,7 @@ const PostsHome: React.FC<IPostsHomeProps> = ({
           viewerId={viewerId}
           contentData={postsData}
           sortBy={sortBy}
+          selectedTag={selectedTag}
         />
       </main>
       <aside className="right-sidebar">

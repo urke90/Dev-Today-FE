@@ -5,7 +5,7 @@ import { EUserRole } from '@/types/user';
 
 // ----------------------------------------------------------------
 
-export const BASE_API_URL = 'http://localhost:8080/api';
+export const BASE_API_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? '';
 
 export const fetchUserContent = async (
   userId: string,
@@ -139,13 +139,14 @@ export const fetchAllContents = async (
   page: number,
   viewerId: string,
   limit: number,
-  sortBy?: ESortByFilter
+  sortBy?: ESortByFilter,
+  selectedTag?: string
 ) => {
   const sortByQuery = sortBy ? `&sortBy${sortBy}` : '';
 
   const response = await fetch(
     BASE_API_URL +
-      `/content?type=${contentType}&page=${page}&limit=${limit}&viewerId=${viewerId}${sortByQuery}`
+      `/content?type=${contentType}&page=${page}&limit=${limit}&viewerId=${viewerId}&tag=${selectedTag}${sortByQuery}`
   );
 
   if (!response.ok) {

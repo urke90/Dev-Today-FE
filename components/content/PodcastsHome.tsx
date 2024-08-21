@@ -65,6 +65,7 @@ const PodcastsHome: React.FC<IPostsHomeProps> = ({
       </aside>
       <main className="main-content">
         <ContentList
+          selectedTag={selectedTag}
           contentType={EQueryType.PODCAST}
           viewerId={viewerId}
           contentData={podcastsData}

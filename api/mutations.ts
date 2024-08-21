@@ -6,9 +6,10 @@ import type {
   IUpdateGroupSchema,
 } from '@/lib/validation';
 import { EUserRole } from '@/types/user';
-import { BASE_API_URL } from './queries';
 
 // ----------------------------------------------------------------
+
+const BASE_API_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? '';
 
 export const createGroup = async (
   data: IBaseGroupSchema,

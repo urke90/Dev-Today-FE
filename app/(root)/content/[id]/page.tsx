@@ -1,13 +1,18 @@
 import ContentDetails from '@/components/content/ContentDetails';
 import FollowButton from '@/components/content/FollowButton';
-import ShareContent from '@/components/content/ShareContent';
+// import ShareOnSocialNetwork from '@/components/content/ShareOnSocialNetwork';
 import SidebarContentCard from '@/components/shared/RightSidebarItems/SidebarContentCard';
+import ShareOnSocialNetworkDialog from '@/components/shared/ShareOnSocialNetworkDialog';
+// import ShareOnSocialNetworkDialog from '@/components/shared/ShareOnSocialNetworkDialog';
+import ShareIcon from '@/components/icons/Share';
+import { CLOUDINARY_URL } from '@/constants';
 import { auth } from '@/lib/auth';
 import type { IComment } from '@/lib/validation';
 import type { IContent } from '@/types/content';
 import type { IProfileUserResponse } from '@/types/user';
 import { typedFetch } from '@/utils/api';
 import { calculateTimeAgo, formatDate, getFirstName } from '@/utils/format';
+import { getCldImageUrl } from 'next-cloudinary';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -42,6 +47,17 @@ const ContentPage: React.FC<IContentPageProps> = async ({ params }) => {
     url: `/content/${id}/comment?viewerId=${session.user.id}`,
     cache: 'no-cache',
   });
+
+  let transformedAvatarImg = authorResponse.user.avatarImg.startsWith(
+    CLOUDINARY_URL
+  )
+    ? getCldImageUrl({
+        width: 100,
+        height: 100,
+        src: authorResponse.user.avatarImg,
+        crop: 'fill',
+      })
+    : authorResponse.user.avatarImg;
 
   return (
     <div className="content-wrapper px-4 !bg-white-200 dark:!bg-black-900 min-h-screen">
@@ -78,7 +94,7 @@ const ContentPage: React.FC<IContentPageProps> = async ({ params }) => {
             </p>
           </div>
           <div className="flex items-center gap-2">
-            <div className="flex items-center size-6 bg-white-200 dark:bg-black-700  rounded">
+            <div className="flex items-center size-6 bg-white-200 dark:bg-black-700 rounded">
               <Image
                 src="/assets/icons/preview-gray.svg"
                 width={25}
@@ -92,7 +108,14 @@ const ContentPage: React.FC<IContentPageProps> = async ({ params }) => {
             </p>
           </div>
         </div>
-        <ShareContent />
+        <ShareOnSocialNetworkDialog
+          triggerBtn={
+            <div className="flex-center shadow-card transition-colors dark:bg-black-800 hover:dark:bg-black-700 bg-white-100 hover:bg-white-400/30 py-2 rounded gap-2 cursor-pointer">
+              <ShareIcon className="dark:text-white-300 text-black-700" />
+              <p className="p3-medium">Share with</p>
+            </div>
+          }
+        />
         <div className="right-sidebar-item hidden md:block rounded-2xl p2-medium !text-white-400 ">
           <p>
             <span className="text-blue-500">{authorName} </span> Posted on{' '}
@@ -109,17 +132,13 @@ const ContentPage: React.FC<IContentPageProps> = async ({ params }) => {
       <aside className="p1-bold right-sidebar w-full">
         <div className="flex flex-col right-sidebar-item rounded-2xl items-center">
           <Image
-            src={
-              authorResponse.user?.avatarImg || '/assets/images/no-image.svg'
-            }
+            src={transformedAvatarImg || '/assets/icons/image-preview.svg'}
             width={100}
             height={100}
             alt="post example"
             className="rounded-full"
           />
-          <h2 className="d2-bold">
-            {authorResponse.user?.userName || 'No name'}
-          </h2>
+          <h2 className="d2-bold">{authorResponse.user?.userName}</h2>
           <p className="p2-medium !text-white-400 lowercase">
             @{getFirstName(authorResponse.user.userName)}
           </p>

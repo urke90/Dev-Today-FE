@@ -48,7 +48,7 @@ const NotificationMenu: React.FC<INotificationMenuProps> = (props) => {
             </button>
           </DropdownMenu.Item>
           <NotificationItem
-            imgUrl="/assets/images/no-image.svg"
+            imgUrl="/assets/icons/image-preview.svg"
             likedBy="Christopher Soltis"
             timeAgo={new Date()}
             message="Liked your Post What is the ideal Tech stack to build..."

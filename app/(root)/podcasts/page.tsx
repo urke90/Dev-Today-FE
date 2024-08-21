@@ -27,7 +27,7 @@ const PodcastsPage: React.FC<IPodcastsPageProps> = async ({ searchParams }) => {
   const sortByQuery = sortBy ? `&sortBy=${sortBy}` : '';
 
   const postsData = await typedFetch<IContentPagesResponse>({
-    url: `/content?type=podcast&viewerId=${session.user.id}${sortByQuery}`,
+    url: `/content?type=podcast&viewerId=${session.user.id}&tag=${tag}${sortByQuery}`,
   });
 
   if (!postsData)

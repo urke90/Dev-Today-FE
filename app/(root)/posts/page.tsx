@@ -27,7 +27,8 @@ const PostsPage: React.FC<IPostsPageProps> = async ({ searchParams }) => {
   const sortByQuery = sortBy ? `&sortBy=${sortBy}` : '';
 
   const postsData = await typedFetch<IContentPagesResponse>({
-    url: `/content?type=post&viewerId=${session.user.id}${sortByQuery}`,
+    url: `/content?type=post&viewerId=${session.user.id}&tag=${tag}${sortByQuery}`,
+    cache: 'no-store',
   });
 
   if (!postsData)

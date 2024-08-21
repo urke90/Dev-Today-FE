@@ -1,10 +1,11 @@
 'use client';
 
 import ShareIcon from '../icons/Share';
-import { Button } from '../ui/button';
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { Button } from '../ui/button';
+import ShareOnSocialNetworkDialog from './ShareOnSocialNetworkDialog';
 
 // ----------------------------------------------------------------
 
@@ -67,12 +68,21 @@ const GroupItemCard: React.FC<IGroupItemCardProps> = ({
               {totalMembers && totalMembers > 120 ? '120+' : totalMembers}
             </div>
           </div>
-          <Button
-            variant="icon"
-            className="bg-white-200 dark:bg-black-700 size-[30px] rounded-full"
-          >
-            <ShareIcon className="text-white-300" />
-          </Button>
+          <ShareOnSocialNetworkDialog
+            triggerBtn={
+              <Button
+                variant="icon"
+                className="bg-white-200 dark:bg-black-700 size-[30px] rounded-full"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  e.nativeEvent.preventDefault();
+                }}
+              >
+                <ShareIcon className="text-white-300" />
+              </Button>
+            }
+            customUrl={`/groups${id}`}
+          />
         </div>
       </Link>
     </li>

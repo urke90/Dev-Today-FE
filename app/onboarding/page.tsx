@@ -31,6 +31,8 @@ import { type IOnboardingSchema, onboardingSchema } from '@/lib/validation';
 
 // ----------------------------------------------------------------
 
+const BASE_API_URL = process.env.NEXT_API_BASE_URL ?? '';
+
 const OnboardingPage = () => {
   const { resolvedTheme } = useTheme();
   const [isMounted, setIsMounted] = useState(false);
@@ -83,7 +85,7 @@ const OnboardingPage = () => {
   const onSubmit = async (data: IOnboardingSchema) => {
     try {
       const response = await fetch(
-        `http://localhost:8080/api/user/${session.user.id}/onboarding`,
+        BASE_API_URL + `/user/${session.user.id}/onboarding`,
         {
           method: 'PATCH',
           headers: {

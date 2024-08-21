@@ -1,10 +1,12 @@
-import { BASE_API_URL } from '@/api/queries';
+// import { BASE_API_URL } from '@/api/queries';
 import type { AuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GitHubProvider from 'next-auth/providers/github';
 import GoogleProvider from 'next-auth/providers/google';
 
 // ----------------------------------------------------------------
+
+const BASE_API_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? '';
 
 export const authOptions: AuthOptions = {
   providers: [

@@ -21,6 +21,7 @@ interface IContentListProps {
   contentType: EQueryType;
   viewerId: string;
   sortBy: ESortByFilter;
+  selectedTag: string;
 }
 
 const ContentList: React.FC<IContentListProps> = ({
@@ -28,13 +29,15 @@ const ContentList: React.FC<IContentListProps> = ({
   contentType,
   viewerId,
   sortBy,
+  selectedTag,
 }) => {
   const queryClient = useQueryClient();
   const [page, setPage] = useState(1);
 
   const { isLoading, data } = useQuery<IContentPagesResponse>({
     queryKey: [updateContentQueryKey(contentType), contentType, page],
-    queryFn: () => fetchAllContents(contentType, page, viewerId, 4, sortBy),
+    queryFn: () =>
+      fetchAllContents(contentType, page, viewerId, 4, sortBy, selectedTag),
     initialData: contentData,
   });
 
@@ -95,7 +98,7 @@ const ContentList: React.FC<IContentListProps> = ({
       [updateContentQueryKey(contentType), contentType, 1],
       contentData
     );
-  }, [sortBy]);
+  }, [sortBy, selectedTag]);
 
   const renderContent = () => {
     let styles;
