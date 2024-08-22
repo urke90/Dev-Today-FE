@@ -24,10 +24,8 @@ const PodcastsPage: React.FC<IPodcastsPageProps> = async ({ searchParams }) => {
   const session = await auth();
   if (!session) throw new Error('User not available!');
 
-  const sortByQuery = sortBy ? `&sortBy=${sortBy}` : '';
-
   const postsData = await typedFetch<IContentPagesResponse>({
-    url: `/content?type=podcast&viewerId=${session.user.id}&tag=${tag}${sortByQuery}`,
+    url: `/content?type=podcast&viewerId=${session.user.id}&tag=${tag}&sortBy=${sortBy}`,
   });
 
   if (!postsData)

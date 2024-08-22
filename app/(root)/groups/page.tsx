@@ -19,13 +19,11 @@ interface IGroupsPage {
 const GroupsPage: React.FC<IGroupsPage> = async ({ searchParams }) => {
   const sortBy: ESortByFilter = parseSearchParams(searchParams.sortBy, '');
 
-  const sortQuery = sortBy ? `&sortBy=${sortBy}` : '';
-
   const session = await auth();
   if (!session) throw new Error('User session is not available!');
 
   const groupsData = await typedFetch<IHomePageGroupsResponse>({
-    url: `/groups?members=true&viewerId=${session.user.id}${sortQuery}`,
+    url: `/groups?members=true&viewerId=${session.user.id}&sortBy=${sortBy}`,
   });
 
   if (!groupsData) throw new Error('Internal server error!');

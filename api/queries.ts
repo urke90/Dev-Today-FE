@@ -44,11 +44,9 @@ export const fetchAllGroups = async (
   viewerId: string,
   sortBy: ESortByFilter
 ) => {
-  const sortQuery = sortBy ? `&sortBy=${sortBy}` : '';
-
   const response = await fetch(
     BASE_API_URL +
-      `/groups?members=true&page=${page}&viewerId=${viewerId}${sortQuery}`
+      `/groups?members=true&page=${page}&viewerId=${viewerId}&sortBy=${sortBy}`
   );
 
   if (!response.ok) {
@@ -142,11 +140,9 @@ export const fetchAllContents = async (
   sortBy?: ESortByFilter,
   selectedTag?: string
 ) => {
-  const sortByQuery = sortBy ? `&sortBy${sortBy}` : '';
-
   const response = await fetch(
     BASE_API_URL +
-      `/content?type=${contentType}&page=${page}&limit=${limit}&viewerId=${viewerId}&tag=${selectedTag}${sortByQuery}`
+      `/content?type=${contentType}&page=${page}&limit=${limit}&viewerId=${viewerId}&tag=${selectedTag}&sortBy=${sortBy}`
   );
 
   if (!response.ok) {

@@ -24,10 +24,8 @@ const MeetupsPage: React.FC<IMeetupsPageProps> = async ({ searchParams }) => {
   const session = await auth();
   if (!session) throw new Error('User not authenticated!');
 
-  const sortByQuery = sortBy ? `&sortBy=${sortBy}` : '';
-
   const meetupsData = await typedFetch<IContentPagesResponse>({
-    url: `/content?type=meetup&viewerId=${session.user.id}&tag=${tag}${sortByQuery}`,
+    url: `/content?type=meetup&viewerId=${session.user.id}&tag=${tag}&sortBy=${sortBy}`,
   });
 
   if (!meetupsData)
