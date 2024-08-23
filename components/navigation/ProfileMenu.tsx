@@ -57,17 +57,17 @@ const ProfileMenu: React.FC = () => {
           onCloseAutoFocus={(e) => e.preventDefault()}
           className="bg-light100__dark800 shadow-header-menu border-white-border data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade dark:border-black-700 z-20 mt-7 flex min-w-44 flex-col gap-5 rounded-[14px] border p-5 max-lg:mt-6"
         >
-          <DropdownMenu.Item className="p3-medium">
+          <DropdownMenu.Item>
             <Link
               href="/profile"
-              className="flex items-center gap-2.5"
               onClick={() => setIsOpen(false)}
+              className="dropdown-item"
             >
               <ProfileIcon />
               Profile
             </Link>
           </DropdownMenu.Item>
-          <DropdownMenu.Item className="p3-medium gap-2.5">
+          <DropdownMenu.Item className="dropdown-item">
             <Button
               className="justify-start gap-2.5 text-primary-500"
               onClick={() => signOut({ callbackUrl: '/login' })}

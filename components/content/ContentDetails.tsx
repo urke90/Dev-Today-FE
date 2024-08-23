@@ -90,8 +90,8 @@ const ContentDetails: React.FC<IContentDetailsProps> = ({
           </APIProvider>
         </div>
       )}
-      <div className="flex flex-col gap-5">
-        <div className="flex items-center bg-white-100 border border-red-800 justify-between">
+      <div className="flex flex-col gap-5 bg-light100__dark800 shadow-card p-5 rounded-xl">
+        <div className="flex items-center justify-between">
           {content.type === EContentType.MEETUP && (
             <div className="flex gap-2 max-w-3xl">
               <Image
@@ -128,18 +128,18 @@ const ContentDetails: React.FC<IContentDetailsProps> = ({
                   sideOffset={8}
                   align="end"
                   onCloseAutoFocus={(e) => e.preventDefault()}
-                  className="bg-light100__dark800 px-2 !w-48 shadow-header-menu data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade z-20 mb-4 flex flex-col gap-2.5 rounded-[10px] py-4 "
+                  className="bg-light200__dark700 shadow-header-menu data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade z-20 mb-4 flex flex-col gap-2.5 rounded-[10px] py-4 px-5 w-40"
                 >
                   <Item
                     onSelect={() => router.push(`/content/${content?.id}/edit`)}
-                    className="flex items-center gap-2.5 focus-visible:outline-none p3-medium cursor-pointer px-3 py-1 rounded-md"
+                    className="dropdown-item"
                   >
                     <EditIcon />
                     <p>Edit Post</p>
                   </Item>
                   <Item
                     onSelect={(e) => e.preventDefault()}
-                    className="flex items-center focus-visible:outline-none gap-2.5 p3-medium px-3 py-1.5 !text-error-text rounded-md cursor-pointer"
+                    className="!text-error-text dropdown-item "
                   >
                     <Image
                       src="/assets/icons/trash.svg"

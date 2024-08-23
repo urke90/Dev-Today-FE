@@ -113,12 +113,7 @@ const MemberItemCard: React.FC<IMemberItemCardProps> = ({
                     ? handleRemoveAdminRole
                     : handleAssignAdminRole
                 }
-                // onClick={
-                //   role === EUserRole.ADMIN
-                //     ? handleRemoveAdminRole
-                //     : handleAssignAdminRole
-                // }
-                className="flex items-center gap-2.5 p3-medium cursor-pointer"
+                className="dropdown-item"
               >
                 {role === EUserRole.ADMIN
                   ? 'Remove Admin Role'
@@ -126,7 +121,7 @@ const MemberItemCard: React.FC<IMemberItemCardProps> = ({
               </Item>
               <Item
                 onSelect={handleRemoveMember}
-                className="flex items-center gap-2.5 p3-medium !text-error-text cursor-pointer"
+                className="dropdown-item !text-error-text"
               >
                 Remove User
               </Item>

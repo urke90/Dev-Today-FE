@@ -83,16 +83,19 @@ const GroupDropdownMenu: React.FC<IGroupDropdownMenuProps> = ({
             sideOffset={8}
             align="end"
             onCloseAutoFocus={(e) => e.preventDefault()}
-            className="bg-light200__dark700 shadow-header-menu data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade z-20 mb-4 flex w-40 flex-col gap-2.5 rounded-[10px] py-4 px-5 ">
+            className="bg-light200__dark700 shadow-header-menu data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade z-20 mb-4 flex w-40 flex-col gap-2.5 rounded-[10px] py-4 px-5"
+          >
             <Item
               onSelect={() => router.push(`/groups/${groupId}/edit`)}
-              className="flex items-center gap-2.5 p3-medium cursor-pointer">
+              className="dropdown-item"
+            >
               <EditIcon /> Edit Group
             </Item>
             {isGroupOwner && (
               <Item
                 onSelect={() => setIsOpen(true)}
-                className="flex items-center gap-2.5 p3-medium !text-error-text cursor-pointer">
+                className="dropdown-item !text-error-text "
+              >
                 <Image
                   src="/assets/icons/trash.svg"
                   width={18}

@@ -63,7 +63,7 @@ const PostItemCard: React.FC<IPostItemCardProps> = ({
           width={165}
           height={165}
           alt={title}
-          className=" max-md:hidden  rounded-2xl"
+          className="max-md:hidden rounded-2xl object-cover"
         />
         {/* RIGHT PART OF THE POST */}
         <div className="flex flex-1 flex-col gap-4">
@@ -74,7 +74,7 @@ const PostItemCard: React.FC<IPostItemCardProps> = ({
                 width={50}
                 height={50}
                 alt={title}
-                className="md:hidden"
+                className="md:hidden object-cover rounded-lg"
               />
               <div>
                 <p className="p1-bold mb-2">{title}</p>

@@ -186,6 +186,9 @@ body::-webkit-scrollbar {
   .nav-link-tab--active {
     @apply bg-primary-500 !text-white-100 dark:!text-white-100;
   }
+  .dropdown-item {
+    @apply flex items-center gap-2.5 p3-medium cursor-pointer hover:translate-x-2 transition-transform;
+  }
   /* MISC */
 
   /* SPINNING LOADER */
