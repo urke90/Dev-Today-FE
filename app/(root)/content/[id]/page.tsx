@@ -48,7 +48,7 @@ const ContentPage: React.FC<IContentPageProps> = async ({ params }) => {
     cache: 'no-cache',
   });
 
-  let transformedAvatarImg = authorResponse.user.avatarImg.startsWith(
+  const transformedAvatarImg = authorResponse.user.avatarImg.startsWith(
     CLOUDINARY_URL
   )
     ? getCldImageUrl({
@@ -60,7 +60,7 @@ const ContentPage: React.FC<IContentPageProps> = async ({ params }) => {
     : authorResponse.user.avatarImg;
 
   return (
-    <div className="content-wrapper px-4 !bg-white-200 dark:!bg-black-900 min-h-screen">
+    <div className="content-wrapper px-3.5 lg:px-5 min-h-screen">
       <aside className="left-sidebar">
         <div className="right-sidebar-item rounded-2xl">
           <div className="flex items-center gap-2">

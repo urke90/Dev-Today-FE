@@ -50,7 +50,7 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
 
   return (
     <div className="content-wrapper">
-      <aside className="left-sidebar bg-light100__dark800 rounded-2xl !p-0 !pb-10 text-center">
+      <aside className="left-sidebar bg-light100__dark800 rounded-2xl !p-0 !pb-10 text-center shadow-card">
         <div className="profile-background relative h-[106px] rounded-t-2xl lg:h-[83px]">
           <Image
             fill
