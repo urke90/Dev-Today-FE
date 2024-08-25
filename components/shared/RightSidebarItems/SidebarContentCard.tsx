@@ -1,9 +1,10 @@
-import ArrowRightIcon from '../../icons/ArrowRight';
-
-import { EContentType, type IContent } from '@/types/content';
 import SidebarMeetupItem from './SidebarMeetupItem';
 import SidebarPodcastItem from './SidebarPodcastItem';
 import SidebarPostItem from './SidebarPostItem';
+
+import ArrowRightIcon from '../../icons/ArrowRight';
+
+import { EContentType, type IContent } from '@/types/content';
 
 // ----------------------------------------------------------------
 

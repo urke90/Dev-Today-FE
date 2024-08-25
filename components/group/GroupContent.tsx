@@ -2,6 +2,19 @@
 
 // ----------------------------------------------------------------
 
+import MemberItemCard from './MemberItemCard';
+
+import ContentNavLinks from '../shared/ContentNavLinks';
+import LoadingSpinner from '../shared/LoadingSpinner';
+import MeetupItemCard from '../shared/MeetupItemCard';
+import Pagination from '../shared/Pagination';
+import PodcastItemCard from '../shared/PodcastItemCard';
+import PostItemCard from '../shared/PostItemCard';
+
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+
 import {
   assignAdminRole,
   removeAdminRole,
@@ -16,16 +29,6 @@ import type {
 } from '@/types/group';
 import { EQueryType } from '@/types/queries';
 import { typedFetch } from '@/utils/api';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
-import ContentNavLinks from '../shared/ContentNavLinks';
-import LoadingSpinner from '../shared/LoadingSpinner';
-import MeetupItemCard from '../shared/MeetupItemCard';
-import Pagination from '../shared/Pagination';
-import PodcastItemCard from '../shared/PodcastItemCard';
-import PostItemCard from '../shared/PostItemCard';
-import MemberItemCard from './MemberItemCard';
 
 // ----------------------------------------------------------------
 
@@ -66,7 +69,13 @@ const GroupContent: React.FC<IGroupContentWrapperProps> = ({
     data: contentData,
   } = useQuery<IGroupContentResponse>({
     initialData: groupContent,
-    queryKey: [updateContentQueryKey(contentType), contentType, page],
+    queryKey: [
+      updateContentQueryKey(contentType),
+      contentType,
+      page,
+      groupId,
+      viewerId,
+    ],
     queryFn: () => fetchGroupContent(groupId, page, contentType, viewerId),
     enabled: contentType !== EQueryType.MEMBERS && page !== 1,
   });
@@ -77,7 +86,12 @@ const GroupContent: React.FC<IGroupContentWrapperProps> = ({
     data: membersData,
   } = useQuery<IGroupMembersResponse>({
     initialData: groupMembers,
-    queryKey: [EContentGroupQueries.FETCH_MEMBERS, EQueryType.MEMBERS, page],
+    queryKey: [
+      EContentGroupQueries.FETCH_MEMBERS,
+      EQueryType.MEMBERS,
+      page,
+      groupId,
+    ],
     queryFn: () => fetchGroupMembers(groupId, page),
     enabled: contentType === EQueryType.MEMBERS && page !== 1,
   });
@@ -229,7 +243,7 @@ const GroupContent: React.FC<IGroupContentWrapperProps> = ({
                 description={description}
                 tags={tags}
                 createdAt={createdAt}
-                author={author.userName}
+                author={author}
                 viewsCount={viewsCount}
                 likesCount={likesCount}
                 commentsCount={commentsCount}
@@ -289,7 +303,7 @@ const GroupContent: React.FC<IGroupContentWrapperProps> = ({
                 title={title}
                 description={description}
                 tags={tags}
-                author={author.userName}
+                author={author}
                 createdAt={createdAt}
                 isLiked={isLiked}
                 handleLikeContent={handleLikeContent}
@@ -348,7 +362,7 @@ const GroupContent: React.FC<IGroupContentWrapperProps> = ({
               description={description}
               tags={tags}
               createdAt={createdAt}
-              author={author.userName}
+              author={author}
               viewsCount={viewsCount}
               likesCount={likesCount}
               commentsCount={commentsCount}

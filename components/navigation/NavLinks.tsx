@@ -72,10 +72,10 @@ const NavLinks: React.FC = () => {
           <Link
             key={page}
             href={href}
-            className={`group p-2.5 rounded-[7px] ${isActive ? 'bg-primary-500' : ''} hover:bg-white-300 dark:hover:bg-white-400 transition-colors`}
+            className={`group rounded-[7px] p-2.5 ${isActive ? 'bg-primary-500' : ''} transition-colors hover:bg-white-300 dark:hover:bg-white-400`}
           >
             <Icon
-              className={`icon-light400__dark300 ${isActive ? '!text-white-100 dark:!text-white-100' : ''} group-hover:dark:text-white-100 transition-colors`}
+              className={`icon-light400__dark300 ${isActive ? '!text-white-100 dark:!text-white-100' : ''} transition-colors group-hover:dark:text-white-100`}
             />
           </Link>
         );

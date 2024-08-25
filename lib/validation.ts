@@ -1,5 +1,6 @@
-import { EContentType } from '@/types/content';
 import z from 'zod';
+
+import { EContentType } from '@/types/content';
 
 // ----------------------------------------------------------------
 
@@ -96,14 +97,16 @@ export type IUpdateProfileSchema = z.infer<typeof updateProfileSchema>;
 export const baseContentSchema = z.object({
   id: z.string(),
   authorId: z.string(),
-  title: z.string().min(3).max(100),
+  title: z.string().min(3, 'Title must be at least characters long').max(100),
   type: z.nativeEnum(EContentType),
   groupId: z.object({
     value: z.string().min(1),
     label: z.string().min(1),
   }),
   coverImage: z.string().url().nullable(),
-  description: z.string().min(30),
+  description: z
+    .string()
+    .min(10, 'Content must be at least 10 characters long'),
   tags: z
     .array(
       z.object({
@@ -133,7 +136,7 @@ export const meetupSchema = baseContentSchema.extend({
     lat: z.number(),
     lng: z.number(),
   }),
-  meetupDate: z.coerce.date(),
+  meetupDate: z.coerce.date({ invalid_type_error: 'INVALID' }),
 });
 
 export type IMeetup = z.infer<typeof meetupSchema>;
@@ -274,3 +277,67 @@ export const updateGroupSchema = baseGroupSchema.omit({
 export type IUpdateGroupSchema = z.infer<typeof updateGroupSchema>;
 
 /************************************************************* GROUP *******************************************************************/
+
+export const createOrUpdateContentSchema = z.object({
+  authorId: z.string(),
+  title: z.string().min(3, 'Title must be at least characters long').max(100),
+  type: z.nativeEnum(EContentType),
+  groupId: z.object({
+    value: z.string().min(1),
+    label: z.string().min(1),
+  }),
+  coverImage: z.string().url().nullable(),
+  description: z
+    .string()
+    .min(10, 'Content must be at least 10 characters long'),
+  tags: z
+    .array(
+      z.object({
+        label: z.string().min(1).max(10, 'Tag must be max 10 characters long'),
+        value: z.string().min(1),
+      })
+    )
+    .max(5),
+  meetupLocation: z
+    .object(
+      {
+        address: z
+          .string()
+          .trim()
+          .min(3, 'Please search for valid address with Google Maps')
+          .refine((val) => val !== '', {
+            message: 'Address cannot be empty',
+          }),
+
+        lat: z.number().refine((val) => val !== 0, {
+          message: 'Latitude must be a valid number',
+        }),
+        lng: z.number().refine((val) => val !== 0, {
+          message: 'Longitude must be a valid number',
+        }),
+      },
+      {
+        message: 'Please enter valid address',
+        required_error: 'Required message',
+        invalid_type_error: 'INVALID ERROR TYPE',
+        description: 'PLEASE ADD DESCRIOTIUOn',
+      }
+    )
+    .optional()
+    .refine((data) => data && data.address && data.lat && data.lng, {
+      message: 'Please search for valid address with Google Maps',
+      path: ['meetupLocation'], // this will point to the entire object
+    }),
+  meetupDate: z.coerce.date({
+    invalid_type_error: 'Please provide valid date',
+  }),
+  podcastFile: z.string({ message: 'Please provide valid file' }).optional(),
+  podcastTitle: z
+    .string()
+    .min(3, 'Podcast title must be at least 3 characters long')
+    .optional(),
+});
+
+export type ICreateOrUpdateContentSchema = z.infer<
+  typeof createOrUpdateContentSchema
+>;

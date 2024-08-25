@@ -1,3 +1,5 @@
+import { Button } from '../ui/button';
+
 import {
   AdvancedMarker,
   ControlPosition,
@@ -8,12 +10,11 @@ import {
 import { CalendarIcon } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { useState } from 'react';
-import { Button } from '../ui/button';
 
 // ----------------------------------------------------------------
 
 interface IGoogleMapsMeetupDisplayProps {
-  location?: {
+  location: {
     address: string;
     lat: number;
     lng: number;
@@ -23,7 +24,6 @@ interface IGoogleMapsMeetupDisplayProps {
 const GoogleMapsMeetupDisplay: React.FC<IGoogleMapsMeetupDisplayProps> = ({
   location,
 }) => {
-  if (!location) return null;
   const { theme } = useTheme();
   const [zoom, setZoom] = useState(location.address ? 16 : 3);
 
@@ -51,7 +51,7 @@ const GoogleMapsMeetupDisplay: React.FC<IGoogleMapsMeetupDisplayProps> = ({
         <MapControl position={ControlPosition.RIGHT_BOTTOM}>
           <div className="mb-1 mr-2 flex flex-col gap-y-1">
             <Button
-              className="p1-medium rounded border border-white-border bg-white-100 px-3 py-0.5 text-black-700 transition duration-300 ease-in-out hover:bg-primary-500 hover:dark:bg-primary-500 hover:text-white-200 dark:border-black-800 dark:bg-black-700 dark:text-white-200"
+              className="p1-medium rounded border border-white-border bg-white-100 px-3 py-0.5 text-black-700 transition duration-300 ease-in-out hover:bg-primary-500 hover:text-white-200 dark:border-black-800 dark:bg-black-700 dark:text-white-200 hover:dark:bg-primary-500"
               type="button"
               onClick={() => setZoom((prevZoom) => prevZoom + 1)}
             >
@@ -59,7 +59,7 @@ const GoogleMapsMeetupDisplay: React.FC<IGoogleMapsMeetupDisplayProps> = ({
             </Button>
             <Button
               type="button"
-              className="p1-medium rounded border border-white-border bg-white-100 px-3 py-0.5 text-black-700 transition duration-300 ease-in-out hover:bg-primary-500 hover:dark:bg-primary-500 hover:text-white-200 dark:border-black-800 dark:bg-black-700 dark:text-white-200"
+              className="p1-medium rounded border border-white-border bg-white-100 px-3 py-0.5 text-black-700 transition duration-300 ease-in-out hover:bg-primary-500 hover:text-white-200 dark:border-black-800 dark:bg-black-700 dark:text-white-200 hover:dark:bg-primary-500"
               onClick={() => setZoom((prevZoom) => prevZoom - 1)}
             >
               -

@@ -1,8 +1,12 @@
 'use client';
-import { Button } from '@/components/ui/button';
-import { IComment } from '@/lib/validation';
-import { EContentType, IContent } from '@/types/content';
-import { IProfileUser } from '@/types/user';
+import AudioPlayer from './AudioPlayer';
+import Comments from './Comments';
+import GoogleMapsMeetupDisplay from './GoogleMapsMeetupDisplay';
+import HtmlParser from './HtmlParser';
+
+import EditIcon from '../icons/Edit';
+import BadgeItem from '../shared/BadgeItem';
+
 import {
   Content,
   DropdownMenu,
@@ -10,18 +14,16 @@ import {
   Portal,
   Trigger,
 } from '@radix-ui/react-dropdown-menu';
-import EditIcon from '../icons/Edit';
-import AudioPlayer from './AudioPlayer';
-import Comments from './Comments';
-import HtmlParser from './HtmlParser';
-
-import { CLOUDINARY_URL } from '@/constants';
 import { APIProvider } from '@vis.gl/react-google-maps';
 import { getCldImageUrl } from 'next-cloudinary';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import BadgeItem from '../shared/BadgeItem';
-import GoogleMapsMeetupDisplay from './GoogleMapsMeetupDisplay';
+
+import { Button } from '@/components/ui/button';
+import { CLOUDINARY_URL } from '@/constants';
+import { IComment } from '@/lib/validation';
+import { EContentType, IContent } from '@/types/content';
+import { IProfileUser } from '@/types/user';
 
 // ----------------------------------------------------------------
 
@@ -61,7 +63,7 @@ const ContentDetails: React.FC<IContentDetailsProps> = ({
       )}
       {content.type === EContentType.POST && (
         <div
-          className={`relative w-full h-24 md:h-44 ${!content.coverImage ? 'flex-center bg-primary-100 dark:bg-black-700 rounded-[10px]' : ''}`}
+          className={`relative h-24 w-full md:h-44 ${!content.coverImage ? 'flex-center bg-primary-100 dark:bg-black-700 rounded-[10px]' : ''}`}
         >
           {content.coverImage ? (
             <Image
@@ -81,7 +83,7 @@ const ContentDetails: React.FC<IContentDetailsProps> = ({
           )}
         </div>
       )}
-      {content.type === EContentType.MEETUP && (
+      {content.type === EContentType.MEETUP && content.meetupLocation && (
         <div className="h-60">
           <APIProvider
             apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ''}
@@ -90,10 +92,10 @@ const ContentDetails: React.FC<IContentDetailsProps> = ({
           </APIProvider>
         </div>
       )}
-      <div className="flex flex-col gap-5 bg-light100__dark800 shadow-card p-5 rounded-xl">
+      <div className="bg-light100__dark800 shadow-card flex flex-col gap-5 rounded-xl p-5">
         <div className="flex items-center justify-between">
           {content.type === EContentType.MEETUP && (
-            <div className="flex gap-2 max-w-3xl">
+            <div className="flex max-w-3xl gap-2">
               <Image
                 src={transformedAvatarImg || '/assets/icons/image-preview.svg'}
                 alt="avatar"
@@ -105,7 +107,7 @@ const ContentDetails: React.FC<IContentDetailsProps> = ({
             </div>
           )}
           {content?.type !== EContentType.MEETUP && (
-            <h2 className="d2-bold text-wrap break-words overflow-wrap overflow-hidden">
+            <h2 className="d2-bold overflow-wrap overflow-hidden text-wrap break-words">
               {content.title}
             </h2>
           )}
@@ -128,7 +130,7 @@ const ContentDetails: React.FC<IContentDetailsProps> = ({
                   sideOffset={8}
                   align="end"
                   onCloseAutoFocus={(e) => e.preventDefault()}
-                  className="bg-light200__dark700 shadow-header-menu data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade z-20 mb-4 flex flex-col gap-2.5 rounded-[10px] py-4 px-5 w-40"
+                  className="bg-light200__dark700 shadow-header-menu data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade z-20 mb-4 flex w-40 flex-col gap-2.5 rounded-[10px] px-5 py-4"
                 >
                   <Item
                     onSelect={() => router.push(`/content/${content?.id}/edit`)}
@@ -139,7 +141,7 @@ const ContentDetails: React.FC<IContentDetailsProps> = ({
                   </Item>
                   <Item
                     onSelect={(e) => e.preventDefault()}
-                    className="!text-error-text dropdown-item "
+                    className="dropdown-item !text-error-text "
                   >
                     <Image
                       src="/assets/icons/trash.svg"

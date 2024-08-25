@@ -1,6 +1,7 @@
-import ArrowRightIcon from '@/components/icons/ArrowRight';
 import Image from 'next/image';
 import Link from 'next/link';
+
+import ArrowRightIcon from '@/components/icons/ArrowRight';
 
 // ----------------------------------------------------------------
 
@@ -21,7 +22,7 @@ const SidebarPostItem: React.FC<ISidebarPostItemProps> = ({
     <li>
       <Link
         href={'/content/' + id}
-        className="flex justify-between sidebar-item-card-hover"
+        className="sidebar-item-card-hover flex justify-between"
       >
         <div className="flex items-center gap-3.5">
           <Image
@@ -29,7 +30,7 @@ const SidebarPostItem: React.FC<ISidebarPostItemProps> = ({
             alt="post"
             width={58}
             height={58}
-            className="rounded shrink-0"
+            className="shrink-0 rounded"
           />
           <div className="flex flex-col gap-[6px]">
             <p className="p4-medium">{title}</p>
@@ -37,7 +38,7 @@ const SidebarPostItem: React.FC<ISidebarPostItemProps> = ({
           </div>
         </div>
 
-        <ArrowRightIcon className="text-white-400 shrink-0" />
+        <ArrowRightIcon className="shrink-0 text-white-400" />
       </Link>
     </li>
   );

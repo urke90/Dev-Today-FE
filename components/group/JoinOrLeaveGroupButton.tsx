@@ -1,12 +1,15 @@
 'use client';
 
-import { joinGroup, leaveGroup } from '@/api/mutations';
+import GroupLeaveOrDeleteDialog from './GroupLeaveOrDeleteDialog';
+
+import LogoutSecondIcon from '../icons/LogoutSecond';
+import { Button } from '../ui/button';
+
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
-import LogoutSecondIcon from '../icons/LogoutSecond';
-import { Button } from '../ui/button';
-import GroupLeaveOrDeleteDialog from './GroupLeaveOrDeleteDialog';
+
+import { joinGroup, leaveGroup } from '@/api/mutations';
 
 // ----------------------------------------------------------------
 
@@ -77,7 +80,7 @@ const JoinOrLeaveGroupButton: React.FC<IJoinOrLeaveGroupButtonProps> = ({
       />
       <Button
         size="small"
-        className={`px-4 gap-1 icon-light400__dark300 ${isMember ? 'bg-white-200 dark:bg-black-700' : 'bg-primary-500'}`}
+        className={`icon-light400__dark300 gap-1 px-4 ${isMember ? 'bg-white-200 dark:bg-black-700' : 'bg-primary-500'}`}
         onClick={isMember ? () => setIsOpen(true) : handleJoinGroup}
         disabled={isPendingJoinGroup || isPendingLeaveGroup}
       >

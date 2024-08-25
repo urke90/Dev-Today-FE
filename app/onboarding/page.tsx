@@ -1,7 +1,6 @@
 'use client';
 
 import { useTheme } from 'next-themes';
-
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -24,8 +23,8 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import {
   CODING_AMBITIONS,
   CURRENT_KNOWLEDGE,
-  PREFERRED_SKILLS,
   generateOnboardingStepData,
+  PREFERRED_SKILLS,
 } from '@/constants';
 import { type IOnboardingSchema, onboardingSchema } from '@/lib/validation';
 
@@ -118,8 +117,8 @@ const OnboardingPage = () => {
         theme={resolvedTheme}
       />
       <div className="auth-onboarding-right-sidebar gap-10">
-        <div className="max-w-md flex flex-col gap-10">
-          <div className="md:hidden mx-auto">
+        <div className="flex max-w-md flex-col gap-10">
+          <div className="mx-auto md:hidden">
             <ThemeLogo theme={resolvedTheme} isMounted={isMounted} />
           </div>
           <h1 className="d1-bold">
@@ -153,7 +152,7 @@ const OnboardingPage = () => {
                               </FormControl>
                               <FormLabel
                                 key={item.value}
-                                className={`flex items-center w-full px-4 !mt-0 rounded h-14 p1-medium cursor-pointer hover:-translate-y-1 transition-transform
+                                className={`p1-medium !mt-0 flex h-14 w-full cursor-pointer items-center rounded px-4 transition-transform hover:-translate-y-1
                               ${
                                 item.value === field.value
                                   ? 'bg-primary-500 !text-white-100'
@@ -203,7 +202,7 @@ const OnboardingPage = () => {
                                   />
                                 </FormControl>
                                 <FormLabel
-                                  className={`flex w-full !mt-0 items-center px-4 justify-start rounded border-none hover:-translate-y-1 transition-transform h-14 p1-medium cursor-pointer
+                                  className={`p1-medium !mt-0 flex h-14 w-full cursor-pointer items-center justify-start rounded border-none px-4 transition-transform hover:-translate-y-1
                               ${
                                 field.value.includes(item.value)
                                   ? 'bg-primary-500 !text-white-100'
@@ -226,7 +225,7 @@ const OnboardingPage = () => {
                   control={form.control}
                   name="preferredSkills"
                   render={() => (
-                    <FormItem className="flex flex-wrap gap-3 items-center space-y-0">
+                    <FormItem className="flex flex-wrap items-center gap-3 space-y-0">
                       {PREFERRED_SKILLS.map((item) => (
                         <FormField
                           key={item.title}
@@ -254,10 +253,10 @@ const OnboardingPage = () => {
                                   />
                                 </FormControl>
                                 <FormLabel
-                                  className={`cursor-pointer !mt-0 h-14 hover:scale-[0.9] transition-transform rounded-lg flex items-center p3-medium !px-5 ${
+                                  className={`p3-medium !mt-0 flex h-14 cursor-pointer items-center rounded-lg !px-5 transition-transform hover:scale-[0.9] ${
                                     field.value.includes(item.title)
                                       ? 'bg-primary-500 !text-white-100'
-                                      : 'dark:bg-black-800 bg-white-100'
+                                      : 'bg-white-100 dark:bg-black-800'
                                   } `}
                                 >
                                   {item.title}
@@ -275,7 +274,7 @@ const OnboardingPage = () => {
             <Button
               onClick={goNext}
               variant="primary"
-              className="w-full bg-primary-500 h-11 p2-bold"
+              className="p2-bold h-11 w-full bg-primary-500"
             >
               {step === 2 ? 'Get Started' : 'Next'}
             </Button>

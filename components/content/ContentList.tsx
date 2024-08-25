@@ -1,18 +1,20 @@
 'use client';
 
-import { fetchAllContents } from '@/api/queries';
-import type { IContentPagesResponse } from '@/types/content';
-import { EQueryType, ESortByFilter } from '@/types/queries';
-import { typedFetch } from '@/utils/api';
-import { updateContentQueryKey } from '@/utils/query';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
 import LoadingSpinner from '../shared/LoadingSpinner';
 import MeetupItemCard from '../shared/MeetupItemCard';
 import Pagination from '../shared/Pagination';
 import PodcastItemCard from '../shared/PodcastItemCard';
 import PostItemCard from '../shared/PostItemCard';
+
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+
+import { fetchAllContents } from '@/api/queries';
+import type { IContentPagesResponse } from '@/types/content';
+import { EQueryType, ESortByFilter } from '@/types/queries';
+import { typedFetch } from '@/utils/api';
+import { updateContentQueryKey } from '@/utils/query';
 
 // ----------------------------------------------------------------
 
@@ -35,7 +37,15 @@ const ContentList: React.FC<IContentListProps> = ({
   const [page, setPage] = useState(1);
 
   const { isLoading, data } = useQuery<IContentPagesResponse>({
-    queryKey: [updateContentQueryKey(contentType), contentType, page],
+    queryKey: [
+      updateContentQueryKey(contentType),
+      contentType,
+      page,
+      viewerId,
+      sortBy,
+      selectedTag,
+    ],
+    // queryKey: [updateContentQueryKey(contentType), contentType, page], just as reference if i have to revert
     queryFn: () =>
       fetchAllContents(contentType, page, viewerId, 4, sortBy, selectedTag),
     initialData: contentData,
@@ -131,7 +141,7 @@ const ContentList: React.FC<IContentListProps> = ({
                 description={description}
                 tags={tags}
                 createdAt={createdAt}
-                author={author.userName}
+                author={author}
                 viewsCount={viewsCount}
                 likesCount={likesCount}
                 commentsCount={commentsCount}
@@ -166,7 +176,7 @@ const ContentList: React.FC<IContentListProps> = ({
                 title={title}
                 description={description}
                 tags={tags}
-                author={author.userName}
+                author={author}
                 createdAt={createdAt}
                 isLiked={isLiked}
                 handleLikeContent={handleLikeContent}

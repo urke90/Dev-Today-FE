@@ -1,9 +1,10 @@
-import { signIn } from 'next-auth/react';
-import Link from 'next/link';
 import GithubIcon from '../icons/Github';
 import GoogleIcon from '../icons/Google';
 import { Button } from '../ui/button';
 import { Separator } from '../ui/separator';
+
+import Link from 'next/link';
+import { signIn } from 'next-auth/react';
 
 // ----------------------------------------------------------------
 
@@ -21,7 +22,7 @@ const ProvidersButtons: React.FC<IProvidersButtonsProps> = ({
       </Button>
       <Link
         href={isLoginPage ? '/register' : '/login'}
-        className="block cursor-pointer text-center hover:underline p3-regular"
+        className="p3-regular block cursor-pointer text-center hover:underline"
       >
         {isLoginPage
           ? "Don't have an account yet?"
@@ -41,7 +42,7 @@ const ProvidersButtons: React.FC<IProvidersButtonsProps> = ({
         onClick={() => signIn('google', { callbackUrl: '/onboarding' })}
         className="p3-medium gap-2.5"
       >
-        <GoogleIcon className="dark:text-white-200 text-black-700" />
+        <GoogleIcon className="text-black-700 dark:text-white-200" />
         Continue with Google
       </Button>
       <Button
@@ -50,7 +51,7 @@ const ProvidersButtons: React.FC<IProvidersButtonsProps> = ({
         onClick={() => signIn('github', { callbackUrl: '/onboarding' })}
         className="p3-medium gap-2.5"
       >
-        <GithubIcon className="dark:text-white-200 text-black-700" />
+        <GithubIcon className="text-black-700 dark:text-white-200" />
         Continue with Github
       </Button>
     </div>

@@ -25,7 +25,7 @@ const EditContentPage: React.FC<IEditContentPageProps> = async ({ params }) => {
 
   return (
     <div className="create-page-wrapper pb-10">
-      <CreateContent content={content} viewerId={session.user.id} />
+      <CreateContent content={content} />
     </div>
   );
 };

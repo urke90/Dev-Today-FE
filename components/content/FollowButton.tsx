@@ -1,9 +1,11 @@
 'use client';
 
-import { typedFetch } from '@/utils/api';
+import { Button } from '../ui/button';
+
 import { useState } from 'react';
 import toast from 'react-hot-toast';
-import { Button } from '../ui/button';
+
+import { typedFetch } from '@/utils/api';
 
 // ----------------------------------------------------------------
 
@@ -56,7 +58,7 @@ const FollowButton: React.FC<IFollowButtonProps> = ({
     <Button
       size="small"
       onClick={isFollowingUser ? handleUnfollowUser : handleFollow}
-      className="dark:bg-black-900 bg-white-300 transition-colors hover:bg-white-400 hover:text-white-100 hover:dark:bg-black-700 text-purple-500  rounded border border-transparent"
+      className="rounded border border-transparent bg-white-300 text-purple-500 transition-colors hover:bg-white-400  hover:text-white-100 dark:bg-black-900 hover:dark:bg-black-700"
     >
       {isFollowingUser ? 'Fallowing' : 'Follow'}
     </Button>

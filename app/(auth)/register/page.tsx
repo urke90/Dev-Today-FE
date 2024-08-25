@@ -4,6 +4,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
+import { useTheme } from 'next-themes';
+import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 
 import LeftSidebar from '@/components/auth-onboarding/LeftSidebar';
 import ProvidersButtons from '@/components/auth-onboarding/ProvidersButtons';
@@ -12,9 +15,6 @@ import ThemeLogo from '@/components/shared/ThemeLogo';
 import { Form } from '@/components/ui/form';
 import { SIGN_UP_SIDEBAR_DATA } from '@/constants';
 import { type IRegisterSchema, registerSchema } from '@/lib/validation';
-import { useTheme } from 'next-themes';
-import { useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
 
 // ----------------------------------------------------------------
 
@@ -86,13 +86,13 @@ const RegisterPage = () => {
         theme={resolvedTheme}
       />
       <div className="auth-onboarding-right-sidebar">
-        <div className="md:hidden mb-14 mx-auto">
+        <div className="mx-auto mb-14 md:hidden">
           <ThemeLogo isMounted={isMounted} theme={resolvedTheme} />
         </div>
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-5 max-w-md w-full"
+            className="w-full max-w-md space-y-5"
           >
             <RHFInput
               name="userName"

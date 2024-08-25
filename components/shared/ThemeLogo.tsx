@@ -11,7 +11,7 @@ interface IThemeLogoProps {
 
 const ThemeLogo: React.FC<IThemeLogoProps> = ({ isMounted, theme }) => {
   return (
-    <div className="w-[147px] h-[30px]">
+    <div className="h-[30px] w-[147px]">
       {!isMounted ? (
         <Image
           src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"

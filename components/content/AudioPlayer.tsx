@@ -1,8 +1,9 @@
+import PauseIcon from '../icons/Pause';
+import { Button } from '../ui/button';
+
 import * as Progress from '@radix-ui/react-progress';
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
-import PauseIcon from '../icons/Pause';
-import { Button } from '../ui/button';
 
 // ----------------------------------------------------------------
 
@@ -60,10 +61,10 @@ const AudioPlayer: React.FC<IAudioPlayerProps> = ({
   const progress = (currentTime / duration) * 100;
 
   return (
-    <div className="flex flex-row sm:py-10 gap-6 md:gap-12 items-start md:items-center p-4 bg-white-200 dark:bg-black-800 rounded-lg shadow-md">
-      <div className="flex justify-start xs:ml-5 md:ml-0 relative space-x-4 w-2/5">
+    <div className="flex flex-row items-start gap-6 rounded-lg bg-white-200 p-4 shadow-md dark:bg-black-800 sm:py-10 md:items-center md:gap-12">
+      <div className="relative flex w-2/5 justify-start space-x-4 xs:ml-5 md:ml-0">
         <div
-          className={`z-10 rounded-lg relative top-2 md:top-0 size-12 xs:size-16 sm:size-20 md:size-28 lg:size-36 ${isPlaying && audioSrc && 'animate-bounce'}`}
+          className={`relative top-2 z-10 size-12 rounded-lg xs:size-16 sm:size-20 md:top-0 md:size-28 lg:size-36 ${isPlaying && audioSrc && 'animate-bounce'}`}
         >
           <Image
             src={coverImage || '/assets/images/post-example.svg'}
@@ -72,7 +73,7 @@ const AudioPlayer: React.FC<IAudioPlayerProps> = ({
             height={150}
           />
         </div>
-        <div className="absolute size-12 xs:size-16 sm:size-20 md:size-24 lg:size-32 top-3/4 md:top-1/2 sm:left-[30px] md:left-[100px] lg:left-[150px] transform md:-translate-x-1/2 md:-translate-y-1/2">
+        <div className="absolute top-3/4 size-12 xs:size-16 sm:left-[30px] sm:size-20 md:left-[100px] md:top-1/2 md:size-24 md:-translate-x-1/2 md:-translate-y-1/2 lg:left-[150px] lg:size-32">
           <Image
             src="/assets/images/disk.png"
             alt="avatar"
@@ -83,17 +84,17 @@ const AudioPlayer: React.FC<IAudioPlayerProps> = ({
       </div>
       <div className="w-full">
         <div className="flex flex-col">
-          <h2 className="text-lg font-semibold p4-regular !text-[10px] md:!tex-[12px] !text-wrap !break-words !overflow-wrap overflow-hidden">
+          <h2 className="p4-regular !overflow-wrap overflow-hidden !text-wrap !break-words !text-[10px] font-semibold md:!text-[12px]">
             {title}
           </h2>
-          <p className="p1-bold !text-[14px] !text-wrap !break-words !overflow-wrap overflow-hidden">
+          <p className="p1-bold !overflow-wrap overflow-hidden !text-wrap !break-words !text-[14px]">
             {audioTitle}
           </p>
-          <div className="w-full flex justify-between items-center gap-1 md:gap-2 mt-4">
+          <div className="mt-4 flex w-full items-center justify-between gap-1 md:gap-2">
             <Progress.Root
               value={progress}
               max={100}
-              className="relative h-2 w-2/3 md:w-4/5 bg-white-300/40 dark:bg-black-700 rounded-lg"
+              className="relative h-2 w-2/3 rounded-lg bg-white-300/40 dark:bg-black-700 md:w-4/5"
             >
               <Progress.Indicator
                 className={`h-full ${isPlaying && audioSrc ? 'bg-primary-500' : 'dark:bg-black-700'} rounded-lg`}
@@ -105,18 +106,18 @@ const AudioPlayer: React.FC<IAudioPlayerProps> = ({
               src={audioSrc}
               className="absolute inset-0 opacity-0"
             ></audio>
-            <span className="md:text-sm !text-[10px] text-gray-600 dark:text-gray-400">
+            <span className="!text-[10px] text-gray-600 dark:text-gray-400 md:text-sm">
               {formatTime(currentTime)}
             </span>
             <span className="text-white-400">|</span>
-            <span className="md:text-sm !text-[10px] text-gray-600 dark:text-gray-400">
+            <span className="!text-[10px] text-gray-600 dark:text-gray-400 md:text-sm">
               {formatTime(duration)}
             </span>
           </div>
           <Button
             type="button"
             onClick={togglePlay}
-            className="flex w-full mt-4 md:!w-28 bg-primary-500 text-sm !text-white-100 hover:bg-purple-600 duration-300 text-white py-2 px-4 rounded-lg"
+            className="text-white mt-4 flex w-full rounded-lg bg-primary-500 px-4 py-2 text-sm !text-white-100 duration-300 hover:bg-purple-600 md:!w-28"
           >
             {isPlaying ? (
               <PauseIcon />

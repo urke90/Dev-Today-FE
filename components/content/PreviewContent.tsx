@@ -1,11 +1,14 @@
 'use client';
 
-import type { IContent } from '@/lib/validation';
-import { EContentType } from '@/types/content';
-import Image from 'next/image';
-import ArrowLeftIcon from '../icons/ArrowLeft';
 import AudioPlayer from './AudioPlayer';
 import HtmlParser from './HtmlParser';
+
+import ArrowLeftIcon from '../icons/ArrowLeft';
+
+import Image from 'next/image';
+
+import type { IContent } from '@/lib/validation';
+import { EContentType } from '@/types/content';
 
 // ----------------------------------------------------------------
 
@@ -25,7 +28,7 @@ const PreviewContent: React.FC<IPreviewContentProps> = ({
   data,
 }) => {
   return (
-    <section className="space-y-5 w-full px-2">
+    <section className="w-full space-y-5 px-2">
       <div className="flex gap-2" onClick={() => setIsPreviewMode(false)}>
         <ArrowLeftIcon className="text-black-800 dark:text-white-200" />
         <Image
@@ -34,7 +37,7 @@ const PreviewContent: React.FC<IPreviewContentProps> = ({
           width={20}
           height={20}
         />
-        <h1 className="!text-primary-500 font-semibold">Preview</h1>
+        <h1 className="font-semibold !text-primary-500">Preview</h1>
       </div>
       {type === EContentType.PODCAST && (
         <AudioPlayer
@@ -50,10 +53,10 @@ const PreviewContent: React.FC<IPreviewContentProps> = ({
           alt="Preview"
           width={785}
           height={270}
-          className="rounded-lg h-72 object-cover w-full"
+          className="h-72 w-full rounded-lg object-cover"
         />
       )}
-      <div className="flex gap-2 max-w-3xl">
+      <div className="flex max-w-3xl gap-2">
         {type === EContentType.MEETUP && (
           <Image
             src={data?.coverImage || '/assets/images/post-example.svg'}
@@ -70,7 +73,7 @@ const PreviewContent: React.FC<IPreviewContentProps> = ({
           {data?.tags?.map((tag: TagProps) => (
             <li
               key={tag.label}
-              className="dark:bg-black-700 bg-gray-100 rounded-full px-2 py-1 cap-10 uppercase"
+              className="cap-10 rounded-full bg-gray-100 px-2 py-1 uppercase dark:bg-black-700"
             >
               {tag.label}
             </li>

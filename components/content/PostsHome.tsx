@@ -1,16 +1,18 @@
 // ----------------------------------------------------------------
 
-import {
-  IContentPagesResponse,
-  IContentPagesSidebarResponse,
-} from '@/types/content';
-import { EQueryType, ESortByFilter } from '@/types/queries';
+import ContentList from './ContentList';
+
 import SidebarGroupItem from '../shared/LeftSidebarItems/SidebarGroupItem';
 import SidebarItemWrapper from '../shared/LeftSidebarItems/SidebarItemWrapper';
 import SidebarTagItem from '../shared/LeftSidebarItems/SidebarTagItem';
 import SidebarContentCard from '../shared/RightSidebarItems/SidebarContentCard';
 import SortAndFilter from '../shared/SortAndFilter';
-import ContentList from './ContentList';
+
+import { EQueryType, ESortByFilter } from '@/types/queries';
+import {
+  IContentPagesResponse,
+  IContentPagesSidebarResponse,
+} from '@/types/content';
 
 interface IPostsHomeProps {
   selectedTag: string;

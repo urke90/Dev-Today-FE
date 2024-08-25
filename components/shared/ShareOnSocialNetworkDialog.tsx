@@ -1,10 +1,10 @@
 'use client';
 
-import CloseIcon from '@/components/icons/CloseIcon';
-
 import * as Dialog from '@radix-ui/react-dialog';
 import { useEffect, useState } from 'react';
 import { ShareSocial } from 'react-share-social';
+
+import CloseIcon from '@/components/icons/CloseIcon';
 
 // ----------------------------------------------------------------
 
@@ -62,15 +62,15 @@ const ShareOnSocialNetworkDialog: React.FC<
         setUrl(window.location.href);
       }
     }
-  }, []);
+  }, [customUrl]);
 
   return (
     <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
       <Dialog.Trigger asChild>{triggerBtn}</Dialog.Trigger>
       <Dialog.Portal>
-        <Dialog.Overlay className="data-[state=open]:animate-overlayShow fixed inset-0 backdrop-blur-md" />
+        <Dialog.Overlay className="fixed inset-0 backdrop-blur-md data-[state=open]:animate-overlayShow" />
         <Dialog.Content
-          className="bg-white-100 dark:bg-black-900 py-[30px] px-3.5 gap-6 md:gap-[30px] flex flex-col md:py-9 md:px-10 data-[state=open]:animate-contentShow fixed left-1/2 top-1/2 max-h-[85vh] w-[354px] -translate-x-1/2 -translate-y-1/2 focus:outline-none lg:w-[520px] rounded-[10px] lg:rounded-2xl shadow-card"
+          className="fixed left-1/2 top-1/2 flex max-h-[85vh] w-[354px] -translate-x-1/2 -translate-y-1/2 flex-col gap-6 rounded-[10px] bg-white-100 px-3.5 py-[30px] shadow-card focus:outline-none data-[state=open]:animate-contentShow dark:bg-black-900 md:gap-[30px] md:px-10 md:py-9 lg:w-[520px] lg:rounded-2xl"
           onClick={(e) => {
             e.stopPropagation();
             e.nativeEvent.preventDefault();

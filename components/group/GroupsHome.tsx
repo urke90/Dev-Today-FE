@@ -1,15 +1,5 @@
 'use client';
 
-import { fetchAllGroups } from '@/api/queries';
-import { EContentGroupQueries } from '@/constants/react-query';
-import type {
-  IAllGroupsSidebarDetails,
-  IHomePageGroupsResponse,
-} from '@/types/group';
-import { ESortByFilter } from '@/types/queries';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import Link from 'next/link';
-import { useEffect, useState } from 'react';
 import GroupItemCard from '../shared/GroupItemCard';
 import SidebarGroupItem from '../shared/LeftSidebarItems/SidebarGroupItem';
 import SidebarItemWrapper from '../shared/LeftSidebarItems/SidebarItemWrapper';
@@ -17,6 +7,18 @@ import Pagination from '../shared/Pagination';
 import SidebarContentCard from '../shared/RightSidebarItems/SidebarContentCard';
 import SortAndFilter from '../shared/SortAndFilter';
 import { Button } from '../ui/button';
+
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+
+import { fetchAllGroups } from '@/api/queries';
+import { EContentGroupQueries } from '@/constants/react-query';
+import type {
+  IAllGroupsSidebarDetails,
+  IHomePageGroupsResponse,
+} from '@/types/group';
+import { ESortByFilter } from '@/types/queries';
 
 // ----------------------------------------------------------------
 
@@ -37,7 +39,7 @@ const GroupsHome: React.FC<IGroupsHomeProps> = ({
   const [page, setPage] = useState(1);
 
   const { data } = useQuery<IHomePageGroupsResponse>({
-    queryKey: [EContentGroupQueries.FETCH_GROUPS, page],
+    queryKey: [EContentGroupQueries.FETCH_GROUPS, page, viewerId, sortBy],
     queryFn: () => fetchAllGroups(page, viewerId, sortBy),
     enabled: page > 1,
     initialData: groupsData,
@@ -93,7 +95,7 @@ const GroupsHome: React.FC<IGroupsHomeProps> = ({
               <Link href="groups/create">Create a new group</Link>
             </Button>
           </div>
-          <ul className="grid grid-cols-2 gap-y-3.5 gap-x-5 mb-5 md:mb-10">
+          <ul className="mb-5 grid grid-cols-2 gap-x-5 gap-y-3.5 md:mb-10">
             {data.groups?.length > 0 &&
               data.groups.map(
                 ({ id, coverImage, bio, name, members, _count }) => (

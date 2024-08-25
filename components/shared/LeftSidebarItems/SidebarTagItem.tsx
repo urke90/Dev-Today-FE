@@ -40,9 +40,9 @@ const SidebarTagItem: React.FC<ISidebarTagItemProps> = ({
     <li>
       <Link
         href={pathname + '?' + handleUpdateTagParams(title.toLowerCase())}
-        className={`flex gap-2.5 hover-sidebar-items rounded-md ${selectedTag === title.toLowerCase() ? 'dark:bg-black-700 bg-[#F8FAFC]' : ''}`}
+        className={`hover-sidebar-items flex gap-2.5 rounded-md ${selectedTag === title.toLowerCase() ? 'bg-[#F8FAFC] dark:bg-black-700' : ''}`}
       >
-        <div className="flex-center size-8 bg-[#80A9FF1A] dark:bg-[#80A9FF1A] rounded">
+        <div className="flex-center size-8 rounded bg-[#80A9FF1A] dark:bg-[#80A9FF1A]">
           <Image
             src={`/assets/icons/tags/tag-${index}.svg`}
             width={20}

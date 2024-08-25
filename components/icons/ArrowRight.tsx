@@ -8,7 +8,8 @@ const ArrowRightIcon = (props: SVGProps<SVGSVGElement>) => (
     width={20}
     height={20}
     fill="none"
-    {...props}>
+    {...props}
+  >
     <path
       stroke="currentColor"
       strokeLinecap="round"

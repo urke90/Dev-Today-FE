@@ -1,5 +1,10 @@
 'use client';
 
+import GroupLeaveOrDeleteDialog from './GroupLeaveOrDeleteDialog';
+
+import EditIcon from '../icons/Edit';
+import { Button } from '../ui/button';
+
 import {
   Content,
   DropdownMenu,
@@ -9,14 +14,11 @@ import {
 } from '@radix-ui/react-dropdown-menu';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import toast from 'react-hot-toast';
 
 import { revalidateRoute } from '@/lib/actions/revalidate';
 import { typedFetch } from '@/utils/api';
-import { useState } from 'react';
-import toast from 'react-hot-toast';
-import EditIcon from '../icons/Edit';
-import { Button } from '../ui/button';
-import GroupLeaveOrDeleteDialog from './GroupLeaveOrDeleteDialog';
 
 // ----------------------------------------------------------------
 
@@ -83,7 +85,7 @@ const GroupDropdownMenu: React.FC<IGroupDropdownMenuProps> = ({
             sideOffset={8}
             align="end"
             onCloseAutoFocus={(e) => e.preventDefault()}
-            className="bg-light200__dark700 shadow-header-menu data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade z-20 mb-4 flex w-40 flex-col gap-2.5 rounded-[10px] py-4 px-5"
+            className="bg-light200__dark700 shadow-header-menu z-20 mb-4 flex w-40 flex-col gap-2.5 rounded-[10px] px-5 py-4 data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade"
           >
             <Item
               onSelect={() => router.push(`/groups/${groupId}/edit`)}

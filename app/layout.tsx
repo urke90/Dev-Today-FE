@@ -1,15 +1,13 @@
-import SessionProvider from '@/context/SessionProvider';
 import ThemeProvider from '../context/ThemeProvider';
 
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import type { Metadata } from 'next';
-
 import { IBM_Plex_Sans } from 'next/font/google';
+import { Toaster } from 'react-hot-toast';
 
 import QueryProvider from '@/context/QueryProvider';
 import { auth } from '@/lib/auth';
-
-import { Toaster } from 'react-hot-toast';
+import SessionProvider from '@/context/SessionProvider';
 import './globals.css';
 
 // ----------------------------------------------------------------

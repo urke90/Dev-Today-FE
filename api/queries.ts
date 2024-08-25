@@ -112,7 +112,7 @@ export const fetchGroupsAndContents = async (q: string, limit: number = 3) => {
   return response.json();
 };
 
-export const fetchCreateGroups = async (query: string) => {
+export const fetchGroupsForDropdown = async (query: string) => {
   const result = await fetch(BASE_API_URL + `/groups?q=${query}`);
 
   if (!result.ok) {

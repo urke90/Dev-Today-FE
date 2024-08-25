@@ -1,6 +1,7 @@
-import ArrowRightIcon from '@/components/icons/ArrowRight';
 import Image from 'next/image';
 import Link from 'next/link';
+
+import ArrowRightIcon from '@/components/icons/ArrowRight';
 
 // ----------------------------------------------------------------
 
@@ -21,7 +22,7 @@ const SidebarPodcastItem: React.FC<ISidebarPodcastItemProps> = ({
     <li>
       <Link
         href={'/content/' + id}
-        className="flex-between items-center gap-3.5 sidebar-item-card-hover"
+        className="flex-between sidebar-item-card-hover items-center gap-3.5"
       >
         <div className="flex items-center gap-3.5">
           <Image
@@ -29,14 +30,14 @@ const SidebarPodcastItem: React.FC<ISidebarPodcastItemProps> = ({
             width={58}
             height={58}
             alt={author}
-            className="rounded-[6px] shrink-0"
+            className="shrink-0 rounded-[6px]"
           />
           <div className="flex flex-col gap-1.5">
             <p className="p3-medium line-clamp-1">{title}</p>
             <p className="subtitle-normal">by {author}</p>
           </div>
         </div>
-        <ArrowRightIcon className="text-white-400 shrink-0" />
+        <ArrowRightIcon className="shrink-0 text-white-400" />
       </Link>
     </li>
   );

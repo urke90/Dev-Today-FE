@@ -1,4 +1,32 @@
 'use client';
+import GoogleMapsAutocomplete from './GoogleMapsAutocomplete';
+import PreviewContent from './PreviewContent';
+
+import CalendarIcon from '../icons/Calendar';
+import FrameIcon from '../icons/Frame';
+import PodcastIcon from '../icons/Podcast';
+import { generateSelectStyles } from '../RHFInputs/RHFMultipleSelect';
+import LoadingSpinner from '../shared/LoadingSpinner';
+import { Input } from '../ui/input';
+
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as Select from '@radix-ui/react-select';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { Editor } from '@tinymce/tinymce-react';
+import { APIProvider } from '@vis.gl/react-google-maps';
+import { format } from 'date-fns';
+import { CldUploadWidget } from 'next-cloudinary';
+import { useTheme } from 'next-themes';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import React, { useRef, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'react-hot-toast';
+import ReactSelect, { components } from 'react-select';
+import CreatableSelect from 'react-select/creatable';
+import { Editor as TinyMCEEditor } from 'tinymce';
+import { useDebounce } from 'use-debounce';
+
 import {
   createMeetup,
   createPodcast,
@@ -7,7 +35,7 @@ import {
   updatePodcast,
   updatePost,
 } from '@/api/mutations';
-import { fetchCreateGroups, fetchTags } from '@/api/queries';
+import { fetchGroupsForDropdown, fetchTags } from '@/api/queries';
 import RHFInput from '@/components/RHFInputs/RHFInput';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
@@ -25,9 +53,10 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { CONTENT_TYPES } from '@/constants';
+import { revalidateRoute } from '@/lib/actions/revalidate';
 import { cn } from '@/lib/utils';
 import {
-  baseContentSchema,
+  createOrUpdateContentSchema,
   type IContent,
   type IContentDTO,
   type IPutMeetupDTO,
@@ -36,46 +65,17 @@ import {
 } from '@/lib/validation';
 import { EContentType, type ITag } from '@/types/content';
 import type { IGroupsResponse } from '@/types/group';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as Select from '@radix-ui/react-select';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { Editor } from '@tinymce/tinymce-react';
-import { format } from 'date-fns';
-import { CldUploadWidget } from 'next-cloudinary';
-import { useTheme } from 'next-themes';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import React, { useRef, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { toast } from 'react-hot-toast';
-import ReactSelect, { components } from 'react-select';
-import CreatableSelect from 'react-select/creatable';
-import { Editor as TinyMCEEditor } from 'tinymce';
-import { useDebounce } from 'use-debounce';
-import { Input } from '../ui/input';
-import PreviewContent from './PreviewContent';
-
-import { revalidateRoute } from '@/lib/actions/revalidate';
-import { APIProvider } from '@vis.gl/react-google-maps';
-import CalendarIcon from '../icons/Calendar';
-import FrameIcon from '../icons/Frame';
-import PodcastIcon from '../icons/Podcast';
-import { generateSelectStyles } from '../RHFInputs/RHFMultipleSelect';
-import LoadingSpinner from '../shared/LoadingSpinner';
-import GoogleMapsAutocomplete from './GoogleMapsAutocomplete';
 
 // ----------------------------------------------------------------
 
 interface ICreateContentProps {
   authorId?: string;
   content?: IContentDTO;
-  viewerId?: string;
 }
 
 const CreateContent: React.FC<ICreateContentProps> = ({
   authorId,
   content,
-  viewerId,
 }) => {
   const [isPreviewMode, setIsPreviewMode] = useState(false);
 
@@ -111,7 +111,7 @@ const CreateContent: React.FC<ICreateContentProps> = ({
     isLoading: isLoadingGroups,
   } = useQuery<IGroupsResponse>({
     queryKey: ['groups', debouncedQ],
-    queryFn: () => fetchCreateGroups(debouncedQ),
+    queryFn: () => fetchGroupsForDropdown(debouncedQ),
   });
 
   const {
@@ -131,7 +131,7 @@ const CreateContent: React.FC<ICreateContentProps> = ({
 
   const { mutateAsync: updateContentAsync } = useMutation({
     mutationFn: async (data: IPutPostDTO) => {
-      await updatePost(content?.id, data, viewerId);
+      await updatePost(content?.id, data, content?.authorId);
     },
   });
 
@@ -143,7 +143,7 @@ const CreateContent: React.FC<ICreateContentProps> = ({
 
   const { mutateAsync: updateMeetupAsync } = useMutation({
     mutationFn: async (data: IPutMeetupDTO) => {
-      await updateMeetup(content?.id, data, viewerId);
+      await updateMeetup(content?.id, data, content?.authorId);
     },
   });
 
@@ -155,7 +155,7 @@ const CreateContent: React.FC<ICreateContentProps> = ({
 
   const { mutateAsync: updatePodcastAsync } = useMutation({
     mutationFn: async (data: IPutPodcastDTO) => {
-      await updatePodcast(content?.id, data, viewerId);
+      await updatePodcast(content?.id, data, content?.authorId);
     },
   });
 
@@ -172,9 +172,9 @@ const CreateContent: React.FC<ICreateContentProps> = ({
   }));
 
   const form = useForm<IContent>({
-    resolver: zodResolver(baseContentSchema),
+    resolver: zodResolver(createOrUpdateContentSchema),
     defaultValues: {
-      authorId: content?.authorId ?? authorId,
+      authorId: content?.authorId || authorId,
       title: content?.title || '',
       type: content?.type || EContentType.POST,
       groupId: content
@@ -199,12 +199,20 @@ const CreateContent: React.FC<ICreateContentProps> = ({
     },
   });
 
-  const type = form.watch('type');
-
   const contentType = form.watch('type');
   const coverImage = form.watch('coverImage');
 
   const onSubmit = async () => {
+    await form.trigger([
+      'authorId',
+      'title',
+      'type',
+      'groupId',
+      'coverImage',
+      'description',
+      'tags',
+    ]);
+
     const commonData: IPutPostDTO = {
       authorId: form.getValues('authorId'),
       title: form.getValues('title'),
@@ -216,15 +224,6 @@ const CreateContent: React.FC<ICreateContentProps> = ({
     };
 
     if (contentType === EContentType.POST) {
-      const isValid = await form.trigger([
-        'title',
-        'coverImage',
-        'description',
-        'tags',
-        'groupId',
-      ]);
-      if (!isValid) return;
-
       try {
         if (isEditPage) {
           await updateContentAsync(commonData);
@@ -244,8 +243,7 @@ const CreateContent: React.FC<ICreateContentProps> = ({
     }
 
     if (contentType === EContentType.MEETUP) {
-      const isValid = await form.trigger(['meetupLocation', 'meetupDate']);
-      if (!isValid) return;
+      await form.trigger(['meetupLocation', 'meetupDate']);
 
       try {
         if (isEditPage) {
@@ -275,8 +273,7 @@ const CreateContent: React.FC<ICreateContentProps> = ({
     }
 
     if (contentType === EContentType.PODCAST) {
-      const isValid = await form.trigger(['podcastFile', 'podcastTitle']);
-      if (!isValid) return;
+      await form.trigger(['podcastFile', 'podcastTitle']);
 
       try {
         if (isEditPage) {
@@ -285,6 +282,7 @@ const CreateContent: React.FC<ICreateContentProps> = ({
             podcastFile: form.getValues('podcastFile'),
             podcastTitle: form.getValues('podcastTitle'),
           });
+
           toast.success('Updated successfully.');
           revalidateRoute(`/content/${content.id}`);
           router.push(`/content/${content.id}`);
@@ -294,6 +292,7 @@ const CreateContent: React.FC<ICreateContentProps> = ({
             podcastFile: form.getValues('podcastFile'),
             podcastTitle: form.getValues('podcastTitle'),
           });
+
           toast.success('Created successfully.');
           revalidateRoute('/podcasts');
           router.push('/podcasts');
@@ -336,97 +335,98 @@ const CreateContent: React.FC<ICreateContentProps> = ({
             placeholder="Write a title of the post"
           />
           <div
-            className={`flex flex-col sm:flex-row ${form.formState.errors && 'items-center'}  items-center gap-3`}
+            className={`flex flex-col sm:flex-row ${form.formState.errors && 'items-center'} items-center gap-3`}
           >
             <FormField
               control={form.control}
-              defaultValue={EContentType.MEETUP}
+              defaultValue={EContentType.POST}
               name="type"
               render={({ field }) => (
-                <Select.Root value={field.value} onValueChange={field.onChange}>
-                  <Select.Trigger
-                    disabled={isEditPage}
-                    {...field}
-                    className={`flex w-full sm:w-[140px] flex-center ${form.formState.errors.groupId ? '!mt-2' : '!mt-6'} capitalize border !border-white-border dark:!border-[#393E4F66] rounded-md px-2 items-center min-h-[46px] bg-white-100 dark:bg-black-800 outline-none pl-6`}
+                <div className="flex flex-col">
+                  <FormLabel className="mb-3 h-[18.5px]">Type</FormLabel>
+                  <Select.Root
+                    value={field.value}
+                    onValueChange={field.onChange}
                   >
-                    <div className="flex w-full items-center p3-regular justify-between !text-black-800 dark:!text-white-100 !font-bold ">
-                      <Select.Value />
-                      <Image
-                        src="/assets/icons/arrow-down-slim.svg"
-                        alt="arrow-down"
-                        width={12}
-                        height={5}
-                        className="md:ml-2 mr-2 md:mr-0"
-                      />
-                    </div>
-                  </Select.Trigger>
-                  <Select.Portal>
-                    <Select.Content position="popper">
-                      <Select.Viewport className="w-40 mt-3 flex-flex-col gap-2 rounded-md bg-light100__dark800 shadow-card">
-                        <Select.Group>
-                          {CONTENT_TYPES.map(({ value, title }) => {
-                            return (
-                              <Select.Item
-                                onSelect={(e) => e.preventDefault()}
-                                value={value}
-                                className="flex gap-3 dark:hover:bg-black-700 dark:text-white-100 hover:bg-white-200 text-white-400 p-2 pl-3 items-center hover:text-primary-500 hover:dark:text-primary-500 cursor-pointer"
-                              >
-                                {value === EContentType.POST && <FrameIcon />}
-                                {value === EContentType.MEETUP && (
-                                  <CalendarIcon />
-                                )}
-                                {value === EContentType.PODCAST && (
-                                  <PodcastIcon />
-                                )}
-                                <Select.ItemText>{title}</Select.ItemText>
-                              </Select.Item>
-                            );
-                          })}
-                        </Select.Group>
-                      </Select.Viewport>
-                    </Select.Content>
-                  </Select.Portal>
-                </Select.Root>
+                    <Select.Trigger
+                      disabled={isEditPage}
+                      {...field}
+                      className={
+                        'flex-center !border-white-border bg-white-100 dark:bg-black-800 flex min-h-[46px] w-full items-center rounded-md border px-2 pl-6 capitalize outline-none sm:w-[140px] dark:!border-[#393E4F66]'
+                      }
+                    >
+                      <div className="p3-regular !text-black-800 dark:!text-white-100 flex w-full items-center justify-between !font-bold ">
+                        <Select.Value />
+                        <Image
+                          src="/assets/icons/arrow-down-slim.svg"
+                          alt="arrow-down"
+                          width={12}
+                          height={5}
+                          className="mr-2 md:ml-2 md:mr-0"
+                        />
+                      </div>
+                    </Select.Trigger>
+                    <Select.Portal>
+                      <Select.Content position="popper">
+                        <Select.Viewport className="flex-flex-col bg-light100__dark800 shadow-card mt-3 w-40 gap-2 rounded-md">
+                          <Select.Group>
+                            {CONTENT_TYPES.map(({ value, title }) => {
+                              return (
+                                <Select.Item
+                                  key={value}
+                                  onSelect={(e) => e.preventDefault()}
+                                  value={value}
+                                  className="text-white-400 hover:bg-white-200 hover:text-primary-500 dark:text-white-100 dark:hover:bg-black-700 hover:dark:text-primary-500 flex cursor-pointer items-center gap-3 p-2 pl-3"
+                                >
+                                  {value === EContentType.POST && <FrameIcon />}
+                                  {value === EContentType.MEETUP && (
+                                    <CalendarIcon />
+                                  )}
+                                  {value === EContentType.PODCAST && (
+                                    <PodcastIcon />
+                                  )}
+                                  <Select.ItemText>{title}</Select.ItemText>
+                                </Select.Item>
+                              );
+                            })}
+                          </Select.Group>
+                        </Select.Viewport>
+                      </Select.Content>
+                    </Select.Portal>
+                  </Select.Root>
+                </div>
               )}
             />
-            <div className="w-full space-y-2">
-              <FormLabel>Select Group</FormLabel>
-              <FormField
-                name="groupId"
-                control={form.control}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <ReactSelect
-                        instanceId={field.name}
-                        {...field}
-                        placeholder="Select a group..."
-                        defaultValue={field.value}
-                        value={form.watch('groupId')}
-                        onInputChange={(value) => setQ(value)}
-                        classNames={generateSelectStyles()}
-                        isLoading={isLoadingGroups}
-                        isDisabled={isEditPage}
-                        isClearable
-                        isSearchable
-                        onChange={(value) => {
-                          field.onChange(value);
-                        }}
-                        options={selectGroupOptions}
-                        components={{ Option }}
-                      />
-                    </FormControl>
-                    <div>
-                      {form.formState.errors.groupId?.message && (
-                        <p className="text-[14px] text-red-500 dark:text-red-500">
-                          {form.formState.errors.groupId.message}
-                        </p>
-                      )}
-                    </div>
-                  </FormItem>
-                )}
-              />
-            </div>
+            <FormField
+              name="groupId"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem className="relative">
+                  <FormLabel>Select Group</FormLabel>
+                  <FormControl>
+                    <ReactSelect
+                      instanceId={field.name}
+                      {...field}
+                      placeholder="Select a group..."
+                      defaultValue={field.value}
+                      value={form.watch('groupId')}
+                      onInputChange={(value) => setQ(value)}
+                      classNames={generateSelectStyles()}
+                      isLoading={isLoadingGroups}
+                      isDisabled={isEditPage}
+                      isClearable
+                      isSearchable
+                      onChange={(value) => {
+                        field.onChange(value);
+                      }}
+                      options={selectGroupOptions}
+                      components={{ Option }}
+                    />
+                  </FormControl>
+                  <FormMessage className="absolute" />
+                </FormItem>
+              )}
+            />
           </div>
 
           <FormField
@@ -437,7 +437,7 @@ const CreateContent: React.FC<ICreateContentProps> = ({
                 <FormLabel>Cover Image</FormLabel>
                 <FormControl>
                   {coverImage ? (
-                    <div className="relative w-full h-64">
+                    <div className="relative h-64 w-full">
                       <Image
                         src={coverImage}
                         alt="Cover Image"
@@ -446,14 +446,14 @@ const CreateContent: React.FC<ICreateContentProps> = ({
                       />
                       <Button
                         type="button"
-                        onClick={() => form.setValue('coverImage', '')}
-                        className="absolute right-0 top-[-40px] hover:bg-black-700 text-white-400  border dark:border-gray-500 size-8 dark:text-white-100"
+                        onClick={() => form.setValue('coverImage', null)}
+                        className="text-white-400 hover:bg-black-700 dark:text-white-100 absolute right-0  top-[-40px] size-8 border dark:border-gray-500"
                       >
                         X
                       </Button>
                     </div>
                   ) : (
-                    <div className="w-full h-64 dashed-border !text-white-400 rounded-lg flex items-center justify-center">
+                    <div className="dashed-border !text-white-400 flex h-64 w-full items-center justify-center rounded-lg">
                       <div className="flex flex-col items-center">
                         <CldUploadWidget
                           uploadPreset={
@@ -480,7 +480,7 @@ const CreateContent: React.FC<ICreateContentProps> = ({
                                 open();
                               }}
                               type="button"
-                              className="flex items-center max-w-[200px] hover:bg-white-300/30 hover:dark:bg-black-700 dark:bg-black-800 py-2 rounded-lg bg-white-100 gap-3 mb-3"
+                              className="bg-white-100 hover:bg-white-300/30 dark:bg-black-800 hover:dark:bg-black-700 mb-3 flex max-w-[200px] items-center gap-3 rounded-lg py-2"
                             >
                               <Image
                                 src={'/assets/icons/upload-icon.svg'}
@@ -515,80 +515,85 @@ const CreateContent: React.FC<ICreateContentProps> = ({
                     name="meetupLocation"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Podcast Audio File</FormLabel>
+                        <FormLabel>Meetup location</FormLabel>
                         <FormControl>
                           <GoogleMapsAutocomplete onChange={field.onChange} />
                         </FormControl>
-                        <FormMessage />
+                        {form.formState.errors.meetupLocation?.address
+                          ?.message && (
+                          <p className="p3-medium !text-error-text">
+                            {
+                              form.formState.errors.meetupLocation?.address
+                                ?.message
+                            }
+                          </p>
+                        )}
                       </FormItem>
                     )}
                   />
                 </APIProvider>
               </div>
-
               <FormField
                 control={form.control}
                 name="meetupDate"
                 render={({ field }) => (
                   <FormItem>
-                    <Popover>
-                      <h3 className="p3-medium"> Meetup date</h3>
-                      <PopoverTrigger asChild>
-                        <Button
-                          className={cn(
-                            'justify-start p3-regular font-bold  bg-light100__dark800 border dark:border-black-700/50 px-4 h-11 !mt-2',
-                            !field.value && 'text-muted-foreground'
-                          )}
-                        >
-                          <Image
-                            src="/assets/icons/calendar-create.svg"
-                            alt="calendar"
-                            width={18}
-                            height={18}
+                    <FormControl>
+                      <Popover>
+                        <h3 className="p3-medium"> Meetup date</h3>
+                        <PopoverTrigger asChild>
+                          <Button
+                            className={cn(
+                              'justify-start p3-regular font-bold bg-light100__dark800 border dark:border-black-700/50 px-4 h-11 !mt-2',
+                              !field.value && 'text-muted-foreground'
+                            )}
+                          >
+                            <Image
+                              src="/assets/icons/calendar-create.svg"
+                              alt="calendar"
+                              width={18}
+                              height={18}
+                            />
+                            {field.value ? (
+                              format(field.value, 'MMMM dd, yyyy hh:mm a')
+                            ) : (
+                              <span className="text-white-400">
+                                Pick a date of the meetup
+                              </span>
+                            )}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="border-white-400 bg-white-100 dark:bg-black-800 w-auto space-y-3 rounded-none  p-0 px-2 pb-5">
+                          <Calendar
+                            className="p4-regular bg-white-100 dark:bg-black-800"
+                            mode="single"
+                            selected={field.value}
+                            onSelect={field.onChange}
+                            initialFocus
                           />
-                          {field.value ? (
-                            format(field.value, 'MMMM dd, yyyy hh:mm a')
-                          ) : (
-                            <span className="text-white-400">
-                              Pick a date of the meetup
-                            </span>
-                          )}
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0 px-2 bg-white-100 dark:bg-black-800 pb-5  rounded-none space-y-3 border-white-400">
-                        <Calendar
-                          className="bg-white-100 dark:bg-black-800 p4-regular"
-                          mode="single"
-                          selected={field.value}
-                          onSelect={field.onChange}
-                          initialFocus
-                        />
-                        <Input
-                          type="time"
-                          defaultValue="09:00"
-                          min="09:00"
-                          max="18:00"
-                          onChange={(event) => {
-                            const currentDate = new Date(field.value);
-                            const newDate = new Date(
-                              currentDate.toDateString() +
-                                ' ' +
-                                event.target.value
-                            );
+                          <Input
+                            type="time"
+                            defaultValue="09:00"
+                            min="09:00"
+                            max="18:00"
+                            onChange={(event) => {
+                              const currentDate = new Date(field.value);
+                              const newDate = new Date(
+                                currentDate.toDateString() +
+                                  ' ' +
+                                  event.target.value
+                              );
 
-                            field.onChange(newDate);
-                          }}
-                        />
-                      </PopoverContent>
-                    </Popover>
+                              field.onChange(newDate);
+                            }}
+                          />
+                        </PopoverContent>
+                      </Popover>
+                    </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
-              {form.formState.errors.meetupDate?.message && (
-                <p className="text-[14px] text-red-500 dark:text-red-500">
-                  {form.formState.errors.meetupDate.type}
-                </p>
-              )}
             </>
           )}
           {contentType === EContentType.PODCAST && (
@@ -619,7 +624,7 @@ const CreateContent: React.FC<ICreateContentProps> = ({
                               open();
                             }}
                             type="button"
-                            className="w-full flex !mt-2 justify-start focus-visible:outline-none dark:placeholder:text-[#ADB3CC] placeholder:text-white-400 placeholder:font-normal placeholder:text-sm dark:text-white-100 text-black-900 text-sm font-medium px-3 border border-white-border dark:border-[#393E4F66] rounded-lg py-3 md:px-5 bg-white-100 dark:bg-black-800"
+                            className="border-white-border bg-white-100 text-black-900 placeholder:text-white-400 dark:bg-black-800 dark:text-white-100 !mt-2 flex w-full justify-start rounded-lg border p-3 text-sm font-medium placeholder:text-sm placeholder:font-normal focus-visible:outline-none md:px-5 dark:border-[#393E4F66] dark:placeholder:text-[#ADB3CC]"
                           >
                             <Image
                               src="/assets/icons/microphone.svg"
@@ -627,7 +632,7 @@ const CreateContent: React.FC<ICreateContentProps> = ({
                               width={11}
                               height={15}
                             />
-                            <span className="subtitle-medium tracking-wide dark:bg-black-700 px-2 py-1 rounded-md bg-white-200 ">
+                            <span className="subtitle-medium bg-white-200 dark:bg-black-700 rounded-md px-2 py-1 tracking-wide ">
                               Choose a file
                             </span>
                           </Button>
@@ -638,7 +643,6 @@ const CreateContent: React.FC<ICreateContentProps> = ({
                   </FormItem>
                 )}
               />
-
               <RHFInput
                 className="!placeholder:white-400 p3-medium dark:!placeholder-white-400"
                 name="podcastTitle"
@@ -710,15 +714,15 @@ const CreateContent: React.FC<ICreateContentProps> = ({
               </FormItem>
             )}
           />
-          <div className="space-y-3">
-            <FormLabel>
-              Add or change tags (up to 5) so readers know what your story is
-              about
-            </FormLabel>
-            <FormField
-              control={form.control}
-              name="tags"
-              render={({ field }) => (
+          <FormField
+            control={form.control}
+            name="tags"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  Add or change tags (up to 5) so readers know what your story
+                  is about
+                </FormLabel>
                 <CreatableSelect
                   instanceId={field.name}
                   {...field}
@@ -748,27 +752,26 @@ const CreateContent: React.FC<ICreateContentProps> = ({
                           height={16}
                           className="dark:invert "
                         />
-                        <div className="flex flex-col ml-2">
+                        <div className="ml-2 flex flex-col">
                           <p className="p4-medium">{option.label}</p>
                         </div>
                       </div>
                     );
                   }}
                 />
-              )}
-            />
-          </div>
-          {form.formState.errors.tags?.[0]?.label?.message && (
-            <p className="text-[14px] text-red-500 dark:text-red-500">
-              {form.formState.errors.tags[0].label.message}
-            </p>
-          )}
-
-          <div className="flex gap-5 p3-bold">
+                {form.formState.errors.tags?.[0]?.label?.message && (
+                  <p className="p3-medium !text-error-text">
+                    {form.formState.errors.tags[0].label.message}
+                  </p>
+                )}
+              </FormItem>
+            )}
+          />
+          <div className="p3-bold flex gap-5">
             <Button
               onClick={resetForm}
               type="button"
-              className="bg-light100__dark800 hover:!text-white-100 duration-200 hover:bg-primary-500"
+              className="bg-light100__dark800 hover:bg-primary-500 hover:!text-white-100 duration-200"
             >
               Cancel
             </Button>
@@ -799,7 +802,7 @@ export default CreateContent;
 const Option = (props: any) => {
   return (
     <components.Option {...props}>
-      <div className="flex items-center gap-2 cursor-pointer">
+      <div className="flex cursor-pointer items-center gap-2">
         <Image
           src={props.data.profileImage || '/assets/icons/bootstrap.svg'}
           alt="frame"
@@ -807,9 +810,9 @@ const Option = (props: any) => {
           height={34}
           className="rounded-md"
         />
-        <div className="flex flex-col ml-2">
+        <div className="ml-2 flex flex-col">
           <p className="p4-medium">{props.data.label}</p>
-          <p className="text-[11px] text-white-400">
+          <p className="text-white-400 text-[11px]">
             {props.data.bio || 'No bio available'}
           </p>
         </div>
@@ -817,36 +820,3 @@ const Option = (props: any) => {
     </components.Option>
   );
 };
-
-interface ISelectItemProps {
-  value: string;
-  // children: React.ReactNode;
-  className?: string;
-  onValueChange: (value: string) => void;
-  text: string;
-  icon: React.ReactNode;
-}
-
-export const SelectItem = React.forwardRef<HTMLDivElement, ISelectItemProps>(
-  ({ onValueChange, value, className, text, icon, ...rest }, forwardedRef) => {
-    return (
-      <Select.Item
-        value={value}
-        onSelect={() => onValueChange(value)}
-        className={cn(
-          'text-sm flex items-center relative select-none data-[highlighted]:outline-none',
-          className
-        )}
-        {...rest}
-        ref={forwardedRef}
-      >
-        <Select.ItemText>{text}</Select.ItemText>
-        <Select.ItemIndicator className="absolute left-0 w-[25px] flex items-center ">
-          {value === EContentType.POST && <FrameIcon />}
-          {value === EContentType.MEETUP && <CalendarIcon />}
-          {value === EContentType.PODCAST && <PodcastIcon />}
-        </Select.ItemIndicator>
-      </Select.Item>
-    );
-  }
-);

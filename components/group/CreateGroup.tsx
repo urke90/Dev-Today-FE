@@ -1,4 +1,22 @@
 'use client';
+import {
+  generateSelectStyles,
+  MemberAdminFormatedOption,
+} from '../RHFInputs/RHFMultipleSelect';
+import RHFProfileImageUpload from '../RHFInputs/RHFProfileImageUpload';
+import RHFTextarea from '../RHFInputs/RHFTextarea';
+
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { CldUploadWidget } from 'next-cloudinary';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
+import CreatableSelect from 'react-select/creatable';
+import { useDebounce } from 'use-debounce';
+
 import { createGroup, updateGroup } from '@/api/mutations';
 import { fetchUsers } from '@/api/queries';
 import RHFInput from '@/components/RHFInputs/RHFInput';
@@ -19,22 +37,6 @@ import {
 } from '@/lib/validation';
 import { IGroup } from '@/types/group';
 import { EUserRole, IGroupDropdownUser } from '@/types/user';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { CldUploadWidget } from 'next-cloudinary';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import toast from 'react-hot-toast';
-import CreatableSelect from 'react-select/creatable';
-import { useDebounce } from 'use-debounce';
-import {
-  generateSelectStyles,
-  MemberAdminFormatedOption,
-} from '../RHFInputs/RHFMultipleSelect';
-import RHFProfileImageUpload from '../RHFInputs/RHFProfileImageUpload';
-import RHFTextarea from '../RHFInputs/RHFTextarea';
 
 // ----------------------------------------------------------------
 
@@ -135,7 +137,7 @@ const CreateGroup: React.FC<ICreateGroup> = ({ viewerId, group }) => {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-8 w-full px-3 md:px-0"
+          className="w-full space-y-8 px-3 md:px-0"
         >
           <RHFInput
             name="name"
@@ -151,7 +153,7 @@ const CreateGroup: React.FC<ICreateGroup> = ({ viewerId, group }) => {
                 <FormLabel>Cover Image</FormLabel>
                 <FormControl>
                   {coverImage ? (
-                    <div className="relative w-full h-64">
+                    <div className="relative h-64 w-full">
                       <Image
                         src={coverImage}
                         alt="Cover Image"
@@ -161,13 +163,13 @@ const CreateGroup: React.FC<ICreateGroup> = ({ viewerId, group }) => {
                       <Button
                         type="button"
                         onClick={() => form.setValue('coverImage', '')}
-                        className="absolute right-0 top-[-40px] hover:bg-black-700 text-white-400 dark:border-gray-500 size-8 dark:text-white-100"
+                        className="absolute right-0 top-[-40px] size-8 text-white-400 hover:bg-black-700 dark:border-gray-500 dark:text-white-100"
                       >
                         X
                       </Button>
                     </div>
                   ) : (
-                    <div className="w-full h-64 dashed-border !text-white-400 rounded-lg flex items-center justify-center">
+                    <div className="dashed-border flex h-64 w-full items-center justify-center rounded-lg !text-white-400">
                       <div className="flex flex-col items-center">
                         <CldUploadWidget
                           uploadPreset={
@@ -192,7 +194,7 @@ const CreateGroup: React.FC<ICreateGroup> = ({ viewerId, group }) => {
                                 open();
                               }}
                               type="button"
-                              className="flex items-center max-w-[200px] dark:bg-black-800 py-2 rounded-lg bg-white-100 gap-3 mb-3"
+                              className="mb-3 flex max-w-[200px] items-center gap-3 rounded-lg bg-white-100 py-2 dark:bg-black-800"
                             >
                               <Image
                                 src={'/assets/icons/upload-icon.svg'}
@@ -290,7 +292,7 @@ const CreateGroup: React.FC<ICreateGroup> = ({ viewerId, group }) => {
               )}
             />
           )}
-          <div className="flex max-sm:flex-col gap-5 p3-bold">
+          <div className="p3-bold flex gap-5 max-sm:flex-col">
             <Button
               onClick={() => form.reset()}
               type="button"
