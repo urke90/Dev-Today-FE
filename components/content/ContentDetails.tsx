@@ -22,6 +22,7 @@ import toast from 'react-hot-toast';
 
 import { Button } from '@/components/ui/button';
 import { CLOUDINARY_URL } from '@/constants';
+import { revalidateRoute } from '@/lib/actions/revalidate';
 import type { IComment } from '@/lib/validation';
 import { EContentType, type IContent } from '@/types/content';
 import type { IProfileUser } from '@/types/user';
@@ -35,6 +36,16 @@ interface IContentDetailsProps {
   comments: IComment[];
   author: IProfileUser;
 }
+
+const buildRevalidateAndRedirectRoute = (type: EContentType) => {
+  if (type === EContentType.POST) {
+    return '/posts';
+  } else if (type === EContentType.MEETUP) {
+    return '/meetups';
+  }
+
+  return '/podcasts';
+};
 
 const ContentDetails: React.FC<IContentDetailsProps> = ({
   content,
@@ -55,13 +66,16 @@ const ContentDetails: React.FC<IContentDetailsProps> = ({
 
   const handleDeleteContent = async () => {
     try {
-      console.log('11111111111');
-      const response = await typedFetch({
+      await typedFetch({
         url: `/content/${content.id}/delete`,
         method: 'DELETE',
         body: { viewerId },
       });
-      console.log('response', response);
+      toast.success('Deleted successfully');
+
+      const route = buildRevalidateAndRedirectRoute(content.type);
+      revalidateRoute(route);
+      router.push(route);
     } catch (error) {
       console.log('Error deleting content FE', error);
       toast.error('Something went wrong');

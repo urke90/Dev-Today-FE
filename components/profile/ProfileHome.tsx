@@ -47,8 +47,6 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
       })
     : user.avatarImg;
 
-  console.log('user u pROFILE', user);
-
   return (
     <div className="content-wrapper">
       <aside className="left-sidebar bg-light100__dark800 shadow-card rounded-2xl !p-0 !pb-10 text-center">
