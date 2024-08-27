@@ -78,14 +78,12 @@ const CreateContent: React.FC<ICreateContentProps> = ({
   content,
 }) => {
   const [isPreviewMode, setIsPreviewMode] = useState(false);
-
   const [q, setQ] = useState('');
   const [title, setTitle] = useState('');
+  const [isOpenDatePopover, setIsOpenDatePopover] = useState(false);
   const { theme } = useTheme();
-
   const [debouncedQ] = useDebounce(q, 500);
   const [debouncedTitle] = useDebounce(title, 500);
-
   const editorRef = useRef<TinyMCEEditor | null>(null);
   const router = useRouter();
 
@@ -428,7 +426,6 @@ const CreateContent: React.FC<ICreateContentProps> = ({
               )}
             />
           </div>
-
           <FormField
             name="coverImage"
             control={form.control}
@@ -536,63 +533,82 @@ const CreateContent: React.FC<ICreateContentProps> = ({
               <FormField
                 control={form.control}
                 name="meetupDate"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Popover>
-                        <h3 className="p3-medium"> Meetup date</h3>
-                        <PopoverTrigger asChild>
-                          <Button
-                            className={cn(
-                              'justify-start p3-regular font-bold bg-light100__dark800 border dark:border-black-700/50 px-4 h-11 !mt-2',
-                              !field.value && 'text-muted-foreground'
-                            )}
-                          >
-                            <Image
-                              src="/assets/icons/calendar-create.svg"
-                              alt="calendar"
-                              width={18}
-                              height={18}
-                            />
-                            {field.value ? (
-                              format(field.value, 'MMMM dd, yyyy hh:mm a')
-                            ) : (
-                              <span className="text-white-400">
-                                Pick a date of the meetup
-                              </span>
-                            )}
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="border-white-400 bg-white-100 dark:bg-black-800 w-auto space-y-3 rounded-none  p-0 px-2 pb-5">
-                          <Calendar
-                            className="p4-regular bg-white-100 dark:bg-black-800"
-                            mode="single"
-                            selected={field.value}
-                            onSelect={field.onChange}
-                            initialFocus
-                          />
-                          <Input
-                            type="time"
-                            defaultValue="09:00"
-                            min="09:00"
-                            max="18:00"
-                            onChange={(event) => {
-                              const currentDate = new Date(field.value);
-                              const newDate = new Date(
-                                currentDate.toDateString() +
-                                  ' ' +
-                                  event.target.value
-                              );
+                render={({ field }) => {
+                  const selectedDate = field.value
+                    ? new Date(field.value)
+                    : null;
+                  return (
+                    <FormItem>
+                      <FormControl>
+                        <Popover>
+                          <h3 className="p3-medium flex gap-1">
+                            Meetup date
+                            <span className="text-primary-500">
+                              ( Select date first in order to select time )
+                            </span>
+                          </h3>
+                          <PopoverTrigger asChild>
+                            <Button
+                              className={cn(
+                                'justify-start p3-regular font-bold bg-light100__dark800 border dark:border-black-700/50 px-4 h-11 !mt-2',
+                                !field.value && 'text-muted-foreground'
+                              )}
+                            >
+                              <Image
+                                src="/assets/icons/calendar-create.svg"
+                                alt="calendar"
+                                width={18}
+                                height={18}
+                              />
 
-                              field.onChange(newDate);
-                            }}
-                          />
-                        </PopoverContent>
-                      </Popover>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                              {selectedDate ? (
+                                format(field.value, 'MMMM dd, yyyy hh:mm a')
+                              ) : (
+                                <span className="text-white-400">
+                                  Pick a date of the meetup
+                                </span>
+                              )}
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent className="border-white-400 bg-white-100 dark:bg-black-800 w-auto space-y-3 rounded-none  p-0 px-2 pb-5">
+                            <Calendar
+                              className="p4-regular bg-white-100 dark:bg-black-800"
+                              mode="single"
+                              selected={field.value}
+                              onSelect={field.onChange}
+                              initialFocus
+                            />
+                            {selectedDate ? (
+                              <Input
+                                type="time"
+                                defaultValue="09:00"
+                                min="09:00"
+                                max="18:00"
+                                onChange={(event) => {
+                                  const currentDate = new Date(field.value);
+                                  const newDate = new Date(
+                                    currentDate.toDateString() +
+                                      ' ' +
+                                      event.target.value
+                                  );
+
+                                  field.onChange(newDate);
+                                }}
+                              />
+                            ) : (
+                              <div className="flex-center">
+                                <p className="p3-bold text-white-400 flex-center ring-primary-500 hover:bg-primary-500 animate-bounce rounded-xl px-3 py-1 ring transition-colors">
+                                  Select a date first to pick a time
+                                </p>
+                              </div>
+                            )}
+                          </PopoverContent>
+                        </Popover>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  );
+                }}
               />
             </>
           )}
@@ -639,7 +655,9 @@ const CreateContent: React.FC<ICreateContentProps> = ({
                         )}
                       </CldUploadWidget>
                     </FormControl>
-                    <FormMessage />
+                    <div className="border border-red-500">
+                      <FormMessage />
+                    </div>
                   </FormItem>
                 )}
               />
@@ -778,7 +796,7 @@ const CreateContent: React.FC<ICreateContentProps> = ({
             <Button
               type="button"
               variant="primary"
-              onClick={() => onSubmit()}
+              onClick={onSubmit}
               disabled={form.formState.isSubmitting}
             >
               {form.formState.isSubmitting

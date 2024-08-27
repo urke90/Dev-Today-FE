@@ -9,6 +9,7 @@ import SidebarContentCard from '@/components/shared/RightSidebarItems/SidebarCon
 import ShareOnSocialNetworkDialog from '@/components/shared/ShareOnSocialNetworkDialog';
 // import ShareOnSocialNetworkDialog from '@/components/shared/ShareOnSocialNetworkDialog';
 import ShareIcon from '@/components/icons/Share';
+import { Button } from '@/components/ui/button';
 import { CLOUDINARY_URL } from '@/constants';
 import { auth } from '@/lib/auth';
 import type { IComment } from '@/lib/validation';
@@ -65,7 +66,7 @@ const ContentPage: React.FC<IContentPageProps> = async ({ params }) => {
       <aside className="left-sidebar">
         <div className="right-sidebar-item rounded-2xl">
           <div className="flex items-center gap-2">
-            <div className="flex items-center rounded bg-white-100">
+            <div className="bg-white-100 flex items-center rounded">
               <Image
                 src="/assets/icons/hart-violet.svg"
                 width={25}
@@ -79,7 +80,7 @@ const ContentPage: React.FC<IContentPageProps> = async ({ params }) => {
             </p>
           </div>
           <div className="flex items-center gap-2">
-            <div className="flex items-center rounded bg-white-200 dark:bg-black-700">
+            <div className="bg-white-200 dark:bg-black-700 flex items-center rounded">
               <Image
                 src="/assets/icons/comments.svg"
                 width={25}
@@ -95,7 +96,7 @@ const ContentPage: React.FC<IContentPageProps> = async ({ params }) => {
             </p>
           </div>
           <div className="flex items-center gap-2">
-            <div className="flex size-6 items-center rounded bg-white-200 dark:bg-black-700">
+            <div className="bg-white-200 dark:bg-black-700 flex size-6 items-center rounded">
               <Image
                 src="/assets/icons/preview-gray.svg"
                 width={25}
@@ -111,13 +112,16 @@ const ContentPage: React.FC<IContentPageProps> = async ({ params }) => {
         </div>
         <ShareOnSocialNetworkDialog
           triggerBtn={
-            <div className="flex-center cursor-pointer gap-2 rounded bg-white-100 py-2 shadow-card transition-colors hover:bg-white-400/30 dark:bg-black-800 hover:dark:bg-black-700">
+            <Button
+              size="large"
+              className="flex-center bg-white-100 shadow-card hover:bg-white-400/30 dark:bg-black-800 hover:dark:bg-black-700 cursor-pointer gap-2 rounded py-2 transition-colors"
+            >
               <ShareIcon className="text-black-700 dark:text-white-300" />
               <p className="p3-medium">Share with</p>
-            </div>
+            </Button>
           }
         />
-        <div className="right-sidebar-item p2-medium hidden rounded-2xl !text-white-400 md:block ">
+        <div className="right-sidebar-item p2-medium !text-white-400 hidden rounded-2xl md:block ">
           <p>
             <span className="text-blue-500">{authorName} </span> Posted on{' '}
           </p>
@@ -130,32 +134,36 @@ const ContentPage: React.FC<IContentPageProps> = async ({ params }) => {
         author={authorResponse.user}
         content={content}
       />
-      <aside className="p1-bold right-sidebar w-full">
-        <div className="right-sidebar-item flex flex-col items-center rounded-2xl">
+      <aside className="right-sidebar">
+        <div className="right-sidebar-item items-center rounded-2xl">
           <Image
             src={transformedAvatarImg || '/assets/icons/image-preview.svg'}
             width={100}
             height={100}
-            alt="post example"
+            alt={authorResponse.user.userName}
             className="rounded-full"
           />
-          <h2 className="d2-bold">{authorResponse.user?.userName}</h2>
-          <p className="p2-medium lowercase !text-white-400">
-            @{getFirstName(authorResponse.user.userName)}
-          </p>
-          {session.user.id !== content.authorId && (
-            <FollowButton
-              isFollowingInit={authorResponse.isFollowing}
-              authorId={content.authorId}
-              viewerId={session.user.id}
-            />
-          )}
-          <Link
-            href={`/profile/${authorResponse.user?.id}`}
-            className="p3-bold w-full rounded-md border border-white-100 bg-white-200 py-2 text-center text-white-200 transition-colors hover:bg-primary-500 hover:text-white-100 dark:border-black-700 dark:bg-black-700 dark:hover:bg-primary-500"
-          >
-            Visit Profile
-          </Link>
+          <div>
+            <h2 className="d2-bold">{authorResponse.user?.userName}</h2>
+            <p className="p2-medium !text-white-400 text-center">
+              @{getFirstName(authorResponse.user.userName)}
+            </p>
+          </div>
+          <div className="flex w-full flex-col gap-2.5">
+            {session.user.id !== content.authorId && (
+              <FollowButton
+                isFollowingInit={authorResponse.isFollowing}
+                authorId={content.authorId}
+                viewerId={session.user.id}
+              />
+            )}
+            <Link
+              href={`/profile/${authorResponse.user?.id}`}
+              className="p3-bold border-white-100 bg-white-200 text-white-200 hover:bg-primary-500 hover:text-white-100 dark:border-black-700 dark:bg-black-700 dark:hover:bg-primary-500 w-full rounded-md border py-2 text-center transition-colors"
+            >
+              Visit Profile
+            </Link>
+          </div>
           <p className="p2-regular">
             joined {calculateTimeAgo(authorResponse.user?.createdAt)}
           </p>

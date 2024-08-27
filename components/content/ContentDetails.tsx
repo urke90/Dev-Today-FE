@@ -18,12 +18,14 @@ import { APIProvider } from '@vis.gl/react-google-maps';
 import { getCldImageUrl } from 'next-cloudinary';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 
 import { Button } from '@/components/ui/button';
 import { CLOUDINARY_URL } from '@/constants';
-import { IComment } from '@/lib/validation';
-import { EContentType, IContent } from '@/types/content';
-import { IProfileUser } from '@/types/user';
+import type { IComment } from '@/lib/validation';
+import { EContentType, type IContent } from '@/types/content';
+import type { IProfileUser } from '@/types/user';
+import { typedFetch } from '@/utils/api';
 
 // ----------------------------------------------------------------
 
@@ -50,6 +52,21 @@ const ContentDetails: React.FC<IContentDetailsProps> = ({
         crop: 'fill',
       })
     : author.avatarImg;
+
+  const handleDeleteContent = async () => {
+    try {
+      console.log('11111111111');
+      const response = await typedFetch({
+        url: `/content/${content.id}/delete`,
+        method: 'DELETE',
+        body: { viewerId },
+      });
+      console.log('response', response);
+    } catch (error) {
+      console.log('Error deleting content FE', error);
+      toast.error('Something went wrong');
+    }
+  };
 
   return (
     <main className="main-content space-y-5">
@@ -141,6 +158,7 @@ const ContentDetails: React.FC<IContentDetailsProps> = ({
                   </Item>
                   <Item
                     onSelect={(e) => e.preventDefault()}
+                    onClick={handleDeleteContent}
                     className="dropdown-item !text-error-text "
                   >
                     <Image

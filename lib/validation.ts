@@ -293,45 +293,25 @@ export const createOrUpdateContentSchema = z.object({
   tags: z
     .array(
       z.object({
-        label: z.string().min(1).max(10, 'Tag must be max 10 characters long'),
+        label: z.string().min(1).max(20, 'Tag must be max 20 characters long'),
         value: z.string().min(1),
       })
     )
     .max(5),
   meetupLocation: z
-    .object(
-      {
-        address: z
-          .string()
-          .trim()
-          .min(3, 'Please search for valid address with Google Maps')
-          .refine((val) => val !== '', {
-            message: 'Address cannot be empty',
-          }),
-
-        lat: z.number().refine((val) => val !== 0, {
-          message: 'Latitude must be a valid number',
-        }),
-        lng: z.number().refine((val) => val !== 0, {
-          message: 'Longitude must be a valid number',
-        }),
-      },
-      {
-        message: 'Please enter valid address',
-        required_error: 'Required message',
-        invalid_type_error: 'INVALID ERROR TYPE',
-        description: 'PLEASE ADD DESCRIOTIUOn',
-      }
-    )
-    .optional()
-    .refine((data) => data && data.address && data.lat && data.lng, {
-      message: 'Please search for valid address with Google Maps',
-      path: ['meetupLocation'], // this will point to the entire object
-    }),
+    .object({
+      address: z
+        .string()
+        .trim()
+        .min(3, 'Please search for valid address with Google Maps'),
+      lat: z.number(),
+      lng: z.number(),
+    })
+    .optional(),
   meetupDate: z.coerce.date({
     invalid_type_error: 'Please provide valid date',
   }),
-  podcastFile: z.string({ message: 'Please provide valid file' }).optional(),
+  podcastFile: z.string().min(1, 'Please provide valid audio file'),
   podcastTitle: z
     .string()
     .min(3, 'Podcast title must be at least 3 characters long')
