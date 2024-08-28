@@ -64,34 +64,23 @@ const GroupContent: React.FC<IGroupContentWrapperProps> = ({
   const [page, setPage] = useState(1);
 
   const {
-    isLoading: isPendingContent,
+    isLoading: isLoadingContent,
     error: contentError,
     data: contentData,
   } = useQuery<IGroupContentResponse>({
     initialData: groupContent,
-    queryKey: [
-      updateContentQueryKey(contentType),
-      contentType,
-      page,
-      groupId,
-      viewerId,
-    ],
+    queryKey: [updateContentQueryKey(contentType), contentType, page],
     queryFn: () => fetchGroupContent(groupId, page, contentType, viewerId),
     enabled: contentType !== EQueryType.MEMBERS && page !== 1,
   });
 
   const {
-    isLoading: isPendingMembers,
+    isLoading: isLoadingMembers,
     error: membersError,
     data: membersData,
   } = useQuery<IGroupMembersResponse>({
     initialData: groupMembers,
-    queryKey: [
-      EContentGroupQueries.FETCH_MEMBERS,
-      EQueryType.MEMBERS,
-      page,
-      groupId,
-    ],
+    queryKey: [EContentGroupQueries.FETCH_MEMBERS, EQueryType.MEMBERS, page],
     queryFn: () => fetchGroupMembers(groupId, page),
     enabled: contentType === EQueryType.MEMBERS && page !== 1,
   });
@@ -390,7 +379,7 @@ const GroupContent: React.FC<IGroupContentWrapperProps> = ({
     <>
       <ContentNavLinks isGroupPage />
       <ul className={styles}>{renderedContent}</ul>
-      {(isPendingContent || isPendingMembers) && (
+      {(isLoadingContent || isLoadingMembers) && (
         <div className="p-1">
           <LoadingSpinner />
         </div>

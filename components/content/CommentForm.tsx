@@ -1,18 +1,22 @@
-import RHFInput from './RHFInput';
-
+import RHFInput from '../RHFInputs/RHFInput';
 import { Button } from '../ui/button';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 
 import { Form } from '@/components/ui/form';
 import { revalidateRoute } from '@/lib/actions/revalidate';
-import { editAndReplyCommentSchema, IComment } from '@/lib/validation';
+import {
+  editAndReplyCommentSchema,
+  type IComment,
+  type IEditAndReplyCommentSchema,
+} from '@/lib/validation';
 import { typedFetch } from '@/utils/api';
 import { formatDate } from '@/utils/format';
+
+// ----------------------------------------------------------------
 
 type CommentProps = {
   isEdit: boolean;
@@ -29,25 +33,24 @@ const RCommentForm = ({
   isReplying,
   comment,
 }: CommentProps) => {
-  const session = useSession();
-  const form = useForm<z.infer<typeof editAndReplyCommentSchema>>({
+  const { data: session } = useSession();
+  const form = useForm<IEditAndReplyCommentSchema>({
     resolver: zodResolver(editAndReplyCommentSchema),
     defaultValues: {
       text: isReplying ? '' : comment?.text ?? '',
     },
   });
 
-  const onSubmit = async (
-    values: z.infer<typeof editAndReplyCommentSchema>
-  ) => {
+  const onSubmit = async (data: IEditAndReplyCommentSchema) => {
     if (isReplying) {
       try {
         await typedFetch({
           url: '/content/comment',
           method: 'POST',
           body: {
-            text: values.text,
-            authorId: session?.data?.user.id,
+            text: data.text,
+            // authorId: session?.data?.user.id,
+            authorId: session?.user.id,
             contentId: comment.contentId,
             replyingToId: comment.id,
           },
@@ -67,7 +70,7 @@ const RCommentForm = ({
           body: {
             id: comment.id,
             contentId: comment.contentId,
-            text: values.text,
+            text: data.text,
             authorId: comment.authorId,
           },
         });
@@ -84,7 +87,7 @@ const RCommentForm = ({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 ">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <div className="bg-light100__dark800 mt-4 !w-full space-y-4 rounded-lg p-3 shadow-2xl md:p-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -97,12 +100,12 @@ const RCommentForm = ({
               />
               <div className="flex gap-1">
                 <h4 className="p3-bold  !mb-0 !text-[12px] !font-semibold  tracking-wide md:mb-2 md:font-bold lg:!text-[12px]">
-                  {session?.data?.user.name}
+                  {session?.user.name}
                 </h4>
-                <span className=" text-[10px] text-white-400 md:text-[12px] ">
+                <span className=" text-white-400 text-[10px] md:text-[12px] ">
                   {formatDate(comment.createdAt)}
                 </span>
-                <span className=" text-[10px] text-white-400 md:text-[12px] ">
+                <span className=" text-white-400 text-[10px] md:text-[12px] ">
                   {formatDate(comment.updatedAt)}
                 </span>
               </div>
@@ -127,14 +130,14 @@ const RCommentForm = ({
                     setOpenReply(false);
                   }
                 }}
-                className="p3-medium w-1/3 cursor-pointer !text-[14px] capitalize !text-white-400 md:w-1/4"
+                className="p3-medium !text-white-400 w-1/3 cursor-pointer !text-[14px] capitalize md:w-1/4"
               >
                 Cancel
               </Button>
-              <span className="mx-1 text-white-400">|</span>
+              <span className="text-white-400 mx-1">|</span>
               <Button
                 type="submit"
-                className="p3-medium  w-1/3 cursor-pointer  !text-[14px]  capitalize !text-primary-500 md:w-1/4"
+                className="p3-medium  !text-primary-500 w-1/3  cursor-pointer  !text-[14px] capitalize md:w-1/4"
               >
                 {isEdit ? 'Save' : 'Reply'}
               </Button>

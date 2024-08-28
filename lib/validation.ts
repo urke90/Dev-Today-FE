@@ -207,6 +207,8 @@ export const commentFormSchema = z.object({
     .optional(),
 });
 
+export type ICommentFormSchema = z.infer<typeof commentFormSchema>;
+
 export const baseCommentSchema = z.object({
   id: z.string(),
   text: z.string(),
@@ -240,6 +242,10 @@ export const baseCommentSchema = z.object({
 export const editAndReplyCommentSchema = z.object({
   text: z.string().min(2).max(1000),
 });
+
+export type IEditAndReplyCommentSchema = z.infer<
+  typeof editAndReplyCommentSchema
+>;
 
 export type IComment = z.infer<typeof baseCommentSchema>;
 

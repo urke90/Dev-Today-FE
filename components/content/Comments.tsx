@@ -1,11 +1,10 @@
 'use client';
+
+import CommentForm from './CommentForm';
+
 import RHFInput from '../RHFInputs/RHFInput';
-import RCommentForm from '../RHFInputs/RCommentForm';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import Image from 'next/image';
 import {
   Content,
   DropdownMenu,
@@ -14,12 +13,18 @@ import {
   Trigger,
 } from '@radix-ui/react-dropdown-menu';
 import { EditIcon } from 'lucide-react';
+import Image from 'next/image';
 import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 
 import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 import { revalidateRoute } from '@/lib/actions/revalidate';
-import { commentFormSchema, IComment } from '@/lib/validation';
+import {
+  commentFormSchema,
+  type IComment,
+  type ICommentFormSchema,
+} from '@/lib/validation';
 import { typedFetch } from '@/utils/api';
 import { formatDate } from '@/utils/format';
 
@@ -39,7 +44,7 @@ const Comments: React.FC<ICommentsProps> = ({
   const [editComment, setEditComment] = useState<string | null>(null);
   const [replyingComment, setReplyingComment] = useState<string | null>(null);
 
-  const form = useForm<z.infer<typeof commentFormSchema>>({
+  const form = useForm<ICommentFormSchema>({
     resolver: zodResolver(commentFormSchema),
     defaultValues: {
       text: '',
@@ -48,15 +53,15 @@ const Comments: React.FC<ICommentsProps> = ({
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof commentFormSchema>) => {
+  const onSubmit = async (data: ICommentFormSchema) => {
     try {
       await typedFetch({
         url: '/content/comment',
         method: 'POST',
         body: {
-          text: values.text,
-          authorId: values.authorId,
-          contentId: values.contentId,
+          text: data.text,
+          authorId: data.authorId,
+          contentId: data.contentId,
         },
       });
       revalidateRoute('/content/comment');
@@ -68,7 +73,7 @@ const Comments: React.FC<ICommentsProps> = ({
     }
   };
 
-  const onDelete = async (commentId: string) => {
+  const handleDeleteComment = async (commentId: string) => {
     try {
       await typedFetch({
         url: '/content/comment/delete',
@@ -105,7 +110,7 @@ const Comments: React.FC<ICommentsProps> = ({
     <div className="!mt-20 max-w-[825px] space-y-5">
       <h2 className="h1-medium ">Comments</h2>
       <div className="flex items-center gap-3">
-        <div className="rounded-full bg-white-100 p-1 px-2">
+        <div className="bg-white-100 rounded-full p-1 px-2">
           <Image
             src="/assets/images/avatars/avatar-1.svg"
             width={32}
@@ -114,17 +119,15 @@ const Comments: React.FC<ICommentsProps> = ({
             className="ml-1 rounded-full"
           />
         </div>
-
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
             className="w-full space-y-8"
           >
             <RHFInput
-              className="bg-white-200"
               name="text"
               onChange={(e) => form.setValue('text', e.target.value)}
-              placeholder="Say something nice to Mansurl Haque..."
+              placeholder="Add comment..."
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
@@ -139,7 +142,8 @@ const Comments: React.FC<ICommentsProps> = ({
       {comments.map((comment) => (
         <>
           {editComment === comment.id ? (
-            <RCommentForm
+            <CommentForm
+              key={comment.id}
               comment={comment}
               isReplying={false}
               isEdit={true}
@@ -170,11 +174,11 @@ const Comments: React.FC<ICommentsProps> = ({
                           {comment.author.userName}
                         </h4>
                         <div className="text-[8px] sm:text-[10px] lg:text-[12px]">
-                          <span className="relative bottom-1 text-white-400">
+                          <span className="text-white-400 relative bottom-1">
                             {formatDate(comment.createdAt)}
                           </span>
-                          <span className="relative bottom-1 size-1 rounded-full bg-white-400"></span>
-                          <span className="relative bottom-1 text-white-400">
+                          <span className="bg-white-400 relative bottom-1 size-1 rounded-full"></span>
+                          <span className="text-white-400 relative bottom-1">
                             {formatDate(comment.updatedAt)}
                           </span>
                         </div>
@@ -193,7 +197,7 @@ const Comments: React.FC<ICommentsProps> = ({
                         alt="avatar"
                         className="rounded-full invert"
                       />
-                      <p className="text-[10px] text-white-400">Reply</p>
+                      <p className="text-white-400 text-[10px]">Reply</p>
                     </div>
                     <Image
                       onClick={() => handleLike(comment.id)}
@@ -225,19 +229,19 @@ const Comments: React.FC<ICommentsProps> = ({
                           sideOffset={8}
                           align="end"
                           onCloseAutoFocus={(e) => e.preventDefault()}
-                          className="shadow-header-menu z-20 mb-4 flex !w-48 flex-col gap-2.5 rounded-[10px] border border-black-700/40 bg-black-900 px-5 py-4 data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade"
+                          className="shadow-header-menu border-black-700/40 bg-black-900 data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade z-20 mb-4 flex !w-48 flex-col gap-2.5 rounded-[10px] border px-5 py-4"
                         >
                           <Item
                             onClick={() => setEditComment(comment.id)}
                             className="p2-medium flex cursor-pointer items-center gap-2.5"
                           >
                             <EditIcon size={16} />
-                            <p>Edit Comment</p>
+                            Edit Comment
                           </Item>
                           <Item
-                            onClick={() => onDelete(comment.id)}
+                            onClick={() => handleDeleteComment(comment.id)}
                             onSelect={(e) => e.preventDefault()}
-                            className="p2-medium flex cursor-pointer items-center gap-2.5 !text-[#FF584D]"
+                            className="p2-medium text-error-text flex cursor-pointer items-center gap-2.5"
                           >
                             <Image
                               src="/assets/icons/trash.svg"
@@ -253,13 +257,13 @@ const Comments: React.FC<ICommentsProps> = ({
                   </div>
                 </div>
 
-                <p className="p2-regular !ml-3 !mt-3 !text-[12px] !font-semibold !text-white-400 md:!mt-1 md:!text-[14px]">
+                <p className="p2-regular !text-white-400 !ml-3 !mt-3 !text-[12px] !font-semibold md:!mt-1 md:!text-[14px]">
                   {comment.text.charAt(0).toUpperCase() + comment.text.slice(1)}
                 </p>
-                {comment.replies && (
+                {comment.replies && comment.replies.length > 0 && (
                   <div className="overflow-wrap break-word !mt-0 !w-full space-y-2 overflow-hidden text-wrap break-words rounded-lg p-2 text-[11px]">
-                    {comment.replies.map((reply, idx) => (
-                      <div key={idx + 1}>
+                    {comment.replies.map((reply) => (
+                      <div key={reply.id}>
                         <div className="flex items-center">
                           <div className="flex gap-1">
                             <Image
@@ -279,7 +283,7 @@ const Comments: React.FC<ICommentsProps> = ({
                             </p>
                           </div>
                         </div>
-                        <p className="ml-7 font-semibold text-white-400">
+                        <p className="text-white-400 ml-7 font-semibold">
                           {reply.text.charAt(0).toUpperCase() +
                             reply.text.slice(1)}
                         </p>
@@ -291,7 +295,7 @@ const Comments: React.FC<ICommentsProps> = ({
             </div>
           )}
           {replyingComment === comment.id && (
-            <RCommentForm
+            <CommentForm
               comment={comment}
               isReplying={true}
               isEdit={false}
