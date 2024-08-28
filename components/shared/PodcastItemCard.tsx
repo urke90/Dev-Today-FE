@@ -52,7 +52,7 @@ const PodcastItemCard: React.FC<IPodcastItemCardProps> = ({
     <li>
       <Link
         href={'/content/' + id}
-        className="bg-light100__dark800 shadow-card flex flex-col gap-3.5 rounded-[10px] px-3.5 py-5 lg:gap-[18px] lg:rounded-2xl lg:p-4"
+        className="bg-light100__dark800 flex flex-col gap-3.5 rounded-[10px] px-3.5 py-5 shadow-card lg:gap-[18px] lg:rounded-2xl lg:p-4"
       >
         <div className="flex-between">
           <div className="flex gap-2">
@@ -67,7 +67,7 @@ const PodcastItemCard: React.FC<IPodcastItemCardProps> = ({
           <Button
             type="button"
             variant="icon"
-            className="like-btn-scale-hover bg-white-200 dark:bg-black-700 size-[30px] shrink-0 rounded-full"
+            className="like-btn-scale-hover size-[30px] shrink-0 rounded-full bg-white-200 dark:bg-black-700"
             onClick={(e) =>
               isLiked ? handleLikeContent(e, id) : handleDislikeContent(e, id)
             }
@@ -88,7 +88,7 @@ const PodcastItemCard: React.FC<IPodcastItemCardProps> = ({
           </ul>
         ) : null}
         <div className="flex items-center gap-[7px] lg:gap-2.5">
-          <div className="flex-center bg-white-300 dark:bg-white-600 relative size-[30px] rounded-full lg:size-[40px]">
+          <div className="flex-center relative size-[30px] rounded-full bg-white-300 dark:bg-white-600 lg:size-[40px]">
             <Image
               fill
               src={

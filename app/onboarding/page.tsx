@@ -275,7 +275,7 @@ const OnboardingPage = () => {
             <Button
               onClick={goNext}
               variant="primary"
-              className="p2-bold bg-primary-500 h-11 w-full"
+              className="p2-bold h-11 w-full bg-primary-500"
             >
               {step === 2 ? 'Get Started' : 'Next'}
             </Button>

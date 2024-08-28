@@ -27,14 +27,14 @@ const ProvidersButtons: React.FC<IProvidersButtonsProps> = ({
         {isLoginPage
           ? "Don't have an account yet?"
           : 'Already have an account?'}
-        <span className="text-primary-500 ml-1 text-[16px]">
+        <span className="ml-1 text-[16px] text-primary-500">
           {isLoginPage ? 'Join the community!' : 'Sign in.'}
         </span>
       </Link>
       <div className="flex-center">
-        <Separator className="bg-black-700/10  dark:bg-black-800 w-2/5" />
+        <Separator className="w-2/5  bg-black-700/10 dark:bg-black-800" />
         <p className="p1-medium">or</p>
-        <Separator className="bg-black-700/10 dark:bg-black-800 w-2/5" />
+        <Separator className="w-2/5 bg-black-700/10 dark:bg-black-800" />
       </div>
       <Button
         type="button"

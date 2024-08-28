@@ -49,7 +49,7 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
 
   return (
     <div className="content-wrapper">
-      <aside className="left-sidebar bg-light100__dark800 shadow-card rounded-2xl !p-0 !pb-10 text-center">
+      <aside className="left-sidebar bg-light100__dark800 rounded-2xl !p-0 !pb-10 text-center shadow-card">
         <div className="profile-background relative h-[106px] rounded-t-2xl lg:h-[83px]">
           <Image
             fill
@@ -65,7 +65,7 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
               width={110}
               height={110}
               alt="profile"
-              className="ring-primary-500 mx-auto mb-2.5 rounded-full ring-4"
+              className="mx-auto mb-2.5 rounded-full ring-4 ring-primary-500"
             />
             <h1 className="h1-medium">{user.userName}</h1>
             <p className="p3-regular dark:text-white-400">{user?.email}</p>
@@ -93,7 +93,7 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
           )}
           <div className="border border-[#C5D0E6] dark:border-[#393E4F]" />
           {user?.bio && (
-            <p className="p3-regular text-white-400 dark:text-white-300 text-center">
+            <p className="p3-regular text-center text-white-400 dark:text-white-300">
               {user.bio}
             </p>
           )}

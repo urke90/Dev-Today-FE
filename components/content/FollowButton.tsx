@@ -58,7 +58,7 @@ const FollowButton: React.FC<IFollowButtonProps> = ({
     <Button
       size="medium"
       onClick={isFollowingUser ? handleUnfollowUser : handleFollow}
-      className="bg-white-300 hover:bg-white-400 hover:text-white-100 dark:bg-black-900 hover:dark:bg-black-700 rounded border  border-transparent text-purple-500 transition-colors"
+      className="rounded border border-transparent bg-white-300 text-purple-500 transition-colors hover:bg-white-400  hover:text-white-100 dark:bg-black-900 hover:dark:bg-black-700"
     >
       {isFollowingUser ? 'Fallowing' : 'Follow'}
     </Button>

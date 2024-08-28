@@ -40,7 +40,7 @@ const HtmlParser: React.FC<IHtmlParserProps> = ({ data }) => {
   const stringData = typeof data === 'string' ? data : String(data);
 
   return (
-    <div className={'!text-black-800 dark:!text-white-200 w-full min-w-full'}>
+    <div className={'w-full min-w-full !text-black-800 dark:!text-white-200'}>
       {parse(stringData)}
     </div>
   );
