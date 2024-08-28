@@ -3,10 +3,13 @@ import { Button } from '../ui/button';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useSession } from 'next-auth/react';
+import { getCldImageUrl } from 'next-cloudinary';
 import Image from 'next/image';
 import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
 
 import { Form } from '@/components/ui/form';
+import { CLOUDINARY_URL } from '@/constants';
 import { revalidateRoute } from '@/lib/actions/revalidate';
 import {
   editAndReplyCommentSchema,
@@ -18,26 +21,26 @@ import { formatDate } from '@/utils/format';
 
 // ----------------------------------------------------------------
 
-type CommentProps = {
+interface ICommentProps {
   isEdit: boolean;
   comment: IComment;
   setOpenEdit: (value: boolean) => void;
   setOpenReply: (value: boolean) => void;
   isReplying: boolean;
-};
+}
 
-const RCommentForm = ({
+const CommentForm: React.FC<ICommentProps> = ({
   isEdit,
   setOpenEdit,
   setOpenReply,
   isReplying,
   comment,
-}: CommentProps) => {
+}) => {
   const { data: session } = useSession();
   const form = useForm<IEditAndReplyCommentSchema>({
     resolver: zodResolver(editAndReplyCommentSchema),
     defaultValues: {
-      text: isReplying ? '' : comment?.text ?? '',
+      text: isReplying ? '' : comment?.text || '',
     },
   });
 
@@ -49,7 +52,6 @@ const RCommentForm = ({
           method: 'POST',
           body: {
             text: data.text,
-            // authorId: session?.data?.user.id,
             authorId: session?.user.id,
             contentId: comment.contentId,
             replyingToId: comment.id,
@@ -60,7 +62,7 @@ const RCommentForm = ({
         revalidateRoute('/content/comment');
       } catch (error) {
         console.error(error);
-        throw new Error('Failed to reply to comment');
+        toast.error('');
       }
     } else {
       try {
@@ -89,23 +91,33 @@ const RCommentForm = ({
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <div className="bg-light100__dark800 mt-4 !w-full space-y-4 rounded-lg p-3 shadow-2xl md:p-6">
-          <div className="flex items-center justify-between">
+          <div className="flex-between">
             <div className="flex items-center gap-2">
               <Image
-                src="/assets/images/avatars/avatar-1.svg"
+                src={
+                  session?.user.image &&
+                  session?.user.image.startsWith(CLOUDINARY_URL)
+                    ? getCldImageUrl({
+                        width: 28,
+                        height: 28,
+                        src: comment.author.avatarImg,
+                        crop: 'fill',
+                      })
+                    : '/assets/images/avatars/avatar-1.svg'
+                }
                 width={28}
                 height={28}
-                alt="avatar"
+                alt={comment.author.userName}
                 className="rounded-full"
               />
-              <div className="flex gap-1">
-                <h4 className="p3-bold  !mb-0 !text-[12px] !font-semibold  tracking-wide md:mb-2 md:font-bold lg:!text-[12px]">
+              <div className="flex items-center gap-2">
+                <h4 className="p3-bold !mb-0 !text-[12px] !font-semibold  tracking-wide md:mb-2 md:font-bold lg:!text-[12px]">
                   {session?.user.name}
                 </h4>
-                <span className=" text-white-400 text-[10px] md:text-[12px] ">
+                <span className="text-white-400 text-[10px] md:text-[12px] ">
                   {formatDate(comment.createdAt)}
                 </span>
-                <span className=" text-white-400 text-[10px] md:text-[12px] ">
+                <span className="text-white-400 text-[10px] md:text-[12px] ">
                   {formatDate(comment.updatedAt)}
                 </span>
               </div>
@@ -116,31 +128,33 @@ const RCommentForm = ({
             <RHFInput
               name="text"
               onChange={(e) => form.setValue('text', e.target.value)}
-              className="bg-white-200 dark:bg-black-900 md:h-20 "
+              className="bg-white-200 dark:bg-black-900 "
               placeholder={isEdit ? 'Edit your comment' : 'Reply to comment'}
             />
-            <div className=" ml-auto flex w-1/2  justify-end">
-              <Button
-                type="button"
-                onSelect={(e) => e.preventDefault()}
-                onClick={() => {
-                  if (isEdit) {
-                    setOpenEdit(false);
-                  } else {
-                    setOpenReply(false);
-                  }
-                }}
-                className="p3-medium !text-white-400 w-1/3 cursor-pointer !text-[14px] capitalize md:w-1/4"
-              >
-                Cancel
-              </Button>
-              <span className="text-white-400 mx-1">|</span>
-              <Button
-                type="submit"
-                className="p3-medium  !text-primary-500 w-1/3  cursor-pointer  !text-[14px] capitalize md:w-1/4"
-              >
-                {isEdit ? 'Save' : 'Reply'}
-              </Button>
+            <div className="flex flex-row-reverse">
+              <div className="flex flex-nowrap items-center">
+                <Button
+                  type="button"
+                  onSelect={(e) => e.preventDefault()}
+                  onClick={() => {
+                    if (isEdit) {
+                      setOpenEdit(false);
+                    } else {
+                      setOpenReply(false);
+                    }
+                  }}
+                  className="p3-medium !text-white-400 w-[80px] capitalize"
+                >
+                  Cancel
+                </Button>
+                <span className="text-white-400 ">|</span>
+                <Button
+                  type="submit"
+                  className="p3-medium !text-primary-500 w-[80px] capitalize"
+                >
+                  {isEdit ? 'Save' : 'Reply'}
+                </Button>
+              </div>
             </div>
           </div>
         </div>
@@ -149,4 +163,4 @@ const RCommentForm = ({
   );
 };
 
-export default RCommentForm;
+export default CommentForm;

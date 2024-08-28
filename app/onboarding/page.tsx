@@ -1,8 +1,8 @@
 'use client';
 
-import { useTheme } from 'next-themes';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useSession } from 'next-auth/react';
+import { useTheme } from 'next-themes';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -30,7 +30,7 @@ import { type IOnboardingSchema, onboardingSchema } from '@/lib/validation';
 
 // ----------------------------------------------------------------
 
-const BASE_API_URL = process.env.NEXT_API_BASE_URL ?? '';
+const BASE_API_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? '';
 
 const OnboardingPage = () => {
   const { resolvedTheme } = useTheme();
@@ -93,7 +93,8 @@ const OnboardingPage = () => {
           body: JSON.stringify({ ...data, isOnboardingCompleted: true }),
         }
       );
-      if (response?.ok) {
+      console.log('RESPONSE u onboardingu', response);
+      if (response.status === 200) {
         toast.success('Onboarding completed successfully.');
         router.push('/posts');
       } else {
@@ -117,7 +118,7 @@ const OnboardingPage = () => {
         theme={resolvedTheme}
       />
       <div className="auth-onboarding-right-sidebar gap-10">
-        <div className="flex max-w-md flex-col gap-10">
+        <div className="flex w-full max-w-md flex-col gap-10">
           <div className="mx-auto md:hidden">
             <ThemeLogo theme={resolvedTheme} isMounted={isMounted} />
           </div>
@@ -174,7 +175,7 @@ const OnboardingPage = () => {
                   control={form.control}
                   name="codingAmbitions"
                   render={() => (
-                    <FormItem className="flex flex-col gap-5 space-y-0">
+                    <FormItem className="flex w-full flex-col gap-5 space-y-0">
                       {CODING_AMBITIONS.map((item, index) => (
                         <FormField
                           key={index}
@@ -274,7 +275,7 @@ const OnboardingPage = () => {
             <Button
               onClick={goNext}
               variant="primary"
-              className="p2-bold h-11 w-full bg-primary-500"
+              className="p2-bold bg-primary-500 h-11 w-full"
             >
               {step === 2 ? 'Get Started' : 'Next'}
             </Button>

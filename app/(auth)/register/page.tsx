@@ -2,10 +2,10 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signIn } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
-import { useForm } from 'react-hook-form';
 import { useTheme } from 'next-themes';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
 import LeftSidebar from '@/components/auth-onboarding/LeftSidebar';
@@ -18,7 +18,7 @@ import { type IRegisterSchema, registerSchema } from '@/lib/validation';
 
 // ----------------------------------------------------------------
 
-const BASE_API_URL = process.env.NEXT_API_BASE_URL ?? '';
+const BASE_API_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? '';
 
 const RegisterPage = () => {
   const { resolvedTheme } = useTheme();

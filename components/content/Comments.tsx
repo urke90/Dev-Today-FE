@@ -13,12 +13,14 @@ import {
   Trigger,
 } from '@radix-ui/react-dropdown-menu';
 import { EditIcon } from 'lucide-react';
+import { getCldImageUrl } from 'next-cloudinary';
 import Image from 'next/image';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
+import { CLOUDINARY_URL } from '@/constants';
 import { revalidateRoute } from '@/lib/actions/revalidate';
 import {
   commentFormSchema,
@@ -32,23 +34,25 @@ import { formatDate } from '@/utils/format';
 
 interface ICommentsProps {
   comments: IComment[];
-  commentAuthorId: string;
+  viewerId: string;
   contentId: string;
 }
 
 const Comments: React.FC<ICommentsProps> = ({
   comments,
-  commentAuthorId,
+  viewerId,
   contentId,
 }) => {
   const [editComment, setEditComment] = useState<string | null>(null);
-  const [replyingComment, setReplyingComment] = useState<string | null>(null);
+  const [isReplyingComment, setIsReplyingComment] = useState<string | null>(
+    null
+  );
 
   const form = useForm<ICommentFormSchema>({
     resolver: zodResolver(commentFormSchema),
     defaultValues: {
       text: '',
-      authorId: commentAuthorId,
+      authorId: viewerId,
       contentId,
     },
   });
@@ -66,7 +70,7 @@ const Comments: React.FC<ICommentsProps> = ({
       });
       revalidateRoute('/content/comment');
       form.reset();
-      setReplyingComment(null);
+      setIsReplyingComment(null);
     } catch (error) {
       console.error(error);
       throw new Error('Failed to post comment');
@@ -96,7 +100,7 @@ const Comments: React.FC<ICommentsProps> = ({
         method: 'POST',
         body: {
           id: commentId,
-          userId: commentAuthorId,
+          userId: viewerId,
         },
       });
       revalidateRoute('/content/comment');
@@ -140,7 +144,7 @@ const Comments: React.FC<ICommentsProps> = ({
       </div>
 
       {comments.map((comment) => (
-        <>
+        <div key={comment.id}>
           {editComment === comment.id ? (
             <CommentForm
               key={comment.id}
@@ -148,7 +152,7 @@ const Comments: React.FC<ICommentsProps> = ({
               isReplying={false}
               isEdit={true}
               setOpenEdit={() => setEditComment(null)}
-              setOpenReply={() => setReplyingComment(null)}
+              setOpenReply={() => setIsReplyingComment(null)}
             />
           ) : (
             <div key={comment.id}>
@@ -156,15 +160,21 @@ const Comments: React.FC<ICommentsProps> = ({
                 <div className="flex  items-start justify-between sm:items-center">
                   <div className="flex items-center gap-1">
                     <div className="flex items-center gap-1">
-                      <div className="flex h-full items-center">
+                      <div className="flex size-[28px] h-full items-center">
                         <Image
                           src={
-                            comment.author.avatarImg ||
-                            '/assets/images/avatars/avatar-1.svg'
+                            comment.author.avatarImg?.startsWith(CLOUDINARY_URL)
+                              ? getCldImageUrl({
+                                  width: 28,
+                                  height: 28,
+                                  src: comment.author.avatarImg,
+                                  crop: 'fill',
+                                })
+                              : '/assets/images/avatars/avatar-1.svg'
                           }
                           width={28}
                           height={28}
-                          alt="avatar"
+                          alt={comment.author.userName}
                           className="h-full rounded-full object-cover"
                         />
                       </div>
@@ -188,7 +198,7 @@ const Comments: React.FC<ICommentsProps> = ({
                   <div className="flex items-center gap-2 sm:mt-0  md:gap-4">
                     <div
                       className="flex cursor-pointer items-center gap-1"
-                      onClick={() => setReplyingComment(comment.id)}
+                      onClick={() => setIsReplyingComment(comment.id)}
                     >
                       <Image
                         src="/assets/icons/reply.svg"
@@ -211,49 +221,51 @@ const Comments: React.FC<ICommentsProps> = ({
                       alt="avatar"
                       className="size-[16px] cursor-pointer"
                     />
-                    <DropdownMenu>
-                      <Trigger asChild>
-                        <Button className="w-auto">
-                          <Image
-                            src="/assets/icons/menu-vertical.svg"
-                            alt="Menu"
-                            width={16}
-                            height={16}
-                          />
-                        </Button>
-                      </Trigger>
-                      <Portal>
-                        <Content
-                          avoidCollisions
-                          collisionPadding={15}
-                          sideOffset={8}
-                          align="end"
-                          onCloseAutoFocus={(e) => e.preventDefault()}
-                          className="shadow-header-menu border-black-700/40 bg-black-900 data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade z-20 mb-4 flex !w-48 flex-col gap-2.5 rounded-[10px] border px-5 py-4"
-                        >
-                          <Item
-                            onClick={() => setEditComment(comment.id)}
-                            className="p2-medium flex cursor-pointer items-center gap-2.5"
-                          >
-                            <EditIcon size={16} />
-                            Edit Comment
-                          </Item>
-                          <Item
-                            onClick={() => handleDeleteComment(comment.id)}
-                            onSelect={(e) => e.preventDefault()}
-                            className="p2-medium text-error-text flex cursor-pointer items-center gap-2.5"
-                          >
+                    {comment.authorId === viewerId && (
+                      <DropdownMenu>
+                        <Trigger asChild>
+                          <Button className="w-auto">
                             <Image
-                              src="/assets/icons/trash.svg"
+                              src="/assets/icons/menu-vertical.svg"
+                              alt="Menu"
                               width={16}
-                              height={18}
-                              alt="Delete"
+                              height={16}
                             />
-                            Delete Comment
-                          </Item>
-                        </Content>
-                      </Portal>
-                    </DropdownMenu>
+                          </Button>
+                        </Trigger>
+                        <Portal>
+                          <Content
+                            avoidCollisions
+                            collisionPadding={15}
+                            sideOffset={8}
+                            align="end"
+                            onCloseAutoFocus={(e) => e.preventDefault()}
+                            className="bg-light200__dark700 shadow-header-menu data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade z-20 mb-4 flex w-40 flex-col gap-2.5 rounded-[10px] px-5 py-4"
+                          >
+                            <Item
+                              onClick={() => setEditComment(comment.id)}
+                              className="p2-medium flex cursor-pointer items-center gap-2.5"
+                            >
+                              <EditIcon size={16} />
+                              Edit
+                            </Item>
+                            <Item
+                              onClick={() => handleDeleteComment(comment.id)}
+                              onSelect={(e) => e.preventDefault()}
+                              className="p2-medium !text-error-text flex cursor-pointer items-center gap-2.5"
+                            >
+                              <Image
+                                src="/assets/icons/trash.svg"
+                                width={16}
+                                height={18}
+                                alt="Delete"
+                              />
+                              Delete
+                            </Item>
+                          </Content>
+                        </Portal>
+                      </DropdownMenu>
+                    )}
                   </div>
                 </div>
 
@@ -262,14 +274,22 @@ const Comments: React.FC<ICommentsProps> = ({
                 </p>
                 {comment.replies && comment.replies.length > 0 && (
                   <div className="overflow-wrap break-word !mt-0 !w-full space-y-2 overflow-hidden text-wrap break-words rounded-lg p-2 text-[11px]">
-                    {comment.replies.map((reply) => (
-                      <div key={reply.id}>
+                    {comment.replies.map((reply, index) => (
+                      <div key={index}>
                         <div className="flex items-center">
                           <div className="flex gap-1">
                             <Image
                               src={
-                                reply.author.avatarImg ||
-                                '/assets/images/avatars/avatar-1.svg'
+                                reply.author.avatarImg?.startsWith(
+                                  CLOUDINARY_URL
+                                )
+                                  ? getCldImageUrl({
+                                      width: 20,
+                                      height: 20,
+                                      src: reply.author.avatarImg,
+                                      crop: 'fill',
+                                    })
+                                  : '/assets/images/avatars/avatar-1.svg'
                               }
                               width={20}
                               height={20}
@@ -294,16 +314,17 @@ const Comments: React.FC<ICommentsProps> = ({
               </div>
             </div>
           )}
-          {replyingComment === comment.id && (
+          {isReplyingComment === comment.id && (
             <CommentForm
+              key={comment.id}
               comment={comment}
               isReplying={true}
               isEdit={false}
               setOpenEdit={() => setEditComment(null)}
-              setOpenReply={() => setReplyingComment(null)}
+              setOpenReply={() => setIsReplyingComment(null)}
             />
           )}
-        </>
+        </div>
       ))}
     </div>
   );

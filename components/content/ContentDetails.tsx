@@ -230,7 +230,7 @@ const ContentDetails: React.FC<IContentDetailsProps> = ({
       </div>
       <Comments
         contentId={content.id}
-        commentAuthorId={viewerId}
+        viewerId={viewerId}
         comments={comments}
       />
     </main>

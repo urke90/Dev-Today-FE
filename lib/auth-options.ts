@@ -29,6 +29,8 @@ export const authOptions: AuthOptions = {
         try {
           if (!credentials) return null;
 
+          console.log('AUTHORIZE CALLBACK');
+
           const response = await fetch(BASE_API_URL + '/user/login', {
             method: 'POST',
             headers: {
@@ -42,7 +44,6 @@ export const authOptions: AuthOptions = {
 
           if (!response.ok) {
             console.error('Error response from server', response);
-            throw new Error('Server responded with an error');
           }
 
           const data = await response.json();
@@ -51,8 +52,7 @@ export const authOptions: AuthOptions = {
 
           return data.user;
         } catch (error) {
-          console.log(error);
-          throw new Error('Error while authorizing');
+          console.log('Error while authorization', error);
         }
       },
     }),
@@ -87,6 +87,7 @@ export const authOptions: AuthOptions = {
     },
     async jwt({ token }) {
       if (!token.email) return token;
+
       try {
         const response = await fetch(
           BASE_API_URL + `/user/email/${token.email}`,
@@ -105,8 +106,9 @@ export const authOptions: AuthOptions = {
           token.name = data.user.userName;
         }
       } catch (error) {
-        console.log('Error inside jwt callback', error);
+        console.log('Error in jwt callback', error);
       }
+
       return token;
     },
     async session({ session, token }) {
@@ -117,8 +119,7 @@ export const authOptions: AuthOptions = {
           session.user.isOnboardingCompleted = token.isOnboardingCompleted;
         }
       } catch (error) {
-        console.error('signIn error: ', error);
-        throw new Error('Error while signing in');
+        console.log('Error in session callback', error);
       }
 
       return session;

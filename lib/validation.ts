@@ -240,7 +240,10 @@ export const baseCommentSchema = z.object({
 });
 
 export const editAndReplyCommentSchema = z.object({
-  text: z.string().min(2).max(1000),
+  text: z
+    .string()
+    .min(2, 'Comment must contain at least 2 characters.')
+    .max(1000),
 });
 
 export type IEditAndReplyCommentSchema = z.infer<

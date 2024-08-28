@@ -15,7 +15,6 @@ declare namespace NodeJS {
 
     NEXT_PUBLIC_GOOGLE_MAPS_API_KEY?: string;
 
-    NEXT_API_BASE_URL?: string;
     NEXT_PUBLIC_API_BASE_URL?: string;
   }
 }

@@ -22,7 +22,7 @@ export const middleware = async (request: NextRequest) => {
   ];
 
   if (!session) {
-    if (protectedPages.some((page) => url.includes(page))) {
+    if (protectedPages.some((page) => url.includes(page)) || url === '/') {
       return NextResponse.redirect(new URL('/login', request.url));
     }
   } else {
