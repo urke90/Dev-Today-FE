@@ -1,22 +1,25 @@
-import { CLOUDINARY_URL } from '@/constants';
+import GroupAdminsDialog from './GroupAdminsDialog';
+import GroupContent from './GroupContent';
+import GroupDropdownMenu from './GroupDropdownMenu';
+import GroupUsersDialog from './GroupUsersDialog';
+import JoinOrLeaveGroupButton from './JoinOrLeaveGroupButton';
+
+import SidebarContentCard from '../shared/RightSidebarItems/SidebarContentCard';
+import SidebarItemWrapper from '../shared/LeftSidebarItems/SidebarItemWrapper';
+import SidebarGroupItem from '../shared/LeftSidebarItems/SidebarGroupItem';
+
+import Image from 'next/image';
+import { getCldImageUrl } from 'next-cloudinary';
+
+import { EUserRole } from '@/types/user';
+import { EQueryType } from '@/types/queries';
 import type {
   IDetailsPageGroup,
   IGroupContentResponse,
   IGroupMembersResponse,
   IGroupWithCount,
 } from '@/types/group';
-import { EQueryType } from '@/types/queries';
-import { EUserRole } from '@/types/user';
-import { getCldImageUrl } from 'next-cloudinary';
-import Image from 'next/image';
-import SidebarGroupItem from '../shared/LeftSidebarItems/SidebarGroupItem';
-import SidebarItemWrapper from '../shared/LeftSidebarItems/SidebarItemWrapper';
-import SidebarContentCard from '../shared/RightSidebarItems/SidebarContentCard';
-import GroupAdminsDialog from './GroupAdminsDialog';
-import GroupContent from './GroupContent';
-import GroupDropdownMenu from './GroupDropdownMenu';
-import GroupUsersDialog from './GroupUsersDialog';
-import JoinOrLeaveGroupButton from './JoinOrLeaveGroupButton';
+import { CLOUDINARY_URL } from '@/constants';
 
 // ----------------------------------------------------------------
 
@@ -70,20 +73,20 @@ const GroupDetails: React.FC<IGroupDetailsProps> = ({
         </div>
         <div className="left-sidebar-item gap-3">
           <p className="p2-bold">Statistical Highlights</p>
-          <ul className="flex md:flex-col  gap-2.5">
-            <li className="flex items-center gap-1 p3-bold">
+          <ul className="flex gap-2.5  md:flex-col">
+            <li className="p3-bold flex items-center gap-1">
               <span className="p3-medium !text-primary-500">
                 {group._count.contents}
               </span>
               Posts
             </li>
-            <li className="flex items-center gap-1 p3-bold">
+            <li className="p3-bold flex items-center gap-1">
               <span className="p3-medium !text-primary-500">
                 {membersCount.users}
               </span>
               Members
             </li>
-            <li className="flex items-center gap-1 p3-bold">
+            <li className="p3-bold flex items-center gap-1">
               <span className="p3-medium !text-primary-500">
                 {membersCount.admins}
               </span>
@@ -110,10 +113,10 @@ const GroupDetails: React.FC<IGroupDetailsProps> = ({
           )}
         </div>
       </aside>
-      <main className="main-content gap-5  mx-auto">
-        <div className="flex flex-col gap-2.5 bg-light100__dark800 py-4 px-2.5 md:py-2.5 rounded-2xl shadow-card">
+      <main className="main-content mx-auto  gap-5">
+        <div className="bg-light100__dark800 flex flex-col gap-2.5 rounded-2xl px-2.5 py-4 shadow-card md:py-2.5">
           <div
-            className={`relative w-full h-24 md:h-44 ${!group.coverImage ? 'flex-center bg-primary-100 dark:bg-black-700 rounded-[10px]' : ''}`}
+            className={`relative h-24 w-full md:h-44 ${!group.coverImage ? 'flex-center rounded-[10px] bg-primary-100 dark:bg-black-700' : ''}`}
           >
             {group.coverImage ? (
               <Image
@@ -134,7 +137,7 @@ const GroupDetails: React.FC<IGroupDetailsProps> = ({
           </div>
           <div className="flex-between gap-2.5 md:px-2.5">
             <div className="flex items-center gap-3.5 md:gap-5">
-              <div className="relative size-14 md:size-[70px] shrink-0">
+              <div className="relative size-14 shrink-0 md:size-[70px]">
                 <Image
                   fill
                   src={groupProfileImage || '/assets/icons/image-preview.svg'}
@@ -199,18 +202,18 @@ const GroupDetails: React.FC<IGroupDetailsProps> = ({
               group.members.map(({ avatarImg, id, userName }, index) => (
                 <li
                   key={id}
-                  className="flex-center relative bg-white-600 size-10 rounded-full"
+                  className="flex-center relative size-10 rounded-full bg-white-600"
                 >
                   <Image
                     src={avatarImg || '/assets/images/avatars/avatar-1.svg'}
                     width={28}
                     height={34}
                     alt={userName}
-                    className="rounded-full shrink-0"
+                    className="shrink-0 rounded-full"
                   />
                   {index === group.members.length - 1 && (
-                    <div className="absolute flex-center bg-[#0A182D] z-10 size-full opacity-70 inset-0 rounded-full">
-                      <span className="cap-10 cursor-default !text-white-100 !text-sm">
+                    <div className="flex-center absolute inset-0 z-10 size-full rounded-full bg-[#0A182D] opacity-70">
+                      <span className="cap-10 cursor-default !text-sm !text-white-100">
                         {group._count.members}+
                       </span>
                     </div>
@@ -232,7 +235,7 @@ const GroupDetails: React.FC<IGroupDetailsProps> = ({
               group.members?.map(({ avatarImg, id, role, userName }) =>
                 role === EUserRole.ADMIN ? (
                   <li key={id} className="flex items-center gap-1.5">
-                    <div className="flex-center bg-white-600 size-[30px] rounded-full shrink-0">
+                    <div className="flex-center size-[30px] shrink-0 rounded-full bg-white-600">
                       <Image
                         src={avatarImg || '/assets/images/avatars/avatar-1.svg'}
                         width={22}

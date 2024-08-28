@@ -20,7 +20,7 @@ const SidebarGroupItem: React.FC<ISidebarGroupItemProps> = ({
     <li>
       <Link
         href={'/groups/' + id}
-        className="flex gap-2.5 hover-sidebar-items rounded-md"
+        className="hover-sidebar-items flex gap-2.5 rounded-md"
       >
         <Image
           src={profileImage || '/assets/icons/image-preview.svg'}

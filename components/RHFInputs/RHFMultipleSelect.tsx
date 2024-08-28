@@ -80,7 +80,7 @@ const RHFMultipleSelect: React.FC<IRHFMultipleSelectProps> = ({
                   `bg-black-700 dark:text-white-300 ${
                     state.isFocused ? 'dark:!bg-black-700 !bg-white-300' : ''
                   } !cursor-pointer`,
-                menuList: () => `bg-white-100 dark:bg-black-800`,
+                menuList: () => 'bg-white-100 dark:bg-black-800',
                 multiValueLabel: () => 'dark:text-white-300 text-black-700',
                 multiValueRemove: () =>
                   'dark:!text-white-300 !text-black-700 hover:!bg-inherit',
@@ -113,7 +113,7 @@ export const generateSelectStyles = () => {
       `bg-black-700 dark:text-white-300 ${
         state.isFocused ? 'dark:!bg-black-700 !bg-white-300' : ''
       } !cursor-pointer`,
-    menuList: () => `bg-white-100 dark:bg-black-800`,
+    menuList: () => 'bg-white-100 dark:bg-black-800',
     multiValueLabel: () => 'dark:text-white-300 text-black-700',
     multiValueRemove: () =>
       'dark:!text-white-300 !text-black-700 hover:!bg-inherit',
@@ -130,7 +130,7 @@ export const MemberAdminFormatedOption = (
   if (context === 'value') {
     return (
       <div className="flex items-center gap-1">
-        <div className="flex-center size-[20px] bg-white-100 rounded-full">
+        <div className="flex-center size-[20px] rounded-full bg-white-100">
           <Image
             src={'/assets/images/avatars/avatar-2.svg'}
             alt={option.label}

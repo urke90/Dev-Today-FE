@@ -1,9 +1,14 @@
 'use client';
 
+import GroupItemCard from '../shared/GroupItemCard';
 import LoadingSpinner from '../shared/LoadingSpinner';
+import MeetupItemCard from '../shared/MeetupItemCard';
+import PodcastItemCard from '../shared/PodcastItemCard';
+import PostItemCard from '../shared/PostItemCard';
 
 import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 
 import { fetchUserContent, fetchUserGroups } from '@/api/queries';
 import { EContentGroupQueries } from '@/constants/react-query';
@@ -18,12 +23,6 @@ import type {
 } from '@/types/group';
 import { EQueryType } from '@/types/queries';
 import { typedFetch } from '@/utils/api';
-import toast from 'react-hot-toast';
-
-import GroupItemCard from '../shared/GroupItemCard';
-import MeetupItemCard from '../shared/MeetupItemCard';
-import PodcastItemCard from '../shared/PodcastItemCard';
-import PostItemCard from '../shared/PostItemCard';
 
 // ----------------------------------------------------------------
 
@@ -50,17 +49,20 @@ interface IContentListProps {
   contentData: IProfilePageContentResponse;
   groupsData: IProfilePageGroupsResponse;
   userId: string;
-  userName: string;
+  author: {
+    userName: string;
+    avatarImg: string | null;
+  };
   viewerId: string;
 }
 
 // TODO figure out why without "groupsToRender[0] !== undefined &&" logic for rendering groups is not working
-const ContentList: React.FC<IContentListProps> = ({
+const ContentListProfile: React.FC<IContentListProps> = ({
   contentType,
   contentData,
   groupsData,
   userId,
-  userName,
+  author,
   viewerId,
 }) => {
   const queryClient = useQueryClient();
@@ -69,7 +71,7 @@ const ContentList: React.FC<IContentListProps> = ({
   // const [content, setContent] = useState<IContent[]>(contentItems);
 
   const {
-    isLoading: isLoadingContent,
+    isFetchingNextPage: isLoadingContent,
     data: content,
     hasNextPage: hasNextContentPage,
     fetchNextPage: fetchNextContentPage,
@@ -89,7 +91,7 @@ const ContentList: React.FC<IContentListProps> = ({
   });
 
   const {
-    isLoading: isLoadingGroups,
+    isFetchingNextPage: isLoadingGroups,
     data: groups,
     hasNextPage: hasNextGroupsPage,
     fetchNextPage: fetchNextGroupsPage,
@@ -229,7 +231,7 @@ const ContentList: React.FC<IContentListProps> = ({
                   description={description}
                   tags={tags}
                   createdAt={createdAt}
-                  author={userName}
+                  author={author}
                   viewsCount={viewsCount}
                   likesCount={likesCount}
                   commentsCount={commentsCount}
@@ -292,7 +294,7 @@ const ContentList: React.FC<IContentListProps> = ({
                   title={title}
                   description={description}
                   tags={tags}
-                  author={userName}
+                  author={author}
                   createdAt={createdAt}
                   isLiked={isLiked}
                   handleLikeContent={handleLikeContent}
@@ -347,7 +349,7 @@ const ContentList: React.FC<IContentListProps> = ({
                 description={description}
                 tags={tags}
                 createdAt={createdAt}
-                author={userName}
+                author={author}
                 viewsCount={viewsCount}
                 likesCount={likesCount}
                 commentsCount={commentsCount}
@@ -383,4 +385,4 @@ const ContentList: React.FC<IContentListProps> = ({
   );
 };
 
-export default ContentList;
+export default ContentListProfile;

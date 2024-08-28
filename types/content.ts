@@ -27,7 +27,6 @@ export interface IContent {
     userName: string;
     avatarImg: string;
   };
-  // author: IProfileUser;
   authorId: string;
   likedBy: IProfileUser[];
   likes: ILike[] | undefined;

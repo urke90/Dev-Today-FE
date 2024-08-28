@@ -1,7 +1,8 @@
 'use client';
 
-import Image from 'next/image';
 import ThemeLogo from '../shared/ThemeLogo';
+
+import Image from 'next/image';
 
 // ----------------------------------------------------------------
 
@@ -25,19 +26,19 @@ const LeftSidebar: React.FC<ILeftSidebarProps> = ({
 }) => {
   return (
     <div className="auth-onboarding-left-sidebar">
-      <div className="mb-12 mt-9 md:ml-12 md:mb-20 max-md:mx-auto">
+      <div className="mb-12 mt-9 max-md:mx-auto md:mb-20 md:ml-12">
         <ThemeLogo isMounted={isMounted} theme={theme} />
       </div>
-      <div className="max-w-md w-full max-md:hidden flex flex-col gap-10 mx-auto">
+      <div className="mx-auto flex w-full max-w-md flex-col gap-10 max-md:hidden">
         <h1 className="d1-bold">{title}</h1>
         <ul className="flex flex-col gap-5">
           {listItems.map((item, index) => (
             <li
               key={index}
-              className="flex items-center gap-5 rounded-lg bg-white-100 p-5 dark:bg-black-700 p1-medium"
+              className="p1-medium flex items-center gap-5 rounded-lg bg-white-100 p-5 dark:bg-black-700"
             >
               <div
-                className={`flex-center dark:bg-black-800 ${item.bgColor} size-[60px] rounded-md shrink-0`}
+                className={`flex-center dark:bg-black-800 ${item.bgColor} size-[60px] shrink-0 rounded-md`}
               >
                 <Image
                   src={item.imgUrl}

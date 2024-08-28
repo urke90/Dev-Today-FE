@@ -2,6 +2,19 @@
 
 // ----------------------------------------------------------------
 
+import MemberItemCard from './MemberItemCard';
+
+import ContentNavLinks from '../shared/ContentNavLinks';
+import LoadingSpinner from '../shared/LoadingSpinner';
+import MeetupItemCard from '../shared/MeetupItemCard';
+import Pagination from '../shared/Pagination';
+import PodcastItemCard from '../shared/PodcastItemCard';
+import PostItemCard from '../shared/PostItemCard';
+
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+
 import {
   assignAdminRole,
   removeAdminRole,
@@ -16,16 +29,6 @@ import type {
 } from '@/types/group';
 import { EQueryType } from '@/types/queries';
 import { typedFetch } from '@/utils/api';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
-import ContentNavLinks from '../shared/ContentNavLinks';
-import LoadingSpinner from '../shared/LoadingSpinner';
-import MeetupItemCard from '../shared/MeetupItemCard';
-import Pagination from '../shared/Pagination';
-import PodcastItemCard from '../shared/PodcastItemCard';
-import PostItemCard from '../shared/PostItemCard';
-import MemberItemCard from './MemberItemCard';
 
 // ----------------------------------------------------------------
 
@@ -61,7 +64,7 @@ const GroupContent: React.FC<IGroupContentWrapperProps> = ({
   const [page, setPage] = useState(1);
 
   const {
-    isLoading: isPendingContent,
+    isLoading: isLoadingContent,
     error: contentError,
     data: contentData,
   } = useQuery<IGroupContentResponse>({
@@ -72,7 +75,7 @@ const GroupContent: React.FC<IGroupContentWrapperProps> = ({
   });
 
   const {
-    isLoading: isPendingMembers,
+    isLoading: isLoadingMembers,
     error: membersError,
     data: membersData,
   } = useQuery<IGroupMembersResponse>({
@@ -229,7 +232,7 @@ const GroupContent: React.FC<IGroupContentWrapperProps> = ({
                 description={description}
                 tags={tags}
                 createdAt={createdAt}
-                author={author.userName}
+                author={author}
                 viewsCount={viewsCount}
                 likesCount={likesCount}
                 commentsCount={commentsCount}
@@ -289,7 +292,7 @@ const GroupContent: React.FC<IGroupContentWrapperProps> = ({
                 title={title}
                 description={description}
                 tags={tags}
-                author={author.userName}
+                author={author}
                 createdAt={createdAt}
                 isLiked={isLiked}
                 handleLikeContent={handleLikeContent}
@@ -348,7 +351,7 @@ const GroupContent: React.FC<IGroupContentWrapperProps> = ({
               description={description}
               tags={tags}
               createdAt={createdAt}
-              author={author.userName}
+              author={author}
               viewsCount={viewsCount}
               likesCount={likesCount}
               commentsCount={commentsCount}
@@ -376,7 +379,7 @@ const GroupContent: React.FC<IGroupContentWrapperProps> = ({
     <>
       <ContentNavLinks isGroupPage />
       <ul className={styles}>{renderedContent}</ul>
-      {(isPendingContent || isPendingMembers) && (
+      {(isLoadingContent || isLoadingMembers) && (
         <div className="p-1">
           <LoadingSpinner />
         </div>

@@ -19,19 +19,19 @@ const Pagination: React.FC<IPaginationProps> = ({
     <div className="flex-center">
       <div className="flex">
         <Button
-          className="bg-white-100 dark:bg-black-800 rounded-[5px] py-2.5 px-3.5 shadow-card"
+          className="rounded-[5px] bg-white-100 px-3.5 py-2.5 shadow-card dark:bg-black-800"
           onClick={() => setPage((prevPage) => prevPage - 1)}
           disabled={disablePrevBtn}
         >
           <span className="p3-medium break-keep">Prev</span>
         </Button>
-        <div className="flex-center py-2.5 px-8">
+        <div className="flex-center px-8 py-2.5">
           <span className="p3-regular break-keep">
             {currentPage}/{totalPages}
           </span>
         </div>
         <Button
-          className="bg-white-100 dark:bg-black-800 rounded-[5px] py-2.5 px-3.5 shadow-card"
+          className="rounded-[5px] bg-white-100 px-3.5 py-2.5 shadow-card dark:bg-black-800"
           onClick={() => {
             setPage((prevPage) => prevPage + 1);
           }}

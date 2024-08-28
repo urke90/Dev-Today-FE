@@ -1,13 +1,15 @@
 'use client';
 
+import RHFMultipleSelect from '../RHFInputs/RHFMultipleSelect';
+import RHFTextarea from '../RHFInputs/RHFTextarea';
+import { Button } from '../ui/button';
+import RHFProfileImageUpload from '../RHFInputs/RHFProfileImageUpload';
+
 import { zodResolver } from '@hookform/resolvers/zod';
 import { getCldImageUrl } from 'next-cloudinary';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import RHFMultipleSelect from '../RHFInputs/RHFMultipleSelect';
-import RHFTextarea from '../RHFInputs/RHFTextarea';
-import { Button } from '../ui/button';
 
 import RHFInput from '@/components/RHFInputs/RHFInput';
 import { Form } from '@/components/ui/form';
@@ -15,7 +17,6 @@ import { CLOUDINARY_URL } from '@/constants';
 import { IUpdateProfileSchema, updateProfileSchema } from '@/lib/validation';
 import type { IProfileUser } from '@/types/user';
 import { typedFetch } from '@/utils/api';
-import RHFProfileImageUpload from '../RHFInputs/RHFProfileImageUpload';
 
 // ----------------------------------------------------------------
 
@@ -107,7 +108,7 @@ const EditProfile: React.FC<IEditProfileProps> = ({ user }) => {
             />
           </div>
           <p className="p1-bold">Social Media</p>
-          <div className="border-white-border dark:border-black-800 flex flex-col gap-5 border-b sm:flex-row">
+          <div className="flex flex-col gap-5 border-b border-white-border dark:border-black-800 sm:flex-row">
             <RHFInput
               name="linkedinName"
               label="LinkedIn"
@@ -119,7 +120,7 @@ const EditProfile: React.FC<IEditProfileProps> = ({ user }) => {
               placeholder="https://linkedin.com/"
             />
           </div>
-          <div className="border-white-border dark:border-black-800 flex flex-col gap-5 border-b sm:flex-row">
+          <div className="flex flex-col gap-5 border-b border-white-border dark:border-black-800 sm:flex-row">
             <RHFInput
               name="twitterName"
               label="LinkedIn"
@@ -131,7 +132,7 @@ const EditProfile: React.FC<IEditProfileProps> = ({ user }) => {
               placeholder="https://twitter.com/"
             />
           </div>
-          <div className="border-white-border dark:border-black-800 flex flex-col gap-5 border-b sm:flex-row">
+          <div className="flex flex-col gap-5 border-b border-white-border dark:border-black-800 sm:flex-row">
             <RHFInput
               name="instagramName"
               label="Instagram"

@@ -1,5 +1,7 @@
 'use client';
 
+import { Button } from '../ui/button';
+
 import {
   Content,
   DropdownMenu,
@@ -8,11 +10,10 @@ import {
   Trigger,
 } from '@radix-ui/react-dropdown-menu';
 import Image from 'next/image';
-
-import { EUserRole } from '@/types/user';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
-import { Button } from '../ui/button';
+
+import { EUserRole } from '@/types/user';
 
 interface IMemberItemCardProps {
   id: string;
@@ -73,7 +74,7 @@ const MemberItemCard: React.FC<IMemberItemCardProps> = ({
   return (
     <li className="flex-between bg-light100__dark800 rounded-xl p-5 shadow-card">
       <div className="flex items-center gap-1.5">
-        <div className="flex-center bg-white-600 size-[30px] rounded-full shrink-0">
+        <div className="flex-center size-[30px] shrink-0 rounded-full bg-white-600">
           <Image
             src={avatarImg || '/assets/images/avatars/avatar-1.svg'}
             width={22}
@@ -82,7 +83,7 @@ const MemberItemCard: React.FC<IMemberItemCardProps> = ({
             className="rounded-full"
           />
         </div>
-        <span className="p1-medium dark:!text-white-200 !text-black-800">
+        <span className="p1-medium !text-black-800 dark:!text-white-200">
           {userName}
         </span>
       </div>
@@ -105,7 +106,7 @@ const MemberItemCard: React.FC<IMemberItemCardProps> = ({
               sideOffset={8}
               align="end"
               onCloseAutoFocus={(e) => e.preventDefault()}
-              className="bg-light200__dark700 shadow-header-menu data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade z-20 mb-4 flex w-42 flex-col gap-2.5 rounded-[10px] py-4 px-5 "
+              className="bg-light200__dark700 shadow-header-menu w-42 z-20 mb-4 flex flex-col gap-2.5 rounded-[10px] px-5 py-4 data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade "
             >
               <Item
                 onSelect={
@@ -113,12 +114,7 @@ const MemberItemCard: React.FC<IMemberItemCardProps> = ({
                     ? handleRemoveAdminRole
                     : handleAssignAdminRole
                 }
-                // onClick={
-                //   role === EUserRole.ADMIN
-                //     ? handleRemoveAdminRole
-                //     : handleAssignAdminRole
-                // }
-                className="flex items-center gap-2.5 p3-medium cursor-pointer"
+                className="dropdown-item"
               >
                 {role === EUserRole.ADMIN
                   ? 'Remove Admin Role'
@@ -126,7 +122,7 @@ const MemberItemCard: React.FC<IMemberItemCardProps> = ({
               </Item>
               <Item
                 onSelect={handleRemoveMember}
-                className="flex items-center gap-2.5 p3-medium !text-error-text cursor-pointer"
+                className="dropdown-item !text-error-text"
               >
                 Remove User
               </Item>

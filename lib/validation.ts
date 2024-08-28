@@ -1,5 +1,6 @@
-import { EContentType } from '@/types/content';
 import z from 'zod';
+
+import { EContentType } from '@/types/content';
 
 // ----------------------------------------------------------------
 
@@ -96,14 +97,16 @@ export type IUpdateProfileSchema = z.infer<typeof updateProfileSchema>;
 export const baseContentSchema = z.object({
   id: z.string(),
   authorId: z.string(),
-  title: z.string().min(3).max(100),
+  title: z.string().min(3, 'Title must be at least characters long').max(100),
   type: z.nativeEnum(EContentType),
   groupId: z.object({
     value: z.string().min(1),
     label: z.string().min(1),
   }),
   coverImage: z.string().url().nullable(),
-  description: z.string().min(30),
+  description: z
+    .string()
+    .min(10, 'Content must be at least 10 characters long'),
   tags: z
     .array(
       z.object({
@@ -133,7 +136,7 @@ export const meetupSchema = baseContentSchema.extend({
     lat: z.number(),
     lng: z.number(),
   }),
-  meetupDate: z.coerce.date(),
+  meetupDate: z.coerce.date({ invalid_type_error: 'INVALID' }),
 });
 
 export type IMeetup = z.infer<typeof meetupSchema>;
@@ -204,6 +207,8 @@ export const commentFormSchema = z.object({
     .optional(),
 });
 
+export type ICommentFormSchema = z.infer<typeof commentFormSchema>;
+
 export const baseCommentSchema = z.object({
   id: z.string(),
   text: z.string(),
@@ -235,8 +240,15 @@ export const baseCommentSchema = z.object({
 });
 
 export const editAndReplyCommentSchema = z.object({
-  text: z.string().min(2).max(1000),
+  text: z
+    .string()
+    .min(2, 'Comment must contain at least 2 characters.')
+    .max(1000),
 });
+
+export type IEditAndReplyCommentSchema = z.infer<
+  typeof editAndReplyCommentSchema
+>;
 
 export type IComment = z.infer<typeof baseCommentSchema>;
 
@@ -274,3 +286,47 @@ export const updateGroupSchema = baseGroupSchema.omit({
 export type IUpdateGroupSchema = z.infer<typeof updateGroupSchema>;
 
 /************************************************************* GROUP *******************************************************************/
+
+export const createOrUpdateContentSchema = z.object({
+  authorId: z.string(),
+  title: z.string().min(3, 'Title must be at least characters long').max(100),
+  type: z.nativeEnum(EContentType),
+  groupId: z.object({
+    value: z.string().min(1),
+    label: z.string().min(1),
+  }),
+  coverImage: z.string().url().nullable(),
+  description: z
+    .string()
+    .min(10, 'Content must be at least 10 characters long'),
+  tags: z
+    .array(
+      z.object({
+        label: z.string().min(1).max(20, 'Tag must be max 20 characters long'),
+        value: z.string().min(1),
+      })
+    )
+    .max(5),
+  meetupLocation: z
+    .object({
+      address: z
+        .string()
+        .trim()
+        .min(3, 'Please search for valid address with Google Maps'),
+      lat: z.number(),
+      lng: z.number(),
+    })
+    .optional(),
+  meetupDate: z.coerce.date({
+    invalid_type_error: 'Please provide valid date',
+  }),
+  podcastFile: z.string().min(1, 'Please provide valid audio file'),
+  podcastTitle: z
+    .string()
+    .min(3, 'Podcast title must be at least 3 characters long')
+    .optional(),
+});
+
+export type ICreateOrUpdateContentSchema = z.infer<
+  typeof createOrUpdateContentSchema
+>;

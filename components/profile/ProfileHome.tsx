@@ -1,7 +1,13 @@
+import ContentListProfile from './ContentListProfile';
 import PerformanceItem from './PerformanceItem';
 import ProfileSidebarInfo from './ProfileSidebarInfo';
 import SocialMediaLinks from './SocialMediaLinks';
 
+import BadgeItem from '../shared/BadgeItem';
+import ContentNavLinks from '../shared/ContentNavLinks';
+import SidebarContentCard from '../shared/RightSidebarItems/SidebarContentCard';
+
+import { getCldImageUrl } from 'next-cloudinary';
 import Image from 'next/image';
 
 import { CLOUDINARY_URL } from '@/constants';
@@ -10,11 +16,6 @@ import type { IProfilePageGroupsResponse } from '@/types/group';
 import { EQueryType } from '@/types/queries';
 import type { IProfileUser } from '@/types/user';
 import { calculateTimeAgo } from '@/utils/format';
-import { getCldImageUrl } from 'next-cloudinary';
-import BadgeItem from '../shared/BadgeItem';
-import ContentNavLinks from '../shared/ContentNavLinks';
-import SidebarContentCard from '../shared/RightSidebarItems/SidebarContentCard';
-import ContentList from './ContentList';
 
 // ----------------------------------------------------------------
 
@@ -37,20 +38,18 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
   groupsData,
   viewerId,
 }) => {
-  let profileImage = user.avatarImg;
-
-  if (profileImage.startsWith(CLOUDINARY_URL)) {
-    profileImage = getCldImageUrl({
-      width: 110,
-      height: 110,
-      crop: 'fill',
-      src: profileImage,
-    });
-  }
+  const transformedAvatarImg = user.avatarImg.startsWith(CLOUDINARY_URL)
+    ? getCldImageUrl({
+        width: 100,
+        height: 100,
+        src: user.avatarImg,
+        crop: 'fill',
+      })
+    : user.avatarImg;
 
   return (
     <div className="content-wrapper">
-      <aside className="left-sidebar bg-light100__dark800 rounded-2xl !p-0 !pb-10 text-center">
+      <aside className="left-sidebar bg-light100__dark800 shadow-card rounded-2xl !p-0 !pb-10 text-center">
         <div className="profile-background relative h-[106px] rounded-t-2xl lg:h-[83px]">
           <Image
             fill
@@ -62,7 +61,7 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
         <div className="flex flex-col gap-y-6 px-5">
           <div className="relative z-10 -mt-20">
             <Image
-              src={profileImage || '/assets/icons/image-preview.svg'}
+              src={transformedAvatarImg || '/assets/icons/image-preview.svg'}
               width={110}
               height={110}
               alt="profile"
@@ -99,7 +98,7 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
             </p>
           )}
           {(user?.linkedinLink || user?.twitterLink || user?.instagramLink) && (
-            <div className="gap-6 flex-center">
+            <div className="flex-center gap-6">
               <SocialMediaLinks
                 linkedinLink={user?.linkedinLink}
                 twitterLink={user?.twitterLink}
@@ -115,12 +114,15 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
       <main className="main-content mx-auto w-full">
         <div className="flex w-full flex-col gap-5">
           <ContentNavLinks />
-          <ContentList
+          <ContentListProfile
             contentType={contentType}
             contentData={contentData}
             groupsData={groupsData}
             userId={user.id}
-            userName={user.name}
+            author={{
+              userName: user.userName,
+              avatarImg: user.avatarImg,
+            }}
             viewerId={viewerId}
           />
         </div>

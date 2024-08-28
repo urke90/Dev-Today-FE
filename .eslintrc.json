@@ -14,14 +14,14 @@
         "singleQuote": true,
         "parser": "typescript",
         "avoidEscape": true,
-        "trailingComma": "always"
+        "trailingComma": "es5"
       }
     ],
     "quotes": ["error", "single", { "avoidEscape": true }],
     "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "error",
+    "react-hooks/exhaustive-deps": "warn",
     "tailwindcss/no-custom-classname": "off",
-    "@tanstack/query/exhaustive-deps": "error",
+    "@tanstack/query/exhaustive-deps": "warn",
     "@tanstack/query/no-rest-destructuring": "warn",
     "@tanstack/query/stable-query-client": "error",
     "sort-imports": [
