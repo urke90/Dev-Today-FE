@@ -61,6 +61,7 @@ const PodcastItemCard: React.FC<IPodcastItemCardProps> = ({
               width={50}
               height={50}
               alt={title}
+              className="size-[50px]"
             />
             <p className="p3-bold lg:p1-bold line-clamp-2">{title}</p>
           </div>
@@ -90,13 +91,14 @@ const PodcastItemCard: React.FC<IPodcastItemCardProps> = ({
         <div className="flex items-center gap-[7px] lg:gap-2.5">
           <div className="flex-center bg-white-300 dark:bg-white-600 relative size-[30px] rounded-full lg:size-[40px]">
             <Image
-              fill
+              width={40}
+              height={40}
               src={
                 author.avatarImg ||
                 `/assets/images/avatars/avatar-${generateRandomAvatarImgIndex()}.svg`
               }
               alt="avatar"
-              className="rounded-full"
+              className="size-[30px] rounded-full lg:size-[40px]"
             />
           </div>
           <div className="flex flex-col">

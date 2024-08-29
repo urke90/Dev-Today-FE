@@ -29,15 +29,15 @@ const SidebarPodcastItem: React.FC<ISidebarPodcastItemProps> = ({
             src={coverImage || '/assets/icons/image-preview.svg'}
             width={58}
             height={58}
-            alt={author}
-            className="shrink-0 rounded-[6px]"
+            alt={title}
+            className="size-[58px] shrink-0 rounded-[6px]"
           />
           <div className="flex flex-col gap-1.5">
             <p className="p3-medium line-clamp-1">{title}</p>
             <p className="subtitle-normal">by {author}</p>
           </div>
         </div>
-        <ArrowRightIcon className="shrink-0 text-white-400" />
+        <ArrowRightIcon className="text-white-400 shrink-0" />
       </Link>
     </li>
   );

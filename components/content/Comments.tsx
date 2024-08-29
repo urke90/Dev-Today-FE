@@ -13,14 +13,12 @@ import {
   Trigger,
 } from '@radix-ui/react-dropdown-menu';
 import { EditIcon } from 'lucide-react';
-import { getCldImageUrl } from 'next-cloudinary';
 import Image from 'next/image';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
-import { CLOUDINARY_URL } from '@/constants';
 import { revalidateRoute } from '@/lib/actions/revalidate';
 import {
   commentFormSchema,
@@ -112,7 +110,7 @@ const Comments: React.FC<ICommentsProps> = ({
 
   return (
     <div className="!mt-20 max-w-[825px] space-y-5">
-      <h2 className="h1-medium ">Comments</h2>
+      <h2 className="h1-medium">Comments</h2>
       <div className="flex items-center gap-3">
         <div className="bg-white-100 rounded-full p-1 px-2">
           <Image
@@ -147,7 +145,6 @@ const Comments: React.FC<ICommentsProps> = ({
         <div key={comment.id}>
           {editComment === comment.id ? (
             <CommentForm
-              key={comment.id}
               comment={comment}
               isReplying={false}
               isEdit={true}
@@ -160,25 +157,16 @@ const Comments: React.FC<ICommentsProps> = ({
                 <div className="flex  items-start justify-between sm:items-center">
                   <div className="flex items-center gap-1">
                     <div className="flex items-center gap-1">
-                      <div className="flex size-[28px] h-full items-center">
-                        <Image
-                          src={
-                            comment.author.avatarImg?.startsWith(CLOUDINARY_URL)
-                              ? getCldImageUrl({
-                                  width: 28,
-                                  height: 28,
-                                  src: comment.author.avatarImg,
-                                  crop: 'fill',
-                                })
-                              : '/assets/images/avatars/avatar-1.svg'
-                          }
-                          width={28}
-                          height={28}
-                          alt={comment.author.userName}
-                          className="h-full rounded-full object-cover"
-                        />
-                      </div>
-
+                      <Image
+                        src={
+                          comment.author.avatarImg ||
+                          '/assets/images/avatars/avatar-1.svg'
+                        }
+                        width={28}
+                        height={28}
+                        alt={comment.author.userName}
+                        className="size-7 rounded-full object-cover"
+                      />
                       <div className="ml-1 flex h-6 flex-col items-start sm:ml-0 md:flex-row md:items-center md:gap-2">
                         <h4 className="p3-bold !text-[12px] !font-semibold tracking-wide sm:!text-[14px] md:mb-2 md:font-bold">
                           {comment.author.userName}
@@ -219,7 +207,7 @@ const Comments: React.FC<ICommentsProps> = ({
                       width={16}
                       height={16}
                       alt="avatar"
-                      className="size-[16px] cursor-pointer"
+                      className="size-4 cursor-pointer"
                     />
                     {comment.authorId === viewerId && (
                       <DropdownMenu>
@@ -274,27 +262,19 @@ const Comments: React.FC<ICommentsProps> = ({
                 </p>
                 {comment.replies && comment.replies.length > 0 && (
                   <div className="overflow-wrap break-word !mt-0 !w-full space-y-2 overflow-hidden text-wrap break-words rounded-lg p-2 text-[11px]">
-                    {comment.replies.map((reply, index) => (
-                      <div key={index}>
+                    {comment.replies.map((reply) => (
+                      <div key={reply.id + '-' + reply.authorId}>
                         <div className="flex items-center">
                           <div className="flex gap-1">
                             <Image
                               src={
-                                reply.author.avatarImg?.startsWith(
-                                  CLOUDINARY_URL
-                                )
-                                  ? getCldImageUrl({
-                                      width: 20,
-                                      height: 20,
-                                      src: reply.author.avatarImg,
-                                      crop: 'fill',
-                                    })
-                                  : '/assets/images/avatars/avatar-1.svg'
+                                reply.author.avatarImg ||
+                                '/assets/images/avatars/avatar-1.svg'
                               }
                               width={20}
                               height={20}
                               alt="avatar"
-                              className="rounded-full"
+                              className="size-5 rounded-full"
                             />
                             {reply.author.userName}
 
@@ -316,7 +296,6 @@ const Comments: React.FC<ICommentsProps> = ({
           )}
           {isReplyingComment === comment.id && (
             <CommentForm
-              key={comment.id}
               comment={comment}
               isReplying={true}
               isEdit={false}

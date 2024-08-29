@@ -69,7 +69,7 @@ const PostItemCard: React.FC<IPostItemCardProps> = ({
           width={165}
           height={165}
           alt={title}
-          className="rounded-2xl object-cover max-md:hidden"
+          className="size-[165px] rounded-2xl object-cover max-md:hidden"
         />
         {/* RIGHT PART OF THE POST */}
         <div className="flex flex-1 flex-col gap-4">
@@ -117,9 +117,9 @@ const PostItemCard: React.FC<IPostItemCardProps> = ({
                     `/assets/images/avatars/avatar-${generateRandomAvatarImgIndex()}.svg`
                   }
                   width={28}
-                  height={34}
+                  height={28}
                   alt="avatar"
-                  className="rounded-full"
+                  className="size-[28px] rounded-full"
                 />
               </div>
               <div>

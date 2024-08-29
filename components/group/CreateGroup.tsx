@@ -157,8 +157,8 @@ const CreateGroup: React.FC<ICreateGroup> = ({ viewerId, group }) => {
                       <Image
                         src={coverImage}
                         alt="Cover Image"
-                        layout="fill"
-                        className="rounded-3xl object-cover"
+                        fill
+                        className="w-full rounded-3xl object-cover"
                       />
                       <Button
                         type="button"
@@ -197,10 +197,11 @@ const CreateGroup: React.FC<ICreateGroup> = ({ viewerId, group }) => {
                               className="bg-white-100 dark:bg-black-800 mb-3 flex max-w-[200px] items-center gap-3 rounded-lg py-2"
                             >
                               <Image
-                                src={'/assets/icons/upload-icon.svg'}
+                                src="/assets/icons/upload-icon.svg"
                                 alt="upload"
                                 width={16}
                                 height={16}
+                                className="size-4"
                               />
                               <p className="p3-regular">Upload a cover image</p>
                             </Button>

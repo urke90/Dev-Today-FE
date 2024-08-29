@@ -4,6 +4,7 @@ import PreviewContent from './PreviewContent';
 
 import CalendarIcon from '../icons/Calendar';
 import FrameIcon from '../icons/Frame';
+import MicrophoneIcon from '../icons/Microphone';
 import PodcastIcon from '../icons/Podcast';
 import { generateSelectStyles } from '../RHFInputs/RHFMultipleSelect';
 import LoadingSpinner from '../shared/LoadingSpinner';
@@ -323,7 +324,7 @@ const CreateContent: React.FC<ICreateContentProps> = ({
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full pb-10">
       <Form {...form}>
         <form className="space-y-8">
           <RHFInput
@@ -438,7 +439,7 @@ const CreateContent: React.FC<ICreateContentProps> = ({
                       <Image
                         src={coverImage}
                         alt="Cover Image"
-                        layout="fill"
+                        fill
                         className="rounded-3xl object-cover"
                       />
                       <Button
@@ -466,8 +467,6 @@ const CreateContent: React.FC<ICreateContentProps> = ({
                           }}
                           options={{
                             multiple: false,
-                            cropping: true,
-                            croppingShowDimensions: true,
                           }}
                         >
                           {({ open }) => (
@@ -597,7 +596,7 @@ const CreateContent: React.FC<ICreateContentProps> = ({
                               />
                             ) : (
                               <div className="flex-center">
-                                <p className="p3-bold text-white-400 flex-center ring-primary-500 hover:bg-primary-500 animate-bounce rounded-xl px-3 py-1 ring transition-colors">
+                                <p className="p3-bold flex-center text-white-400 ring-primary-500 hover:bg-primary-500 animate-bounce rounded-xl px-3 py-1 ring transition-colors">
                                   Select a date first to pick a time
                                 </p>
                               </div>
@@ -626,6 +625,7 @@ const CreateContent: React.FC<ICreateContentProps> = ({
                           process.env.NEXT_PUBLIC_CLOUDINARY_PRESEST_NAME
                         }
                         onSuccess={(res) => {
+                          console.log('RES ZA PODCAST FILE', res);
                           if (res.info && typeof res.info === 'object') {
                             field.onChange(res.info.secure_url);
                           } else {
@@ -642,22 +642,19 @@ const CreateContent: React.FC<ICreateContentProps> = ({
                             type="button"
                             className="border-white-border bg-white-100 text-black-900 placeholder:text-white-400 dark:bg-black-800 dark:text-white-100 !mt-2 flex w-full justify-start rounded-lg border p-3 text-sm font-medium placeholder:text-sm placeholder:font-normal focus-visible:outline-none md:px-5 dark:border-[#393E4F66] dark:placeholder:text-[#ADB3CC]"
                           >
-                            <Image
-                              src="/assets/icons/microphone.svg"
-                              alt="upload"
-                              width={11}
-                              height={15}
+                            <MicrophoneIcon
+                              className={`${field.value ? 'text-green-400 dark:text-green-700' : ''}`}
                             />
-                            <span className="subtitle-medium bg-white-200 dark:bg-black-700 rounded-md px-2 py-1 tracking-wide ">
-                              Choose a file
+                            <span
+                              className={`subtitle-medium ${field.value ? 'text-white-400 dark:!text-white-100 bg-green-400 dark:bg-green-700' : 'bg-white-200 dark:bg-black-700'}  rounded-md px-2 py-1 tracking-wide`}
+                            >
+                              {field.value ? 'File chosen' : 'Choose a file'}
                             </span>
                           </Button>
                         )}
                       </CldUploadWidget>
                     </FormControl>
-                    <div className="border border-red-500">
-                      <FormMessage />
-                    </div>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -690,7 +687,7 @@ const CreateContent: React.FC<ICreateContentProps> = ({
                       content_style: `body {
                            font-family: Roboto, sans-serif;
                            font-size: 14px;
-                           color: #FFFFFF !important;
+                           color: ${theme === 'dark' ? '#FFFFFF' : '#808191'} !important;
                            ${theme === 'dark' ? 'background-color: #262935;' : 'background-color: #ffffff;'}!important;
                           }
                            color: #FFFFFF !important;}
@@ -786,11 +783,7 @@ const CreateContent: React.FC<ICreateContentProps> = ({
             )}
           />
           <div className="p3-bold flex gap-5">
-            <Button
-              onClick={resetForm}
-              type="button"
-              className="bg-light100__dark800 hover:bg-primary-500 hover:!text-white-100 duration-200"
-            >
+            <Button onClick={resetForm} variant="cancel" type="button">
               Cancel
             </Button>
             <Button

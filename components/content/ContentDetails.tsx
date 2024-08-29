@@ -109,7 +109,7 @@ const ContentDetails: React.FC<IContentDetailsProps> = ({
               width={40}
               height={40}
               alt={content.title}
-              className="rounded-[10px]"
+              className="size-10 rounded-[10px]"
             />
           )}
         </div>
@@ -129,10 +129,10 @@ const ContentDetails: React.FC<IContentDetailsProps> = ({
             <div className="flex max-w-3xl gap-2">
               <Image
                 src={transformedAvatarImg || '/assets/icons/image-preview.svg'}
-                alt="avatar"
+                alt={author.userName}
                 width={72}
                 height={72}
-                className="rounded-md"
+                className="size-[72px] rounded-md"
               />
               <h2 className="d2-bold">{content?.title}</h2>
             </div>

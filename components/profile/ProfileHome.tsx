@@ -7,10 +7,8 @@ import BadgeItem from '../shared/BadgeItem';
 import ContentNavLinks from '../shared/ContentNavLinks';
 import SidebarContentCard from '../shared/RightSidebarItems/SidebarContentCard';
 
-import { getCldImageUrl } from 'next-cloudinary';
 import Image from 'next/image';
 
-import { CLOUDINARY_URL } from '@/constants';
 import type { IProfilePageContentResponse } from '@/types/content';
 import type { IProfilePageGroupsResponse } from '@/types/group';
 import { EQueryType } from '@/types/queries';
@@ -38,15 +36,6 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
   groupsData,
   viewerId,
 }) => {
-  const transformedAvatarImg = user.avatarImg.startsWith(CLOUDINARY_URL)
-    ? getCldImageUrl({
-        width: 100,
-        height: 100,
-        src: user.avatarImg,
-        crop: 'fill',
-      })
-    : user.avatarImg;
-
   return (
     <div className="content-wrapper">
       <aside className="left-sidebar bg-light100__dark800 shadow-card rounded-2xl !p-0 !pb-10 text-center">
@@ -61,11 +50,11 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
         <div className="flex flex-col gap-y-6 px-5">
           <div className="relative z-10 -mt-20">
             <Image
-              src={transformedAvatarImg || '/assets/icons/image-preview.svg'}
+              src={user.avatarImg || '/assets/icons/image-preview.svg'}
               width={110}
               height={110}
-              alt="profile"
-              className="ring-primary-500 mx-auto mb-2.5 rounded-full ring-4"
+              alt={user.userName}
+              className="ring-primary-500 mx-auto mb-2.5 size-[110px] rounded-full object-cover ring-4"
             />
             <h1 className="h1-medium">{user.userName}</h1>
             <p className="p3-regular dark:text-white-400">{user?.email}</p>
