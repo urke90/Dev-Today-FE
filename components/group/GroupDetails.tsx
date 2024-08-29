@@ -4,22 +4,20 @@ import GroupDropdownMenu from './GroupDropdownMenu';
 import GroupUsersDialog from './GroupUsersDialog';
 import JoinOrLeaveGroupButton from './JoinOrLeaveGroupButton';
 
-import SidebarContentCard from '../shared/RightSidebarItems/SidebarContentCard';
-import SidebarItemWrapper from '../shared/LeftSidebarItems/SidebarItemWrapper';
 import SidebarGroupItem from '../shared/LeftSidebarItems/SidebarGroupItem';
+import SidebarItemWrapper from '../shared/LeftSidebarItems/SidebarItemWrapper';
+import SidebarContentCard from '../shared/RightSidebarItems/SidebarContentCard';
 
 import Image from 'next/image';
-import { getCldImageUrl } from 'next-cloudinary';
 
-import { EUserRole } from '@/types/user';
-import { EQueryType } from '@/types/queries';
 import type {
   IDetailsPageGroup,
   IGroupContentResponse,
   IGroupMembersResponse,
   IGroupWithCount,
 } from '@/types/group';
-import { CLOUDINARY_URL } from '@/constants';
+import { EQueryType } from '@/types/queries';
+import { EUserRole } from '@/types/user';
 
 // ----------------------------------------------------------------
 
@@ -54,15 +52,6 @@ const GroupDetails: React.FC<IGroupDetailsProps> = ({
       ? membersCount.users++
       : membersCount.admins++
   );
-
-  let groupProfileImage = group.profileImage.startsWith(CLOUDINARY_URL)
-    ? getCldImageUrl({
-        width: 56,
-        height: 56,
-        crop: 'fill',
-        src: group.profileImage,
-      })
-    : group.profileImage;
 
   return (
     <div className="content-wrapper">
@@ -114,9 +103,9 @@ const GroupDetails: React.FC<IGroupDetailsProps> = ({
         </div>
       </aside>
       <main className="main-content mx-auto  gap-5">
-        <div className="bg-light100__dark800 flex flex-col gap-2.5 rounded-2xl px-2.5 py-4 shadow-card md:py-2.5">
+        <div className="bg-light100__dark800 shadow-card flex flex-col gap-2.5 rounded-2xl px-2.5 py-4 md:py-2.5">
           <div
-            className={`relative h-24 w-full md:h-44 ${!group.coverImage ? 'flex-center rounded-[10px] bg-primary-100 dark:bg-black-700' : ''}`}
+            className={`relative h-24 w-full md:h-44 ${!group.coverImage ? 'flex-center bg-primary-100 dark:bg-black-700 rounded-[10px]' : ''}`}
           >
             {group.coverImage ? (
               <Image
@@ -131,7 +120,7 @@ const GroupDetails: React.FC<IGroupDetailsProps> = ({
                 width={40}
                 height={40}
                 alt={group.name}
-                className="rounded-[10px]"
+                className="size-10 rounded-[10px]"
               />
             )}
           </div>
@@ -140,9 +129,9 @@ const GroupDetails: React.FC<IGroupDetailsProps> = ({
               <div className="relative size-14 shrink-0 md:size-[70px]">
                 <Image
                   fill
-                  src={groupProfileImage || '/assets/icons/image-preview.svg'}
+                  src={group.profileImage || '/assets/icons/image-preview.svg'}
                   alt={group.name}
-                  className="rounded-full"
+                  className="size-14 rounded-full"
                 />
               </div>
               <div>
@@ -202,7 +191,7 @@ const GroupDetails: React.FC<IGroupDetailsProps> = ({
               group.members.map(({ avatarImg, id, userName }, index) => (
                 <li
                   key={id}
-                  className="flex-center relative size-10 rounded-full bg-white-600"
+                  className="flex-center bg-white-600 relative size-10 rounded-full"
                 >
                   <Image
                     src={avatarImg || '/assets/images/avatars/avatar-1.svg'}
@@ -213,7 +202,7 @@ const GroupDetails: React.FC<IGroupDetailsProps> = ({
                   />
                   {index === group.members.length - 1 && (
                     <div className="flex-center absolute inset-0 z-10 size-full rounded-full bg-[#0A182D] opacity-70">
-                      <span className="cap-10 cursor-default !text-sm !text-white-100">
+                      <span className="cap-10 !text-white-100 cursor-default !text-sm">
                         {group._count.members}+
                       </span>
                     </div>
@@ -235,7 +224,7 @@ const GroupDetails: React.FC<IGroupDetailsProps> = ({
               group.members?.map(({ avatarImg, id, role, userName }) =>
                 role === EUserRole.ADMIN ? (
                   <li key={id} className="flex items-center gap-1.5">
-                    <div className="flex-center size-[30px] shrink-0 rounded-full bg-white-600">
+                    <div className="flex-center bg-white-600 size-[30px] shrink-0 rounded-full">
                       <Image
                         src={avatarImg || '/assets/images/avatars/avatar-1.svg'}
                         width={22}

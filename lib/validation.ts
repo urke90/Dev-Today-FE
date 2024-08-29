@@ -291,10 +291,15 @@ export const createOrUpdateContentSchema = z.object({
   authorId: z.string(),
   title: z.string().min(3, 'Title must be at least characters long').max(100),
   type: z.nativeEnum(EContentType),
-  groupId: z.object({
-    value: z.string().min(1),
-    label: z.string().min(1),
-  }),
+  groupId: z.object(
+    {
+      value: z.string().min(1),
+      label: z.string().min(1),
+    },
+    {
+      required_error: 'Group is required',
+    }
+  ),
   coverImage: z.string().url().nullable(),
   description: z
     .string()
@@ -320,7 +325,9 @@ export const createOrUpdateContentSchema = z.object({
   meetupDate: z.coerce.date({
     invalid_type_error: 'Please provide valid date',
   }),
-  podcastFile: z.string().min(1, 'Please provide valid audio file'),
+  podcastFile: z
+    .string({ required_error: 'Podcast file is required' })
+    .min(1, 'Please provide valid file'),
   podcastTitle: z
     .string()
     .min(3, 'Podcast title must be at least 3 characters long')

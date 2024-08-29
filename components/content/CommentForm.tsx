@@ -3,13 +3,11 @@ import { Button } from '../ui/button';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useSession } from 'next-auth/react';
-import { getCldImageUrl } from 'next-cloudinary';
 import Image from 'next/image';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
 import { Form } from '@/components/ui/form';
-import { CLOUDINARY_URL } from '@/constants';
 import { revalidateRoute } from '@/lib/actions/revalidate';
 import {
   editAndReplyCommentSchema,
@@ -95,29 +93,21 @@ const CommentForm: React.FC<ICommentProps> = ({
             <div className="flex items-center gap-2">
               <Image
                 src={
-                  session?.user.image &&
-                  session?.user.image.startsWith(CLOUDINARY_URL)
-                    ? getCldImageUrl({
-                        width: 28,
-                        height: 28,
-                        src: comment.author.avatarImg,
-                        crop: 'fill',
-                      })
-                    : '/assets/images/avatars/avatar-1.svg'
+                  session?.user.image || '/assets/images/avatars/avatar-1.svg'
                 }
                 width={28}
                 height={28}
                 alt={comment.author.userName}
-                className="rounded-full"
+                className="size-7 rounded-full"
               />
               <div className="flex items-center gap-2">
                 <h4 className="p3-bold !mb-0 !text-[12px] !font-semibold  tracking-wide md:mb-2 md:font-bold lg:!text-[12px]">
                   {session?.user.name}
                 </h4>
-                <span className="text-[10px] text-white-400 md:text-[12px] ">
+                <span className="text-white-400 text-[10px] md:text-[12px] ">
                   {formatDate(comment.createdAt)}
                 </span>
-                <span className="text-[10px] text-white-400 md:text-[12px] ">
+                <span className="text-white-400 text-[10px] md:text-[12px] ">
                   {formatDate(comment.updatedAt)}
                 </span>
               </div>
@@ -143,14 +133,14 @@ const CommentForm: React.FC<ICommentProps> = ({
                       setOpenReply(false);
                     }
                   }}
-                  className="p3-medium w-[80px] capitalize !text-white-400"
+                  className="p3-medium !text-white-400 w-[80px] capitalize"
                 >
                   Cancel
                 </Button>
                 <span className="text-white-400 ">|</span>
                 <Button
                   type="submit"
-                  className="p3-medium w-[80px] capitalize !text-primary-500"
+                  className="p3-medium !text-primary-500 w-[80px] capitalize"
                 >
                   {isEdit ? 'Save' : 'Reply'}
                 </Button>
