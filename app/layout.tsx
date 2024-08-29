@@ -6,8 +6,8 @@ import { IBM_Plex_Sans } from 'next/font/google';
 import { Toaster } from 'react-hot-toast';
 
 import QueryProvider from '@/context/QueryProvider';
-import { auth } from '@/lib/auth';
 import SessionProvider from '@/context/SessionProvider';
+import { auth } from '@/lib/auth';
 import './globals.css';
 
 // ----------------------------------------------------------------
@@ -34,15 +34,16 @@ const RootLayout = async ({
       <QueryProvider>
         <html lang="en" suppressHydrationWarning>
           <body
-            className={`${ibmPlexSans.className} min-h-screen overflow-auto bg-white-200 dark:bg-black-900`}
+            className={`${ibmPlexSans.className} bg-white-200 dark:bg-black-900 min-h-screen overflow-auto`}
           >
             <ThemeProvider>
               <Toaster
                 toastOptions={{
-                  className: '!bg-black-600 !text-white-100',
+                  className:
+                    'dark:!bg-black-600 dark:!text-white-100 !bg-white-200 !text-white-400',
                 }}
               />
-              <main className="mx-auto max-w-screen-xxl">{children}</main>
+              <main className="max-w-screen-xxl mx-auto">{children}</main>
               {process.env.NODE_ENV === 'development' && <ReactQueryDevtools />}
             </ThemeProvider>
           </body>

@@ -8,6 +8,12 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'res.cloudinary.com',
         port: '',
+        pathname: '/dev-today-split-code/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
+        port: '',
         pathname: '/dev-today/**',
       },
       {
