@@ -112,7 +112,7 @@ export const generateSelectStyles = () => {
     option: (state: any) =>
       `bg-black-700 dark:text-white-300 ${
         state.isFocused ? 'dark:!bg-black-700 !bg-white-300' : ''
-      } !cursor-pointer`,
+      }  ${state.isSelected ? '!bg-inherit' : ''} !cursor-pointer`,
     menuList: () => 'bg-white-100 dark:bg-black-800',
     multiValueLabel: () => 'dark:text-white-300 text-black-700',
     multiValueRemove: () =>
@@ -130,7 +130,7 @@ export const MemberAdminFormatedOption = (
   if (context === 'value') {
     return (
       <div className="flex items-center gap-1">
-        <div className="flex-center size-[20px] rounded-full bg-white-100">
+        <div className="flex-center bg-white-100 size-[20px] rounded-full">
           <Image
             src={'/assets/images/avatars/avatar-2.svg'}
             alt={option.label}
