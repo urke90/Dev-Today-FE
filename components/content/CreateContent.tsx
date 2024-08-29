@@ -351,10 +351,10 @@ const CreateContent: React.FC<ICreateContentProps> = ({
                       disabled={isEditPage}
                       {...field}
                       className={
-                        'flex-center !border-white-border bg-white-100 dark:bg-black-800 flex min-h-[46px] w-full items-center rounded-md border px-2 pl-6 capitalize outline-none sm:w-[140px] dark:!border-[#393E4F66]'
+                        'flex-center flex min-h-[46px] w-full items-center rounded-md border !border-white-border bg-white-100 px-2 pl-6 capitalize outline-none dark:!border-[#393E4F66] dark:bg-black-800 sm:w-[140px]'
                       }
                     >
-                      <div className="p3-regular !text-black-800 dark:!text-white-100 flex w-full items-center justify-between !font-bold ">
+                      <div className="p3-regular flex w-full items-center justify-between !font-bold !text-black-800 dark:!text-white-100 ">
                         <Select.Value />
                         <Image
                           src="/assets/icons/arrow-down-slim.svg"
@@ -367,7 +367,7 @@ const CreateContent: React.FC<ICreateContentProps> = ({
                     </Select.Trigger>
                     <Select.Portal>
                       <Select.Content position="popper">
-                        <Select.Viewport className="flex-flex-col bg-light100__dark800 shadow-card mt-3 w-40 gap-2 rounded-md">
+                        <Select.Viewport className="flex-flex-col bg-light100__dark800 mt-3 w-40 gap-2 rounded-md shadow-card">
                           <Select.Group>
                             {CONTENT_TYPES.map(({ value, title }) => {
                               return (
@@ -375,7 +375,7 @@ const CreateContent: React.FC<ICreateContentProps> = ({
                                   key={value}
                                   onSelect={(e) => e.preventDefault()}
                                   value={value}
-                                  className="text-white-400 hover:bg-white-200 hover:text-primary-500 dark:text-white-100 dark:hover:bg-black-700 hover:dark:text-primary-500 flex cursor-pointer items-center gap-3 p-2 pl-3"
+                                  className="flex cursor-pointer items-center gap-3 p-2 pl-3 text-white-400 hover:bg-white-200 hover:text-primary-500 dark:text-white-100 dark:hover:bg-black-700 hover:dark:text-primary-500"
                                 >
                                   {value === EContentType.POST && <FrameIcon />}
                                   {value === EContentType.MEETUP && (
@@ -445,13 +445,13 @@ const CreateContent: React.FC<ICreateContentProps> = ({
                       <Button
                         type="button"
                         onClick={() => form.setValue('coverImage', null)}
-                        className="text-white-400 hover:bg-black-700 dark:text-white-100 absolute right-0  top-[-40px] size-8 border dark:border-gray-500"
+                        className="absolute right-0 top-[-40px] size-8 border  text-white-400 hover:bg-black-700 dark:border-gray-500 dark:text-white-100"
                       >
                         X
                       </Button>
                     </div>
                   ) : (
-                    <div className="dashed-border !text-white-400 flex h-64 w-full items-center justify-center rounded-lg">
+                    <div className="dashed-border flex h-64 w-full items-center justify-center rounded-lg !text-white-400">
                       <div className="flex flex-col items-center">
                         <CldUploadWidget
                           uploadPreset={
@@ -476,7 +476,7 @@ const CreateContent: React.FC<ICreateContentProps> = ({
                                 open();
                               }}
                               type="button"
-                              className="bg-white-100 hover:bg-white-300/30 dark:bg-black-800 hover:dark:bg-black-700 mb-3 flex max-w-[200px] items-center gap-3 rounded-lg py-2"
+                              className="mb-3 flex max-w-[200px] items-center gap-3 rounded-lg bg-white-100 py-2 hover:bg-white-300/30 dark:bg-black-800 hover:dark:bg-black-700"
                             >
                               <Image
                                 src={'/assets/icons/upload-icon.svg'}
@@ -569,7 +569,7 @@ const CreateContent: React.FC<ICreateContentProps> = ({
                               )}
                             </Button>
                           </PopoverTrigger>
-                          <PopoverContent className="border-white-400 bg-white-100 dark:bg-black-800 w-auto space-y-3 rounded-none  p-0 px-2 pb-5">
+                          <PopoverContent className="w-auto space-y-3 rounded-none border-white-400 bg-white-100 p-0  px-2 pb-5 dark:bg-black-800">
                             <Calendar
                               className="p4-regular bg-white-100 dark:bg-black-800"
                               mode="single"
@@ -596,7 +596,7 @@ const CreateContent: React.FC<ICreateContentProps> = ({
                               />
                             ) : (
                               <div className="flex-center">
-                                <p className="p3-bold flex-center text-white-400 ring-primary-500 hover:bg-primary-500 animate-bounce rounded-xl px-3 py-1 ring transition-colors">
+                                <p className="p3-bold flex-center animate-bounce rounded-xl px-3 py-1 text-white-400 ring ring-primary-500 transition-colors hover:bg-primary-500">
                                   Select a date first to pick a time
                                 </p>
                               </div>
@@ -640,13 +640,13 @@ const CreateContent: React.FC<ICreateContentProps> = ({
                               open();
                             }}
                             type="button"
-                            className="border-white-border bg-white-100 text-black-900 placeholder:text-white-400 dark:bg-black-800 dark:text-white-100 !mt-2 flex w-full justify-start rounded-lg border p-3 text-sm font-medium placeholder:text-sm placeholder:font-normal focus-visible:outline-none md:px-5 dark:border-[#393E4F66] dark:placeholder:text-[#ADB3CC]"
+                            className="!mt-2 flex w-full justify-start rounded-lg border border-white-border bg-white-100 p-3 text-sm font-medium text-black-900 placeholder:text-sm placeholder:font-normal placeholder:text-white-400 focus-visible:outline-none dark:border-[#393E4F66] dark:bg-black-800 dark:text-white-100 dark:placeholder:text-[#ADB3CC] md:px-5"
                           >
                             <MicrophoneIcon
                               className={`${field.value ? 'text-green-400 dark:text-green-700' : ''}`}
                             />
                             <span
-                              className={`subtitle-medium ${field.value ? 'text-white-400 dark:!text-white-100 bg-green-400 dark:bg-green-700' : 'bg-white-200 dark:bg-black-700'}  rounded-md px-2 py-1 tracking-wide`}
+                              className={`subtitle-medium ${field.value ? 'bg-green-400 text-white-400 dark:bg-green-700 dark:!text-white-100' : 'bg-white-200 dark:bg-black-700'}  rounded-md px-2 py-1 tracking-wide`}
                             >
                               {field.value ? 'File chosen' : 'Choose a file'}
                             </span>
@@ -823,7 +823,7 @@ const Option = (props: any) => {
         />
         <div className="ml-2 flex flex-col">
           <p className="p4-medium">{props.data.label}</p>
-          <p className="text-white-400 text-[11px]">
+          <p className="text-[11px] text-white-400">
             {props.data.bio || 'No bio available'}
           </p>
         </div>

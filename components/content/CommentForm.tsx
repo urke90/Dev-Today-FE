@@ -104,10 +104,10 @@ const CommentForm: React.FC<ICommentProps> = ({
                 <h4 className="p3-bold !mb-0 !text-[12px] !font-semibold  tracking-wide md:mb-2 md:font-bold lg:!text-[12px]">
                   {session?.user.name}
                 </h4>
-                <span className="text-white-400 text-[10px] md:text-[12px] ">
+                <span className="text-[10px] text-white-400 md:text-[12px] ">
                   {formatDate(comment.createdAt)}
                 </span>
-                <span className="text-white-400 text-[10px] md:text-[12px] ">
+                <span className="text-[10px] text-white-400 md:text-[12px] ">
                   {formatDate(comment.updatedAt)}
                 </span>
               </div>
@@ -133,14 +133,14 @@ const CommentForm: React.FC<ICommentProps> = ({
                       setOpenReply(false);
                     }
                   }}
-                  className="p3-medium !text-white-400 w-[80px] capitalize"
+                  className="p3-medium w-[80px] capitalize !text-white-400"
                 >
                   Cancel
                 </Button>
                 <span className="text-white-400 ">|</span>
                 <Button
                   type="submit"
-                  className="p3-medium !text-primary-500 w-[80px] capitalize"
+                  className="p3-medium w-[80px] capitalize !text-primary-500"
                 >
                   {isEdit ? 'Save' : 'Reply'}
                 </Button>

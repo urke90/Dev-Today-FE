@@ -103,9 +103,9 @@ const GroupDetails: React.FC<IGroupDetailsProps> = ({
         </div>
       </aside>
       <main className="main-content mx-auto  gap-5">
-        <div className="bg-light100__dark800 shadow-card flex flex-col gap-2.5 rounded-2xl px-2.5 py-4 md:py-2.5">
+        <div className="bg-light100__dark800 flex flex-col gap-2.5 rounded-2xl px-2.5 py-4 shadow-card md:py-2.5">
           <div
-            className={`relative h-24 w-full md:h-44 ${!group.coverImage ? 'flex-center bg-primary-100 dark:bg-black-700 rounded-[10px]' : ''}`}
+            className={`relative h-24 w-full md:h-44 ${!group.coverImage ? 'flex-center rounded-[10px] bg-primary-100 dark:bg-black-700' : ''}`}
           >
             {group.coverImage ? (
               <Image
@@ -191,7 +191,7 @@ const GroupDetails: React.FC<IGroupDetailsProps> = ({
               group.members.map(({ avatarImg, id, userName }, index) => (
                 <li
                   key={id}
-                  className="flex-center bg-white-600 relative size-10 rounded-full"
+                  className="flex-center relative size-10 rounded-full bg-white-600"
                 >
                   <Image
                     src={avatarImg || '/assets/images/avatars/avatar-1.svg'}
@@ -202,7 +202,7 @@ const GroupDetails: React.FC<IGroupDetailsProps> = ({
                   />
                   {index === group.members.length - 1 && (
                     <div className="flex-center absolute inset-0 z-10 size-full rounded-full bg-[#0A182D] opacity-70">
-                      <span className="cap-10 !text-white-100 cursor-default !text-sm">
+                      <span className="cap-10 cursor-default !text-sm !text-white-100">
                         {group._count.members}+
                       </span>
                     </div>
@@ -224,7 +224,7 @@ const GroupDetails: React.FC<IGroupDetailsProps> = ({
               group.members?.map(({ avatarImg, id, role, userName }) =>
                 role === EUserRole.ADMIN ? (
                   <li key={id} className="flex items-center gap-1.5">
-                    <div className="flex-center bg-white-600 size-[30px] shrink-0 rounded-full">
+                    <div className="flex-center size-[30px] shrink-0 rounded-full bg-white-600">
                       <Image
                         src={avatarImg || '/assets/images/avatars/avatar-1.svg'}
                         width={22}

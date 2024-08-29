@@ -62,7 +62,7 @@ const PostItemCard: React.FC<IPostItemCardProps> = ({
     <li>
       <Link
         href={'/content/' + id}
-        className="bg-light100__dark800 shadow-card flex gap-4 rounded-2xl p-4 md:items-center md:p-5"
+        className="bg-light100__dark800 flex gap-4 rounded-2xl p-4 shadow-card md:items-center md:p-5"
       >
         <Image
           src={coverImage || '/assets/icons/image-preview.svg'}
@@ -91,7 +91,7 @@ const PostItemCard: React.FC<IPostItemCardProps> = ({
             </div>
             <Button
               type="button"
-              className="flex-center like-btn-scale-hover bg-white-200 dark:bg-black-700 size-[30px] shrink-0 rounded-full"
+              className="flex-center like-btn-scale-hover size-[30px] shrink-0 rounded-full bg-white-200 dark:bg-black-700"
               onClick={(e) =>
                 isLiked ? handleDislikeContent(e, id) : handleLikeContent(e, id)
               }
@@ -110,7 +110,7 @@ const PostItemCard: React.FC<IPostItemCardProps> = ({
           ) : null}
           <div className="flex-between flex-wrap gap-5">
             <div className="flex">
-              <div className="flex-center bg-white-600 mr-2.5 size-[40px] rounded-full">
+              <div className="flex-center mr-2.5 size-[40px] rounded-full bg-white-600">
                 <Image
                   src={
                     author.avatarImg ||
@@ -127,7 +127,7 @@ const PostItemCard: React.FC<IPostItemCardProps> = ({
                 <p className="subtitle-normal">{calculateTimeAgo(createdAt)}</p>
               </div>
             </div>
-            <div className="text-white-400 dark:text-white-300 flex gap-[30px]">
+            <div className="flex gap-[30px] text-white-400 dark:text-white-300">
               <span className="p3-regular">
                 {formatNumberWithCommas(viewsCount)} Views
               </span>
