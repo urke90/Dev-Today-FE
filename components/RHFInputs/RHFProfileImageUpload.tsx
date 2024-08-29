@@ -43,7 +43,7 @@ const RHFProfileImageUpload: React.FC<IRHFProfileImageUploadProps> = ({
         <FormItem>
           <FormControl>
             <div className="flex items-center gap-2.5">
-              <div className="flex-center bg-white-100 dark:bg-black-800 size-[60px] shrink-0 rounded-full">
+              <div className="flex-center size-[60px] shrink-0 rounded-full bg-white-100 dark:bg-black-800">
                 {image ? (
                   <Image
                     src={image}
@@ -77,7 +77,7 @@ const RHFProfileImageUpload: React.FC<IRHFProfileImageUploadProps> = ({
                     <Button
                       onClick={() => open()}
                       type="button"
-                      className="bg-white-100 dark:bg-black-800 flex h-11 w-auto items-center gap-2.5 rounded-[5px] px-5 py-3"
+                      className="flex h-11 w-auto items-center gap-2.5 rounded-[5px] bg-white-100 px-5 py-3 dark:bg-black-800"
                     >
                       <ImageUploadIcon className="icon-light400__dark300" />
                       <span className="p3-regular">Set a profile photo</span>

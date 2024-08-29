@@ -37,7 +37,7 @@ const SidebarPodcastItem: React.FC<ISidebarPodcastItemProps> = ({
             <p className="subtitle-normal">by {author}</p>
           </div>
         </div>
-        <ArrowRightIcon className="text-white-400 shrink-0" />
+        <ArrowRightIcon className="shrink-0 text-white-400" />
       </Link>
     </li>
   );

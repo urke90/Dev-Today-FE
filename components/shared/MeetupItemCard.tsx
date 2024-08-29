@@ -37,7 +37,7 @@ const MeetupItemCard: React.FC<IMeetupItemCardProps> = ({
     <li>
       <Link
         href={'/content/' + id}
-        className="bg-light100__dark800 shadow-card flex flex-col gap-2.5 rounded-[10px] px-3.5 py-5"
+        className="bg-light100__dark800 flex flex-col gap-2.5 rounded-[10px] px-3.5 py-5 shadow-card"
       >
         <div className="flex-between flex">
           <div className="flex items-center gap-2 md:gap-4">
@@ -55,7 +55,7 @@ const MeetupItemCard: React.FC<IMeetupItemCardProps> = ({
             </div>
           </div>
           <div className="flex-center bg-light200__dark700 h-[56px] w-[38px] shrink-0 flex-col rounded-[6px] px-2.5 py-[5px] md:h-[58px] md:w-[54px]">
-            <span className="subtitle-normal md:p4-regular text-black-800 dark:text-white-200 uppercase">
+            <span className="subtitle-normal md:p4-regular uppercase text-black-800 dark:text-white-200">
               {month}
             </span>
             <span className="p2-bold md:d2-bold !text-primary-500">{day}</span>

@@ -94,7 +94,7 @@ const ContentDetails: React.FC<IContentDetailsProps> = ({
       )}
       {content.type === EContentType.POST && (
         <div
-          className={`relative h-24 w-full md:h-44 ${!content.coverImage ? 'flex-center bg-primary-100 dark:bg-black-700 rounded-[10px]' : ''}`}
+          className={`relative h-24 w-full md:h-44 ${!content.coverImage ? 'flex-center rounded-[10px] bg-primary-100 dark:bg-black-700' : ''}`}
         >
           {content.coverImage ? (
             <Image
@@ -123,7 +123,7 @@ const ContentDetails: React.FC<IContentDetailsProps> = ({
           </APIProvider>
         </div>
       )}
-      <div className="bg-light100__dark800 shadow-card flex flex-col gap-5 rounded-xl p-5">
+      <div className="bg-light100__dark800 flex flex-col gap-5 rounded-xl p-5 shadow-card">
         <div className="flex items-center justify-between">
           {content.type === EContentType.MEETUP && (
             <div className="flex max-w-3xl gap-2">
@@ -161,7 +161,7 @@ const ContentDetails: React.FC<IContentDetailsProps> = ({
                   sideOffset={8}
                   align="end"
                   onCloseAutoFocus={(e) => e.preventDefault()}
-                  className="bg-light200__dark700 shadow-header-menu data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade z-20 mb-4 flex w-40 flex-col gap-2.5 rounded-[10px] px-5 py-4"
+                  className="bg-light200__dark700 shadow-header-menu z-20 mb-4 flex w-40 flex-col gap-2.5 rounded-[10px] px-5 py-4 data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade"
                 >
                   <Item
                     onSelect={() => router.push(`/content/${content?.id}/edit`)}
