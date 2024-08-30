@@ -3,10 +3,8 @@ import { NextResponse } from 'next/server';
 
 // ----------------------------------------------------------------
 
-const NEXT_SERVER_URL = process.env.NEX_SERVER_URL || '';
-
 export const middleware = async (request: NextRequest) => {
-  const result = await fetch(NEXT_SERVER_URL + '/api/user', {
+  const result = await fetch(request.nextUrl.origin + '/api/user', {
     headers: {
       Cookie: request.cookies.toString(),
     },
