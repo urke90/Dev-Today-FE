@@ -4,6 +4,7 @@ import AudioPlayer from './AudioPlayer';
 import HtmlParser from './HtmlParser';
 
 import ArrowLeftIcon from '../icons/ArrowLeft';
+import BadgeItem from '../shared/BadgeItem';
 
 import Image from 'next/image';
 
@@ -18,10 +19,6 @@ interface IPreviewContentProps {
   data: IContent;
 }
 
-type TagProps = {
-  label: string;
-};
-
 const PreviewContent: React.FC<IPreviewContentProps> = ({
   setIsPreviewMode,
   type,
@@ -29,15 +26,19 @@ const PreviewContent: React.FC<IPreviewContentProps> = ({
 }) => {
   return (
     <section className="w-full space-y-5 px-2">
-      <div className="flex gap-2" onClick={() => setIsPreviewMode(false)}>
+      <div
+        className="flex cursor-pointer items-center gap-2"
+        onClick={() => setIsPreviewMode(false)}
+      >
         <ArrowLeftIcon className="text-black-800 dark:text-white-200" />
         <Image
           src="/assets/icons/view.svg"
           alt="Preview"
           width={20}
           height={20}
+          className="size-[20px]"
         />
-        <h1 className="font-semibold !text-primary-500">Preview</h1>
+        <h4 className="!text-primary-500 font-semibold">Preview</h4>
       </div>
       {type === EContentType.PODCAST && (
         <AudioPlayer
@@ -59,24 +60,19 @@ const PreviewContent: React.FC<IPreviewContentProps> = ({
       <div className="flex max-w-3xl gap-2">
         {type === EContentType.MEETUP && (
           <Image
-            src={data?.coverImage || '/assets/images/post-example.svg'}
+            src={data?.coverImage || '/assets/icons/image-preview.svg'}
             alt="avatar"
             width={72}
             height={72}
-            className="rounded-md"
+            className="size-[72px] rounded-md"
           />
         )}
         <h2 className="d2-bold">{data.title}</h2>
       </div>
       <div>
         <ul className="flex gap-2">
-          {data?.tags?.map((tag: TagProps) => (
-            <li
-              key={tag.label}
-              className="cap-10 rounded-full bg-gray-100 px-2 py-1 uppercase dark:bg-black-700"
-            >
-              {tag.label}
-            </li>
+          {data?.tags?.map(({ label, value }) => (
+            <BadgeItem key={value} title={value} />
           ))}
         </ul>
       </div>
@@ -109,7 +105,7 @@ const PreviewContent: React.FC<IPreviewContentProps> = ({
               width={20}
               height={20}
             />
-            <p className="p3-medium">{data?.meetupLocation}</p>
+            <p className="p3-medium">{data?.meetupLocation.address}</p>
           </div>
         </>
       )}
