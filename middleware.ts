@@ -6,14 +6,14 @@ import { NextResponse } from 'next/server';
 export const middleware = async (request: NextRequest) => {
   console.log('REQ. NEXT URL ORIGIN', request.nextUrl.origin);
 
-  // const result = await fetch(request.nextUrl.origin + '/api/user', {
-  //   headers: {
-  //     Cookie: request.cookies.toString(),
-  //   },
-  // });
+  const result = await fetch(request.nextUrl.origin + '/api/user', {
+    headers: {
+      Cookie: request.cookies.toString(),
+    },
+  });
 
-  // const session = await result.json();
-  const session = true;
+  const session = await result.json();
+  // const session = true;
   const url = request.nextUrl.pathname;
 
   const protectedPages = [
