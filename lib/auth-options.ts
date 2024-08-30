@@ -1,4 +1,3 @@
-// import { BASE_API_URL } from '@/api/queries';
 import type { AuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GitHubProvider from 'next-auth/providers/github';
@@ -28,8 +27,6 @@ export const authOptions: AuthOptions = {
       async authorize(credentials) {
         try {
           if (!credentials) return null;
-
-          console.log('AUTHORIZE CALLBACK');
 
           const response = await fetch(BASE_API_URL + '/user/login', {
             method: 'POST',
