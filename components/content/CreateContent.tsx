@@ -202,7 +202,7 @@ const CreateContent: React.FC<ICreateContentProps> = ({
   const coverImage = form.watch('coverImage');
 
   const onSubmit = async () => {
-    await form.trigger([
+    const isValid = await form.trigger([
       'authorId',
       'title',
       'type',
@@ -211,6 +211,7 @@ const CreateContent: React.FC<ICreateContentProps> = ({
       'description',
       'tags',
     ]);
+    if (!isValid) return;
 
     const commonData: IPutPostDTO = {
       authorId: form.getValues('authorId'),
@@ -242,9 +243,10 @@ const CreateContent: React.FC<ICreateContentProps> = ({
     }
 
     if (contentType === EContentType.MEETUP) {
-      await form.trigger(['meetupLocation', 'meetupDate']);
-
       try {
+        const isValid = await form.trigger(['meetupLocation', 'meetupDate']);
+        if (!isValid) return;
+
         if (isEditPage) {
           await updateMeetupAsync({
             ...commonData,
@@ -272,9 +274,10 @@ const CreateContent: React.FC<ICreateContentProps> = ({
     }
 
     if (contentType === EContentType.PODCAST) {
-      await form.trigger(['podcastFile', 'podcastTitle']);
-
       try {
+        const isValid = await form.trigger(['podcastFile', 'podcastTitle']);
+        if (!isValid) return;
+
         if (isEditPage) {
           await updatePodcastAsync({
             ...commonData,
@@ -366,8 +369,8 @@ const CreateContent: React.FC<ICreateContentProps> = ({
                       </div>
                     </Select.Trigger>
                     <Select.Portal>
-                      <Select.Content position="popper">
-                        <Select.Viewport className="flex-flex-col bg-light100__dark800 shadow-card mt-3 w-40 gap-2 rounded-md">
+                      <Select.Content position="popper" className="p-2">
+                        <Select.Viewport className="flex-flex-col bg-light100__dark800 shadow-card mt-3 w-40 gap-2 rounded-lg p-2">
                           <Select.Group>
                             {CONTENT_TYPES.map(({ value, title }) => {
                               return (
@@ -375,7 +378,7 @@ const CreateContent: React.FC<ICreateContentProps> = ({
                                   key={value}
                                   onSelect={(e) => e.preventDefault()}
                                   value={value}
-                                  className="text-white-400 hover:bg-white-200 hover:text-primary-500 dark:text-white-100 dark:hover:bg-black-700 hover:dark:text-primary-500 flex cursor-pointer items-center gap-3 p-2 pl-3"
+                                  className="text-white-400 hover:bg-white-200 hover:text-primary-500 dark:text-white-100 dark:hover:bg-black-700 hover:dark:text-primary-500 flex cursor-pointer items-center gap-3 rounded-md p-2 pl-3"
                                 >
                                   {value === EContentType.POST && <FrameIcon />}
                                   {value === EContentType.MEETUP && (
