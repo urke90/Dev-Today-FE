@@ -13,6 +13,7 @@ export const middleware = async (request: NextRequest) => {
   });
 
   const session = await result.json();
+  console.log('SESSION', session);
   // const session = true;
   const url = request.nextUrl.pathname;
 
@@ -26,32 +27,32 @@ export const middleware = async (request: NextRequest) => {
     '/profile',
   ];
 
-  // if (!session) {
-  //   if (protectedPages.some((page) => url.includes(page)) || url === '/') {
-  //     return NextResponse.redirect(new URL('/login', request.url));
-  //   }
-  // } else {
-  //   if (url === '/') {
-  //     return NextResponse.redirect(new URL('/posts', request.url));
-  //   }
+  if (!session) {
+    if (protectedPages.some((page) => url.includes(page)) || url === '/') {
+      return NextResponse.redirect(new URL('/login', request.url));
+    }
+  } else {
+    if (url === '/') {
+      return NextResponse.redirect(new URL('/posts', request.url));
+    }
 
-  //   if (url.startsWith('/onboarding') && session.user.isOnboardingCompleted) {
-  //     return NextResponse.redirect(new URL('/posts', request.url));
-  //   }
+    if (url.startsWith('/onboarding') && session.user.isOnboardingCompleted) {
+      return NextResponse.redirect(new URL('/posts', request.url));
+    }
 
-  //   if (
-  //     (url.startsWith('/register') || url.startsWith('/login')) &&
-  //     session.user.isOnboardingCompleted
-  //   ) {
-  //     return NextResponse.redirect(new URL('/posts', request.url));
-  //   }
-  //   if (
-  //     protectedPages.some((page) => url.includes(page)) &&
-  //     !session.user.isOnboardingCompleted
-  //   ) {
-  //     return NextResponse.redirect(new URL('/onboarding', request.url));
-  //   }
-  // }
+    if (
+      (url.startsWith('/register') || url.startsWith('/login')) &&
+      session.user.isOnboardingCompleted
+    ) {
+      return NextResponse.redirect(new URL('/posts', request.url));
+    }
+    if (
+      protectedPages.some((page) => url.includes(page)) &&
+      !session.user.isOnboardingCompleted
+    ) {
+      return NextResponse.redirect(new URL('/onboarding', request.url));
+    }
+  }
 
   return NextResponse.next();
 };
