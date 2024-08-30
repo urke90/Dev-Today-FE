@@ -3,16 +3,18 @@ import { NextResponse } from 'next/server';
 
 // ----------------------------------------------------------------
 
-const NEXT_SERVER_URL = process.env.NEX_SERVER_URL || '';
-
 export const middleware = async (request: NextRequest) => {
-  const result = await fetch(NEXT_SERVER_URL + '/api/user', {
+  console.log('REQ. NEXT URL ORIGIN', request.nextUrl.origin);
+
+  const result = await fetch(request.nextUrl.origin + '/api/user', {
     headers: {
       Cookie: request.cookies.toString(),
     },
   });
 
   const session = await result.json();
+  console.log('SESSION', session);
+  // const session = true;
   const url = request.nextUrl.pathname;
 
   const protectedPages = [
