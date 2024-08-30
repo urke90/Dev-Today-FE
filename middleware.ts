@@ -4,13 +4,16 @@ import { NextResponse } from 'next/server';
 // ----------------------------------------------------------------
 
 export const middleware = async (request: NextRequest) => {
-  const result = await fetch(request.nextUrl.origin + '/api/user', {
-    headers: {
-      Cookie: request.cookies.toString(),
-    },
-  });
+  console.log('REQ. NEXT URL ORIGIN', request.nextUrl.origin);
 
-  const session = await result.json();
+  // const result = await fetch(request.nextUrl.origin + '/api/user', {
+  //   headers: {
+  //     Cookie: request.cookies.toString(),
+  //   },
+  // });
+
+  // const session = await result.json();
+  const session = true;
   const url = request.nextUrl.pathname;
 
   const protectedPages = [
@@ -23,32 +26,32 @@ export const middleware = async (request: NextRequest) => {
     '/profile',
   ];
 
-  if (!session) {
-    if (protectedPages.some((page) => url.includes(page)) || url === '/') {
-      return NextResponse.redirect(new URL('/login', request.url));
-    }
-  } else {
-    if (url === '/') {
-      return NextResponse.redirect(new URL('/posts', request.url));
-    }
+  // if (!session) {
+  //   if (protectedPages.some((page) => url.includes(page)) || url === '/') {
+  //     return NextResponse.redirect(new URL('/login', request.url));
+  //   }
+  // } else {
+  //   if (url === '/') {
+  //     return NextResponse.redirect(new URL('/posts', request.url));
+  //   }
 
-    if (url.startsWith('/onboarding') && session.user.isOnboardingCompleted) {
-      return NextResponse.redirect(new URL('/posts', request.url));
-    }
+  //   if (url.startsWith('/onboarding') && session.user.isOnboardingCompleted) {
+  //     return NextResponse.redirect(new URL('/posts', request.url));
+  //   }
 
-    if (
-      (url.startsWith('/register') || url.startsWith('/login')) &&
-      session.user.isOnboardingCompleted
-    ) {
-      return NextResponse.redirect(new URL('/posts', request.url));
-    }
-    if (
-      protectedPages.some((page) => url.includes(page)) &&
-      !session.user.isOnboardingCompleted
-    ) {
-      return NextResponse.redirect(new URL('/onboarding', request.url));
-    }
-  }
+  //   if (
+  //     (url.startsWith('/register') || url.startsWith('/login')) &&
+  //     session.user.isOnboardingCompleted
+  //   ) {
+  //     return NextResponse.redirect(new URL('/posts', request.url));
+  //   }
+  //   if (
+  //     protectedPages.some((page) => url.includes(page)) &&
+  //     !session.user.isOnboardingCompleted
+  //   ) {
+  //     return NextResponse.redirect(new URL('/onboarding', request.url));
+  //   }
+  // }
 
   return NextResponse.next();
 };
