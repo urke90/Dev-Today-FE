@@ -8,6 +8,7 @@ import GoogleProvider from 'next-auth/providers/google';
 const BASE_API_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? '';
 
 export const authOptions: AuthOptions = {
+  secret: process.env.NEXTAUTH_SECRET,
   providers: [
     GitHubProvider({
       clientId: process.env.GITHUB_ID ?? '',
