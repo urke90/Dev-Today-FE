@@ -27,19 +27,19 @@ const ProvidersButtons: React.FC<IProvidersButtonsProps> = ({
         {isLoginPage
           ? "Don't have an account yet?"
           : 'Already have an account?'}
-        <span className="ml-1 text-[16px] text-primary-500">
+        <span className="text-primary-500 ml-1 text-[16px]">
           {isLoginPage ? 'Join the community!' : 'Sign in.'}
         </span>
       </Link>
       <div className="flex-center">
-        <Separator className="w-2/5  bg-black-700/10 dark:bg-black-800" />
+        <Separator className="bg-black-700/10  dark:bg-black-800 w-2/5" />
         <p className="p1-medium">or</p>
-        <Separator className="w-2/5 bg-black-700/10 dark:bg-black-800" />
+        <Separator className="bg-black-700/10 dark:bg-black-800 w-2/5" />
       </div>
       <Button
         type="button"
         variant="cancel"
-        onClick={() => signIn('google', { callbackUrl: '/onboarding' })}
+        onClick={() => signIn('google')}
         className="p3-medium gap-2.5"
       >
         <GoogleIcon className="text-black-700 dark:text-white-200" />
@@ -48,7 +48,7 @@ const ProvidersButtons: React.FC<IProvidersButtonsProps> = ({
       <Button
         type="button"
         variant="cancel"
-        onClick={() => signIn('github', { callbackUrl: '/onboarding' })}
+        onClick={() => signIn('github')}
         className="p3-medium gap-2.5"
       >
         <GithubIcon className="text-black-700 dark:text-white-200" />
