@@ -39,7 +39,10 @@ const ProvidersButtons: React.FC<IProvidersButtonsProps> = ({
       <Button
         type="button"
         variant="cancel"
-        onClick={() => signIn('google')}
+        onClick={(e) => {
+          e.preventDefault();
+          signIn('google');
+        }}
         className="p3-medium gap-2.5"
       >
         <GoogleIcon className="text-black-700 dark:text-white-200" />
@@ -48,7 +51,10 @@ const ProvidersButtons: React.FC<IProvidersButtonsProps> = ({
       <Button
         type="button"
         variant="cancel"
-        onClick={() => signIn('github')}
+        onClick={(e) => {
+          e.preventDefault();
+          signIn('google');
+        }}
         className="p3-medium gap-2.5"
       >
         <GithubIcon className="text-black-700 dark:text-white-200" />
