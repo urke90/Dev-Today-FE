@@ -11,7 +11,7 @@ export const authOptions: AuthOptions = {
   session: {
     strategy: 'jwt',
   },
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: process.env.NEXTAUTH_SECRET || '',
   providers: [
     GitHubProvider({
       clientId: process.env.GITHUB_ID ?? '',
@@ -37,6 +37,7 @@ export const authOptions: AuthOptions = {
             headers: {
               'Content-Type': 'application/json',
             },
+            mode: 'cors',
             body: JSON.stringify({
               email: credentials.email,
               password: credentials.password,
@@ -67,6 +68,7 @@ export const authOptions: AuthOptions = {
             headers: {
               'Content-Type': 'application/json',
             },
+            mode: 'cors',
             body: JSON.stringify({
               email: user?.email,
               name: user?.name,
@@ -97,9 +99,11 @@ export const authOptions: AuthOptions = {
             headers: {
               'Content-Type': 'application/json',
             },
+            mode: 'cors',
           }
         );
         const data = await response.json();
+        // console.log('DATA U JWT', data);
 
         if (data) {
           token.id = data.user.id;
@@ -126,8 +130,8 @@ export const authOptions: AuthOptions = {
       return session;
     },
   },
+
   pages: {
     signIn: '/login',
-    signOut: '/register',
   },
 };
