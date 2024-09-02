@@ -10,8 +10,8 @@ import * as Dialog from '@radix-ui/react-dialog';
 import { useQuery } from '@tanstack/react-query';
 import { useCallback, useEffect, useState } from 'react';
 
-import { fetchGroupMembers } from '@/api/queries';
 import { EContentGroupQueries } from '@/constants/react-query';
+import { fetchGroupMembers } from '@/functions-api/queries';
 import { useInfiniteScroll } from '@/hooks/use-infinite-scroll';
 import type { IGroupMember, IGroupMembersResponse } from '@/types/group';
 import { EUserRole } from '@/types/user';

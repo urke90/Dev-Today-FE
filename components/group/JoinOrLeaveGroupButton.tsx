@@ -9,7 +9,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 
-import { joinGroup, leaveGroup } from '@/api/mutations';
+import { joinGroup, leaveGroup } from '@/functions-api/mutations';
 
 // ----------------------------------------------------------------
 
