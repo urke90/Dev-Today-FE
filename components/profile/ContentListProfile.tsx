@@ -10,8 +10,8 @@ import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
-import { fetchUserContent, fetchUserGroups } from '@/api/queries';
 import { EContentGroupQueries } from '@/constants/react-query';
+import { fetchUserContent, fetchUserGroups } from '@/functions-api/queries';
 import { useInfiniteScroll } from '@/hooks/use-infinite-scroll';
 import {
   type IContent,

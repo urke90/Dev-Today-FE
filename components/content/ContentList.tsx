@@ -10,7 +10,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
-import { fetchAllContents } from '@/api/queries';
+import { fetchAllContents } from '@/functions-api/queries';
 import type { IContentPagesResponse } from '@/types/content';
 import { EQueryType, ESortByFilter } from '@/types/queries';
 import { typedFetch } from '@/utils/api';

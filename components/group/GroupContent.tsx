@@ -15,13 +15,13 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
+import { EContentGroupQueries } from '@/constants/react-query';
 import {
   assignAdminRole,
   removeAdminRole,
   removeMemberFromGroup,
-} from '@/api/mutations';
-import { fetchGroupContent, fetchGroupMembers } from '@/api/queries';
-import { EContentGroupQueries } from '@/constants/react-query';
+} from '@/functions-api/mutations';
+import { fetchGroupContent, fetchGroupMembers } from '@/functions-api/queries';
 import { revalidateRoute } from '@/lib/actions/revalidate';
 import type {
   IGroupContentResponse,

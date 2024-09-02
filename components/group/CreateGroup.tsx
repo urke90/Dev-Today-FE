@@ -17,8 +17,6 @@ import toast from 'react-hot-toast';
 import CreatableSelect from 'react-select/creatable';
 import { useDebounce } from 'use-debounce';
 
-import { createGroup, updateGroup } from '@/api/mutations';
-import { fetchUsers } from '@/api/queries';
 import RHFInput from '@/components/RHFInputs/RHFInput';
 import { Button } from '@/components/ui/button';
 import {
@@ -30,6 +28,8 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { EContentGroupQueries } from '@/constants/react-query';
+import { createGroup, updateGroup } from '@/functions-api/mutations';
+import { fetchUsers } from '@/functions-api/queries';
 import {
   baseGroupSchema,
   IBaseGroupSchema,

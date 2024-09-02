@@ -28,15 +28,6 @@ import CreatableSelect from 'react-select/creatable';
 import { Editor as TinyMCEEditor } from 'tinymce';
 import { useDebounce } from 'use-debounce';
 
-import {
-  createMeetup,
-  createPodcast,
-  createPost,
-  updateMeetup,
-  updatePodcast,
-  updatePost,
-} from '@/api/mutations';
-import { fetchGroupsForDropdown, fetchTags } from '@/api/queries';
 import RHFInput from '@/components/RHFInputs/RHFInput';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
@@ -54,6 +45,15 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { CONTENT_TYPES } from '@/constants';
+import {
+  createMeetup,
+  createPodcast,
+  createPost,
+  updateMeetup,
+  updatePodcast,
+  updatePost,
+} from '@/functions-api/mutations';
+import { fetchGroupsForDropdown, fetchTags } from '@/functions-api/queries';
 import { revalidateRoute } from '@/lib/actions/revalidate';
 import { cn } from '@/lib/utils';
 import {

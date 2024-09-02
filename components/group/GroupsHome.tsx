@@ -12,8 +12,8 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
-import { fetchAllGroups } from '@/api/queries';
 import { EContentGroupQueries } from '@/constants/react-query';
+import { fetchAllGroups } from '@/functions-api/queries';
 import type {
   IAllGroupsSidebarDetails,
   IHomePageGroupsResponse,
