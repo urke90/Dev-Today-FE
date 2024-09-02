@@ -45,15 +45,6 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { CONTENT_TYPES } from '@/constants';
-import {
-  createMeetup,
-  createPodcast,
-  createPost,
-  updateMeetup,
-  updatePodcast,
-  updatePost,
-} from '@/functions-api/mutations';
-import { fetchGroupsForDropdown, fetchTags } from '@/functions-api/queries';
 import { revalidateRoute } from '@/lib/actions/revalidate';
 import { cn } from '@/lib/utils';
 import {
@@ -66,6 +57,15 @@ import {
 } from '@/lib/validation';
 import { EContentType, type ITag } from '@/types/content';
 import type { IGroupsResponse } from '@/types/group';
+import {
+  createMeetup,
+  createPodcast,
+  createPost,
+  updateMeetup,
+  updatePodcast,
+  updatePost,
+} from '@/utils/mutations';
+import { fetchGroupsForDropdown, fetchTags } from '@/utils/queries';
 
 // ----------------------------------------------------------------
 

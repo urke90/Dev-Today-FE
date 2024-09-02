@@ -11,7 +11,6 @@ import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
 import { EContentGroupQueries } from '@/constants/react-query';
-import { fetchUserContent, fetchUserGroups } from '@/functions-api/queries';
 import { useInfiniteScroll } from '@/hooks/use-infinite-scroll';
 import {
   type IContent,
@@ -23,6 +22,7 @@ import type {
 } from '@/types/group';
 import { EQueryType } from '@/types/queries';
 import { typedFetch } from '@/utils/api';
+import { fetchUserContent, fetchUserGroups } from '@/utils/queries';
 
 // ----------------------------------------------------------------
 

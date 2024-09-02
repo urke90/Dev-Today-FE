@@ -17,9 +17,9 @@ import { useState } from 'react';
 import { useDebounce } from 'use-debounce';
 
 import { EContentGroupQueries } from '@/constants/react-query';
-import { fetchGroupsAndContents } from '@/functions-api/queries';
 import { EContentType } from '@/types/content';
 import type { IGlobalSearchItem } from '@/types/group';
+import { fetchGroupsAndContents } from '@/utils/queries';
 
 // ----------------------------------------------------------------
 

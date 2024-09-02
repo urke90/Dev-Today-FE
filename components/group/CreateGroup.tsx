@@ -28,8 +28,6 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { EContentGroupQueries } from '@/constants/react-query';
-import { createGroup, updateGroup } from '@/functions-api/mutations';
-import { fetchUsers } from '@/functions-api/queries';
 import {
   baseGroupSchema,
   IBaseGroupSchema,
@@ -37,6 +35,8 @@ import {
 } from '@/lib/validation';
 import { IGroup } from '@/types/group';
 import { EUserRole, IGroupDropdownUser } from '@/types/user';
+import { createGroup, updateGroup } from '@/utils/mutations';
+import { fetchUsers } from '@/utils/queries';
 
 // ----------------------------------------------------------------
 
