@@ -16,12 +16,6 @@ import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
 import { EContentGroupQueries } from '@/constants/react-query';
-import {
-  assignAdminRole,
-  removeAdminRole,
-  removeMemberFromGroup,
-} from '@/functions-api/mutations';
-import { fetchGroupContent, fetchGroupMembers } from '@/functions-api/queries';
 import { revalidateRoute } from '@/lib/actions/revalidate';
 import type {
   IGroupContentResponse,
@@ -29,6 +23,12 @@ import type {
 } from '@/types/group';
 import { EQueryType } from '@/types/queries';
 import { typedFetch } from '@/utils/api';
+import {
+  assignAdminRole,
+  removeAdminRole,
+  removeMemberFromGroup,
+} from '@/utils/mutations';
+import { fetchGroupContent, fetchGroupMembers } from '@/utils/queries';
 
 // ----------------------------------------------------------------
 

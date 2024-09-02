@@ -13,12 +13,12 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 import { EContentGroupQueries } from '@/constants/react-query';
-import { fetchAllGroups } from '@/functions-api/queries';
 import type {
   IAllGroupsSidebarDetails,
   IHomePageGroupsResponse,
 } from '@/types/group';
 import { ESortByFilter } from '@/types/queries';
+import { fetchAllGroups } from '@/utils/queries';
 
 // ----------------------------------------------------------------
 

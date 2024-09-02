@@ -11,10 +11,10 @@ import { useQuery } from '@tanstack/react-query';
 import { useCallback, useEffect, useState } from 'react';
 
 import { EContentGroupQueries } from '@/constants/react-query';
-import { fetchGroupMembers } from '@/functions-api/queries';
 import { useInfiniteScroll } from '@/hooks/use-infinite-scroll';
 import { IGroupMember, IGroupMembersResponse } from '@/types/group';
 import { EUserRole } from '@/types/user';
+import { fetchGroupMembers } from '@/utils/queries';
 
 // ----------------------------------------------------------------
 
