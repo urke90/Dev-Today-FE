@@ -94,7 +94,7 @@ const OnboardingPage = () => {
           body: JSON.stringify({ ...data, isOnboardingCompleted: true }),
         }
       );
-      console.log('RESPONSE u onboardingu', response);
+
       if (response.status === 200) {
         toast.success('Onboarding completed successfully.');
         router.push('/posts');

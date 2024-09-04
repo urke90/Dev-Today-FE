@@ -35,10 +35,15 @@ const LeftSidebar: React.FC<ILeftSidebarProps> = ({
           {listItems.map((item, index) => (
             <li
               key={index}
-              className="p1-medium flex items-center gap-5 rounded-lg bg-white-100 p-5 dark:bg-black-700"
+              className="p1-medium bg-white-200 dark:bg-black-700 flex items-center gap-5 rounded-lg p-5"
             >
               <div
-                className={`flex-center dark:bg-black-800 ${item.bgColor} size-[60px] shrink-0 rounded-md`}
+                className={
+                  'flex-center dark:bg-black-800  size-[60px] shrink-0 rounded-md'
+                }
+                style={{
+                  backgroundColor: theme === 'dark' ? item.bgColor : '',
+                }}
               >
                 <Image
                   src={item.imgUrl}

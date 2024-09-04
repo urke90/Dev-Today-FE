@@ -111,13 +111,15 @@ const GroupsHome: React.FC<IGroupsHomeProps> = ({
                 )
               )}
           </ul>
-          <Pagination
-            currentPage={page}
-            totalPages={data.totalPages}
-            setPage={setPage}
-            disableNextBtn={!data.hasNextPage}
-            disablePrevBtn={page === 1}
-          />
+          {data.groups?.length > 0 && (
+            <Pagination
+              currentPage={page}
+              totalPages={data.totalPages}
+              setPage={setPage}
+              disableNextBtn={!data.hasNextPage}
+              disablePrevBtn={page === 1}
+            />
+          )}
         </main>
         <aside className="right-sidebar">
           <SidebarContentCard title="Meetups" items={sidebarDetails.meetups} />
