@@ -28,6 +28,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { EContentGroupQueries } from '@/constants/react-query';
+import { revalidateRoute } from '@/lib/actions/revalidate';
 import {
   baseGroupSchema,
   IBaseGroupSchema,
@@ -113,12 +114,14 @@ const CreateGroup: React.FC<ICreateGroup> = ({ viewerId, group }) => {
       if (group) {
         await updateGroupAsync(data);
         toast.success('Group updated successfully.');
+        revalidateRoute(`/groups/${group.id}`);
         router.push(`/groups/${group.id}`);
       } else {
         await createGroupAsync({
           data,
           members: [...modifiedMembers, ...modifiedAdmins],
         });
+        revalidateRoute('/groups/');
         toast.success('Group created successfully.');
         router.push('/groups');
       }
@@ -163,13 +166,13 @@ const CreateGroup: React.FC<ICreateGroup> = ({ viewerId, group }) => {
                       <Button
                         type="button"
                         onClick={() => form.setValue('coverImage', null)}
-                        className="absolute right-0 top-[-40px] size-8 text-white-400 hover:bg-black-700 dark:border-gray-500 dark:text-white-100"
+                        className="text-white-400 hover:bg-black-700 dark:text-white-100 absolute right-0 top-[-40px] size-8 dark:border-gray-500"
                       >
                         X
                       </Button>
                     </div>
                   ) : (
-                    <div className="dashed-border flex h-64 w-full items-center justify-center rounded-lg !text-white-400">
+                    <div className="dashed-border !text-white-400 flex h-64 w-full items-center justify-center rounded-lg">
                       <div className="flex flex-col items-center">
                         <CldUploadWidget
                           uploadPreset={
@@ -194,7 +197,7 @@ const CreateGroup: React.FC<ICreateGroup> = ({ viewerId, group }) => {
                                 open();
                               }}
                               type="button"
-                              className="mb-3 flex max-w-[200px] items-center gap-3 rounded-lg bg-white-100 py-2 dark:bg-black-800"
+                              className="bg-white-100 dark:bg-black-800 mb-3 flex max-w-[200px] items-center gap-3 rounded-lg py-2"
                             >
                               <Image
                                 src="/assets/icons/upload-icon.svg"
