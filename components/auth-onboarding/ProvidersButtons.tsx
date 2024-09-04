@@ -17,11 +17,17 @@ const ProvidersButtons: React.FC<IProvidersButtonsProps> = ({
 }) => {
   return (
     <div className="space-y-5">
-      <Button type="submit" size="medium" variant="primary" className="p2-bold">
+      <Button
+        type="submit"
+        size="medium"
+        variant="primary"
+        className="p2-bold !text-white-100"
+      >
         Next
       </Button>
       <Link
         href={isLoginPage ? '/register' : '/login'}
+        replace
         className="p3-regular block cursor-pointer text-center hover:underline"
       >
         {isLoginPage
@@ -39,7 +45,7 @@ const ProvidersButtons: React.FC<IProvidersButtonsProps> = ({
       <Button
         type="button"
         variant="cancel"
-        onClick={() => signIn('google', { callbackUrl: '/onboarding' })}
+        onClick={() => signIn('google')}
         className="p3-medium gap-2.5"
       >
         <GoogleIcon className="text-black-700 dark:text-white-200" />
@@ -48,7 +54,7 @@ const ProvidersButtons: React.FC<IProvidersButtonsProps> = ({
       <Button
         type="button"
         variant="cancel"
-        onClick={() => signIn('github', { callbackUrl: '/onboarding' })}
+        onClick={() => signIn('github')}
         className="p3-medium gap-2.5"
       >
         <GithubIcon className="text-black-700 dark:text-white-200" />

@@ -50,7 +50,7 @@ export const SIGN_IN_SIDEBAR_DATA: IAuthOnboardingSidebarData = {
       alt: 'inbox',
       label:
         'Get in the code zone quickly! Swift sign-in for instant access to your hub.',
-      bgColor: '#FFECE6 ',
+      bgColor: '#E7FAF4',
     },
     {
       imgUrl: '/assets/icons/auth-onboarding/thunder.svg',
