@@ -17,6 +17,8 @@ const SidebarContentCard: React.FC<ISidebarContentCardProps> = ({
   title,
   items,
 }) => {
+  if (items.length === 0) return null;
+
   return (
     <div className="right-sidebar-item">
       <div className="flex items-center gap-[3px]">
