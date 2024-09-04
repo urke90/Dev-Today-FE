@@ -1,5 +1,4 @@
 import ContentListProfile from './ContentListProfile';
-import PerformanceItem from './PerformanceItem';
 import ProfileSidebarInfo from './ProfileSidebarInfo';
 import SocialMediaLinks from './SocialMediaLinks';
 
@@ -38,7 +37,7 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
 }) => {
   return (
     <div className="content-wrapper">
-      <aside className="left-sidebar bg-light100__dark800 rounded-2xl !p-0 !pb-10 text-center shadow-card">
+      <aside className="left-sidebar bg-light100__dark800 shadow-card rounded-2xl !p-0 !pb-10 text-center">
         <div className="profile-background relative h-[106px] rounded-t-2xl lg:h-[83px]">
           <Image
             fill
@@ -54,7 +53,7 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
               width={110}
               height={110}
               alt={user.userName}
-              className="mx-auto mb-2.5 size-[110px] rounded-full object-cover ring-4 ring-primary-500"
+              className="ring-primary-500 mx-auto mb-2.5 size-[110px] rounded-full object-cover ring-4"
             />
             <h1 className="h1-medium">{user.userName}</h1>
             <p className="p3-regular dark:text-white-400">{user?.email}</p>
@@ -82,7 +81,7 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
           )}
           <div className="border border-[#C5D0E6] dark:border-[#393E4F]" />
           {user?.bio && (
-            <p className="p3-regular text-center text-white-400 dark:text-white-300">
+            <p className="p3-regular text-white-400 dark:text-white-300 text-center">
               {user.bio}
             </p>
           )}
@@ -120,7 +119,7 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
         <div className="max-xl:hidden">
           <SidebarContentCard title="Recent Posts" items={user?.contents} />
         </div>
-        <div className="right-sidebar-item">
+        {/* <div className="right-sidebar-item">
           <div>
             <p className="p2-bold">Performance</p>
             <p className="p3-regular">The best posts from the last 30 days</p>
@@ -132,7 +131,7 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
             <PerformanceItem />
             <PerformanceItem />
           </ul>
-        </div>
+        </div> */}
       </aside>
     </div>
   );

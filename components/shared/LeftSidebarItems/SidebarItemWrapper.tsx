@@ -9,6 +9,8 @@ const SidebarItemWrapper: React.FC<ISidebarItemWrapperProps> = ({
   title,
   items,
 }) => {
+  if (items.length === 0) return null;
+
   return (
     <div className="left-sidebar-item gap-3">
       <p className="p2-bold">{title}</p>

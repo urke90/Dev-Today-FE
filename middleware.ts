@@ -62,6 +62,7 @@ export default withAuth(
   function middleware(request) {
     const pathname = request.nextUrl.pathname;
     const token = request.nextauth.token;
+
     const protectedPages = [
       '/content',
       '/posts',
