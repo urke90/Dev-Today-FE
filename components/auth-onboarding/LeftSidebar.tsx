@@ -18,6 +18,8 @@ interface ILeftSidebarProps {
   theme: string | undefined;
 }
 
+const colors = ['bg-[#FFECE6]', 'bg-[#FDF4EA]', 'bg-[#EBF2FC]'];
+
 const LeftSidebar: React.FC<ILeftSidebarProps> = ({
   title,
   listItems,
@@ -38,18 +40,14 @@ const LeftSidebar: React.FC<ILeftSidebarProps> = ({
               className="p1-medium bg-white-200 dark:bg-black-700 flex items-center gap-5 rounded-lg p-5"
             >
               <div
-                className={
-                  'flex-center dark:bg-black-800  size-[60px] shrink-0 rounded-md'
-                }
-                style={{
-                  backgroundColor: theme === 'dark' ? item.bgColor : '',
-                }}
+                className={`flex-center dark:bg-black-800 ${colors[index]} size-[60px] shrink-0 rounded-md`}
               >
                 <Image
                   src={item.imgUrl}
                   alt={item.alt}
                   width={20}
                   height={20}
+                  className="size-5 bg-transparent"
                 />
               </div>
               {item.label}
