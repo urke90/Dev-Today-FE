@@ -118,6 +118,3 @@ export const formatDate = (date: Date | string) => {
   );
   return formattedDate;
 };
-
-export const generateRandomAvatarImgIndex = () =>
-  Math.floor(Math.random() * 4) + 1;

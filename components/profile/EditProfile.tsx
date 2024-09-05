@@ -1,19 +1,17 @@
 'use client';
 
 import RHFMultipleSelect from '../RHFInputs/RHFMultipleSelect';
+import RHFProfileImageUpload from '../RHFInputs/RHFProfileImageUpload';
 import RHFTextarea from '../RHFInputs/RHFTextarea';
 import { Button } from '../ui/button';
-import RHFProfileImageUpload from '../RHFInputs/RHFProfileImageUpload';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { getCldImageUrl } from 'next-cloudinary';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
 import RHFInput from '@/components/RHFInputs/RHFInput';
 import { Form } from '@/components/ui/form';
-import { CLOUDINARY_URL } from '@/constants';
 import { IUpdateProfileSchema, updateProfileSchema } from '@/lib/validation';
 import type { IProfileUser } from '@/types/user';
 import { typedFetch } from '@/utils/api';
@@ -32,15 +30,6 @@ const EditProfile: React.FC<IEditProfileProps> = ({ user }) => {
     label: skill,
   }));
 
-  let transformedAvatarImg = user.avatarImg.startsWith(CLOUDINARY_URL)
-    ? getCldImageUrl({
-        width: 60,
-        height: 60,
-        src: user.avatarImg,
-        crop: 'fill',
-      })
-    : user.avatarImg;
-
   const form = useForm({
     resolver: zodResolver(updateProfileSchema),
     defaultValues: {
@@ -48,7 +37,7 @@ const EditProfile: React.FC<IEditProfileProps> = ({ user }) => {
       userName: user?.userName || '',
       bio: user?.bio || '',
       preferredSkills: PREFERRED_SKILLS_OPTIONS || [],
-      avatarImg: transformedAvatarImg || '',
+      avatarImg: user.avatarImg || '',
       instagramName: user?.instagramName || '',
       instagramLink: user?.instagramLink || '',
       linkedinName: user?.linkedinName || '',
@@ -108,7 +97,7 @@ const EditProfile: React.FC<IEditProfileProps> = ({ user }) => {
             />
           </div>
           <p className="p1-bold">Social Media</p>
-          <div className="flex flex-col gap-5 border-b border-white-border dark:border-black-800 sm:flex-row">
+          <div className="border-white-border dark:border-black-800 flex flex-col gap-5 border-b sm:flex-row">
             <RHFInput
               name="linkedinName"
               label="LinkedIn"
@@ -120,7 +109,7 @@ const EditProfile: React.FC<IEditProfileProps> = ({ user }) => {
               placeholder="https://linkedin.com/"
             />
           </div>
-          <div className="flex flex-col gap-5 border-b border-white-border dark:border-black-800 sm:flex-row">
+          <div className="border-white-border dark:border-black-800 flex flex-col gap-5 border-b sm:flex-row">
             <RHFInput
               name="twitterName"
               label="LinkedIn"
@@ -132,7 +121,7 @@ const EditProfile: React.FC<IEditProfileProps> = ({ user }) => {
               placeholder="https://twitter.com/"
             />
           </div>
-          <div className="flex flex-col gap-5 border-b border-white-border dark:border-black-800 sm:flex-row">
+          <div className="border-white-border dark:border-black-800 flex flex-col gap-5 border-b sm:flex-row">
             <RHFInput
               name="instagramName"
               label="Instagram"
