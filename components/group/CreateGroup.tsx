@@ -126,8 +126,9 @@ const CreateGroup: React.FC<ICreateGroup> = ({ viewerId, group }) => {
         router.push('/groups');
       }
     } catch (error) {
-      console.log(error);
-      throw new Error('Something went wrong');
+      console.log('Error on craete or update group', error);
+      // throw new Error('Something went wrong');
+      toast.error('Ooops something went wrong');
     }
   };
 

@@ -628,7 +628,6 @@ const CreateContent: React.FC<ICreateContentProps> = ({
                           process.env.NEXT_PUBLIC_CLOUDINARY_PRESEST_NAME
                         }
                         onSuccess={(res) => {
-                          console.log('RES ZA PODCAST FILE', res);
                           if (res.info && typeof res.info === 'object') {
                             field.onChange(res.info.secure_url);
                           } else {
