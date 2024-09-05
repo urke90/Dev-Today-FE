@@ -102,10 +102,6 @@ const ContentList: React.FC<IContentListProps> = ({
     );
   }, [sortBy, selectedTag]);
 
-  useEffect(() => {
-    console.log('contentData', contentData);
-  }, [contentData]);
-
   const renderContent = () => {
     let styles;
 
