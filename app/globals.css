@@ -251,8 +251,26 @@ input:-webkit-autofill:active {
 .tox .tox-edit-area__iframe {
   background-color: transparent !important;
 }
+.tox .tox-toolbar__group .tox-tbtn {
+  background-color: transparent;
+  color: #adb3cc;
+}
+.tox .tox-dialog .tox-dialog__footer button[data-mce-name='Cancel'] {
+  background-color: #2e3757;
+  color: #adb3cc;
+}
 .tox:not(.tox-tinymce-inline) .tox-editor-header {
   background-color: transparent !important;
+}
+.tox .tox-form__group .tox-label {
+  color: #adb3cc;
+}
+.tox .tox-dialog .tox-dialog__header {
+  background-color: #2e3757;
+  color: #adb3cc;
+}
+.tox .tox-dialog__header .tox-button {
+  color: #adb3cc;
 }
 
 .tox .tox-edit-area::before {

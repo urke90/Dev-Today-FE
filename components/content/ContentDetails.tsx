@@ -15,13 +15,11 @@ import {
   Trigger,
 } from '@radix-ui/react-dropdown-menu';
 import { APIProvider } from '@vis.gl/react-google-maps';
-import { getCldImageUrl } from 'next-cloudinary';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 
 import { Button } from '@/components/ui/button';
-import { CLOUDINARY_URL } from '@/constants';
 import { revalidateRoute } from '@/lib/actions/revalidate';
 import type { IComment } from '@/lib/validation';
 import { EContentType, type IContent } from '@/types/content';
@@ -55,15 +53,6 @@ const ContentDetails: React.FC<IContentDetailsProps> = ({
 }) => {
   const router = useRouter();
 
-  const transformedAvatarImg = author.avatarImg.startsWith(CLOUDINARY_URL)
-    ? getCldImageUrl({
-        width: 72,
-        height: 72,
-        src: author.avatarImg,
-        crop: 'fill',
-      })
-    : author.avatarImg;
-
   const handleDeleteContent = async () => {
     try {
       await typedFetch({
@@ -94,7 +83,7 @@ const ContentDetails: React.FC<IContentDetailsProps> = ({
       )}
       {content.type === EContentType.POST && (
         <div
-          className={`relative h-24 w-full md:h-44 ${!content.coverImage ? 'flex-center rounded-[10px] bg-primary-100 dark:bg-black-700' : ''}`}
+          className={`relative h-24 w-full md:h-44 ${!content.coverImage ? 'flex-center bg-primary-100 dark:bg-black-700 rounded-[10px]' : ''}`}
         >
           {content.coverImage ? (
             <Image
@@ -123,12 +112,12 @@ const ContentDetails: React.FC<IContentDetailsProps> = ({
           </APIProvider>
         </div>
       )}
-      <div className="bg-light100__dark800 flex flex-col gap-5 rounded-xl p-5 shadow-card">
+      <div className="bg-light100__dark800 shadow-card flex flex-col gap-5 rounded-xl p-5">
         <div className="flex items-center justify-between">
           {content.type === EContentType.MEETUP && (
             <div className="flex max-w-3xl gap-2">
               <Image
-                src={transformedAvatarImg || '/assets/icons/image-preview.svg'}
+                src={author.avatarImg || '/assets/icons/image-preview.svg'}
                 alt={author.userName}
                 width={72}
                 height={72}
@@ -161,7 +150,7 @@ const ContentDetails: React.FC<IContentDetailsProps> = ({
                   sideOffset={8}
                   align="end"
                   onCloseAutoFocus={(e) => e.preventDefault()}
-                  className="bg-light200__dark700 shadow-header-menu z-20 mb-4 flex w-40 flex-col gap-2.5 rounded-[10px] px-5 py-4 data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade"
+                  className="bg-light200__dark700 shadow-header-menu data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade z-20 mb-4 flex w-40 flex-col gap-2.5 rounded-[10px] px-5 py-4"
                 >
                   <Item
                     onSelect={() => router.push(`/content/${content?.id}/edit`)}
