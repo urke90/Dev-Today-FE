@@ -7,7 +7,7 @@ import { Button } from '../ui/button';
 
 import parse from 'html-react-parser';
 import Image from 'next/image';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 import type { ITag } from '@/types/content';
 import { calculateTimeAgo } from '@/utils/format';
@@ -48,64 +48,62 @@ const PodcastItemCard: React.FC<IPodcastItemCardProps> = ({
   handleLikeContent,
   handleDislikeContent,
 }) => {
+  const router = useRouter();
+
   return (
-    <li>
-      <Link
-        href={'/content/' + id}
-        className="bg-light100__dark800 shadow-card flex flex-col gap-3.5 rounded-[10px] px-3.5 py-5 lg:gap-[18px] lg:rounded-2xl lg:p-4"
-      >
-        <div className="flex-between">
-          <div className="flex gap-2">
-            <Image
-              src={coverImage || '/assets/icons/image-preview.svg'}
-              width={50}
-              height={50}
-              alt={title}
-              className="size-[50px]"
-            />
-            <p className="p3-bold lg:p1-bold line-clamp-2">{title}</p>
-          </div>
-          <Button
-            type="button"
-            variant="icon"
-            className="like-btn-scale-hover bg-white-200 dark:bg-black-700 size-[30px] shrink-0 rounded-full"
-            onClick={(e) =>
-              isLiked ? handleLikeContent(e, id) : handleDislikeContent(e, id)
-            }
-          >
-            <HeartIcon
-              className={isLiked ? 'text-primary-500' : 'text-white-300'}
-            />
-          </Button>
+    <li
+      onClick={() => router.push('/content/' + id)}
+      className="bg-light100__dark800 shadow-card flex flex-col gap-3.5 rounded-[10px] px-3.5 py-5 lg:gap-[18px] lg:rounded-2xl lg:p-4"
+    >
+      <div className="flex-between">
+        <div className="flex gap-2">
+          <Image
+            src={coverImage || '/assets/icons/image-preview.svg'}
+            width={50}
+            height={50}
+            alt={title}
+            className="size-[50px]"
+          />
+          <p className="p3-bold lg:p1-bold line-clamp-2">{title}</p>
         </div>
-        <div className="p4-regular lg:p3-regular line-clamp-3 lg:line-clamp-4">
-          {parse(description)}
+        <Button
+          type="button"
+          variant="icon"
+          className="like-btn-scale-hover bg-white-200 dark:bg-black-700 size-[30px] shrink-0 rounded-full"
+          onClick={(e) =>
+            isLiked ? handleLikeContent(e, id) : handleDislikeContent(e, id)
+          }
+        >
+          <HeartIcon
+            className={isLiked ? 'text-primary-500' : 'text-white-300'}
+          />
+        </Button>
+      </div>
+      <div className="p4-regular lg:p3-regular line-clamp-3 lg:line-clamp-4">
+        {parse(description)}
+      </div>
+      {tags?.length > 0 ? (
+        <ul className="flex flex-wrap gap-2.5">
+          {tags.map(({ id, title }) => (
+            <BadgeItem key={id} title={title} />
+          ))}
+        </ul>
+      ) : null}
+      <div className="flex items-center gap-[7px] lg:gap-2.5">
+        <div className="flex-center bg-white-300 dark:bg-white-600 relative size-[30px] rounded-full lg:size-[40px]">
+          <Image
+            width={40}
+            height={40}
+            src={author.avatarImg || '/assets/images/avatars/avatar-1.svg'}
+            alt="avatar"
+            className="size-[30px] rounded-full lg:size-[40px]"
+          />
         </div>
-        {tags?.length > 0 ? (
-          <ul className="flex flex-wrap gap-2.5">
-            {tags.map(({ id, title }) => (
-              <BadgeItem key={id} title={title} />
-            ))}
-          </ul>
-        ) : null}
-        <div className="flex items-center gap-[7px] lg:gap-2.5">
-          <div className="flex-center bg-white-300 dark:bg-white-600 relative size-[30px] rounded-full lg:size-[40px]">
-            <Image
-              width={40}
-              height={40}
-              src={author.avatarImg || '/assets/images/avatars/avatar-1.svg'}
-              alt="avatar"
-              className="size-[30px] rounded-full lg:size-[40px]"
-            />
-          </div>
-          <div className="flex flex-col">
-            <span className="p4-bold lg:p3-bold">{author.userName}</span>
-            <span className="subtitle-normal">
-              {calculateTimeAgo(createdAt)}
-            </span>
-          </div>
+        <div className="flex flex-col">
+          <span className="p4-bold lg:p3-bold">{author.userName}</span>
+          <span className="subtitle-normal">{calculateTimeAgo(createdAt)}</span>
         </div>
-      </Link>
+      </div>
     </li>
   );
 };
