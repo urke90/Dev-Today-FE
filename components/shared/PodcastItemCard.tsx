@@ -53,7 +53,7 @@ const PodcastItemCard: React.FC<IPodcastItemCardProps> = ({
   return (
     <li
       onClick={() => router.push('/content/' + id)}
-      className="bg-light100__dark800 shadow-card flex flex-col gap-3.5 rounded-[10px] px-3.5 py-5 lg:gap-[18px] lg:rounded-2xl lg:p-4"
+      className="bg-light100__dark800 shadow-card flex cursor-pointer flex-col gap-3.5 rounded-[10px] px-3.5 py-5 lg:gap-[18px] lg:rounded-2xl lg:p-4"
     >
       <div className="flex-between">
         <div className="flex gap-2">

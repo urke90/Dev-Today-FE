@@ -58,7 +58,7 @@ const PostItemCard: React.FC<IPostItemCardProps> = ({
 
   return (
     <li
-      className="bg-light100__dark800 shadow-card flex gap-4 rounded-2xl p-4 md:items-center md:p-5"
+      className="bg-light100__dark800 shadow-card flex cursor-pointer gap-4 rounded-2xl p-4 md:items-center md:p-5"
       onClick={() => router.push('/content/' + id)}
     >
       <Image

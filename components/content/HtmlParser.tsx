@@ -1,5 +1,5 @@
 'use client';
-import parse from 'html-react-parser';
+import parse, { Element, HTMLReactParserOptions } from 'html-react-parser';
 import Prism from 'prismjs';
 import { useEffect } from 'react';
 
@@ -32,6 +32,20 @@ interface IHtmlParserProps {
   data: string;
 }
 
+const parserOptions: HTMLReactParserOptions = {
+  replace: (domNode) => {
+    if (domNode instanceof Element && domNode.name === 'ul') {
+      domNode.attribs.class = 'list-disc pl-5';
+      return domNode;
+    }
+
+    if (domNode instanceof Element && domNode.name === 'a') {
+      domNode.attribs.class = 'text-primary-500 underline';
+      return domNode;
+    }
+  },
+};
+
 const HtmlParser: React.FC<IHtmlParserProps> = ({ data }) => {
   useEffect(() => {
     Prism.highlightAll();
@@ -40,8 +54,8 @@ const HtmlParser: React.FC<IHtmlParserProps> = ({ data }) => {
   const stringData = typeof data === 'string' ? data : String(data);
 
   return (
-    <div className={'w-full min-w-full !text-black-800 dark:!text-white-200'}>
-      {parse(stringData)}
+    <div className={'!text-black-800 dark:!text-white-200 w-full min-w-full'}>
+      {parse(stringData, parserOptions)}
     </div>
   );
 };
