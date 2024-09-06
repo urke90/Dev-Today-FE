@@ -30,7 +30,7 @@ const SidebarPostItem: React.FC<ISidebarPostItemProps> = ({
             alt={title}
             width={58}
             height={58}
-            className="size-[58px] shrink-0 rounded"
+            className="size-[58px] shrink-0 rounded object-cover"
           />
           <div className="flex flex-col gap-[6px]">
             <p className="p4-medium">{title}</p>
@@ -38,7 +38,7 @@ const SidebarPostItem: React.FC<ISidebarPostItemProps> = ({
           </div>
         </div>
 
-        <ArrowRightIcon className="shrink-0 text-white-400" />
+        <ArrowRightIcon className="text-white-400 shrink-0" />
       </Link>
     </li>
   );
