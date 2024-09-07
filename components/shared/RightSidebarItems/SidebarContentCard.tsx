@@ -74,7 +74,7 @@ const SidebarContentCard: React.FC<ISidebarContentCardProps> = ({
                     );
                   }
                   default:
-                    return <p className="p3-bold">Type is not supported!</p>;
+                    return <p className="p3-bold">Invalid data!</p>;
                 }
               }
             )

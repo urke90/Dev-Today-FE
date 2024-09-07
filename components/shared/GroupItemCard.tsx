@@ -34,14 +34,14 @@ const GroupItemCard: React.FC<IGroupItemCardProps> = ({
     <li>
       <Link
         href={'/groups/' + id}
-        className="bg-light100__dark800 flex-0 flex shrink-0 flex-col gap-3.5 rounded-2xl p-5 shadow-card"
+        className="bg-light100__dark800 flex-0 shadow-card flex shrink-0 flex-col gap-3.5 rounded-2xl p-5"
       >
         <div className="relative h-[150px] w-full">
           <Image
             src={coverImage || '/assets/icons/image-preview.svg'}
             fill
             alt={title}
-            className="object-cover"
+            className="w-full rounded-2xl object-cover"
           />
         </div>
         <p className="p1-bold">{title}</p>
@@ -51,7 +51,7 @@ const GroupItemCard: React.FC<IGroupItemCardProps> = ({
             {members.map((member, index) => (
               <div
                 key={index}
-                className="flex-center -ml-3 size-[30px] rounded-full bg-white-600"
+                className="flex-center bg-white-600 -ml-3 size-[30px] rounded-full"
               >
                 <Image
                   width={22}
@@ -61,11 +61,11 @@ const GroupItemCard: React.FC<IGroupItemCardProps> = ({
                     `/assets/images/avatars/avatar-${index + 1}.svg`
                   }
                   alt="avatar"
-                  className="rounded-full"
+                  className="size-[22px] rounded-full"
                 />
               </div>
             ))}
-            <div className="cap-8 flex-center -ml-3 size-[30px] rounded-full bg-white-600 text-black-700 dark:bg-black-700 dark:text-white-100">
+            <div className="cap-8 flex-center bg-white-600 text-black-700 dark:bg-black-700 dark:text-white-100 -ml-3 size-[30px] rounded-full">
               {totalMembers && totalMembers > 120 ? '120+' : totalMembers}
             </div>
           </div>
@@ -73,7 +73,7 @@ const GroupItemCard: React.FC<IGroupItemCardProps> = ({
             triggerBtn={
               <Button
                 variant="icon"
-                className="size-[30px] rounded-full bg-white-200 dark:bg-black-700"
+                className="bg-white-200 dark:bg-black-700 size-[30px] rounded-full"
                 onClick={(e) => {
                   e.stopPropagation();
                   e.nativeEvent.preventDefault();
