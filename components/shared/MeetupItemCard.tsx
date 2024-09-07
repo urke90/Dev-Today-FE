@@ -37,7 +37,7 @@ const MeetupItemCard: React.FC<IMeetupItemCardProps> = ({
   return (
     <li
       onClick={() => router.push('/content/' + id)}
-      className="bg-light100__dark800 shadow-card flex flex-col gap-2.5 rounded-[10px] px-3.5 py-5"
+      className="bg-light100__dark800 shadow-card flex cursor-pointer flex-col gap-2.5 rounded-[10px] px-3.5 py-5"
     >
       <div className="flex-between flex">
         <div className="flex items-center gap-2 md:gap-4">
@@ -46,7 +46,7 @@ const MeetupItemCard: React.FC<IMeetupItemCardProps> = ({
               src={coverImage || '/assets/icons/image-preview.svg'}
               alt="meetup"
               fill
-              className="size-[56px] md:size-[72px]"
+              className="size-[56px] rounded-[10px] md:size-[72px]"
             />
           </div>
           <div>

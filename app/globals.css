@@ -229,7 +229,7 @@ input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
   transition: background-color 5000s ease-in-out 0s !important;
-  -webkit-text-fill-color: #ffff !important;
+  -webkit-text-fill-color: #000000 !important;
 }
 
 /* dashed border */
