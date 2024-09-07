@@ -67,15 +67,16 @@ const AudioPlayer: React.FC<IAudioPlayerProps> = ({
           className={`xs:size-16 relative top-2 z-10 size-12 rounded-lg sm:size-20 md:top-0 md:size-28 lg:size-36 ${isPlaying && audioSrc && 'animate-bounce'}`}
         >
           <Image
-            src={coverImage || '/assets/images/post-example.svg'}
+            src={coverImage || '/assets/icons/image-preview.svg'}
             alt="avatar"
             width={150}
             height={150}
+            className="rounded-lg"
           />
         </div>
         <div className="xs:size-16 absolute top-3/4 size-12 sm:left-[30px] sm:size-20 md:left-[100px] md:top-1/2 md:size-24 md:-translate-x-1/2 md:-translate-y-1/2 lg:left-[150px] lg:size-32">
           <Image
-            src="/assets/images/disk.png"
+            src="/assets/images/Disk.svg"
             alt="avatar"
             width={130}
             height={130}

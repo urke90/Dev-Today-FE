@@ -711,7 +711,7 @@ const CreateContent: React.FC<ICreateContentProps> = ({
                       menubar: false,
                       plugins: 'code codesample link preview image lists',
                       toolbar:
-                        'customImageButton customPreview | H2 bold italic underline link strikethrough alignleft aligncenter alignright image numlist bullist',
+                        'customImageButton customPreview | bold italic underline link strikethrough alignleft aligncenter alignright image numlist bullist',
                       setup: function (editor) {
                         editor.ui.registry.addButton('customImageButton', {
                           text: 'Write',
