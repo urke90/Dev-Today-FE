@@ -48,13 +48,29 @@ const ProfileHome: React.FC<IProfileHomeProps> = ({
         </div>
         <div className="flex flex-col gap-y-6 px-5">
           <div className="relative z-10 -mt-20">
-            <Image
-              src={user.avatarImg || '/assets/icons/image-preview.svg'}
-              width={110}
-              height={110}
-              alt={user.userName}
-              className="ring-primary-500 mx-auto mb-2.5 size-[110px] rounded-full object-cover ring-4"
-            />
+            <div className="bg-white-100 dark:bg-black-800 mx-auto mb-2.5 size-[110px] rounded-full">
+              {user.avatarImg ? (
+                <Image
+                  src={user.avatarImg || '/assets/images/avatars/avatar-1.svg'}
+                  width={110}
+                  height={110}
+                  alt={user.userName}
+                  className="ring-primary-500 mx-auto mb-2.5 size-[110px] rounded-full object-cover ring-4"
+                />
+              ) : (
+                <div className="flex-center ring-primary-500 mx-auto mb-2.5 size-[110px] rounded-full ring-4">
+                  <Image
+                    src={
+                      user.avatarImg || '/assets/images/avatars/avatar-1.svg'
+                    }
+                    width={80}
+                    height={80}
+                    alt={user.userName}
+                    className="size-[80px] object-cover"
+                  />
+                </div>
+              )}
+            </div>
             <h1 className="h1-medium">{user.userName}</h1>
             <p className="p3-regular dark:text-white-400">{user?.email}</p>
           </div>

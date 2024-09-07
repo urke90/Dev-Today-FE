@@ -1,4 +1,4 @@
-('');
+'use client';
 
 import ImagePreviewIcon from '../icons/ImagePreview';
 import ImageUploadIcon from '../icons/ImageUpload';
@@ -7,22 +7,21 @@ import { FormControl, FormField, FormItem, FormMessage } from '../ui/form';
 
 import { CldUploadWidget } from 'next-cloudinary';
 import Image from 'next/image';
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 
 // ----------------------------------------------------------------
 
 interface IRHFProfileImageUploadProps {
   name: string;
-  // image: string;
 }
 
 const RHFProfileImageUpload: React.FC<IRHFProfileImageUploadProps> = ({
   name,
-  // image,
 }) => {
   const { control, getValues } = useFormContext();
 
-  let image = getValues(name);
+  useWatch({ name });
+  const image = getValues(name);
 
   return (
     <FormField
@@ -38,8 +37,8 @@ const RHFProfileImageUpload: React.FC<IRHFProfileImageUploadProps> = ({
                     src={image}
                     width={60}
                     height={60}
-                    className="size-[60px] rounded-full"
                     alt="Avatar image"
+                    className="size-[60px] rounded-full"
                   />
                 ) : (
                   <ImagePreviewIcon className="icon-light400__dark300" />
@@ -47,7 +46,6 @@ const RHFProfileImageUpload: React.FC<IRHFProfileImageUploadProps> = ({
               </div>
               <CldUploadWidget
                 uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_PRESEST_NAME}
-                // onSuccess={handleUploadImage}
                 onSuccess={(res) => {
                   if (res.info && typeof res.info === 'object') {
                     field.onChange(res.info.secure_url);
