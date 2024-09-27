@@ -231,6 +231,16 @@ input:-webkit-autofill:active {
   transition: background-color 5000s ease-in-out 0s !important;
   -webkit-text-fill-color: #000000 !important;
 }
+@media (prefers-color-scheme: dark) {
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    -webkit-text-fill-color: theme(
+      'colors.white.100'
+    ) !important; /* for dark theme */
+  }
+}
 
 /* dashed border */
 .dashed-border {

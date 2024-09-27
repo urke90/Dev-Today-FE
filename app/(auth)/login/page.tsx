@@ -2,10 +2,10 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signIn } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
-import { useForm } from 'react-hook-form';
 import { useTheme } from 'next-themes';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 
 import LeftSidebar from '@/components/auth-onboarding/LeftSidebar';
 import ProvidersButtons from '@/components/auth-onboarding/ProvidersButtons';
@@ -60,6 +60,9 @@ const LoginPage = () => {
         <div className="mx-auto mb-14 md:hidden">
           <ThemeLogo isMounted={isMounted} theme={resolvedTheme} />
         </div>
+        <p className="mb-4 text-green-500">
+          Demo account: test@test.com pw: 123123
+        </p>
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
