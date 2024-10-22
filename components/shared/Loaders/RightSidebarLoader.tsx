@@ -14,8 +14,6 @@ const RightSidebarLoader: React.FC<IRightSidebarLoaderProps> = ({
       {Array.from({ length: numItems }).map((_, i) => (
         <Skeleton key={i} className="right-sidebar-item h-80" />
       ))}
-
-      {/* <Skeleton className="right-sidebar-item h-80" /> */}
     </aside>
   );
 };

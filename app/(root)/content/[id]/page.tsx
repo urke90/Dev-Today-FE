@@ -49,7 +49,7 @@ const ContentPage: React.FC<IContentPageProps> = async ({ params }) => {
   });
 
   return (
-    <div className="content-wrapper min-h-screen px-3.5 lg:px-5">
+    <section className="content-wrapper min-h-screen px-3.5 lg:px-5">
       <aside className="left-sidebar">
         <div className="right-sidebar-item rounded-2xl">
           <div className="flex items-center gap-2">
@@ -162,7 +162,7 @@ const ContentPage: React.FC<IContentPageProps> = async ({ params }) => {
           items={authorResponse.user.contents}
         />
       </aside>
-    </div>
+    </section>
   );
 };
 export default ContentPage;

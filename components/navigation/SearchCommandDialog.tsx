@@ -6,7 +6,7 @@ import GroupsIcon from '../icons/Groups';
 import PodcastIcon from '../icons/Podcast';
 import SearchIcon from '../icons/Search';
 import SearchDialogIcon from '../icons/SearchDialog';
-import LoadingSpinner from '../shared/LoadingSpinner';
+import LoadingSpinner from '../shared/Loaders/LoadingSpinner';
 import { Button } from '../ui/button';
 
 import * as Dialog from '@radix-ui/react-dialog';

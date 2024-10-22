@@ -5,11 +5,13 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 // ----------------------------------------------------------------
 
-const MeetupsPageLoader = () => {
+const SingleGroupPageLoader = () => {
   return (
     <div className="content-wrapper">
       <LeftSidebarLoader />
       <main className="main-content">
+        <Skeleton className="bg-light100__dark800 shadow-card mb-5 h-[276px] rounded-[10px]" />
+        <Skeleton className="bg-light100__dark800 shadow-card mb-5 h-[64px] rounded-[10px]" />
         <ul className="flex flex-col flex-wrap gap-5">
           {Array.from({ length: 4 }).map((_, i) => (
             <Skeleton
@@ -19,9 +21,9 @@ const MeetupsPageLoader = () => {
           ))}
         </ul>
       </main>
-      <RightSidebarLoader />
+      <RightSidebarLoader numItems={3} />
     </div>
   );
 };
 
-export default MeetupsPageLoader;
+export default SingleGroupPageLoader;
