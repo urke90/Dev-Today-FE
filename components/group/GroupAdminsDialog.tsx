@@ -3,7 +3,7 @@
 import MemberItemCard from './MemberItemCard';
 
 import CloseIcon from '../icons/CloseIcon';
-import LoadingSpinner from '../shared/LoadingSpinner';
+import LoadingSpinner from '../shared/Loaders/LoadingSpinner';
 import { Button } from '../ui/button';
 
 import * as Dialog from '@radix-ui/react-dialog';

@@ -1,6 +1,6 @@
 'use client';
 
-import LoadingSpinner from '../shared/LoadingSpinner';
+import LoadingSpinner from '../shared/Loaders/LoadingSpinner';
 import MeetupItemCard from '../shared/MeetupItemCard';
 import Pagination from '../shared/Pagination';
 import PodcastItemCard from '../shared/PodcastItemCard';

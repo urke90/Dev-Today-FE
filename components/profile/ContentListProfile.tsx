@@ -1,7 +1,7 @@
 'use client';
 
 import GroupItemCard from '../shared/GroupItemCard';
-import LoadingSpinner from '../shared/LoadingSpinner';
+import LoadingSpinner from '../shared/Loaders/LoadingSpinner';
 import MeetupItemCard from '../shared/MeetupItemCard';
 import PodcastItemCard from '../shared/PodcastItemCard';
 import PostItemCard from '../shared/PostItemCard';

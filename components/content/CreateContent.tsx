@@ -7,7 +7,7 @@ import FrameIcon from '../icons/Frame';
 import MicrophoneIcon from '../icons/Microphone';
 import PodcastIcon from '../icons/Podcast';
 import { generateSelectStyles } from '../RHFInputs/RHFMultipleSelect';
-import LoadingSpinner from '../shared/LoadingSpinner';
+import LoadingSpinner from '../shared/Loaders/LoadingSpinner';
 import { Input } from '../ui/input';
 
 import { zodResolver } from '@hookform/resolvers/zod';
